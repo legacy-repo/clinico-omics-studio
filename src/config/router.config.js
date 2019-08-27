@@ -8,165 +8,197 @@ export const asyncRouterMap = [
     path: '/',
     name: 'index',
     component: BasicLayout,
-    meta: { title: '首页' },
+    meta: { title: 'Home' },
     redirect: '/dashboard/workplace',
     children: [
-      // dashboard
+      // Dashboard
       {
         path: '/dashboard',
         name: 'dashboard',
         redirect: '/dashboard/workplace',
         component: RouteView,
-        meta: { title: '仪表盘', keepAlive: true, icon: bxAnaalyse, permission: [ 'dashboard' ] },
+        meta: { title: 'Dashboard', keepAlive: true, icon: bxAnaalyse, permission: [ 'dashboard' ] },
         children: [
-          {
-            path: '/dashboard/analysis',
-            name: 'Analysis',
-            component: () => import('@/views/dashboard/Analysis'),
-            meta: { title: '分析页', keepAlive: false, permission: [ 'dashboard' ] }
-          },
-          // 外部链接
-          {
-            path: 'https://www.baidu.com/',
-            name: 'Monitor',
-            meta: { title: '监控页（外部）', target: '_blank' }
-          },
           {
             path: '/dashboard/workplace',
             name: 'Workplace',
             component: () => import('@/views/dashboard/Workplace'),
-            meta: { title: '工作台', keepAlive: true, permission: [ 'dashboard' ] }
+            meta: { title: 'Workbench', keepAlive: true, permission: [ 'dashboard' ] }
+          },
+          {
+            path: '/dashboard/analysis',
+            name: 'Analysis',
+            component: () => import('@/views/dashboard/Analysis'),
+            meta: { title: 'Statistics', keepAlive: false, permission: [ 'dashboard' ] }
           }
         ]
       },
 
-      // forms
+      // Data Source
       {
-        path: '/form',
-        redirect: '/form/base-form',
+        path: '/data-source',
+        name: 'data-source',
+        redirect: '/data-source/discovery',
         component: PageView,
-        meta: { title: '表单页', icon: 'form', permission: [ 'form' ] },
+        meta: { title: 'DataSource', icon: 'form', permission: [ 'form' ] },
         children: [
           {
-            path: '/form/base-form',
-            name: 'BaseForm',
+            path: '/data-source/submit',
+            name: 'submit-data',
             component: () => import('@/views/form/BasicForm'),
-            meta: { title: '基础表单', keepAlive: true, permission: [ 'form' ] }
+            meta: { title: 'Submit Data', keepAlive: true, permission: [ 'form' ] }
           },
           {
-            path: '/form/step-form',
-            name: 'StepForm',
+            path: '/data-source/discovery',
+            name: 'Discovery',
             component: () => import('@/views/form/stepForm/StepForm'),
-            meta: { title: '分步表单', keepAlive: true, permission: [ 'form' ] }
+            meta: { title: 'Discovery', keepAlive: true, permission: [ 'form' ] }
           },
           {
-            path: '/form/advanced-form',
-            name: 'AdvanceForm',
+            path: '/data-source/visualizer',
+            name: 'Visualizer',
             component: () => import('@/views/form/advancedForm/AdvancedForm'),
-            meta: { title: '高级表单', keepAlive: true, permission: [ 'form' ] }
+            meta: { title: 'Visualizer', keepAlive: true, permission: [ 'form' ] }
           }
         ]
       },
 
       // list
       {
-        path: '/list',
-        name: 'list',
+        path: '/choppy-pipe',
+        name: 'choppy-pipe',
         component: PageView,
-        redirect: '/list/table-list',
-        meta: { title: '列表页', icon: 'table', permission: [ 'table' ] },
+        redirect: '/choppy-pipe/submit',
+        meta: { title: 'Pipeline', icon: 'table', permission: [ 'table' ] },
         children: [
           {
-            path: '/list/table-list/:pageNo([1-9]\\d*)?',
-            name: 'TableListWrapper',
+            path: '/choppy-pipe/submit/:pageNo([1-9]\\d*)?',
+            name: 'submit-workflow',
             hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
             component: () => import('@/views/list/TableList'),
-            meta: { title: '查询表格', keepAlive: true, permission: [ 'table' ] }
+            meta: { title: 'Submit Workflow', keepAlive: true, permission: [ 'table' ] }
           },
           {
-            path: '/list/basic-list',
-            name: 'BasicList',
+            path: '/choppy-pipe/task',
+            name: 'Task',
             component: () => import('@/views/list/StandardList'),
-            meta: { title: '标准列表', keepAlive: true, permission: [ 'table' ] }
+            meta: { title: 'Task', keepAlive: true, permission: [ 'table' ] }
           },
           {
-            path: '/list/card',
-            name: 'CardList',
+            path: '/choppy-pipe/report',
+            name: 'Report',
             component: () => import('@/views/list/CardList'),
-            meta: { title: '卡片列表', keepAlive: true, permission: [ 'table' ] }
+            meta: { title: 'Report', keepAlive: true, permission: [ 'table' ] }
           },
           {
-            path: '/list/search',
-            name: 'SearchList',
+            path: '/choppy-pipe/apps',
+            name: 'Apps',
             component: () => import('@/views/list/search/SearchLayout'),
             redirect: '/list/search/article',
-            meta: { title: '搜索列表', keepAlive: true, permission: [ 'table' ] },
+            meta: { title: 'Applications', keepAlive: true, permission: [ 'table' ] },
             children: [
               {
                 path: '/list/search/article',
                 name: 'SearchArticles',
                 component: () => import('../views/list/search/Article'),
-                meta: { title: '搜索列表（文章）', permission: [ 'table' ] }
+                meta: { title: 'Search List（Articles）', permission: [ 'table' ] }
               },
               {
                 path: '/list/search/project',
                 name: 'SearchProjects',
                 component: () => import('../views/list/search/Projects'),
-                meta: { title: '搜索列表（项目）', permission: [ 'table' ] }
+                meta: { title: 'Search List（Projects）', permission: [ 'table' ] }
               },
               {
                 path: '/list/search/application',
                 name: 'SearchApplications',
                 component: () => import('../views/list/search/Applications'),
-                meta: { title: '搜索列表（应用）', permission: [ 'table' ] }
+                meta: { title: 'Search List（Applications）', permission: [ 'table' ] }
               }
             ]
           }
         ]
       },
 
-      // profile
+      // Data Portal
       {
-        path: '/profile',
-        name: 'profile',
+        path: '/data-portal',
+        name: 'data-portal',
+        redirect: '/data-portal/import',
         component: RouteView,
-        redirect: '/profile/basic',
-        meta: { title: '详情页', icon: 'profile', permission: [ 'profile' ] },
+        meta: { title: 'Data Portal', keepAlive: true, icon: bxAnaalyse, permission: [ 'dashboard' ] },
         children: [
           {
-            path: '/profile/basic',
-            name: 'ProfileBasic',
-            component: () => import('@/views/profile/basic/Index'),
-            meta: { title: '基础详情页', permission: [ 'profile' ] }
+            path: '/data-portal/import',
+            name: 'import-data',
+            component: () => import('@/views/form/BasicForm'),
+            meta: { title: 'Import Data', keepAlive: true, permission: [ 'form' ] }
           },
           {
-            path: '/profile/advanced',
-            name: 'ProfileAdvanced',
+            path: 'http://data.3steps.cn',
+            name: 'Portal',
+            meta: { title: 'Choppy Data Portal', target: '_blank' }
+          }
+        ]
+      },
+
+      // PreMedKB
+      {
+        path: '/premedkb',
+        name: 'premedkb',
+        component: RouteView,
+        meta: { title: 'PreMedKB', keepAlive: true, icon: bxAnaalyse, permission: [ 'dashboard' ] },
+        children: [
+          {
+            path: 'http://www.fudan-pgx.org/premedkb/',
+            name: 'PreMedKB',
+            meta: { title: 'Query', target: '_blank' }
+          }
+        ]
+      },
+
+      // profile
+      {
+        path: '/next-service-engine',
+        name: 'PluginService',
+        component: RouteView,
+        redirect: '/next-service-engine/plugins',
+        meta: { title: 'Plugins & Services', icon: 'profile', permission: [ 'profile' ] },
+        children: [
+          {
+            path: '/next-service-engine/plugins',
+            name: 'Plugins',
+            component: () => import('@/views/profile/basic/Index'),
+            meta: { title: 'Plugins', permission: [ 'profile' ] }
+          },
+          {
+            path: '/next-service-engine/services',
+            name: 'Services',
             component: () => import('@/views/profile/advanced/Advanced'),
-            meta: { title: '高级详情页', permission: [ 'profile' ] }
+            meta: { title: 'Services', permission: [ 'profile' ] }
           }
         ]
       },
 
       // result
       {
-        path: '/result',
-        name: 'result',
+        path: '/nccn',
+        name: 'NCCN',
         component: PageView,
-        redirect: '/result/success',
-        meta: { title: '结果页', icon: 'check-circle-o', permission: [ 'result' ] },
+        redirect: '/nccn/editor',
+        meta: { title: 'NCCN', icon: 'check-circle-o', permission: [ 'result' ] },
         children: [
           {
-            path: '/result/success',
-            name: 'ResultSuccess',
+            path: '/nccn/editor',
+            name: 'Editor',
             component: () => import(/* webpackChunkName: "result" */ '@/views/result/Success'),
-            meta: { title: '成功', keepAlive: false, hiddenHeaderContent: true, permission: [ 'result' ] }
+            meta: { title: 'Editor', keepAlive: false, hiddenHeaderContent: true, permission: [ 'result' ] }
           },
           {
-            path: '/result/fail',
-            name: 'ResultFail',
+            path: '/nccn/materials',
+            name: 'Materials',
             component: () => import(/* webpackChunkName: "result" */ '@/views/result/Error'),
-            meta: { title: '失败', keepAlive: false, hiddenHeaderContent: true, permission: [ 'result' ] }
+            meta: { title: 'Materials', keepAlive: false, hiddenHeaderContent: true, permission: [ 'result' ] }
           }
         ]
       },
@@ -174,6 +206,7 @@ export const asyncRouterMap = [
       // Exception
       {
         path: '/exception',
+        hidden: true,
         name: 'exception',
         component: RouteView,
         redirect: '/exception/403',
@@ -206,19 +239,19 @@ export const asyncRouterMap = [
         component: RouteView,
         redirect: '/account/center',
         name: 'account',
-        meta: { title: '个人页', icon: 'user', keepAlive: true, permission: [ 'user' ] },
+        meta: { title: 'User', icon: 'user', keepAlive: true, permission: [ 'user' ] },
         children: [
           {
             path: '/account/center',
             name: 'center',
             component: () => import('@/views/account/center/Index'),
-            meta: { title: '个人中心', keepAlive: true, permission: [ 'user' ] }
+            meta: { title: 'User Center', keepAlive: true, permission: [ 'user' ] }
           },
           {
             path: '/account/settings',
             name: 'settings',
             component: () => import('@/views/account/settings/Index'),
-            meta: { title: '个人设置', hideHeader: true, permission: [ 'user' ] },
+            meta: { title: 'Profiles', hideHeader: true, permission: [ 'user' ] },
             redirect: '/account/settings/base',
             hideChildrenInMenu: true,
             children: [
@@ -226,31 +259,31 @@ export const asyncRouterMap = [
                 path: '/account/settings/base',
                 name: 'BaseSettings',
                 component: () => import('@/views/account/settings/BaseSetting'),
-                meta: { title: '基本设置', hidden: true, permission: [ 'user' ] }
+                meta: { title: 'Basic Profiles', hidden: true, permission: [ 'user' ] }
               },
               {
                 path: '/account/settings/security',
                 name: 'SecuritySettings',
                 component: () => import('@/views/account/settings/Security'),
-                meta: { title: '安全设置', hidden: true, keepAlive: true, permission: [ 'user' ] }
+                meta: { title: 'Secure Profiles', hidden: true, keepAlive: true, permission: [ 'user' ] }
               },
               {
                 path: '/account/settings/custom',
                 name: 'CustomSettings',
                 component: () => import('@/views/account/settings/Custom'),
-                meta: { title: '个性化设置', hidden: true, keepAlive: true, permission: [ 'user' ] }
+                meta: { title: 'Customization', hidden: true, keepAlive: true, permission: [ 'user' ] }
               },
               {
                 path: '/account/settings/binding',
                 name: 'BindingSettings',
                 component: () => import('@/views/account/settings/Binding'),
-                meta: { title: '账户绑定', hidden: true, keepAlive: true, permission: [ 'user' ] }
+                meta: { title: 'Binding Settings', hidden: true, keepAlive: true, permission: [ 'user' ] }
               },
               {
                 path: '/account/settings/notification',
                 name: 'NotificationSettings',
                 component: () => import('@/views/account/settings/Notification'),
-                meta: { title: '新消息通知', hidden: true, keepAlive: true, permission: [ 'user' ] }
+                meta: { title: 'Notifications', hidden: true, keepAlive: true, permission: [ 'user' ] }
               }
             ]
           }
@@ -261,6 +294,7 @@ export const asyncRouterMap = [
       {
         path: '/other',
         name: 'otherPage',
+        hidden: true,
         component: PageView,
         meta: { title: '其他组件', icon: 'slack', permission: [ 'dashboard' ] },
         redirect: '/other/icon-selector',

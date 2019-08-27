@@ -2,7 +2,7 @@ export default {
   dashboard: {
     workplace: {
       project: 'Project Count',
-      teamRank: 'Team rank',
+      teamRank: 'Team Rank',
       views: 'Views'
     }
   }

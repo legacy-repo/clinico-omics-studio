@@ -17,9 +17,9 @@
 
       <div class="footer">
         <div class="links">
-          <a href="_self">帮助</a>
-          <a href="_self">隐私</a>
-          <a href="_self">条款</a>
+          <a href="_self">Help</a>
+          <a href="_self">Privacy</a>
+          <a href="_self">Terms</a>
         </div>
         <div class="copyright">
           Copyright &copy;  2019 The Genius Medicine Consortium

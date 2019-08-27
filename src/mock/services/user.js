@@ -5,10 +5,10 @@ const info = (options) => {
   console.log('options', options)
   const userInfo = {
     'id': '4291d7da9005377ec9aec4a71ea837f',
-    'name': '天野远子',
+    'name': 'PGx',
     'username': 'admin',
     'password': '',
-    'avatar': '/avatar2.jpg',
+    'avatar': '/avatar2.png',
     'status': 1,
     'telephone': '',
     'lastLoginIp': '27.154.74.117',

@@ -2,14 +2,25 @@ import Mock from 'mockjs2'
 import { builder, getQueryParameters } from '../util'
 
 const titles = [
-  'Alipay',
-  'Angular',
-  'Ant Design',
-  'Ant Design Pro',
-  'Bootstrap',
-  'React',
-  'Vue',
-  'Webpack'
+  'High Confidence Region Intergration',
+  'RNAseq Variant Calling',
+  'NGScheckMates',
+  'Trimmomatic',
+  'Fastqscreen',
+  'concatVCF',
+  'VQSR',
+  'miRNAseq'
+]
+
+const descriptions = [
+  '在中台产品的研发过程中，会出现不同的设计规范和实现方式，但其中往往存在很多类似的页面和组件，这些类似的组件会被抽离成一套标准规范。',
+  '从RNAseq数据中call突变',
+  '从fastq文件中判断样本间的关系',
+  '',
+  '',
+  '',
+  '',
+  '用于miRNA-seq二代测序数据分析'
 ]
 
 const avatar = ['https://gw.alipayobjects.com/zos/rmsportal/WdGqmHpayyMjiEhcKoVE.png',
@@ -57,9 +68,10 @@ const article = (options) => {
       percent: Mock.mock('@integer(1, 999)'),
       like: Mock.mock('@integer(1, 999)'),
       message: Mock.mock('@integer(1, 999)'),
-      description: description,
+      // description: description,
       href: href,
       title: titles[ i % 8 ],
+      description: descriptions[ i % 8 ],
       updatedAt: Mock.mock('@datetime'),
       members: [
         {

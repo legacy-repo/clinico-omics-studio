@@ -4,11 +4,6 @@
       <a-icon type="global" style="font-size: 16px"/>
     </span>
     <a-menu slot="overlay" style="width: 150px;" @click="SwitchLang">
-      <!-- <a-menu-item key="zh-CN">
-        <a rel="noopener noreferrer">
-          <span role="img" aria-label="简体中文">🇨🇳</span> 简体中文
-        </a>
-      </a-menu-item> -->
       <a-menu-item key="en-US">
         <a rel="noopener noreferrer">
           <span role="img" aria-label="English">🇬🇧</span> English

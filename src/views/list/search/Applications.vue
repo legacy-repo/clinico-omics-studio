@@ -2,47 +2,39 @@
   <div>
     <a-card :bordered="false" class="ant-pro-components-tag-select">
       <a-form :form="form" layout="inline">
-        <standard-form-row title="所属类目" block style="padding-bottom: 11px;">
+        <standard-form-row title="Topics" block style="padding-bottom: 11px;">
           <a-form-item>
             <tag-select>
-              <tag-select-option value="Category1">类目一</tag-select-option>
-              <tag-select-option value="Category2">类目二</tag-select-option>
-              <tag-select-option value="Category3">类目三</tag-select-option>
-              <tag-select-option value="Category4">类目四</tag-select-option>
-              <tag-select-option value="Category5">类目五</tag-select-option>
-              <tag-select-option value="Category6">类目六</tag-select-option>
-              <tag-select-option value="Category7">类目七</tag-select-option>
-              <tag-select-option value="Category8">类目八</tag-select-option>
-              <tag-select-option value="Category9">类目九</tag-select-option>
-              <tag-select-option value="Category10">类目十</tag-select-option>
+              <tag-select-option value="choppy-app">Choppy App</tag-select-option>
             </tag-select>
           </a-form-item>
         </standard-form-row>
 
-        <standard-form-row title="其它选项" grid last>
+        <standard-form-row title="Advanced" grid last>
           <a-row>
             <a-col :lg="8" :md="10" :sm="10" :xs="24">
-              <a-form-item :wrapper-col="{ sm: { span: 16 }, xs: { span: 24 } }" label="作者">
+              <a-form-item :wrapper-col="{ sm: { span: 16 }, xs: { span: 24 } }" label="Author">
                 <a-select
                   style="max-width: 200px; width: 100%;"
                   mode="multiple"
-                  placeholder="不限"
+                  placeholder="Not Specified"
                   v-decorator="['author']"
                   @change="handleChange"
                 >
-                  <a-select-option value="lisa">王昭君</a-select-option>
+                  <a-select-option value="Yechao Huang">Yechao Huang</a-select-option>
+                  <a-select-option value="Luyao Ren">Luyao Ren</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>
             <a-col :lg="8" :md="10" :sm="10" :xs="24">
-              <a-form-item :wrapper-col="{ sm: { span: 16 }, xs: { span: 24 } }" label="好评度">
+              <a-form-item :wrapper-col="{ sm: { span: 16 }, xs: { span: 24 } }" label="Rate">
                 <a-select
                   style="max-width: 200px; width: 100%;"
-                  placeholder="不限"
+                  placeholder="Not Specified"
                   v-decorator="['rate']"
                 >
-                  <a-select-option value="good">优秀</a-select-option>
-                  <a-select-option value="normal">普通</a-select-option>
+                  <a-select-option value="good">Good</a-select-option>
+                  <a-select-option value="normal">Normal</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>
@@ -52,22 +44,26 @@
     </a-card>
 
     <div class="ant-pro-pages-list-applications-filterCardList">
-      <a-list :loading="loading" :data-source="data" :grid="{ gutter: 24, xl: 4, lg: 3, md: 3, sm: 2, xs: 1 }" style="margin-top: 24px;">
+      <a-list :loading="loading" :data-source="data" :grid="{ gutter: 24, xl: 3, lg: 3, md: 2, sm: 1, xs: 1 }" style="margin-top: 16px;">
         <a-list-item slot="renderItem" slot-scope="item">
           <a-card :body-style="{ paddingBottom: 20 }" hoverable>
             <a-card-meta :title="item.title">
               <template slot="avatar">
-                <a-avatar size="small" :src="item.avatar"/>
+                <avatar :username="item.title" :size="24"/>
               </template>
             </a-card-meta>
+            <div class="">
+              <div class="description">{{ item.description }}</div>
+              <card-info active-user="100" new-user="999"></card-info>
+            </div>
             <template slot="actions">
-              <a-tooltip title="下载">
+              <a-tooltip title="Install">
                 <a-icon type="download" />
               </a-tooltip>
-              <a-tooltip title="编辑">
-                <a-icon type="edit" />
+              <a-tooltip title="View">
+                <a-icon type="message" />
               </a-tooltip>
-              <a-tooltip title="分享">
+              <a-tooltip title="Share">
                 <a-icon type="share-alt" />
               </a-tooltip>
               <a-dropdown>
@@ -76,20 +72,11 @@
                 </a>
                 <a-menu slot="overlay">
                   <a-menu-item>
-                    <a href="javascript:;">1st menu item</a>
-                  </a-menu-item>
-                  <a-menu-item>
-                    <a href="javascript:;">2nd menu item</a>
-                  </a-menu-item>
-                  <a-menu-item>
-                    <a href="javascript:;">3rd menu item</a>
+                    <a href="javascript:;">Uninstall</a>
                   </a-menu-item>
                 </a-menu>
               </a-dropdown>
             </template>
-            <div class="">
-              <card-info active-user="100" new-user="999"></card-info>
-            </div>
           </a-card>
         </a-list-item>
       </a-list>
@@ -99,6 +86,7 @@
 
 <script>
 import moment from 'moment'
+import Avatar from '@/components/Avatar'
 import { TagSelect, StandardFormRow, Ellipsis, AvatarList } from '@/components'
 import CardInfo from './components/CardInfo'
 const TagSelectOption = TagSelect.Option
@@ -106,6 +94,7 @@ const AvatarListItem = AvatarList.AvatarItem
 
 export default {
   components: {
+    Avatar,
     AvatarList,
     AvatarListItem,
     Ellipsis,
@@ -152,6 +141,20 @@ export default {
     font-size: 14px;
   }
 }
+
+.ant-pro-pages-list-applications-filterCardList {
+  .description {
+    margin-top: 15px;
+    height: 40px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    /*! autoprefixer: off */
+    -webkit-box-orient: vertical;
+  }
+}
+
 .ant-pro-pages-list-projects-cardList {
   margin-top: 24px;
 

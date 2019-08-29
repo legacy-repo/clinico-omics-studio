@@ -12,27 +12,27 @@
           >
             <a-menu-item key="/account/settings/base">
               <router-link :to="{ name: 'base-settings' }">
-                基本设置
+                Basic Profiles
               </router-link>
             </a-menu-item>
             <a-menu-item key="/account/settings/security">
               <router-link :to="{ name: 'security-settings' }">
-                安全设置
+                Security Profiles
               </router-link>
             </a-menu-item>
             <a-menu-item key="/account/settings/custom">
               <router-link :to="{ name: 'custom-settings' }">
-                个性化
+                Customization
               </router-link>
             </a-menu-item>
             <a-menu-item key="/account/settings/binding">
               <router-link :to="{ name: 'binding-settings' }">
-                账户绑定
+                Account Binding
               </router-link>
             </a-menu-item>
             <a-menu-item key="/account/settings/notification">
               <router-link :to="{ name: 'notification-settings' }">
-                新消息通知
+                Notification
               </router-link>
             </a-menu-item>
           </a-menu>

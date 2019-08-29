@@ -20,6 +20,13 @@ export const asyncRouterMap = [
         meta: { title: 'Dashboard', keepAlive: true, icon: bxAnaalyse, permission: [ 'dashboard' ] },
         children: [
           {
+            path: '/dashboard/search',
+            name: 'dashboard-search',
+            component: () => import('@/views/list/search/SearchLayout'),
+            redirect: '/global/search/application',
+            meta: { title: 'Search', keepAlive: true, permission: [ 'table' ] }
+          },
+          {
             path: '/dashboard/workplace',
             name: 'workplace',
             component: () => import('@/views/dashboard/Workplace'),
@@ -30,6 +37,44 @@ export const asyncRouterMap = [
             name: 'analysis',
             component: () => import('@/views/dashboard/Analysis'),
             meta: { title: 'Statistics', keepAlive: false, permission: [ 'dashboard' ] }
+          }
+        ]
+      },
+
+      {
+        path: '/global',
+        name: 'global',
+        redirect: '/global/search',
+        hidden: true,
+        component: PageView,
+        meta: { title: 'Global', icon: 'table', permission: [ 'table' ] },
+        children: [
+          {
+            path: '/global/search',
+            name: 'global-search',
+            component: () => import('@/views/list/search/SearchLayout'),
+            redirect: '/dashboard/search/application',
+            meta: { title: 'Search', keepAlive: true, permission: [ 'table' ] },
+            children: [
+              {
+                path: '/global/search/application',
+                name: 'search-applications',
+                component: () => import('../views/list/search/Applications'),
+                meta: { title: 'Search List（Applications）', permission: [ 'table' ] }
+              },
+              {
+                path: '/global/search/project',
+                name: 'search-projects',
+                component: () => import('../views/list/search/Projects'),
+                meta: { title: 'Search List（Projects）', permission: [ 'table' ] }
+              },
+              {
+                path: '/global/search/report',
+                name: 'search-reports',
+                component: () => import('../views/list/search/Article'),
+                meta: { title: 'Search List（Reports）', permission: [ 'table' ] }
+              }
+            ]
           }
         ]
       },
@@ -79,43 +124,19 @@ export const asyncRouterMap = [
             meta: { title: 'Submit Workflow', keepAlive: true, permission: [ 'table' ] }
           },
           {
-            path: '/choppy-pipe/task',
-            name: 'task',
+            path: '/choppy-pipe/project',
+            name: 'project',
             component: () => import('@/views/list/StandardList'),
-            meta: { title: 'Task', keepAlive: true, permission: [ 'table' ] }
+            meta: { title: 'Project Management', keepAlive: true, permission: [ 'table' ] }
           },
           {
-            path: '/choppy-pipe/report',
+            path: '/choppy-pipe/report/:reportId',
             name: 'report',
-            component: () => import('@/views/list/CardList'),
-            meta: { title: 'Report', keepAlive: true, permission: [ 'table' ] }
-          },
-          {
-            path: '/choppy-pipe/apps',
-            name: 'apps',
-            component: () => import('@/views/list/search/SearchLayout'),
-            redirect: '/list/search/article',
-            meta: { title: 'Applications', keepAlive: true, permission: [ 'table' ] },
-            children: [
-              {
-                path: '/list/search/article',
-                name: 'search-articles',
-                component: () => import('../views/list/search/Article'),
-                meta: { title: 'Search List（Articles）', permission: [ 'table' ] }
-              },
-              {
-                path: '/list/search/project',
-                name: 'search-projects',
-                component: () => import('../views/list/search/Projects'),
-                meta: { title: 'Search List（Projects）', permission: [ 'table' ] }
-              },
-              {
-                path: '/list/search/application',
-                name: 'search-applications',
-                component: () => import('../views/list/search/Applications'),
-                meta: { title: 'Search List（Applications）', permission: [ 'table' ] }
-              }
-            ]
+            // hidden: true,
+            // component: () => import('@/views/list/CardList'),
+            component: () => import('@/views/report/Report'),
+            props: (route) => ({ readonly: route.query.readonly, description: route.query.description }),
+            meta: { title: 'Report Management', keepAlive: true, permission: [ 'table' ] }
           }
         ]
       },
@@ -152,7 +173,7 @@ export const asyncRouterMap = [
           {
             path: 'http://www.fudan-pgx.org/premedkb/',
             name: 'premedkb-link',
-            meta: { title: 'Query', target: '_blank' }
+            meta: { title: 'Query Knowledgebase', target: '_blank' }
           }
         ]
       },
@@ -169,13 +190,13 @@ export const asyncRouterMap = [
             path: '/next-service-engine/plugins',
             name: 'plugins',
             component: () => import('@/views/profile/basic/Index'),
-            meta: { title: 'Plugins', permission: [ 'profile' ] }
+            meta: { title: 'Plugin Management', permission: [ 'profile' ] }
           },
           {
             path: '/next-service-engine/services',
             name: 'services',
             component: () => import('@/views/profile/advanced/Advanced'),
-            meta: { title: 'Services', permission: [ 'profile' ] }
+            meta: { title: 'Service Management', permission: [ 'profile' ] }
           }
         ]
       },
@@ -192,13 +213,13 @@ export const asyncRouterMap = [
             path: '/nccn/editor',
             name: 'editor',
             component: () => import(/* webpackChunkName: "result" */ '@/views/result/Success'),
-            meta: { title: 'Editor', keepAlive: false, hiddenHeaderContent: true, permission: [ 'result' ] }
+            meta: { title: 'NCCN Editor', keepAlive: false, hiddenHeaderContent: true, permission: [ 'result' ] }
           },
           {
             path: '/nccn/materials',
             name: 'materials',
             component: () => import(/* webpackChunkName: "result" */ '@/views/result/Error'),
-            meta: { title: 'Materials', keepAlive: false, hiddenHeaderContent: true, permission: [ 'result' ] }
+            meta: { title: 'NCCN Materials', keepAlive: false, hiddenHeaderContent: true, permission: [ 'result' ] }
           }
         ]
       },

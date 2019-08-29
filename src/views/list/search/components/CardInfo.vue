@@ -1,11 +1,11 @@
 <template>
   <div class="cardInfo">
     <div>
-      <p>活跃用户</p>
+      <p>Active Users</p>
       <p>{{ activeUser }}</p>
     </div>
     <div>
-      <p>新增用户</p>
+      <p>New Users</p>
       <p>{{ newUser }}</p>
     </div>
   </div>

@@ -13,24 +13,24 @@ export default {
         items: [
           {
             key: '1',
-            title: '文章'
+            title: 'Projects'
           },
           {
             key: '2',
-            title: '项目'
+            title: 'Reports'
           },
           {
             key: '3',
-            title: '应用'
+            title: 'Applications'
           }
         ],
         active: () => {
           switch (this.$route.path) {
-            case '/list/search/article':
+            case '/global/search/project':
               return '1'
-            case '/list/search/project':
+            case '/global/search/report':
               return '2'
-            case '/list/search/application':
+            case '/global/search/application':
               return '3'
             default:
               return '1'
@@ -39,13 +39,13 @@ export default {
         callback: (key) => {
           switch (key) {
             case '1':
-              this.$router.push('/list/search/article')
+              this.$router.push('/global/search/project')
               break
             case '2':
-              this.$router.push('/list/search/project')
+              this.$router.push('/global/search/report')
               break
             case '3':
-              this.$router.push('/list/search/application')
+              this.$router.push('/global/search/application')
               break
             default:
               this.$router.push('/workplace')
@@ -73,6 +73,6 @@ export default {
     }
   }
   .search-content{
-    margin-top: 48px;
+    margin-top: 10px;
   }
 </style>

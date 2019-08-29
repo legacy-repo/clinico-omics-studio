@@ -47,20 +47,20 @@ export default {
       <AList itemLayout="horizontal">
         <AListItem>
           <Meta>
-            <a slot="title">风格配色</a>
+            <a slot="title">Theme</a>
             <span slot="description">
-                整体风格配色设置
+                Dark or Light
             </span>
           </Meta>
           <div slot="actions">
-            <ASwitch checkedChildren="暗色" unCheckedChildren="白色" defaultChecked={this.navTheme === 'dark' && true || false} onChange={this.onChange} />
+            <ASwitch checkedChildren="Dark" unCheckedChildren="Light" defaultChecked={this.navTheme === 'dark' && true || false} onChange={this.onChange} />
           </div>
         </AListItem>
         <AListItem>
           <Meta>
-            <a slot="title">主题色</a>
+            <a slot="title">Theme Color</a>
             <span slot="description">
-                页面风格配色： <a domPropsInnerHTML={ this.colorFilter(this.primaryColor) }/>
+                Color: <a domPropsInnerHTML={ this.colorFilter(this.primaryColor) }/>
             </span>
           </Meta>
         </AListItem>

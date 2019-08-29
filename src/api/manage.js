@@ -6,10 +6,45 @@ const api = {
   service: '/service',
   permission: '/permission',
   permissionNoPager: '/permission/no-pager',
-  orgTree: '/org/tree'
+  orgTree: '/org/tree',
+  report: '/report'
 }
 
 export default api
+
+export function getTaskList () {
+  return axios({
+    url: 'https://nordata-cdn.oss-cn-shanghai.aliyuncs.com/choppy/tasks-2.json',
+    method: 'get',
+    params: {}
+  })
+}
+
+export function getReport () {
+  return axios({
+    url: 'https://nordata-cdn.oss-cn-shanghai.aliyuncs.com/choppy/test.json',
+    method: 'get',
+    params: {}
+  })
+}
+
+export function getReportList (parameter) {
+  return axios({
+    url: api.report,
+    method: 'get',
+    params: parameter
+  })
+}
+
+// id == 0 add     post
+// id != 0 update  put
+export function saveReport (parameter) {
+  return axios({
+    url: api.report,
+    method: parameter.id === 0 ? 'post' : 'put',
+    data: parameter
+  })
+}
 
 export function getUserList (parameter) {
   return axios({

@@ -7,6 +7,10 @@ const info = (options) => {
     'id': '4291d7da9005377ec9aec4a71ea837f',
     'name': 'PGx',
     'username': 'admin',
+    'description': '[Past - A Cardiothoracic Surgeon] - [Present - A Software Developer] - [Future - A Data Scientist]',
+    'title': 'Software Developer',
+    'organization': 'Fudan University',
+    'address': 'Shanghai',
     'password': '',
     'avatar': '/avatar2.png',
     'status': 1,
@@ -18,7 +22,8 @@ const info = (options) => {
     'merchantCode': 'TLif2btpzg079h15bk',
     'deleted': 0,
     'roleId': 'admin',
-    'role': {}
+    'role': {},
+    'tags': ['很有想法的', '专注设计', '辣~', '大长腿', '川妹子', '海纳百川']
   }
   // role
   const roleObj = {

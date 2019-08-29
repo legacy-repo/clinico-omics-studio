@@ -27,7 +27,7 @@ const login = (options) => {
     'createTime': 1497160610259,
     'deleted': 0,
     'roleId': 'admin',
-    'lang': 'zh-CN',
+    'lang': 'en-US',
     'token': '4291d7da9005377ec9aec4a71ea837f'
   }, '', 200, { 'Custom-Header': Mock.mock('@guid') })
 }

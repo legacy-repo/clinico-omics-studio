@@ -785,6 +785,13 @@
   dependencies:
     regenerator-runtime "^0.13.2"
 
+"@babel/runtime@^7.3.1":
+  version "7.5.5"
+  resolved "https://registry.npm.taobao.org/@babel/runtime/download/@babel/runtime-7.5.5.tgz?cache=0&sync_timestamp=1563398515522&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40babel%2Fruntime%2Fdownload%2F%40babel%2Fruntime-7.5.5.tgz#74fba56d35efbeca444091c7850ccd494fd2f132"
+  integrity sha1-dPulbTXvvspEQJHHhQzNSU/S8TI=
+  dependencies:
+    regenerator-runtime "^0.13.2"
+
 "@babel/template@^7.1.0", "@babel/template@^7.4.4":
   version "7.4.4"
   resolved "https://registry.npmjs.org/@babel/template/-/template-7.4.4.tgz#f4b88d1225689a08f5bc3a17483545be9e4ed237"
@@ -832,6 +839,90 @@
     esutils "^2.0.2"
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
+
+"@editorjs/checklist@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.npm.taobao.org/@editorjs/checklist/download/@editorjs/checklist-1.1.0.tgz#1c5a083a48852f3d86d6086d2e1a6057ac5b0429"
+  integrity sha1-HFoIOkiFLz2G1ghtLhpgV6xbBCk=
+
+"@editorjs/code@^2.4.1":
+  version "2.4.1"
+  resolved "https://registry.npm.taobao.org/@editorjs/code/download/@editorjs/code-2.4.1.tgz#a1851c781c9ead9a84bd921f04df172a2383f550"
+  integrity sha1-oYUceByerZqEvZIfBN8XKiOD9VA=
+
+"@editorjs/delimiter@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.npm.taobao.org/@editorjs/delimiter/download/@editorjs/delimiter-1.1.0.tgz#f61808ea92e4e289607d54441964f1cb8605410a"
+  integrity sha1-9hgI6pLk4olgfVREGWTxy4YFQQo=
+
+"@editorjs/editorjs@^2.15.0":
+  version "2.15.0"
+  resolved "https://registry.npm.taobao.org/@editorjs/editorjs/download/@editorjs/editorjs-2.15.0.tgz#7bb1cd38863e613be904a7e3d048a99590c9f5d9"
+  integrity sha1-e7HNOIY+YTvpBKfj0EiplZDJ9dk=
+  dependencies:
+    codex-notifier "^1.1.2"
+
+"@editorjs/embed@^2.2.1":
+  version "2.2.1"
+  resolved "https://registry.npm.taobao.org/@editorjs/embed/download/@editorjs/embed-2.2.1.tgz#90dbcac6e163d20c665fcc1a218d4ba1db80e2f1"
+  integrity sha1-kNvKxuFj0gxmX8waIY1LoduA4vE=
+
+"@editorjs/header@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.npm.taobao.org/@editorjs/header/download/@editorjs/header-2.3.0.tgz#ce48414e3d8b39b1ed5633d35e3684b158fb9e98"
+  integrity sha1-zkhBTj2LObHtVjPTXjaEsVj7npg=
+
+"@editorjs/image@^2.3.1":
+  version "2.3.1"
+  resolved "https://registry.npm.taobao.org/@editorjs/image/download/@editorjs/image-2.3.1.tgz#ba575a5db3b647e725acafdfbccd54df6a231c06"
+  integrity sha1-uldaXbO2R+clrK/fvM1U32ojHAY=
+
+"@editorjs/inline-code@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.npm.taobao.org/@editorjs/inline-code/download/@editorjs/inline-code-1.3.0.tgz#66b915d2c128ba520ba4b245067d40851d78355a"
+  integrity sha1-ZrkV0sEoulILpLJFBn1AhR14NVo=
+
+"@editorjs/link@^2.1.3":
+  version "2.1.3"
+  resolved "https://registry.npm.taobao.org/@editorjs/link/download/@editorjs/link-2.1.3.tgz#fd14f0a519aab75e234bba5f6e729ba5f0b94422"
+  integrity sha1-/RTwpRmqt14jS7pfbnKbpfC5RCI=
+  dependencies:
+    "@babel/runtime" "^7.3.1"
+
+"@editorjs/list@^1.4.0":
+  version "1.4.0"
+  resolved "https://registry.npm.taobao.org/@editorjs/list/download/@editorjs/list-1.4.0.tgz#e92459a8ac2305bc4385245e329c8b5c8437456a"
+  integrity sha1-6SRZqKwjBbxDhSReMpyLXIQ3RWo=
+
+"@editorjs/marker@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.npm.taobao.org/@editorjs/marker/download/@editorjs/marker-1.2.1.tgz#c0d8ebcc7a421e659b5d01c1e59c8aec911c7818"
+  integrity sha1-wNjrzHpCHmWbXQHB5ZyK7JEceBg=
+
+"@editorjs/paragraph@^2.6.0":
+  version "2.6.0"
+  resolved "https://registry.npm.taobao.org/@editorjs/paragraph/download/@editorjs/paragraph-2.6.0.tgz#49ec5ee2eabe84c57f876eac989df99126df616a"
+  integrity sha1-Sexe4uq+hMV/h26smJ35kSbfYWo=
+
+"@editorjs/quote@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.npm.taobao.org/@editorjs/quote/download/@editorjs/quote-2.3.0.tgz#5585cf93a87a1fd4e0c72ba08c90eb8eb06b518d"
+  integrity sha1-VYXPk6h6H9TgxyugjJDrjrBrUY0=
+
+"@editorjs/raw@^2.1.1":
+  version "2.1.1"
+  resolved "https://registry.npm.taobao.org/@editorjs/raw/download/@editorjs/raw-2.1.1.tgz#00cea181d8ce1a2a082352c6644090660c8237c7"
+  integrity sha1-AM6hgdjOGioII1LGZECQZgyCN8c=
+
+"@editorjs/table@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.npm.taobao.org/@editorjs/table/download/@editorjs/table-1.2.0.tgz#547d7b28c96f8a37605bea10bd4f016e8bfc344d"
+  integrity sha1-VH17KMlvijdgW+oQvU8Bbov8NE0=
+
+"@editorjs/warning@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.npm.taobao.org/@editorjs/warning/download/@editorjs/warning-1.1.1.tgz#8981f36f2316ae87e5204e808d22a0d9aa072468"
+  integrity sha1-iYHzbyMWroflIE6AjSKg2aoHJGg=
 
 "@hapi/address@2.x.x":
   version "2.0.0"
@@ -2825,6 +2916,11 @@ code-point-at@^1.0.0:
   resolved "https://registry.npmjs.org/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
   integrity sha1-DQcLTQQ6W+ozovGkDi7bPZpMz3c=
 
+codex-notifier@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.npm.taobao.org/codex-notifier/download/codex-notifier-1.1.2.tgz#a733079185f4c927fa296f1d71eb8753fe080895"
+  integrity sha1-pzMHkYX0ySf6KW8dceuHU/4ICJU=
+
 collection-visit@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/collection-visit/-/collection-visit-1.0.0.tgz#4bc0373c164bc3291b4d368c829cf1a80a59dca0"
@@ -3075,6 +3171,11 @@ core-js@^2.6.5:
   version "2.6.5"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.5.tgz#44bc8d249e7fb2ff5d00e0341a7ffb94fbf67895"
   integrity sha512-klh/kDpwX8hryYL14M9w/xei6vrv6sE8gTHDG7/T/+SEovB/G4ejwcfE/CBzO6Edsu+OETZMZ3wcX/EjUkrl5A==
+
+core-js@^3.1.4:
+  version "3.2.1"
+  resolved "https://registry.npm.taobao.org/core-js/download/core-js-3.2.1.tgz#cd41f38534da6cc59f7db050fe67307de9868b09"
+  integrity sha1-zUHzhTTabMWffbBQ/mcwfemGiwk=
 
 core-util-is@1.0.2, core-util-is@~1.0.0:
   version "1.0.2"
@@ -10735,6 +10836,11 @@ vm-browserify@^1.0.1:
   resolved "https://registry.npm.taobao.org/vm-browserify/download/vm-browserify-1.1.0.tgz#bd76d6a23323e2ca8ffa12028dc04559c75f9019"
   integrity sha1-vXbWojMj4sqP+hICjcBFWcdfkBk=
 
+vue-avatar@^2.1.7:
+  version "2.1.7"
+  resolved "https://registry.npm.taobao.org/vue-avatar/download/vue-avatar-2.1.7.tgz#00fca25f59ad9311159d55aacc4a98f70a23bd9d"
+  integrity sha1-APyiX1mtkxEVnVWqzEqY9wojvZ0=
+
 vue-clipboard2@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/vue-clipboard2/-/vue-clipboard2-0.2.1.tgz#9f06690af1c98aef344be1fc4beb00cdc5307ee1"
@@ -10746,6 +10852,29 @@ vue-cropper@0.4.9:
   version "0.4.9"
   resolved "https://registry.npm.taobao.org/vue-cropper/download/vue-cropper-0.4.9.tgz#fe650f32516ecf29014bbd4a9079191c8dc5a5ae"
   integrity sha1-/mUPMlFuzykBS71KkHkZHI3Fpa4=
+
+vue-editor-js@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.npm.taobao.org/vue-editor-js/download/vue-editor-js-0.4.0.tgz#a0cc826b8e90cce85088a4760d80d7f1ab660dd9"
+  integrity sha1-oMyCa46QzOhQiKR2DYDX8atmDdk=
+  dependencies:
+    "@editorjs/checklist" "^1.1.0"
+    "@editorjs/code" "^2.4.1"
+    "@editorjs/delimiter" "^1.1.0"
+    "@editorjs/editorjs" "^2.15.0"
+    "@editorjs/embed" "^2.2.1"
+    "@editorjs/header" "^2.3.0"
+    "@editorjs/image" "^2.3.1"
+    "@editorjs/inline-code" "^1.3.0"
+    "@editorjs/link" "^2.1.3"
+    "@editorjs/list" "^1.4.0"
+    "@editorjs/marker" "^1.2.1"
+    "@editorjs/paragraph" "^2.6.0"
+    "@editorjs/quote" "^2.3.0"
+    "@editorjs/raw" "^2.1.1"
+    "@editorjs/table" "^1.2.0"
+    "@editorjs/warning" "^1.1.1"
+    core-js "^3.1.4"
 
 vue-eslint-parser@^2.0.3:
   version "2.0.3"

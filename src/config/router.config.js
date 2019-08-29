@@ -21,13 +21,13 @@ export const asyncRouterMap = [
         children: [
           {
             path: '/dashboard/workplace',
-            name: 'Workplace',
+            name: 'workplace',
             component: () => import('@/views/dashboard/Workplace'),
-            meta: { title: 'Workbench', keepAlive: true, permission: [ 'dashboard' ] }
+            meta: { title: 'Workplace', keepAlive: true, permission: [ 'dashboard' ] }
           },
           {
             path: '/dashboard/analysis',
-            name: 'Analysis',
+            name: 'analysis',
             component: () => import('@/views/dashboard/Analysis'),
             meta: { title: 'Statistics', keepAlive: false, permission: [ 'dashboard' ] }
           }
@@ -50,13 +50,13 @@ export const asyncRouterMap = [
           },
           {
             path: '/data-source/discovery',
-            name: 'Discovery',
+            name: 'discovery',
             component: () => import('@/views/form/stepForm/StepForm'),
             meta: { title: 'Discovery', keepAlive: true, permission: [ 'form' ] }
           },
           {
             path: '/data-source/visualizer',
-            name: 'Visualizer',
+            name: 'visualizer',
             component: () => import('@/views/form/advancedForm/AdvancedForm'),
             meta: { title: 'Visualizer', keepAlive: true, permission: [ 'form' ] }
           }
@@ -80,38 +80,38 @@ export const asyncRouterMap = [
           },
           {
             path: '/choppy-pipe/task',
-            name: 'Task',
+            name: 'task',
             component: () => import('@/views/list/StandardList'),
             meta: { title: 'Task', keepAlive: true, permission: [ 'table' ] }
           },
           {
             path: '/choppy-pipe/report',
-            name: 'Report',
+            name: 'report',
             component: () => import('@/views/list/CardList'),
             meta: { title: 'Report', keepAlive: true, permission: [ 'table' ] }
           },
           {
             path: '/choppy-pipe/apps',
-            name: 'Apps',
+            name: 'apps',
             component: () => import('@/views/list/search/SearchLayout'),
             redirect: '/list/search/article',
             meta: { title: 'Applications', keepAlive: true, permission: [ 'table' ] },
             children: [
               {
                 path: '/list/search/article',
-                name: 'SearchArticles',
+                name: 'search-articles',
                 component: () => import('../views/list/search/Article'),
                 meta: { title: 'Search List（Articles）', permission: [ 'table' ] }
               },
               {
                 path: '/list/search/project',
-                name: 'SearchProjects',
+                name: 'search-projects',
                 component: () => import('../views/list/search/Projects'),
                 meta: { title: 'Search List（Projects）', permission: [ 'table' ] }
               },
               {
                 path: '/list/search/application',
-                name: 'SearchApplications',
+                name: 'search-applications',
                 component: () => import('../views/list/search/Applications'),
                 meta: { title: 'Search List（Applications）', permission: [ 'table' ] }
               }
@@ -136,7 +136,7 @@ export const asyncRouterMap = [
           },
           {
             path: 'http://data.3steps.cn',
-            name: 'Portal',
+            name: 'portal',
             meta: { title: 'Choppy Data Portal', target: '_blank' }
           }
         ]
@@ -151,7 +151,7 @@ export const asyncRouterMap = [
         children: [
           {
             path: 'http://www.fudan-pgx.org/premedkb/',
-            name: 'PreMedKB',
+            name: 'premedkb-link',
             meta: { title: 'Query', target: '_blank' }
           }
         ]
@@ -160,20 +160,20 @@ export const asyncRouterMap = [
       // profile
       {
         path: '/next-service-engine',
-        name: 'PluginService',
+        name: 'plugin-service',
         component: RouteView,
         redirect: '/next-service-engine/plugins',
         meta: { title: 'Plugins & Services', icon: 'profile', permission: [ 'profile' ] },
         children: [
           {
             path: '/next-service-engine/plugins',
-            name: 'Plugins',
+            name: 'plugins',
             component: () => import('@/views/profile/basic/Index'),
             meta: { title: 'Plugins', permission: [ 'profile' ] }
           },
           {
             path: '/next-service-engine/services',
-            name: 'Services',
+            name: 'services',
             component: () => import('@/views/profile/advanced/Advanced'),
             meta: { title: 'Services', permission: [ 'profile' ] }
           }
@@ -183,20 +183,20 @@ export const asyncRouterMap = [
       // result
       {
         path: '/nccn',
-        name: 'NCCN',
+        name: 'nccn',
         component: PageView,
         redirect: '/nccn/editor',
         meta: { title: 'NCCN', icon: 'check-circle-o', permission: [ 'result' ] },
         children: [
           {
             path: '/nccn/editor',
-            name: 'Editor',
+            name: 'editor',
             component: () => import(/* webpackChunkName: "result" */ '@/views/result/Success'),
             meta: { title: 'Editor', keepAlive: false, hiddenHeaderContent: true, permission: [ 'result' ] }
           },
           {
             path: '/nccn/materials',
-            name: 'Materials',
+            name: 'materials',
             component: () => import(/* webpackChunkName: "result" */ '@/views/result/Error'),
             meta: { title: 'Materials', keepAlive: false, hiddenHeaderContent: true, permission: [ 'result' ] }
           }
@@ -214,19 +214,19 @@ export const asyncRouterMap = [
         children: [
           {
             path: '/exception/403',
-            name: 'Exception403',
+            name: 'exception403',
             component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/403'),
             meta: { title: '403', permission: [ 'exception' ] }
           },
           {
             path: '/exception/404',
-            name: 'Exception404',
+            name: 'exception404',
             component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/404'),
             meta: { title: '404', permission: [ 'exception' ] }
           },
           {
             path: '/exception/500',
-            name: 'Exception500',
+            name: 'exception500',
             component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/500'),
             meta: { title: '500', permission: [ 'exception' ] }
           }
@@ -257,31 +257,31 @@ export const asyncRouterMap = [
             children: [
               {
                 path: '/account/settings/base',
-                name: 'BaseSettings',
+                name: 'base-settings',
                 component: () => import('@/views/account/settings/BaseSetting'),
                 meta: { title: 'Basic Profiles', hidden: true, permission: [ 'user' ] }
               },
               {
                 path: '/account/settings/security',
-                name: 'SecuritySettings',
+                name: 'security-settings',
                 component: () => import('@/views/account/settings/Security'),
                 meta: { title: 'Secure Profiles', hidden: true, keepAlive: true, permission: [ 'user' ] }
               },
               {
                 path: '/account/settings/custom',
-                name: 'CustomSettings',
+                name: 'custom-settings',
                 component: () => import('@/views/account/settings/Custom'),
                 meta: { title: 'Customization', hidden: true, keepAlive: true, permission: [ 'user' ] }
               },
               {
                 path: '/account/settings/binding',
-                name: 'BindingSettings',
+                name: 'binding-settings',
                 component: () => import('@/views/account/settings/Binding'),
                 meta: { title: 'Binding Settings', hidden: true, keepAlive: true, permission: [ 'user' ] }
               },
               {
                 path: '/account/settings/notification',
-                name: 'NotificationSettings',
+                name: 'notification-settings',
                 component: () => import('@/views/account/settings/Notification'),
                 meta: { title: 'Notifications', hidden: true, keepAlive: true, permission: [ 'user' ] }
               }
@@ -293,7 +293,7 @@ export const asyncRouterMap = [
       // other
       {
         path: '/other',
-        name: 'otherPage',
+        name: 'other-page',
         hidden: true,
         component: PageView,
         meta: { title: '其他组件', icon: 'slack', permission: [ 'dashboard' ] },
@@ -301,7 +301,7 @@ export const asyncRouterMap = [
         children: [
           {
             path: '/other/icon-selector',
-            name: 'TestIconSelect',
+            name: 'test-icon-select',
             component: () => import('@/views/other/IconSelectorView'),
             meta: { title: 'IconSelector', icon: 'tool', keepAlive: true, permission: [ 'dashboard' ] }
           },
@@ -313,37 +313,37 @@ export const asyncRouterMap = [
             children: [
               {
                 path: '/other/list/tree-list',
-                name: 'TreeList',
+                name: 'tree-list',
                 component: () => import('@/views/other/TreeList'),
                 meta: { title: '树目录表格', keepAlive: true }
               },
               {
                 path: '/other/list/edit-table',
-                name: 'EditList',
+                name: 'edit-list',
                 component: () => import('@/views/other/TableInnerEditList'),
                 meta: { title: '内联编辑表格', keepAlive: true }
               },
               {
                 path: '/other/list/user-list',
-                name: 'UserList',
+                name: 'user-list',
                 component: () => import('@/views/other/UserList'),
                 meta: { title: '用户列表', keepAlive: true }
               },
               {
                 path: '/other/list/role-list',
-                name: 'RoleList',
+                name: 'role-list',
                 component: () => import('@/views/other/RoleList'),
                 meta: { title: '角色列表', keepAlive: true }
               },
               {
                 path: '/other/list/system-role',
-                name: 'SystemRole',
+                name: 'system-role',
                 component: () => import('@/views/role/RoleList'),
                 meta: { title: '角色列表2', keepAlive: true }
               },
               {
                 path: '/other/list/permission-list',
-                name: 'PermissionList',
+                name: 'permission-list',
                 component: () => import('@/views/other/PermissionList'),
                 meta: { title: '权限列表', keepAlive: true }
               }

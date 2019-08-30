@@ -12,7 +12,15 @@ const api = {
 
 export default api
 
-export function getTaskList () {
+export function getAppList () {
+  return axios({
+    url: 'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/choppy/apps.json',
+    method: 'get',
+    params: {}
+  })
+}
+
+export function getWorkflowList () {
   return axios({
     url: 'https://nordata-cdn.oss-cn-shanghai.aliyuncs.com/choppy/tasks-2.json',
     method: 'get',

@@ -1,56 +1,56 @@
 <template>
   <div>
+
     <a-card :bordered="false" class="ant-pro-components-tag-select">
       <a-form :form="form" layout="inline">
-        <standard-form-row title="所属类目" block style="padding-bottom: 11px;">
-          <a-form-item>
-            <tag-select>
-              <tag-select-option value="Category1">类目一</tag-select-option>
-              <tag-select-option value="Category2">类目二</tag-select-option>
-              <tag-select-option value="Category3">类目三</tag-select-option>
-              <tag-select-option value="Category4">类目四</tag-select-option>
-              <tag-select-option value="Category5">类目五</tag-select-option>
-              <tag-select-option value="Category6">类目六</tag-select-option>
-              <tag-select-option value="Category7">类目七</tag-select-option>
-              <tag-select-option value="Category8">类目八</tag-select-option>
-              <tag-select-option value="Category9">类目九</tag-select-option>
-              <tag-select-option value="Category10">类目十</tag-select-option>
-            </tag-select>
-          </a-form-item>
+        <standard-form-row title="Status" block style="padding-bottom: 11px; margin-bottom: 0px;">
+          <a-row type="flex" justify="space-between">
+            <a-form-item>
+              <tag-select>
+                <tag-select-option value="Category1">Checked</tag-select-option>
+                <tag-select-option value="Category2">Archived</tag-select-option>
+                <tag-select-option value="Category3">Finished</tag-select-option>
+                <tag-select-option value="Category4">NotFinished</tag-select-option>
+              </tag-select>
+            </a-form-item>
+            <a-button type="primary" @click="onShowAdvancedForm(switchBtnText)">{{ switchBtnText }}</a-button>
+          </a-row>
         </standard-form-row>
 
-        <standard-form-row title="owner" grid>
+        <standard-form-row title="owner" grid v-if="advancedFormActive" style="margin-top: 16px;">
           <a-row>
             <a-col :md="24">
               <a-form-item :wrapper-col="{ span: 24 }">
                 <a-select
                   style="max-width: 268px; width: 100%;"
                   mode="multiple"
-                  placeholder="选择 onwer"
+                  placeholder="Choose Owner"
                   v-decorator="['owner']"
                   @change="handleChange"
                 >
                   <a-select-option v-for="item in owners" :key="item.id">{{ item.name }}</a-select-option>
                 </a-select>
-                <a class="list-articles-trigger" @click="setOwner">只看自己的</a>
+                <a class="list-articles-trigger" @click="setOwner">Only Yourself</a>
               </a-form-item>
             </a-col>
           </a-row>
         </standard-form-row>
 
-        <standard-form-row title="其它选项" grid last>
+        <standard-form-row title="Advanced" grid last v-if="advancedFormActive">
           <a-row :gutter="16">
             <a-col :xs="24" :sm="24" :md="12" :lg="10" :xl="8">
-              <a-form-item label="活跃用户" :wrapper-col="{ xs: 24, sm: 24, md: 12 }">
-                <a-select placeholder="不限" style="max-width: 200px; width: 100%;">
-                  <a-select-option value="李三">李三</a-select-option>
+              <a-form-item label="" :wrapper-col="{ xs: 24, sm: 24, md: 12 }">
+                <a-select placeholder="Active Report" style="max-width: 200px; width: 100%;">
+                  <a-select-option value="monthly">Monthly</a-select-option>
+                  <a-select-option value="weekly">Weekly</a-select-option>
+                  <a-select-option value="today">Today</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>
             <a-col :xs="24" :sm="24" :md="12" :lg="10" :xl="8">
-              <a-form-item label="好评度" :wrapper-col="{ xs: 24, sm: 24, md: 12 }">
-                <a-select placeholder="不限" style="max-width: 200px; width: 100%;">
-                  <a-select-option value="优秀">优秀</a-select-option>
+              <a-form-item label="" :wrapper-col="{ xs: 24, sm: 24, md: 12 }">
+                <a-select placeholder="Rate" style="max-width: 200px; width: 100%;">
+                  <a-select-option value="good">Good</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>
@@ -59,7 +59,7 @@
       </a-form>
     </a-card>
 
-    <a-card style="margin-top: 24px;" :bordered="false">
+    <a-card style="margin-top: 10px;" :bordered="false">
       <a-list
         size="large"
         rowKey="id"
@@ -74,19 +74,19 @@
             <icon-text type="message" :text="item.message" />
           </template>
           <a-list-item-meta>
-            <a slot="title" href="https://vue.ant.design/">{{ item.title }}</a>
+            <router-link slot="title" :to="{ name: 'report-details', params: { reportId: item.id }}">{{ item.title }}</router-link>
             <template slot="description">
               <span>
-                <a-tag>Ant Design</a-tag>
-                <a-tag>设计语言</a-tag>
-                <a-tag>蚂蚁金服</a-tag>
+                <a-tag>Mutation</a-tag>
+                <a-tag>Patient</a-tag>
+                <a-tag>WGS</a-tag>
               </span>
             </template>
           </a-list-item-meta>
-          <article-list-content :description="item.description" :owner="item.owner" :avatar="item.avatar" :href="item.href" :updateAt="item.updatedAt" />
+          <report-list-content :description="item.description" :owner="item.owner" :avatar="item.avatar" :href="item.href" :updateAt="item.updatedAt" />
         </a-list-item>
         <div slot="footer" v-if="data.length > 0" style="text-align: center; margin-top: 16px;">
-          <a-button @click="loadMore" :loading="loadingMore">加载更多</a-button>
+          <a-button @click="loadMore" :loading="loadingMore">Load More...</a-button>
         </div>
       </a-list>
     </a-card>
@@ -94,7 +94,7 @@
 </template>
 
 <script>
-import { TagSelect, StandardFormRow, ArticleListContent } from '@/components'
+import { TagSelect, StandardFormRow, ReportListContent } from '@/components'
 import IconText from './components/IconText'
 const TagSelectOption = TagSelect.Option
 
@@ -126,7 +126,7 @@ export default {
     TagSelect,
     TagSelectOption,
     StandardFormRow,
-    ArticleListContent,
+    ReportListContent,
     IconText
   },
   data () {
@@ -135,13 +135,23 @@ export default {
       loading: true,
       loadingMore: false,
       data: [],
-      form: this.$form.createForm(this)
+      form: this.$form.createForm(this),
+      switchBtnText: 'More',
+      advancedFormActive: false
     }
   },
   mounted () {
     this.getList()
   },
   methods: {
+    onShowAdvancedForm (switchBtnText) {
+      if (switchBtnText === 'More') {
+        this.switchBtnText = 'Less'
+      } else {
+        this.switchBtnText = 'More'
+      }
+      this.advancedFormActive = !this.advancedFormActive
+    },
     handleChange (value) {
       console.log(`selected ${value}`)
     },
@@ -171,6 +181,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.antd-pro-components-standard-form-row-index-standardFormRow {
+    display: flex;
+    align-items: center;
+}
+
 .ant-pro-components-tag-select {
   /deep/ .ant-pro-tag-select .ant-tag {
     margin-right: 24px;

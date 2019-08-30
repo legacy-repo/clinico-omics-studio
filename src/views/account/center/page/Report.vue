@@ -13,32 +13,32 @@
         <icon-text type="message" :text="item.message" />
       </template>
       <a-list-item-meta>
-        <a slot="title" href="https://vue.ant.design/">{{ item.title }}</a>
+        <router-link slot="title" :to="{ name: 'report-details', params: { reportId: item.id }}">{{ item.title }}</router-link>
         <template slot="description">
           <span>
-            <a-tag>Ant Design</a-tag>
-            <a-tag>设计语言</a-tag>
-            <a-tag>蚂蚁金服</a-tag>
+            <a-tag>Mutation</a-tag>
+            <a-tag>Patient</a-tag>
+            <a-tag>WGS</a-tag>
           </span>
         </template>
       </a-list-item-meta>
-      <article-list-content :description="item.description" :owner="item.owner" :avatar="item.avatar" :href="item.href" :updateAt="item.updatedAt" />
+      <report-list-content :description="item.description" :owner="item.owner" :avatar="item.avatar" :href="item.href" :updateAt="item.updatedAt" />
     </a-list-item>
     <div slot="footer" v-if="data.length > 0" style="text-align: center; margin-top: 16px;">
-      <a-button @click="loadMore" :loading="loadingMore">加载更多</a-button>
+      <a-button @click="loadMore" :loading="loadingMore">Load More...</a-button>
     </div>
   </a-list>
 </template>
 
 <script>
-import { ArticleListContent } from '@/components'
+import { ReportListContent } from '@/components'
 import IconText from '@/views/list/search/components/IconText'
 
 export default {
-  name: 'Article',
+  name: 'Report',
   components: {
     IconText,
-    ArticleListContent
+    ReportListContent
   },
   data () {
     return {

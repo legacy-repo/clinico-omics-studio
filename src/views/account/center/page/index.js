@@ -1,5 +1,5 @@
 import AppPage from './App'
-import ArticlePage from './Article'
+import ReportPage from './Report'
 import ProjectPage from './Project'
 
-export { AppPage, ArticlePage, ProjectPage }
+export { AppPage, ReportPage, ProjectPage }

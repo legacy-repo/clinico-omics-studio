@@ -7,13 +7,13 @@
     <div slot="extra">
       <a-row class="more-info">
         <a-col :span="8">
-          <head-info :title="$t('dashboard.workplace.project')" content="56" :center="false" :bordered="false"/>
+          <head-info :title="$t('dashboard.workplace.projects')" content="56" :center="false" :bordered="false"/>
         </a-col>
         <a-col :span="8">
-          <head-info :title="$t('dashboard.workplace.teamRank')" content="8/24" :center="false" :bordered="false"/>
+          <head-info :title="$t('dashboard.workplace.samples')" content="1,299" :center="false" :bordered="false"/>
         </a-col>
         <a-col :span="8">
-          <head-info :title="$t('dashboard.workplace.views')" content="2,223" :center="false" />
+          <head-info :title="$t('dashboard.workplace.reports')" content="56" :center="false" />
         </a-col>
       </a-row>
     </div>
@@ -28,7 +28,7 @@
             :bordered="false"
             title="Ongoing Projects"
             :body-style="{ padding: 0 }">
-            <a slot="extra">All Projects</a>
+            <a slot="extra" @click="onShowWorkflowMgmt">All Projects</a>
             <div>
               <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in projects">
                 <a-card :bordered="false" :body-style="{ padding: 0 }">
@@ -207,6 +207,11 @@ export default {
     this.initRadar()
   },
   methods: {
+    onShowWorkflowMgmt () {
+      this.$router.push({
+        name: 'workflow-management'
+      })
+    },
     getProjects () {
       this.$http.get('/list/search/projects')
         .then(res => {

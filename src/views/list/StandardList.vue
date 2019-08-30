@@ -2,14 +2,17 @@
   <div>
     <a-card :bordered="false">
       <a-row>
-        <a-col :sm="8" :xs="24">
-          <head-info title="Running" content="8 tasks" :bordered="true"/>
+        <a-col :sm="6" :xs="24">
+          <head-info title="Running" content="8" :bordered="true"/>
         </a-col>
-        <a-col :sm="8" :xs="24">
-          <head-info title="Failed" content="32 tasks" :bordered="true"/>
+        <a-col :sm="6" :xs="24">
+          <head-info title="Failed" content="32" :bordered="true"/>
         </a-col>
-        <a-col :sm="8" :xs="24">
-          <head-info title="Finished" content="24 tasks"/>
+        <a-col :sm="6" :xs="24">
+          <head-info title="Finished" content="24" :bordered="true"/>
+        </a-col>
+        <a-col :sm="6" :xs="24">
+          <head-info title="Total" content="64"/>
         </a-col>
       </a-row>
     </a-card>
@@ -17,7 +20,7 @@
     <a-card
       style="margin-top: 10px"
       :bordered="false"
-      title="Task List">
+      title="Workflow List">
 
       <div slot="extra">
         <a-radio-group @change="onClickRadioBtn" defaultValue="total" :value="radioGroupValue">
@@ -41,7 +44,7 @@
           <div slot="actions">
             <a-dropdown>
               <a-menu slot="overlay">
-                <a-menu-item><a @click="onShowTask(item.title)">View</a></a-menu-item>
+                <a-menu-item><a @click="onShowWorkflow(item.title)">View</a></a-menu-item>
                 <a-menu-item><a>Update</a></a-menu-item>
                 <a-menu-item><a>Delete</a></a-menu-item>
               </a-menu>
@@ -76,7 +79,7 @@
 <script>
 import HeadInfo from '@/components/tools/HeadInfo'
 import TaskForm from './modules/TaskForm'
-import { getTaskList } from '@/api/manage'
+import { getWorkflowList } from '@/api/manage'
 
 export default {
   name: 'StandardList',
@@ -101,24 +104,29 @@ export default {
       this.radioGroupValue = event.target.value
       console.log('Current Radio Button Value: ', this.radioGroupValue)
     },
-    onShowTask (taskName) {
-
-    },
-    onShowReport (taskName, reportId) {
+    onShowWorkflow (workflowId) {
       this.$router.push({
-        name: 'report',
+        name: 'workflow-details',
+        params: {
+          workflowId: workflowId
+        }
+      })
+    },
+    onShowReport (workflowName, reportId) {
+      this.$router.push({
+        name: 'report-details',
         params: {
           reportId: reportId
         },
         query: {
           readonly: true,
-          description: 'The Report of ' + taskName
+          description: 'The Report of ' + workflowName
         }
       })
     }
   },
   created () {
-    getTaskList().then(res => {
+    getWorkflowList().then(res => {
       const that = this
       that.data = res.data
       that.perPage = res.per_page

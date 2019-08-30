@@ -13,11 +13,11 @@
         <standard-form-row title="Advanced" grid last>
           <a-row>
             <a-col :lg="8" :md="10" :sm="10" :xs="24">
-              <a-form-item :wrapper-col="{ sm: { span: 16 }, xs: { span: 24 } }" label="Author">
+              <a-form-item :wrapper-col="{ sm: { span: 16 }, xs: { span: 24 } }" label="">
                 <a-select
                   style="max-width: 200px; width: 100%;"
                   mode="multiple"
-                  placeholder="Not Specified"
+                  placeholder="Author"
                   v-decorator="['author']"
                   @change="handleChange"
                 >
@@ -27,10 +27,10 @@
               </a-form-item>
             </a-col>
             <a-col :lg="8" :md="10" :sm="10" :xs="24">
-              <a-form-item :wrapper-col="{ sm: { span: 16 }, xs: { span: 24 } }" label="Rate">
+              <a-form-item :wrapper-col="{ sm: { span: 16 }, xs: { span: 24 } }" label="">
                 <a-select
                   style="max-width: 200px; width: 100%;"
-                  placeholder="Not Specified"
+                  placeholder="Rate"
                   v-decorator="['rate']"
                 >
                   <a-select-option value="good">Good</a-select-option>
@@ -58,13 +58,13 @@
             </div>
             <template slot="actions">
               <a-tooltip title="Install">
-                <a-icon type="download" />
+                <a-icon type="download" @click="onInstall(item)" />
               </a-tooltip>
               <a-tooltip title="View">
-                <a-icon type="message" />
+                <a-icon type="eye" @click="onView(item)" />
               </a-tooltip>
               <a-tooltip title="Share">
-                <a-icon type="share-alt" />
+                <a-icon type="share-alt" @click="onShare(item)" />
               </a-tooltip>
               <a-dropdown>
                 <a class="ant-dropdown-link">
@@ -89,6 +89,8 @@ import moment from 'moment'
 import Avatar from '@/components/Avatar'
 import { TagSelect, StandardFormRow, Ellipsis, AvatarList } from '@/components'
 import CardInfo from './components/CardInfo'
+import { getAppList } from '@/api/manage'
+
 const TagSelectOption = TagSelect.Option
 const AvatarListItem = AvatarList.AvatarItem
 
@@ -123,10 +125,24 @@ export default {
       console.log(`selected ${value}`)
     },
     getList () {
-      this.$http.get('/list/article', { params: { count: 8 } }).then(res => {
+      getAppList().then(res => {
         console.log('res', res)
-        this.data = res.result
+        this.data = res.data
         this.loading = false
+      })
+    },
+    onInstall (app) {
+
+    },
+    onView (app) {
+      window.open(app.repoUrl, '_blank')
+    },
+    onShare (app) {
+      this.$copyText(app.repoUrl).then(message => {
+        this.$message.success('The application url has been copied to your clipboard!')
+      }).catch(err => {
+        console.log('onShare: ', err)
+        this.$message.error('Copy failed.')
       })
     }
   }
@@ -134,6 +150,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.antd-pro-components-standard-form-row-index-standardFormRow {
+  display: flex;
+  align-items: center;
+}
+
 .ant-pro-components-tag-select {
   /deep/ .ant-pro-tag-select .ant-tag {
     margin-right: 24px;

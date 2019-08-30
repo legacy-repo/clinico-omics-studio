@@ -2,47 +2,40 @@
   <div>
     <a-card :bordered="false" class="ant-pro-components-tag-select">
       <a-form :form="form" layout="inline">
-        <standard-form-row title="所属类目" block style="padding-bottom: 11px;">
+        <standard-form-row title="Status" block style="padding-bottom: 11px;">
           <a-form-item>
             <tag-select>
-              <tag-select-option value="Category1">类目一</tag-select-option>
-              <tag-select-option value="Category2">类目二</tag-select-option>
-              <tag-select-option value="Category3">类目三</tag-select-option>
-              <tag-select-option value="Category4">类目四</tag-select-option>
-              <tag-select-option value="Category5">类目五</tag-select-option>
-              <tag-select-option value="Category6">类目六</tag-select-option>
-              <tag-select-option value="Category7">类目七</tag-select-option>
-              <tag-select-option value="Category8">类目八</tag-select-option>
-              <tag-select-option value="Category9">类目九</tag-select-option>
-              <tag-select-option value="Category10">类目十</tag-select-option>
+              <tag-select-option value="running">Running</tag-select-option>
+              <tag-select-option value="failed">Failed</tag-select-option>
+              <tag-select-option value="finished">Finished</tag-select-option>
             </tag-select>
           </a-form-item>
         </standard-form-row>
 
-        <standard-form-row title="其它选项" grid last>
+        <standard-form-row title="Advanced" grid last>
           <a-row>
             <a-col :lg="8" :md="10" :sm="10" :xs="24">
-              <a-form-item :wrapper-col="{ sm: { span: 16 }, xs: { span: 24 } }" label="作者">
+              <a-form-item :wrapper-col="{ sm: { span: 16 }, xs: { span: 24 } }" label="">
                 <a-select
                   style="max-width: 200px; width: 100%;"
                   mode="multiple"
-                  placeholder="不限"
+                  placeholder="Author"
                   v-decorator="['author']"
                   @change="handleChange"
                 >
-                  <a-select-option value="lisa">王昭君</a-select-option>
+                  <a-select-option value="huangyechao">Yechao Huang</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>
             <a-col :lg="8" :md="10" :sm="10" :xs="24">
-              <a-form-item :wrapper-col="{ sm: { span: 16 }, xs: { span: 24 } }" label="好评度">
+              <a-form-item :wrapper-col="{ sm: { span: 16 }, xs: { span: 24 } }" label="">
                 <a-select
                   style="max-width: 200px; width: 100%;"
-                  placeholder="不限"
+                  placeholder="Rate"
                   v-decorator="['rate']"
                 >
-                  <a-select-option value="good">优秀</a-select-option>
-                  <a-select-option value="normal">普通</a-select-option>
+                  <a-select-option value="good">Good</a-select-option>
+                  <a-select-option value="normal">Normal</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>
@@ -52,7 +45,7 @@
     </a-card>
 
     <div class="ant-pro-pages-list-projects-cardList">
-      <a-list :loading="loading" :data-source="data" :grid="{ gutter: 24, xl: 4, lg: 3, md: 3, sm: 2, xs: 1 }">
+      <a-list :loading="loading" :data-source="data" :grid="{ gutter: 24, xl: 3, lg: 3, md: 2, sm: 1, xs: 1 }">
         <a-list-item slot="renderItem" slot-scope="item">
           <a-card class="ant-pro-pages-list-projects-card" hoverable>
             <img slot="cover" :src="item.cover" :alt="item.title" />
@@ -127,6 +120,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.antd-pro-components-standard-form-row-index-standardFormRow {
+  display: flex;
+  align-items: center;
+}
+
 .ant-pro-components-tag-select {
   /deep/ .ant-pro-tag-select .ant-tag {
     margin-right: 24px;

@@ -1,25 +1,31 @@
 <template>
-  <div class="antd-pro-components-article-list-content-index-listContent">
+  <div class="antd-pro-components-report-list-content-index-listContent">
     <div class="description">
       <slot>
         {{ description }}
       </slot>
     </div>
     <div class="extra">
-      <a-avatar :src="avatar" size="small" />
-      <a :href="href">{{ owner }}</a> 发布在 <a :href="href">{{ href }}</a>
+      <!-- <a-avatar :src="avatar" size="small" /> -->
+      <avatar :username="owner" :size="24" inline style="margin-right: 5px"/>
+      <a :href="href">{{ owner }}</a> publish at <a :href="href">{{ href }}</a>
       <em>{{ updateAt | moment }}</em>
     </div>
   </div>
 </template>
 
 <script>
+import Avatar from '@/components/Avatar'
+
 export default {
-  name: 'ArticleListContent',
+  components: {
+    Avatar
+  },
+  name: 'ReportListContent',
   props: {
     prefixCls: {
       type: String,
-      default: 'antd-pro-components-article-list-content-index-listContent'
+      default: 'antd-pro-components-report-list-content-index-listContent'
     },
     description: {
       type: String,
@@ -48,7 +54,7 @@ export default {
 <style lang="less" scoped>
 @import '../index.less';
 
-.antd-pro-components-article-list-content-index-listContent {
+.antd-pro-components-report-list-content-index-listContent {
   .description {
     max-width: 720px;
     line-height: 22px;
@@ -76,7 +82,7 @@ export default {
 }
 
 @media screen and (max-width: @screen-xs) {
-  .antd-pro-components-article-list-content-index-listContent {
+  .antd-pro-components-report-list-content-index-listContent {
     .extra {
       & > em {
         display: block;

@@ -17,7 +17,7 @@ export const asyncRouterMap = [
         name: 'dashboard',
         redirect: '/dashboard/workplace',
         component: RouteView,
-        meta: { title: 'Dashboard', keepAlive: true, icon: bxAnaalyse, permission: [ 'dashboard' ] },
+        meta: { title: 'Dashboard', keepAlive: true, icon: 'dashboard', permission: [ 'dashboard' ] },
         children: [
           {
             path: '/dashboard/search',
@@ -44,7 +44,7 @@ export const asyncRouterMap = [
       {
         path: '/global',
         name: 'global',
-        redirect: '/global/search',
+        redirect: '/global/search/application',
         hidden: true,
         component: PageView,
         meta: { title: 'Global', icon: 'table', permission: [ 'table' ] },
@@ -53,7 +53,7 @@ export const asyncRouterMap = [
             path: '/global/search',
             name: 'global-search',
             component: () => import('@/views/list/search/SearchLayout'),
-            redirect: '/dashboard/search/application',
+            redirect: '/global/search/application',
             meta: { title: 'Search', keepAlive: true, permission: [ 'table' ] },
             children: [
               {
@@ -71,7 +71,7 @@ export const asyncRouterMap = [
               {
                 path: '/global/search/report',
                 name: 'search-reports',
-                component: () => import('../views/list/search/Article'),
+                component: () => import('../views/list/search/Report'),
                 meta: { title: 'Search List（Reports）', permission: [ 'table' ] }
               }
             ]
@@ -85,7 +85,7 @@ export const asyncRouterMap = [
         name: 'data-source',
         redirect: '/data-source/discovery',
         component: PageView,
-        meta: { title: 'DataSource', icon: 'form', permission: [ 'form' ] },
+        meta: { title: 'DataSource', icon: 'project', permission: [ 'form' ] },
         children: [
           {
             path: '/data-source/submit',
@@ -112,31 +112,40 @@ export const asyncRouterMap = [
       {
         path: '/choppy-pipe',
         name: 'choppy-pipe',
-        component: PageView,
+        component: RouteView,
         redirect: '/choppy-pipe/submit',
-        meta: { title: 'Pipeline', icon: 'table', permission: [ 'table' ] },
+        meta: { title: 'Workflow', icon: 'play-circle', permission: [ 'table' ] },
         children: [
           {
             path: '/choppy-pipe/submit/:pageNo([1-9]\\d*)?',
             name: 'submit-workflow',
-            hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
-            component: () => import('@/views/list/TableList'),
+            component: () => import('@/views/form/BasicForm'),
             meta: { title: 'Submit Workflow', keepAlive: true, permission: [ 'table' ] }
           },
           {
-            path: '/choppy-pipe/project',
-            name: 'project',
-            component: () => import('@/views/list/StandardList'),
-            meta: { title: 'Project Management', keepAlive: true, permission: [ 'table' ] }
-          },
-          {
-            path: '/choppy-pipe/report/:reportId',
-            name: 'report',
-            // hidden: true,
-            // component: () => import('@/views/list/CardList'),
-            component: () => import('@/views/report/Report'),
-            props: (route) => ({ readonly: route.query.readonly, description: route.query.description }),
-            meta: { title: 'Report Management', keepAlive: true, permission: [ 'table' ] }
+            path: '/choppy-pipe/workflow-management',
+            name: 'workflow-management',
+            hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
+            component: () => import('@/views/workflow/WorkflowManagement'),
+            meta: { title: 'Workflow Management', keepAlive: true, permission: [ 'table' ] },
+            children: [
+              {
+                path: '/choppy-pipe/workflow/:workflowId',
+                name: 'workflow-details',
+                hidden: true,
+                component: () => import('@/views/workflow/WorkflowDetails'),
+                props: (route) => ({ readonly: route.query.readonly, description: route.query.description }),
+                meta: { title: 'Workflow', keepAlive: true, permission: [ 'table' ] }
+              },
+              {
+                path: '/choppy-pipe/report/:reportId',
+                name: 'report-details',
+                hidden: true,
+                component: () => import('@/views/report/ReportDetails'),
+                props: (route) => ({ readonly: route.query.readonly, description: route.query.description }),
+                meta: { title: 'Report', keepAlive: true, permission: [ 'table' ] }
+              }
+            ]
           }
         ]
       },
@@ -147,7 +156,7 @@ export const asyncRouterMap = [
         name: 'data-portal',
         redirect: '/data-portal/import',
         component: RouteView,
-        meta: { title: 'Data Portal', keepAlive: true, icon: bxAnaalyse, permission: [ 'dashboard' ] },
+        meta: { title: 'Data Portal', keepAlive: true, icon: 'file-search', permission: [ 'dashboard' ] },
         children: [
           {
             path: '/data-portal/import',
@@ -168,7 +177,7 @@ export const asyncRouterMap = [
         path: '/premedkb',
         name: 'premedkb',
         component: RouteView,
-        meta: { title: 'PreMedKB', keepAlive: true, icon: bxAnaalyse, permission: [ 'dashboard' ] },
+        meta: { title: 'PreMedKB', keepAlive: true, icon: 'deployment-unit', permission: [ 'dashboard' ] },
         children: [
           {
             path: 'http://www.fudan-pgx.org/premedkb/',
@@ -184,7 +193,7 @@ export const asyncRouterMap = [
         name: 'plugin-service',
         component: RouteView,
         redirect: '/next-service-engine/plugins',
-        meta: { title: 'Plugins & Services', icon: 'profile', permission: [ 'profile' ] },
+        meta: { title: 'Plugins & Services', icon: 'api', permission: [ 'profile' ] },
         children: [
           {
             path: '/next-service-engine/plugins',
@@ -207,7 +216,7 @@ export const asyncRouterMap = [
         name: 'nccn',
         component: PageView,
         redirect: '/nccn/editor',
-        meta: { title: 'NCCN', icon: 'check-circle-o', permission: [ 'result' ] },
+        meta: { title: 'NCCN', icon: bxAnaalyse, permission: [ 'result' ] },
         children: [
           {
             path: '/nccn/editor',
@@ -222,6 +231,14 @@ export const asyncRouterMap = [
             meta: { title: 'NCCN Materials', keepAlive: false, hiddenHeaderContent: true, permission: [ 'result' ] }
           }
         ]
+      },
+
+      // list
+      {
+        path: '/report-management',
+        name: 'report-management',
+        component: () => import('@/views/report/ReportManagement'),
+        meta: { title: 'Report Management', icon: 'solution', permission: [ 'table' ] }
       },
 
       // Exception

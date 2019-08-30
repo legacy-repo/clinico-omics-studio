@@ -96,7 +96,7 @@
 
 <script>
 import { PageView, RouteView } from '@/layouts'
-import { AppPage, ArticlePage, ProjectPage } from './page'
+import { AppPage, ReportPage, ProjectPage } from './page'
 
 import { mapGetters } from 'vuex'
 
@@ -105,7 +105,7 @@ export default {
     RouteView,
     PageView,
     AppPage,
-    ArticlePage,
+    ReportPage,
     ProjectPage
   },
   data () {

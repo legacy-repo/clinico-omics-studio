@@ -2,10 +2,12 @@
   <div>
     <a-card :bordered="false" class="ant-pro-components-tag-select">
       <a-form :form="form" layout="inline">
-        <standard-form-row title="Topics" block style="padding-bottom: 11px;">
+        <standard-form-row title="Status" block style="padding-bottom: 11px;">
           <a-form-item>
             <tag-select>
-              <tag-select-option value="choppy-app">Choppy App</tag-select-option>
+              <tag-select-option value="running">Running</tag-select-option>
+              <tag-select-option value="failed">Failed</tag-select-option>
+              <tag-select-option value="finished">Finished</tag-select-option>
             </tag-select>
           </a-form-item>
         </standard-form-row>
@@ -21,8 +23,7 @@
                   v-decorator="['author']"
                   @change="handleChange"
                 >
-                  <a-select-option value="Yechao Huang">Yechao Huang</a-select-option>
-                  <a-select-option value="Luyao Ren">Luyao Ren</a-select-option>
+                  <a-select-option value="huangyechao">Yechao Huang</a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>
@@ -43,40 +44,29 @@
       </a-form>
     </a-card>
 
-    <div class="ant-pro-pages-list-applications-filterCardList">
-      <a-list :loading="loading" :data-source="data" :grid="{ gutter: 24, xl: 3, lg: 3, md: 2, sm: 1, xs: 1 }" style="margin-top: 16px;">
+    <div class="ant-pro-pages-list-workflows-cardList">
+      <a-list :loading="loading" :data-source="data" :grid="{ gutter: 24, xl: 3, lg: 3, md: 2, sm: 1, xs: 1 }">
         <a-list-item slot="renderItem" slot-scope="item">
-          <a-card :body-style="{ paddingBottom: 20 }" hoverable>
+          <a-card class="ant-pro-pages-list-workflows-card" hoverable>
+            <img slot="cover" :src="item.cover" :alt="item.title" />
             <a-card-meta :title="item.title">
-              <template slot="avatar">
-                <avatar :username="item.title" :size="24"/>
+              <template slot="description">
+                <ellipsis :length="50">{{ item.description }}</ellipsis>
               </template>
             </a-card-meta>
-            <div class="">
-              <div class="description">{{ item.description }}</div>
-              <card-info active-user="100" new-user="999"></card-info>
+            <div class="cardItemContent">
+              <span>{{ item.updatedAt | fromNow }}</span>
+              <div class="avatarList">
+                <avatar-list size="mini">
+                  <avatar-list-item
+                    v-for="(member, i) in item.members"
+                    :key="`${item.id}-avatar-${i}`"
+                    :src="member.avatar"
+                    :tips="member.name"
+                  />
+                </avatar-list>
+              </div>
             </div>
-            <template slot="actions">
-              <a-tooltip title="Install">
-                <a-icon type="download" @click="onInstall(item)" />
-              </a-tooltip>
-              <a-tooltip title="View">
-                <a-icon type="eye" @click="onView(item)" />
-              </a-tooltip>
-              <a-tooltip title="Share">
-                <a-icon type="share-alt" @click="onShare(item)" />
-              </a-tooltip>
-              <a-dropdown>
-                <a class="ant-dropdown-link">
-                  <a-icon type="ellipsis" />
-                </a>
-                <a-menu slot="overlay">
-                  <a-menu-item>
-                    <a href="javascript:;">Uninstall</a>
-                  </a-menu-item>
-                </a-menu>
-              </a-dropdown>
-            </template>
           </a-card>
         </a-list-item>
       </a-list>
@@ -86,24 +76,19 @@
 
 <script>
 import moment from 'moment'
-import Avatar from '@/components/Avatar'
 import { TagSelect, StandardFormRow, Ellipsis, AvatarList } from '@/components'
-import CardInfo from './components/CardInfo'
-import { getAppList } from '@/api/manage'
-
 const TagSelectOption = TagSelect.Option
 const AvatarListItem = AvatarList.AvatarItem
 
 export default {
+  name: 'Workflow',
   components: {
-    Avatar,
     AvatarList,
     AvatarListItem,
     Ellipsis,
     TagSelect,
     TagSelectOption,
-    StandardFormRow,
-    CardInfo
+    StandardFormRow
   },
   data () {
     return {
@@ -125,24 +110,10 @@ export default {
       console.log(`selected ${value}`)
     },
     getList () {
-      getAppList().then(res => {
+      this.$http.get('/list/article', { params: { count: 8 } }).then(res => {
         console.log('res', res)
-        this.data = res.data
+        this.data = res.result
         this.loading = false
-      })
-    },
-    onInstall (app) {
-
-    },
-    onView (app) {
-      window.open(app.repoUrl, '_blank')
-    },
-    onShare (app) {
-      this.$copyText(app.repoUrl).then(message => {
-        this.$message.success('The application url has been copied to your clipboard!')
-      }).catch(err => {
-        console.log('onShare: ', err)
-        this.$message.error('Copy failed.')
       })
     }
   }
@@ -162,21 +133,7 @@ export default {
     font-size: 14px;
   }
 }
-
-.ant-pro-pages-list-applications-filterCardList {
-  .description {
-    margin-top: 15px;
-    height: 40px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    /*! autoprefixer: off */
-    -webkit-box-orient: vertical;
-  }
-}
-
-.ant-pro-pages-list-projects-cardList {
+.ant-pro-pages-list-workflows-cardList {
   margin-top: 24px;
 
   /deep/ .ant-card-meta-title {

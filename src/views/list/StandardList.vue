@@ -58,7 +58,7 @@
             </div>
             <div class="list-content-item">
               <span>Started</span>
-              <p>{{ item.startAt }}</p>
+              <p>{{ item.startedAt }}</p>
             </div>
             <div class="list-content-item">
               <span>Finished</span>
@@ -80,10 +80,12 @@
 import HeadInfo from '@/components/tools/HeadInfo'
 import TaskForm from './modules/TaskForm'
 import { getWorkflowList } from '@/api/manage'
+import Avatar from '@/components/Avatar'
 
 export default {
   name: 'StandardList',
   components: {
+    Avatar,
     HeadInfo,
     TaskForm
   },
@@ -126,12 +128,15 @@ export default {
     }
   },
   created () {
-    getWorkflowList().then(res => {
+    getWorkflowList({
+      page: 1,
+      per_page: 5
+    }).then(result => {
       const that = this
-      that.data = res.data
-      that.perPage = res.per_page
-      that.total = res.total
-      that.page = res.page
+      that.data = result.data
+      that.perPage = result.per_page
+      that.total = result.total
+      that.page = result.page
     })
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="page-header-index-wide page-header-wrapper-grid-content-main">
     <a-row :gutter="24">
-      <a-col :md="24" :lg="7">
+      <a-col :md="24" :lg="7" style="padding-right: 0px;">
         <a-card :bordered="false">
           <div class="account-center-avatarHolder">
             <div class="avatar">
@@ -85,9 +85,9 @@
           :activeTabKey="noTitleKey"
           @tabChange="key => handleTabChange(key, 'noTitleKey')"
         >
-          <article-page v-if="noTitleKey === 'report'"></article-page>
+          <report-page v-if="noTitleKey === 'report'"></report-page>
           <app-page v-else-if="noTitleKey === 'application'"></app-page>
-          <project-page v-else-if="noTitleKey === 'project'"></project-page>
+          <workflow-page v-else-if="noTitleKey === 'workflow'"></workflow-page>
         </a-card>
       </a-col>
     </a-row>
@@ -96,7 +96,7 @@
 
 <script>
 import { PageView, RouteView } from '@/layouts'
-import { AppPage, ReportPage, ProjectPage } from './page'
+import { AppPage, ReportPage, WorkflowPage } from './page'
 
 import { mapGetters } from 'vuex'
 
@@ -106,7 +106,7 @@ export default {
     PageView,
     AppPage,
     ReportPage,
-    ProjectPage
+    WorkflowPage
   },
   data () {
     return {
@@ -120,8 +120,8 @@ export default {
 
       tabListNoTitle: [
         {
-          key: 'project',
-          tab: 'Projects (8)'
+          key: 'workflow',
+          tab: 'Workflows (8)'
         },
         {
           key: 'report',

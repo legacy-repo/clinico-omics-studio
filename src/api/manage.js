@@ -7,7 +7,8 @@ const api = {
   permission: '/permission',
   permissionNoPager: '/permission/no-pager',
   orgTree: '/org/tree',
-  report: '/report'
+  report: '/report',
+  workflow: '/workflow'
 }
 
 export default api
@@ -20,11 +21,11 @@ export function getAppList () {
   })
 }
 
-export function getWorkflowList () {
+export function getWorkflowList (parameter) {
   return axios({
-    url: 'https://nordata-cdn.oss-cn-shanghai.aliyuncs.com/choppy/tasks-2.json',
+    url: api.workflow,
     method: 'get',
-    params: {}
+    params: parameter
   })
 }
 

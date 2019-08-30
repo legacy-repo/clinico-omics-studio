@@ -13,7 +13,7 @@ export default {
         items: [
           {
             key: '1',
-            title: 'Projects'
+            title: 'Workflows'
           },
           {
             key: '2',
@@ -26,7 +26,7 @@ export default {
         ],
         active: () => {
           switch (this.$route.path) {
-            case '/global/search/project':
+            case '/global/search/workflow':
               return '1'
             case '/global/search/report':
               return '2'
@@ -39,7 +39,7 @@ export default {
         callback: (key) => {
           switch (key) {
             case '1':
-              this.$router.push('/global/search/project')
+              this.$router.push('/global/search/workflow')
               break
             case '2':
               this.$router.push('/global/search/report')

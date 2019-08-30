@@ -1,8 +1,8 @@
 <template>
-  <div class="ant-pro-pages-account-projects-cardList">
+  <div class="ant-pro-pages-account-workflows-cardList">
     <a-list :loading="loading" :data-source="data" :grid="{ gutter: 24, xxl: 3, xl: 2, lg: 2, md: 2, sm: 2, xs: 1 }">
       <a-list-item slot="renderItem" slot-scope="item">
-        <a-card class="ant-pro-pages-account-projects-card" hoverable>
+        <a-card class="ant-pro-pages-account-workflows-card" hoverable>
           <img slot="cover" :src="item.cover" :alt="item.title" />
           <a-card-meta :title="item.title">
             <template slot="description">
@@ -75,7 +75,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .ant-pro-pages-account-projects-cardList {
+  .ant-pro-pages-account-workflows-cardList {
     margin-top: 0px;
 
     /deep/ .ant-card-meta-title {

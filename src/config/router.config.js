@@ -58,19 +58,19 @@ export const asyncRouterMap = [
             children: [
               {
                 path: '/global/search/application',
-                name: 'search-applications',
-                component: () => import('../views/list/search/Applications'),
+                name: 'search-application',
+                component: () => import('../views/list/search/Application'),
                 meta: { title: 'Search List（Applications）', permission: [ 'table' ] }
               },
               {
-                path: '/global/search/project',
-                name: 'search-projects',
-                component: () => import('../views/list/search/Projects'),
-                meta: { title: 'Search List（Projects）', permission: [ 'table' ] }
+                path: '/global/search/workflow',
+                name: 'search-workflow',
+                component: () => import('../views/list/search/Workflow'),
+                meta: { title: 'Search List（Workflows）', permission: [ 'table' ] }
               },
               {
                 path: '/global/search/report',
-                name: 'search-reports',
+                name: 'search-report',
                 component: () => import('../views/list/search/Report'),
                 meta: { title: 'Search List（Reports）', permission: [ 'table' ] }
               }
@@ -127,25 +127,15 @@ export const asyncRouterMap = [
             name: 'workflow-management',
             hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
             component: () => import('@/views/workflow/WorkflowManagement'),
-            meta: { title: 'Workflow Management', keepAlive: true, permission: [ 'table' ] },
-            children: [
-              {
-                path: '/choppy-pipe/workflow/:workflowId',
-                name: 'workflow-details',
-                hidden: true,
-                component: () => import('@/views/workflow/WorkflowDetails'),
-                props: (route) => ({ readonly: route.query.readonly, description: route.query.description }),
-                meta: { title: 'Workflow', keepAlive: true, permission: [ 'table' ] }
-              },
-              {
-                path: '/choppy-pipe/report/:reportId',
-                name: 'report-details',
-                hidden: true,
-                component: () => import('@/views/report/ReportDetails'),
-                props: (route) => ({ readonly: route.query.readonly, description: route.query.description }),
-                meta: { title: 'Report', keepAlive: true, permission: [ 'table' ] }
-              }
-            ]
+            meta: { title: 'Workflow Management', keepAlive: true, permission: [ 'table' ] }
+          },
+          {
+            path: '/choppy-pipe/workflow/:workflowId',
+            name: 'workflow-details',
+            hidden: true,
+            component: () => import('@/views/workflow/WorkflowDetails'),
+            props: (route) => ({ readonly: route.query.readonly, description: route.query.description }),
+            meta: { title: 'Workflow Details', keepAlive: true, permission: [ 'table' ] }
           }
         ]
       },
@@ -235,10 +225,28 @@ export const asyncRouterMap = [
 
       // list
       {
-        path: '/report-management',
-        name: 'report-management',
-        component: () => import('@/views/report/ReportManagement'),
-        meta: { title: 'Report Management', icon: 'solution', permission: [ 'table' ] }
+        path: '/report',
+        name: 'report',
+        component: RouteView,
+        redirect: '/report/report-management',
+        meta: { title: 'Report', icon: 'solution', permission: [ 'table' ] },
+        children: [
+          {
+            path: '/report/report-management',
+            name: 'report-management',
+            hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
+            component: () => import('@/views/report/ReportManagement'),
+            meta: { title: 'Report Management', keepAlive: true, permission: [ 'table' ] }
+          },
+          {
+            path: '/report/:reportId',
+            name: 'report-details',
+            hidden: true,
+            component: () => import('@/views/report/ReportDetails'),
+            props: (route) => ({ readonly: route.query.readonly, description: route.query.description }),
+            meta: { title: 'Report Details', keepAlive: true, permission: [ 'table' ] }
+          }
+        ]
       },
 
       // Exception

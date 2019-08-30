@@ -5,7 +5,7 @@
       <detail-list-item term="Analysis Type">{{ report.analysisType }}</detail-list-item>
       <detail-list-item term="Created Time">{{ report.createdTime }}</detail-list-item>
       <detail-list-item term="Related Workflow">
-        <router-link :to="{ name: 'workflow', params: { workflowId: report.relatedWorkflowId }}">{{ report.relatedWorkflowId }}</router-link>
+        <router-link :to="{ name: 'workflow-details', params: { workflowId: report.relatedWorkflowId }}">{{ report.relatedWorkflowId }}</router-link>
       </detail-list-item>
       <detail-list-item term="Audit Time">{{ report.auditTime }}</detail-list-item>
       <detail-list-item term="Description">{{ report.description }}</detail-list-item>
@@ -62,7 +62,7 @@ export default {
   },
   props: {
     readonly: {
-      type: Boolean,
+      type: [Boolean, String],
       default: true
     },
     description: {

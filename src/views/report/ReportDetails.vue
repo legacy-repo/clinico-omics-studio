@@ -16,13 +16,14 @@
         <div class="heading">{{ report.status }}</div>
       </a-col>
       <a-col :xs="12" :sm="12">
-        <div class="text">Order</div>
-        <div class="heading">$ 568.08</div>
+        <div class="text">Reviewer</div>
+        <div class="heading">PGx</div>
       </a-col>
     </a-row>
     <!-- actions -->
     <template slot="action">
       <a-button-group style="margin-right: 4px;">
+        <a-button @click="onSave">Save</a-button>
         <a-button>Edit</a-button>
         <a-button>{{ switchBtnText }}</a-button>
         <!-- <a-button><a-icon type="ellipsis"/></a-button> -->
@@ -37,7 +38,6 @@
       holder-id="codex-editor"
       save-button-id="save-button"
       :init-data="initData"
-      @save="onSave"
       @ready="onReady"
       @change="onChange"
     />
@@ -99,9 +99,13 @@ export default {
     getTitle () {
       return this.$route.meta.title
     },
-    onSave (response) {
-      console.log(JSON.stringify(response))
-      this.savedData = response
+    async onSave () {
+      const editor = this.$refs.editor.editor
+      if (editor) {
+        const response = await editor.save()
+        this.savedData = response
+        console.log('savedData', this.savedData)
+      }
     },
     onReady () {
       console.log('ready')

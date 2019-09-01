@@ -31,7 +31,7 @@ export function getWorkflowList (parameter) {
 
 export function getReport () {
   return axios({
-    url: 'https://nordata-cdn.oss-cn-shanghai.aliyuncs.com/choppy/report.json',
+    url: 'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/choppy/report-datainsEmbed.json',
     method: 'get',
     params: {}
   })

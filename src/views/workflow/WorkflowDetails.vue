@@ -16,8 +16,8 @@
         <div class="heading">{{ report.status }}</div>
       </a-col>
       <a-col :xs="12" :sm="12">
-        <div class="text">Order</div>
-        <div class="heading">$ 568.08</div>
+        <div class="text">Reviewer</div>
+        <div class="heading">PGx</div>
       </a-col>
     </a-row>
     <!-- actions -->

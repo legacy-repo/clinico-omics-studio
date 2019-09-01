@@ -3663,6 +3663,10 @@ data-urls@^1.0.0:
     whatwg-mimetype "^2.2.0"
     whatwg-url "^7.0.0"
 
+"datains-embed@github:yjcyxky/datains-embed#tgmc-master":
+  version "2.2.1"
+  resolved "https://codeload.github.com/yjcyxky/datains-embed/tar.gz/ea9dadb198677b89b8d220b456076dd538fe8cb8"
+
 date-now@^0.1.4:
   version "0.1.4"
   resolved "https://registry.npmjs.org/date-now/-/date-now-0.1.4.tgz#eaf439fd4d4848ad74e5cc7dbef200672b9e345b"

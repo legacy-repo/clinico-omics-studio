@@ -15,6 +15,7 @@ export const asyncRouterMap = [
       {
         path: '/dashboard',
         name: 'dashboard',
+        hidden: true,
         redirect: '/dashboard/workplace',
         component: RouteView,
         meta: { title: 'Dashboard', keepAlive: true, icon: 'dashboard', permission: [ 'dashboard' ] },
@@ -100,6 +101,12 @@ export const asyncRouterMap = [
             meta: { title: 'Data Commons', keepAlive: true, permission: [ 'form' ] }
           },
           {
+            path: '/data-source/databank',
+            name: 'Data Bank',
+            component: () => import('@/views/form/BasicForm'),
+            meta: { title: 'Data Bank', keepAlive: true, permission: [ 'form' ] }
+          },
+          {
             path: '/data-source/visualizer',
             name: 'visualizer',
             component: () => import('@/views/form/advancedForm/AdvancedForm'),
@@ -144,6 +151,7 @@ export const asyncRouterMap = [
       {
         path: '/data-portal',
         name: 'data-portal',
+        hidden: true,
         redirect: '/data-portal/import',
         component: RouteView,
         meta: { title: 'Data Portal', keepAlive: true, icon: 'file-search', permission: [ 'dashboard' ] },
@@ -166,6 +174,7 @@ export const asyncRouterMap = [
       {
         path: '/premedkb',
         name: 'premedkb',
+        hidden: true,
         component: RouteView,
         meta: { title: 'PreMedKB', keepAlive: true, icon: 'deployment-unit', permission: [ 'dashboard' ] },
         children: [
@@ -181,6 +190,7 @@ export const asyncRouterMap = [
       {
         path: '/next-service-engine',
         name: 'plugin-service',
+        hidden: true,
         component: RouteView,
         redirect: '/next-service-engine/plugins',
         meta: { title: 'Plugins & Services', icon: 'api', permission: [ 'profile' ] },
@@ -204,6 +214,7 @@ export const asyncRouterMap = [
       {
         path: '/nccn',
         name: 'nccn',
+        hidden: true,
         component: PageView,
         redirect: '/nccn/editor',
         meta: { title: 'NCCN', icon: bxAnaalyse, permission: [ 'result' ] },

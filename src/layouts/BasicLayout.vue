@@ -55,6 +55,7 @@
       <!-- Setting Drawer (show in development mode) -->
       <!-- <setting-drawer v-if="!production"></setting-drawer> -->
       <setting-drawer></setting-drawer>
+      <a-back-top />
     </a-layout>
   </a-layout>
 

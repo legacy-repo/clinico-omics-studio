@@ -54,7 +54,7 @@
             </a-card-meta>
             <div class="">
               <div class="description">{{ item.description }}</div>
-              <card-info active-user="100" new-user="999"></card-info>
+              <card-info active-user="100" new-user="0"></card-info>
             </div>
             <template slot="actions">
               <a-tooltip title="Install">
@@ -90,6 +90,7 @@ import Avatar from '@/components/Avatar'
 import { TagSelect, StandardFormRow, Ellipsis, AvatarList } from '@/components'
 import CardInfo from './components/CardInfo'
 import { getAppList } from '@/api/manage'
+import orderBy from 'lodash.orderby'
 
 const TagSelectOption = TagSelect.Option
 const AvatarListItem = AvatarList.AvatarItem
@@ -127,7 +128,7 @@ export default {
     getList () {
       getAppList().then(res => {
         console.log('res', res)
-        this.data = res.data
+        this.data = orderBy(res.data, [item => item.title.toLowerCase()], ['asc'])
         this.loading = false
       })
     },

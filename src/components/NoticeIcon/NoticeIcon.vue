@@ -75,7 +75,7 @@ export default {
 
 <style lang="css">
   .header-notice-wrapper {
-    top: 50px !important;
+    top: 60px !important;
   }
 </style>
 <style lang="less" scoped>

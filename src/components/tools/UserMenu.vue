@@ -7,10 +7,11 @@
         </span>
       </a>
       <notice-icon class="action"/>
+      <lang-select />
       <a-dropdown>
         <span class="action ant-dropdown-link user-dropdown-menu">
           <a-avatar class="avatar" size="small" :src="avatar"/>
-          <span>{{ nickname }}</span>
+          <span style="vertical-align: middle;">{{ nickname }}</span>
         </span>
         <a-menu slot="overlay" class="user-dropdown-menu-wrapper">
           <a-menu-item key="0">
@@ -34,13 +35,14 @@
           </a-menu-item>
         </a-menu>
       </a-dropdown>
-      <lang-select />
+      <app-store-icon class="action"/>
     </div>
   </div>
 </template>
 
 <script>
 import NoticeIcon from '@/components/NoticeIcon'
+import AppStoreIcon from '@/components/AppStoreIcon'
 import { mapActions, mapGetters } from 'vuex'
 import LangSelect from '@/components/tools/LangSelect'
 
@@ -48,7 +50,8 @@ export default {
   name: 'UserMenu',
   components: {
     LangSelect,
-    NoticeIcon
+    NoticeIcon,
+    AppStoreIcon
   },
   computed: {
     ...mapGetters(['nickname', 'avatar'])
@@ -79,3 +82,10 @@ export default {
   }
 }
 </script>
+
+<style lang="less" scoped>
+.action {
+  font-size: 16px;
+  vertical-align: middle;
+}
+</style>

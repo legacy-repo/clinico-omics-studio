@@ -1,7 +1,7 @@
 <template>
   <div class="page-header-index-wide">
     <a-row :gutter="24">
-      <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '24px' }">
+      <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '10px', paddingRight: '0px' }">
         <chart-card :loading="loading" title="总销售额" total="￥126,560">
           <a-tooltip title="指标说明" slot="action">
             <a-icon type="info-circle-o" />
@@ -19,7 +19,7 @@
           <template slot="footer">日均销售额<span>￥ 234.56</span></template>
         </chart-card>
       </a-col>
-      <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '24px' }">
+      <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '10px', paddingRight: '0px' }">
         <chart-card :loading="loading" title="访问量" :total="8846 | NumberFormat">
           <a-tooltip title="指标说明" slot="action">
             <a-icon type="info-circle-o" />
@@ -30,7 +30,7 @@
           <template slot="footer">日访问量<span> {{ '1234' | NumberFormat }}</span></template>
         </chart-card>
       </a-col>
-      <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '24px' }">
+      <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '10px', paddingRight: '0px' }">
         <chart-card :loading="loading" title="支付笔数" :total="6560 | NumberFormat">
           <a-tooltip title="指标说明" slot="action">
             <a-icon type="info-circle-o" />
@@ -41,7 +41,7 @@
           <template slot="footer">转化率 <span>60%</span></template>
         </chart-card>
       </a-col>
-      <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '24px' }">
+      <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '10px' }">
         <chart-card :loading="loading" title="运营活动效果" total="78%">
           <a-tooltip title="指标说明" slot="action">
             <a-icon type="info-circle-o" />
@@ -102,7 +102,7 @@
     <div class="antd-pro-pages-dashboard-analysis-twoColLayout" :class="isDesktop() ? 'desktop' : ''">
       <a-row :gutter="24">
         <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24">
-          <a-card :loading="loading" :bordered="false" title="线上热门搜索" :style="{ marginTop: '24px', minHeight: '500px' }">
+          <a-card :loading="loading" :bordered="false" title="线上热门搜索" :style="{ marginTop: '10px', height: '500px' }">
             <a-dropdown :trigger="['click']" placement="bottomLeft" slot="extra">
               <a class="ant-dropdown-link" href="#">
                 <a-icon type="ellipsis" />
@@ -164,7 +164,7 @@
           </a-card>
         </a-col>
         <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24">
-          <a-card class="antd-pro-pages-dashboard-analysis-salesCard" :loading="loading" :bordered="false" title="销售额类别占比" :style="{ marginTop: '24px', minHeight: '500px' }">
+          <a-card class="antd-pro-pages-dashboard-analysis-salesCard" :loading="loading" :bordered="false" title="销售额类别占比" :style="{ marginTop: '10px', height: '500px' }">
             <div slot="extra" style="height: inherit;">
               <!-- style="bottom: 12px;display: inline-block;" -->
               <span class="dashboard-analysis-iconGroup">

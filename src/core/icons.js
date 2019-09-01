@@ -7,5 +7,6 @@
  * 所有图标均从这里加载，方便管理
  */
 import bxAnaalyse from '@/assets/icons/bx-analyse.svg?inline' // path to your '*.svg?inline' file.
+import appStoreIcon from '@/assets/icons/app-store.svg?inline'
 
-export { bxAnaalyse }
+export { bxAnaalyse, appStoreIcon }

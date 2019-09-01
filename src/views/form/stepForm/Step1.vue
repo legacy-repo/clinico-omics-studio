@@ -2,18 +2,45 @@
   <div>
     <a-form :form="form" style="max-width: 500px; margin: 40px auto 0;">
       <a-form-item
-        label="付款账户"
+        label="Project Name"
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
       >
         <a-select
-          placeholder="ant-design@alipay.com"
-          v-decorator="['paymentUser', { rules: [{required: true, message: '付款账户必须填写'}] }]">
-          <a-select-option value="1">ant-design@alipay.com</a-select-option>
+          placeholder="Please enter your project name"
+          v-decorator="['projectName', { rules: [{required: true, message: 'Project name is required'}] }]">
+          <a-select-option value="quartet">Quartet</a-select-option>
         </a-select>
       </a-form-item>
       <a-form-item
-        label="收款账户"
+        label="Description"
+        :labelCol="labelCol"
+        :wrapperCol="wrapperCol">
+        <a-textarea
+          rows="4"
+          placeholder="Please enter a description of the project"
+          v-decorator="[
+            'description',
+            {rules: [{ required: true, message: 'Please enter a description of the project' }]}
+          ]" />
+      </a-form-item>
+      <a-form-item
+        label="Started Time"
+        :labelCol="labelCol"
+        :wrapperCol="wrapperCol">
+        <a-date-picker
+          name="buildTime"
+          style="width: 100%"
+          v-decorator="[
+            'buildTime',
+            {rules: [{ required: true, message: 'Please choose started time' }]}
+          ]"
+          show-time
+          format="YYYY-MM-DD HH:mm:ss"
+        />
+      </a-form-item>
+      <a-form-item
+        label="Corporation"
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
       >
@@ -21,41 +48,39 @@
           style="display: inline-block; vertical-align: middle"
           :compact="true"
         >
-          <a-select defaultValue="alipay" style="width: 100px">
-            <a-select-option value="alipay">支付宝</a-select-option>
-            <a-select-option value="wexinpay">微信</a-select-option>
+          <a-select defaultValue="alipay" style="width: 120px">
+            <a-select-option value="alipay">Company</a-select-option>
+            <a-select-option value="wexinpay">Organization</a-select-option>
           </a-select>
           <a-input
-            :style="{width: 'calc(100% - 100px)'}"
-            v-decorator="['payType', { initialValue: 'test@example.com', rules: [{required: true, message: '收款账户必须填写'}]}]"
+            :style="{width: 'calc(100% - 120px)'}"
+            v-decorator="['payType', { initialValue: 'Fudan University', rules: [{required: true, message: 'Corporation is required'}]}]"
           />
         </a-input-group>
       </a-form-item>
       <a-form-item
-        label="收款人姓名"
+        label="Choppy App"
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
       >
-        <a-input v-decorator="['name', { initialValue: 'Alex', rules: [{required: true, message: '收款人名称必须核对'}] }]"/>
-      </a-form-item>
-      <a-form-item
-        label="转账金额"
-        :labelCol="labelCol"
-        :wrapperCol="wrapperCol"
-      >
-        <a-input prefix="￥" v-decorator="['momey', { initialValue: '5000', rules: [{required: true, message: '转账金额必须填写'}] }]"/>
+        <a-select
+          placeholder="Please choose a choppy app"
+          v-decorator="['choppyApp', { rules: [{required: true, message: 'Choppy app is required'}] }]">
+          <a-select-option value="Quality_control">Quality_control</a-select-option>
+          <a-select-option value="RNAseq_Variant_Calling">RNAseq_Variant_Calling</a-select-option>
+        </a-select>
       </a-form-item>
       <a-form-item :wrapperCol="{span: 19, offset: 5}">
-        <a-button type="primary" @click="nextStep">下一步</a-button>
+        <a-button type="primary" @click="nextStep">Next</a-button>
       </a-form-item>
     </a-form>
     <a-divider />
     <div class="step-form-style-desc">
-      <h3>说明</h3>
-      <h4>转账到支付宝账户</h4>
-      <p>如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。</p>
-      <h4>转账到银行卡</h4>
-      <p>如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。</p>
+      <h3>Notice</h3>
+      <h4>Benchmark based on source data</h4>
+      <p>You need to choose a choppy app which can handle source data, such as fastq, bam etc.</p>
+      <h4>Benchmark based on result data</h4>
+      <p>You need to choose a choppy app which can handle result data, such as vcf, matrix table etc.</p>
     </div>
   </div>
 </template>
@@ -65,8 +90,8 @@ export default {
   name: 'Step1',
   data () {
     return {
-      labelCol: { lg: { span: 5 }, sm: { span: 5 } },
-      wrapperCol: { lg: { span: 19 }, sm: { span: 19 } },
+      labelCol: { lg: { span: 6 }, sm: { span: 5 } },
+      wrapperCol: { lg: { span: 18 }, sm: { span: 19 } },
       form: this.$form.createForm(this)
     }
   },

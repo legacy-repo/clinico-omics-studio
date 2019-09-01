@@ -13,7 +13,7 @@ const titles = [
 ]
 
 const descriptions = [
-  '在中台产品的研发过程中，会出现不同的设计规范和实现方式，但其中往往存在很多类似的页面和组件，这些类似的组件会被抽离成一套标准规范。',
+  'High Confidence Region Integration',
   '从RNAseq数据中call突变',
   '从fastq文件中判断样本间的关系',
   '',
@@ -23,7 +23,8 @@ const descriptions = [
   '用于miRNA-seq二代测序数据分析'
 ]
 
-const avatar = ['https://gw.alipayobjects.com/zos/rmsportal/WdGqmHpayyMjiEhcKoVE.png',
+const avatar = [
+  'http://choppy.3steps.cn/renluyao/Quality_control/raw/branch/master/pictures/workflow.png',
   'https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png',
   'https://gw.alipayobjects.com/zos/rmsportal/dURIMkkrRFpPgTuzkwnB.png',
   'https://gw.alipayobjects.com/zos/rmsportal/sfjbOqnsXXJgNCjCzDBL.png',
@@ -31,7 +32,7 @@ const avatar = ['https://gw.alipayobjects.com/zos/rmsportal/WdGqmHpayyMjiEhcKoVE
 ]
 
 const covers = [
-  'https://gw.alipayobjects.com/zos/rmsportal/uMfMFlvUuceEyPpotzlq.png',
+  'http://choppy.3steps.cn/renluyao/Quality_control/raw/branch/master/pictures/workflow.png',
   'https://gw.alipayobjects.com/zos/rmsportal/iZBVOIhGJiAnhplqjvZW.png',
   'https://gw.alipayobjects.com/zos/rmsportal/iXjVmWVHbCJAyqvDxdtx.png',
   'https://gw.alipayobjects.com/zos/rmsportal/gLaIAoVWTtLbBWZNYEMg.png'
@@ -73,6 +74,17 @@ const progress = [
   }
 ]
 
+const startedAt = [
+  '2019-09-01 08:30:00',
+  '2019-09-01 09:30:00',
+  '2019-09-01 09:40:00',
+  '2019-09-01 08:35:00',
+  '2019-09-01 08:40:00',
+  '2019-09-01 08:31:00',
+  '2019-09-01 08:28:00',
+  '2019-09-01 08:32:00'
+]
+
 const href = 'https://ant.design'
 
 const workflow = (options) => {
@@ -94,7 +106,8 @@ const workflow = (options) => {
       href: href,
       title: titles[ i % 8 ],
       description: descriptions[ i % 8 ],
-      startedAt: Mock.mock('@datetime'),
+      // startedAt: Mock.mock('@datetime'),
+      startedAt: startedAt[ i % 8 ],
       finishedAt: Mock.mock('@datetime'),
       members: [
         {

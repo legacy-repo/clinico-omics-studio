@@ -15,7 +15,7 @@ export default api
 
 export function getAppList () {
   return axios({
-    url: 'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/choppy/apps.json',
+    url: 'https://nordata-cdn.oss-cn-shanghai.aliyuncs.com/choppy/applications.json',
     method: 'get',
     params: {}
   })
@@ -31,7 +31,7 @@ export function getWorkflowList (parameter) {
 
 export function getReport () {
   return axios({
-    url: 'https://nordata-cdn.oss-cn-shanghai.aliyuncs.com/choppy/test.json',
+    url: 'https://nordata-cdn.oss-cn-shanghai.aliyuncs.com/choppy/report.json',
     method: 'get',
     params: {}
   })

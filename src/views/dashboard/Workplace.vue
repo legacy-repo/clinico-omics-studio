@@ -26,7 +26,7 @@
             :loading="loading"
             style="margin-bottom: 10px;"
             :bordered="false"
-            title="Ongoing Projects"
+            title="Ongoing Workflows"
             :body-style="{ padding: 0 }">
             <a slot="extra" @click="onShowWorkflowMgmt">All Workflows</a>
             <div>
@@ -118,6 +118,7 @@ import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
 import { Radar } from '@/components'
 import { getRoleList, getServiceList, getWorkflowList } from '@/api/manage'
+import orderBy from 'lodash.orderby'
 
 const DataSet = require('@antv/data-set')
 
@@ -224,7 +225,7 @@ export default {
         per_page: 6,
         status: 'active'
       }).then(result => {
-        this.workflows = result.data
+        this.workflows = orderBy(result.data, [item => item.title.toLowerCase()], ['asc'])
         this.loading = false
       })
     },

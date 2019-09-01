@@ -97,7 +97,7 @@ export const asyncRouterMap = [
             path: '/data-source/discovery',
             name: 'discovery',
             component: () => import('@/views/form/stepForm/StepForm'),
-            meta: { title: 'Discovery', keepAlive: true, permission: [ 'form' ] }
+            meta: { title: 'Data Commons', keepAlive: true, permission: [ 'form' ] }
           },
           {
             path: '/data-source/visualizer',
@@ -119,7 +119,7 @@ export const asyncRouterMap = [
           {
             path: '/choppy-pipe/submit/:pageNo([1-9]\\d*)?',
             name: 'submit-workflow',
-            component: () => import('@/views/form/BasicForm'),
+            component: () => import('@/views/form/stepForm/StepForm'),
             meta: { title: 'Submit Workflow', keepAlive: true, permission: [ 'table' ] }
           },
           {

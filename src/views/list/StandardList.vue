@@ -35,7 +35,12 @@
       <a-list size="large" :pagination="{showSizeChanger: true, showQuickJumper: true, pageSize: perPage, total: total, current: page}">
         <a-list-item :key="index" v-for="(item, index) in data">
           <a-list-item-meta :description="item.description">
-            <a-avatar slot="avatar" size="large" shape="square" :src="item.avatar"/>
+            <a-popover slot="avatar">
+              <template slot="content">
+                <img :src="item.cover" class="popover">
+              </template>
+              <a-avatar size="large" shape="square" :src="item.cover"/>
+            </a-popover>
             <a slot="title">{{ item.title }}</a>
           </a-list-item-meta>
           <div slot="actions">
@@ -81,6 +86,7 @@ import HeadInfo from '@/components/tools/HeadInfo'
 import TaskForm from './modules/TaskForm'
 import { getWorkflowList } from '@/api/manage'
 import Avatar from '@/components/Avatar'
+import orderBy from 'lodash.orderby'
 
 export default {
   name: 'StandardList',
@@ -133,7 +139,7 @@ export default {
       per_page: 5
     }).then(result => {
       const that = this
-      that.data = result.data
+      that.data = orderBy(result.data, [item => item.title.toLowerCase()], ['asc'])
       that.perPage = result.per_page
       that.total = result.total
       that.page = result.page
@@ -163,5 +169,9 @@ export default {
         margin-bottom: 0;
         line-height: 22px;
     }
+}
+
+.popover {
+  width: 300px;
 }
 </style>

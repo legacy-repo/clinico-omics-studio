@@ -5,7 +5,7 @@
       <slot slot="action" name="action"></slot>
       <slot slot="content" name="headerContent"></slot>
       <div slot="content" v-if="!this.$slots.headerContent && description">
-        <p style="font-size: 14px;color: rgba(0,0,0,.65)">{{ description }}</p>
+        <p style="font-size: 14px;color: rgba(0,0,0,.65)" v-html="description"></p>
         <div class="link">
           <template v-for="(link, index) in linkList">
             <a :key="index" :href="link.href">
@@ -15,9 +15,9 @@
           </template>
         </div>
       </div>
-      <slot slot="extra" name="extra">
+      <slot slot="extra" name="extra" v-if="typeof extraImage !== 'undefined'" >
         <div class="extra-img">
-          <img v-if="typeof extraImage !== 'undefined'" :src="extraImage"/>
+          <img :src="extraImage"/>
         </div>
       </slot>
       <div slot="pageMenu">

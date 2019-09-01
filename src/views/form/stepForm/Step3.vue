@@ -1,28 +1,32 @@
 <template>
   <div>
     <a-form style="margin: 40px auto 0;">
-      <result title="操作成功" :is-success="true" description="预计两小时内到账" style="max-width: 560px;">
+      <result title="Success" :is-success="true" description="Expected to be completed within half an hour." style="max-width: 560px;">
         <div class="information">
           <a-row>
-            <a-col :sm="8" :xs="24">付款账户：</a-col>
-            <a-col :sm="16" :xs="24">ant-design@alipay.com</a-col>
+            <a-col :sm="8" :xs="24">Project Name: </a-col>
+            <a-col :sm="16" :xs="24"></a-col>
           </a-row>
           <a-row>
-            <a-col :sm="8" :xs="24">收款账户：</a-col>
-            <a-col :sm="16" :xs="24">test@example.com</a-col>
+            <a-col :sm="8" :xs="24">Description: </a-col>
+            <a-col :sm="16" :xs="24"></a-col>
           </a-row>
           <a-row>
-            <a-col :sm="8" :xs="24">收款人姓名：</a-col>
-            <a-col :sm="16" :xs="24">辉夜</a-col>
+            <a-col :sm="8" :xs="24">Submmiter: </a-col>
+            <a-col :sm="16" :xs="24"></a-col>
           </a-row>
           <a-row>
-            <a-col :sm="8" :xs="24">转账金额：</a-col>
-            <a-col :sm="16" :xs="24"><span class="money">500</span> 元</a-col>
+            <a-col :sm="8" :xs="24">Choppy App: </a-col>
+            <a-col :sm="16" :xs="24">RNAseq_Variant_Calling</a-col>
+          </a-row>
+          <a-row>
+            <a-col :sm="8" :xs="24">Started Time: </a-col>
+            <a-col :sm="16" :xs="24">2019-09-20 08:30:00</a-col>
           </a-row>
         </div>
         <div slot="action">
-          <a-button type="primary" @click="finish">再转一笔</a-button>
-          <a-button style="margin-left: 8px" @click="toOrderList">查看账单</a-button>
+          <a-button type="primary" @click="finish">Turn Another</a-button>
+          <a-button style="margin-left: 8px" @click="toOrderList">Show Workflow</a-button>
         </div>
       </result>
     </a-form>

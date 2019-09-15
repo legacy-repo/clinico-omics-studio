@@ -24,7 +24,7 @@ const descriptions = [
 ]
 
 const avatar = [
-  'http://choppy.3steps.cn/renluyao/Quality_control/raw/branch/master/pictures/workflow.png',
+  'http://choppy.3steps.cn/renluyao/Quality_control/raw/commit/b4eb0d896ea247130b2bde65da83a523ca81fad5/pictures/workflow2.png',
   'https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png',
   'https://gw.alipayobjects.com/zos/rmsportal/dURIMkkrRFpPgTuzkwnB.png',
   'https://gw.alipayobjects.com/zos/rmsportal/sfjbOqnsXXJgNCjCzDBL.png',
@@ -32,7 +32,7 @@ const avatar = [
 ]
 
 const covers = [
-  'http://choppy.3steps.cn/renluyao/Quality_control/raw/branch/master/pictures/workflow.png',
+  'http://choppy.3steps.cn/renluyao/Quality_control/raw/commit/b4eb0d896ea247130b2bde65da83a523ca81fad5/pictures/workflow2.png',
   'https://gw.alipayobjects.com/zos/rmsportal/iZBVOIhGJiAnhplqjvZW.png',
   'https://gw.alipayobjects.com/zos/rmsportal/iXjVmWVHbCJAyqvDxdtx.png',
   'https://gw.alipayobjects.com/zos/rmsportal/gLaIAoVWTtLbBWZNYEMg.png'

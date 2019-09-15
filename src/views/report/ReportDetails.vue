@@ -118,7 +118,7 @@ export default {
     getReport().then(res => {
       const that = this
       that.initData = res
-      console.log(that.initData)
+      console.log('initData', that.initData)
     })
   },
   created () {

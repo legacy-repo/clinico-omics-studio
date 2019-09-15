@@ -7,7 +7,7 @@ const api = {
   permission: '/permission',
   permissionNoPager: '/permission/no-pager',
   orgTree: '/org/tree',
-  report: '/report',
+  report: '/report-list',
   workflow: '/workflow'
 }
 
@@ -31,7 +31,7 @@ export function getWorkflowList (parameter) {
 
 export function getReport () {
   return axios({
-    url: 'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/choppy/report-datainsEmbed.json',
+    url: 'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/choppy/report-datainsEmbed-20190902.json',
     method: 'get',
     params: {}
   })

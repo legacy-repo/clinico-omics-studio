@@ -97,18 +97,21 @@ export const asyncRouterMap = [
           {
             path: '/data-source/discovery',
             name: 'discovery',
+            hidden: true,
             component: () => import('@/views/form/stepForm/StepForm'),
             meta: { title: 'Data Commons', keepAlive: true, permission: [ 'form' ] }
           },
           {
             path: '/data-source/databank',
             name: 'Data Bank',
+            hidden: true,
             component: () => import('@/views/form/BasicForm'),
             meta: { title: 'Data Bank', keepAlive: true, permission: [ 'form' ] }
           },
           {
             path: '/data-source/visualizer',
             name: 'visualizer',
+            hidden: true,
             component: () => import('@/views/form/advancedForm/AdvancedForm'),
             meta: { title: 'Visualizer', keepAlive: true, permission: [ 'form' ] }
           }
@@ -236,21 +239,21 @@ export const asyncRouterMap = [
 
       // list
       {
-        path: '/report',
-        name: 'report',
+        path: '/datains-report',
+        name: 'datains-report',
         component: RouteView,
-        redirect: '/report/report-management',
+        redirect: '/datains-report/report-management',
         meta: { title: 'Report', icon: 'solution', permission: [ 'table' ] },
         children: [
           {
-            path: '/report/report-management',
+            path: '/datains-report/report-management',
             name: 'report-management',
             hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
             component: () => import('@/views/report/ReportManagement'),
             meta: { title: 'Report Management', keepAlive: true, permission: [ 'table' ] }
           },
           {
-            path: '/report/:reportId',
+            path: '/datains-report/:reportId',
             name: 'report-details',
             hidden: true,
             component: () => import('@/views/report/ReportDetails'),

@@ -6,7 +6,7 @@
         <a-button @click="onSwitchViewer(switchBtnText)">{{ switchBtnText }}</a-button>
         <!-- <a-button><a-icon type="ellipsis"/></a-button> -->
       </a-button-group>
-      <a-button type="primary" >Submit Workflow</a-button>
+      <a-button type="primary" @click="onSubmitWorkflow">Submit Workflow</a-button>
     </template>
 
     <table-list v-if="tableViewActive"></table-list>
@@ -44,6 +44,11 @@ export default {
       }
 
       this.tableViewActive = !this.tableViewActive
+    },
+    onSubmitWorkflow () {
+      this.$router.push({
+        name: 'submit-workflow'
+      })
     }
   }
 }

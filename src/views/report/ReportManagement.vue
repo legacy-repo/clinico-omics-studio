@@ -4,27 +4,26 @@
     <template slot="action">
       <a-button-group style="margin-right: 4px;">
         <a-button @click="onSwitchViewer(switchBtnText)">{{ switchBtnText }}</a-button>
-        <!-- <a-button><a-icon type="ellipsis"/></a-button> -->
       </a-button-group>
-      <a-button type="primary" >Submit Workflow</a-button>
+      <a-button type="primary" @click="onSubmitWorkflow">Submit Workflow</a-button>
     </template>
 
     <table-list v-if="tableViewActive"></table-list>
-    <standard-list v-else></standard-list>
+    <report-list v-else></report-list>
   </page-view>
 </template>
 
 <script>
 import { PageView } from '@/layouts'
 import TableList from '@/views/list/TableList'
-import StandardList from '@/views/list/StandardList'
+import ReportList from '@/views/list/ReportList'
 
 export default {
   name: 'ReportManagement',
   components: {
     PageView,
     TableList,
-    StandardList
+    ReportList
   },
   data () {
     return {
@@ -44,6 +43,11 @@ export default {
       }
 
       this.tableViewActive = !this.tableViewActive
+    },
+    onSubmitWorkflow () {
+      this.$router.push({
+        name: 'submit-workflow'
+      })
     }
   }
 }

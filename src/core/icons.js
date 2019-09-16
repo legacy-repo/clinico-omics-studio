@@ -8,5 +8,9 @@
  */
 import bxAnaalyse from '@/assets/icons/bx-analyse.svg?inline' // path to your '*.svg?inline' file.
 import appStoreIcon from '@/assets/icons/app-store.svg?inline'
+import projectIcon from '@/assets/icons/project.svg?inline'
+import analysisIcon from '@/assets/icons/analysis.svg?inline'
+import caseIcon from '@/assets/icons/case-o.svg?inline'
+import sitemapIcon from '@/assets/icons/sitemap.svg?inline'
 
-export { bxAnaalyse, appStoreIcon }
+export { bxAnaalyse, appStoreIcon, projectIcon, analysisIcon, caseIcon, sitemapIcon }

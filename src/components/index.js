@@ -10,6 +10,7 @@ import Radar from '@/components/Charts/Radar'
 import RankList from '@/components/Charts/RankList'
 import TransferBar from '@/components/Charts/TransferBar'
 import TagCloud from '@/components/Charts/TagCloud'
+import Pie from '@/components/Charts/Pie'
 
 // pro components
 import AvatarList from '@/components/AvatarList'
@@ -28,6 +29,7 @@ import TagSelect from '@/components/TagSelect'
 import ExceptionPage from '@/components/Exception'
 import StandardFormRow from '@/components/StandardFormRow'
 import ReportListContent from '@/components/ReportListContent'
+import FilterList from '@/components/Filter'
 
 export {
   AvatarList,
@@ -40,6 +42,8 @@ export {
   MiniProgress,
   Radar,
   TagCloud,
+  Pie,
+
   RankList,
   TransferBar,
   Trend,
@@ -58,5 +62,6 @@ export {
   IconSelector,
   TagSelect,
   StandardFormRow,
-  ReportListContent
+  ReportListContent,
+  FilterList
 }

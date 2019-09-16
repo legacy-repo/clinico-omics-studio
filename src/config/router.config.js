@@ -15,7 +15,7 @@ export const asyncRouterMap = [
       {
         path: '/dashboard',
         name: 'dashboard',
-        hidden: true,
+        hidden: false,
         redirect: '/dashboard/workplace',
         component: RouteView,
         meta: { title: 'Dashboard', keepAlive: true, icon: 'dashboard', permission: [ 'dashboard' ] },
@@ -95,15 +95,22 @@ export const asyncRouterMap = [
             meta: { title: 'Submit Data', keepAlive: true, permission: [ 'form' ] }
           },
           {
-            path: '/data-source/discovery',
-            name: 'discovery',
-            hidden: true,
-            component: () => import('@/views/form/stepForm/StepForm'),
-            meta: { title: 'Data Commons', keepAlive: true, permission: [ 'form' ] }
+            path: '/data-source/search',
+            name: 'search-datasource',
+            hidden: false,
+            component: () => import('@/views/datasource/Search'),
+            meta: { title: 'Search', hiddenHeaderContent: true, keepAlive: true, permission: [ 'form' ] }
+          },
+          {
+            path: '/data-source/exploration',
+            name: 'exploration',
+            hidden: false,
+            component: () => import('@/views/datasource/FilterPanel'),
+            meta: { title: 'Exploration', hiddenHeaderContent: true, keepAlive: true, permission: [ 'form' ] }
           },
           {
             path: '/data-source/databank',
-            name: 'Data Bank',
+            name: 'databank',
             hidden: true,
             component: () => import('@/views/form/BasicForm'),
             meta: { title: 'Data Bank', keepAlive: true, permission: [ 'form' ] }
@@ -129,7 +136,7 @@ export const asyncRouterMap = [
           {
             path: '/choppy-pipe/submit/:pageNo([1-9]\\d*)?',
             name: 'submit-workflow',
-            component: () => import('@/views/form/stepForm/StepForm'),
+            component: () => import('@/views/workflow/stepForm/StepForm'),
             meta: { title: 'Submit Workflow', keepAlive: true, permission: [ 'table' ] }
           },
           {
@@ -154,7 +161,7 @@ export const asyncRouterMap = [
       {
         path: '/data-portal',
         name: 'data-portal',
-        hidden: true,
+        hidden: false,
         redirect: '/data-portal/import',
         component: RouteView,
         meta: { title: 'Data Portal', keepAlive: true, icon: 'file-search', permission: [ 'dashboard' ] },
@@ -177,7 +184,7 @@ export const asyncRouterMap = [
       {
         path: '/premedkb',
         name: 'premedkb',
-        hidden: true,
+        hidden: false,
         component: RouteView,
         meta: { title: 'PreMedKB', keepAlive: true, icon: 'deployment-unit', permission: [ 'dashboard' ] },
         children: [
@@ -193,7 +200,7 @@ export const asyncRouterMap = [
       {
         path: '/next-service-engine',
         name: 'plugin-service',
-        hidden: true,
+        hidden: false,
         component: RouteView,
         redirect: '/next-service-engine/plugins',
         meta: { title: 'Plugins & Services', icon: 'api', permission: [ 'profile' ] },
@@ -217,7 +224,7 @@ export const asyncRouterMap = [
       {
         path: '/nccn',
         name: 'nccn',
-        hidden: true,
+        hidden: false,
         component: PageView,
         redirect: '/nccn/editor',
         meta: { title: 'NCCN', icon: bxAnaalyse, permission: [ 'result' ] },
@@ -259,36 +266,6 @@ export const asyncRouterMap = [
             component: () => import('@/views/report/ReportDetails'),
             props: (route) => ({ readonly: route.query.readonly, description: route.query.description }),
             meta: { title: 'Report Details', keepAlive: true, permission: [ 'table' ] }
-          }
-        ]
-      },
-
-      // Exception
-      {
-        path: '/exception',
-        hidden: true,
-        name: 'exception',
-        component: RouteView,
-        redirect: '/exception/403',
-        meta: { title: '异常页', icon: 'warning', permission: [ 'exception' ] },
-        children: [
-          {
-            path: '/exception/403',
-            name: 'exception403',
-            component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/403'),
-            meta: { title: '403', permission: [ 'exception' ] }
-          },
-          {
-            path: '/exception/404',
-            name: 'exception404',
-            component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/404'),
-            meta: { title: '404', permission: [ 'exception' ] }
-          },
-          {
-            path: '/exception/500',
-            name: 'exception500',
-            component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/500'),
-            meta: { title: '500', permission: [ 'exception' ] }
           }
         ]
       },
@@ -346,6 +323,56 @@ export const asyncRouterMap = [
                 meta: { title: 'Notifications', hidden: true, keepAlive: true, permission: [ 'user' ] }
               }
             ]
+          }
+        ]
+      },
+
+      {
+        path: '/documentation',
+        name: 'documentation',
+        hidden: false,
+        component: RouteView,
+        meta: { title: 'Docs', keepAlive: false, icon: 'question-circle', permission: [ 'dashboard' ] },
+        children: [
+          {
+            path: 'http://docs.3steps.cn',
+            name: 'official-documentation',
+            meta: { title: 'Official Docs', target: '_blank' }
+          },
+          {
+            path: 'https://tgmc.yuque.com',
+            name: 'yuque',
+            meta: { title: 'Yuque', target: '_blank' }
+          }
+        ]
+      },
+
+      // Exception
+      {
+        path: '/exception',
+        hidden: true,
+        name: 'exception',
+        component: RouteView,
+        redirect: '/exception/403',
+        meta: { title: '异常页', icon: 'warning', permission: [ 'exception' ] },
+        children: [
+          {
+            path: '/exception/403',
+            name: 'exception403',
+            component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/403'),
+            meta: { title: '403', permission: [ 'exception' ] }
+          },
+          {
+            path: '/exception/404',
+            name: 'exception404',
+            component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/404'),
+            meta: { title: '404', permission: [ 'exception' ] }
+          },
+          {
+            path: '/exception/500',
+            name: 'exception500',
+            component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/500'),
+            meta: { title: '500', permission: [ 'exception' ] }
           }
         ]
       },

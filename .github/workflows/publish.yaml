@@ -40,3 +40,14 @@ jobs:
         run: |
           echo "${{ steps.ossutil.outputs.command }}"
           echo "Publish Datains Frontend ${{ steps.config.outputs.version }} Successfully."
+
+      - name: Dingtalk Robot Message
+        uses: fifsky/dingtalk-action@master
+        with:
+          url: ${{ secrets.DINGTALK_WEBHOOK }}
+          type: markdown
+          content: |
+            # Datains Frontend ${{ steps.config.outputs.version }} 构建 & 发布
+            @Choppy Team 主人，我已将您刚更新在Github上的Datains Frontend代码发布到公网了，您可随时访问
+            > Choppy Team：可通过 http://datains.3steps.cn 链接访问
+          at: Choppy Team

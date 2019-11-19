@@ -1,5 +1,5 @@
 // eslint-disable-next-line
-import { UserLayout, BasicLayout, RouteView, BlankLayout, PageView } from '@/layouts'
+import { UserLayout, BasicLayout, RouteView, BlankLayout, PageView, PublicFormLayout } from '@/layouts'
 import { bxAnaalyse } from '@/core/icons'
 
 export const asyncRouterMap = [
@@ -80,13 +80,71 @@ export const asyncRouterMap = [
         ]
       },
 
+      // Pipeline
+      {
+        path: '/choppy-pipe',
+        name: 'choppy-pipe',
+        component: RouteView,
+        redirect: '/choppy-pipe/submit',
+        meta: { title: 'Workflow', icon: 'play-circle', permission: [ 'table' ] },
+        children: [
+          {
+            path: '/choppy-pipe/submit/:pageNo([1-9]\\d*)?',
+            name: 'submit-workflow',
+            component: () => import('@/views/workflow/stepForm/StepForm'),
+            meta: { title: 'Submit Workflow', keepAlive: true, permission: [ 'table' ] }
+          },
+          {
+            path: '/choppy-pipe/workflow-management',
+            name: 'workflow-management',
+            hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
+            component: () => import('@/views/workflow/WorkflowManagement'),
+            meta: { title: 'Workflow Management', keepAlive: true, permission: [ 'table' ] }
+          },
+          {
+            path: '/choppy-pipe/workflow/:workflowId',
+            name: 'workflow-details',
+            hidden: true,
+            component: () => import('@/views/workflow/WorkflowDetails'),
+            props: (route) => ({ readonly: route.query.readonly, description: route.query.description }),
+            meta: { title: 'Workflow Details', keepAlive: true, permission: [ 'table' ] }
+          }
+        ]
+      },
+
+      // Report
+      {
+        path: '/datains-report',
+        name: 'datains-report',
+        component: RouteView,
+        redirect: '/datains-report/report-management',
+        meta: { title: 'Report', icon: 'solution', permission: [ 'table' ] },
+        children: [
+          {
+            path: '/datains-report/report-management',
+            name: 'report-management',
+            hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
+            component: () => import('@/views/report/ReportManagement'),
+            meta: { title: 'Report Management', keepAlive: true, permission: [ 'table' ] }
+          },
+          {
+            path: '/datains-report/:reportId',
+            name: 'report-details',
+            hidden: true,
+            component: () => import('@/views/report/ReportDetails'),
+            props: (route) => ({ readonly: route.query.readonly, description: route.query.description }),
+            meta: { title: 'Report Details', keepAlive: true, permission: [ 'table' ] }
+          }
+        ]
+      },
+
       // Data Source
       {
         path: '/data-source',
         name: 'data-source',
         redirect: '/data-source/discovery',
         component: PageView,
-        meta: { title: 'DataSource', icon: 'project', permission: [ 'form' ] },
+        meta: { title: 'Data Source', icon: 'project', permission: [ 'form' ] },
         children: [
           {
             path: '/data-source/submit',
@@ -125,38 +183,6 @@ export const asyncRouterMap = [
         ]
       },
 
-      // list
-      {
-        path: '/choppy-pipe',
-        name: 'choppy-pipe',
-        component: RouteView,
-        redirect: '/choppy-pipe/submit',
-        meta: { title: 'Workflow', icon: 'play-circle', permission: [ 'table' ] },
-        children: [
-          {
-            path: '/choppy-pipe/submit/:pageNo([1-9]\\d*)?',
-            name: 'submit-workflow',
-            component: () => import('@/views/workflow/stepForm/StepForm'),
-            meta: { title: 'Submit Workflow', keepAlive: true, permission: [ 'table' ] }
-          },
-          {
-            path: '/choppy-pipe/workflow-management',
-            name: 'workflow-management',
-            hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
-            component: () => import('@/views/workflow/WorkflowManagement'),
-            meta: { title: 'Workflow Management', keepAlive: true, permission: [ 'table' ] }
-          },
-          {
-            path: '/choppy-pipe/workflow/:workflowId',
-            name: 'workflow-details',
-            hidden: true,
-            component: () => import('@/views/workflow/WorkflowDetails'),
-            props: (route) => ({ readonly: route.query.readonly, description: route.query.description }),
-            meta: { title: 'Workflow Details', keepAlive: true, permission: [ 'table' ] }
-          }
-        ]
-      },
-
       // Data Portal
       {
         path: '/data-portal',
@@ -180,27 +206,11 @@ export const asyncRouterMap = [
         ]
       },
 
-      // PreMedKB
-      {
-        path: '/premedkb',
-        name: 'premedkb',
-        hidden: false,
-        component: RouteView,
-        meta: { title: 'PreMedKB', keepAlive: true, icon: 'deployment-unit', permission: [ 'dashboard' ] },
-        children: [
-          {
-            path: 'http://www.fudan-pgx.org/premedkb/',
-            name: 'premedkb-link',
-            meta: { title: 'Query Knowledgebase', target: '_blank' }
-          }
-        ]
-      },
-
-      // profile
+      // Next Service Engine
       {
         path: '/next-service-engine',
         name: 'plugin-service',
-        hidden: false,
+        hidden: true,
         component: RouteView,
         redirect: '/next-service-engine/plugins',
         meta: { title: 'Plugins & Services', icon: 'api', permission: [ 'profile' ] },
@@ -220,7 +230,7 @@ export const asyncRouterMap = [
         ]
       },
 
-      // result
+      // NCCN
       {
         path: '/nccn',
         name: 'nccn',
@@ -244,33 +254,16 @@ export const asyncRouterMap = [
         ]
       },
 
-      // list
+      // App Store
       {
-        path: '/datains-report',
-        name: 'datains-report',
-        component: RouteView,
-        redirect: '/datains-report/report-management',
-        meta: { title: 'Report', icon: 'solution', permission: [ 'table' ] },
-        children: [
-          {
-            path: '/datains-report/report-management',
-            name: 'report-management',
-            hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
-            component: () => import('@/views/report/ReportManagement'),
-            meta: { title: 'Report Management', keepAlive: true, permission: [ 'table' ] }
-          },
-          {
-            path: '/datains-report/:reportId',
-            name: 'report-details',
-            hidden: true,
-            component: () => import('@/views/report/ReportDetails'),
-            props: (route) => ({ readonly: route.query.readonly, description: route.query.description }),
-            meta: { title: 'Report Details', keepAlive: true, permission: [ 'table' ] }
-          }
-        ]
+        path: '/app-store',
+        name: 'app-store',
+        hidden: false,
+        component: () => import('@/views/appstore/FilterPanel'),
+        meta: { title: 'App Store', keepAlive: true, icon: 'appstore', permission: [ 'table' ] }
       },
 
-      // account
+      // Account
       {
         path: '/account',
         component: RouteView,
@@ -470,19 +463,6 @@ export const constantRouterMap = [
         path: 'register-result',
         name: 'registerResult',
         component: () => import(/* webpackChunkName: "user" */ '@/views/user/RegisterResult')
-      }
-    ]
-  },
-
-  {
-    path: '/test',
-    component: BlankLayout,
-    redirect: '/test/home',
-    children: [
-      {
-        path: 'home',
-        name: 'TestHome',
-        component: () => import('@/views/Home')
       }
     ]
   },

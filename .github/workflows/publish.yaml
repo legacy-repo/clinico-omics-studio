@@ -1,0 +1,42 @@
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  test-publish-docker:
+    runs-on: ubuntu-latest
+    name: Publish datains-frontend to aliyun oss.
+    steps:
+      - name: Configure environment
+        id: config
+        run: |
+          VERSION=$(echo $GITHUB_REF | sed -e "s/^refs\/tags\/v//")
+          echo ::set-output name=version::$VERSION
+
+      - name: Fetch repository
+        uses: actions/checkout@master
+
+      - name: Install dependences
+        uses: borales/actions-yarn@v2.1.0
+        with:
+          cmd: install
+
+      - name: Build project
+        uses: borales/actions-yarn@v2.1.0
+        with:
+          cmd: build
+
+      - name: Publish datains-frontend to aliyun oss
+        id: ossutil
+        uses: go-choppy/ossutil-github-action@master
+        with:
+          ossArgs: 'cp -r -u ./dist/ oss://datains-frontend/'
+          accessKey: ${{ secrets.ALIYUN_ACCESS_KEY }}
+          accessSecret: ${{ secrets.ALIYUN_ACCESS_SECRET }}
+          endpoint: oss-cn-shanghai.aliyuncs.com
+
+      - name: Output command
+        run: |
+          echo "${{ steps.ossutil.outputs.command }}"
+          echo "Publish Datains Frontend ${{ steps.config.outputs.version }} Successfully."

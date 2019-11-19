@@ -15,7 +15,7 @@ export default api
 
 export function getAppList () {
   return axios({
-    url: 'https://nordata-cdn.oss-cn-shanghai.aliyuncs.com/choppy/applications.json',
+    url: 'http://localhost:3001/apps',
     method: 'get',
     params: {}
   })

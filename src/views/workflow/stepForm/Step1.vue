@@ -6,11 +6,9 @@
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
       >
-        <a-select
-          placeholder="Please enter your project name"
-          v-decorator="['projectName', { rules: [{required: true, message: 'Project name is required'}] }]">
-          <a-select-option value="quartet">Quartet</a-select-option>
-        </a-select>
+        <a-input placeholder="Please enter your project name"
+                 @blur="validateProjectNameBlur"
+                 v-decorator="['projectName', { rules: [{required: true, message: 'Project name is required'}] }]" />
       </a-form-item>
       <a-form-item
         label="Description"
@@ -48,13 +46,13 @@
           style="display: inline-block; vertical-align: middle"
           :compact="true"
         >
-          <a-select defaultValue="alipay" style="width: 120px">
-            <a-select-option value="alipay">Company</a-select-option>
-            <a-select-option value="wexinpay">Organization</a-select-option>
+          <a-select defaultValue="organization" style="width: 120px">
+            <a-select-option value="company">Company</a-select-option>
+            <a-select-option value="organization">Organization</a-select-option>
           </a-select>
           <a-input
             :style="{width: 'calc(100% - 120px)'}"
-            v-decorator="['payType', { initialValue: 'Fudan University', rules: [{required: true, message: 'Corporation is required'}]}]"
+            v-decorator="['corporation', { initialValue: 'Fudan University', rules: [{required: true, message: 'Corporation is required'}]}]"
           />
         </a-input-group>
       </a-form-item>
@@ -96,11 +94,22 @@ export default {
     }
   },
   methods: {
+    validateProjectNameBlur (e) {
+      const validateProjectNameReg = /^[a-z0-9A-Z_]+$/
+      if (e.target.value && !validateProjectNameReg.test(e.target.value)) {
+        const arr = [{
+          message: 'Project Name is not valid, only support [a-z0-9A-Z_]!',
+          field: 'projectName',
+        }]
+        this.form.setFields({ projectName: { value: e.target.value, errors: arr } })
+      }
+    },
     nextStep () {
       const { form: { validateFields } } = this
       // 先校验，通过表单校验后，才进入下一步
       validateFields((err, values) => {
         if (!err) {
+          console.log('Project information: ', values)
           this.$emit('nextStep')
         }
       })

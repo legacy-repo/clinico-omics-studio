@@ -104,16 +104,16 @@
         </template>
       </span>
     </s-table>
-    <create-form ref="createModal" @ok="handleOk" />
-    <step-by-step-modal ref="modal" @ok="handleOk"/>
+    <!-- <create-form ref="createModal" @ok="handleOk" /> -->
+    <!-- <step-by-step-modal ref="modal" @ok="handleOk"/> -->
   </a-card>
 </template>
 
 <script>
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
-import StepByStepModal from './modules/StepByStepModal'
-import CreateForm from './modules/CreateForm'
+import StepByStepModal from '@/views/list/modules/StepByStepModal'
+import CreateForm from '@/views/list/modules/CreateForm'
 import { getRoleList, getServiceList } from '@/api/manage'
 
 const statusMap = {
@@ -140,8 +140,8 @@ export default {
   components: {
     STable,
     Ellipsis,
-    // CreateForm,
-    // StepByStepModal
+    CreateForm,
+    StepByStepModal
   },
   data () {
     return {

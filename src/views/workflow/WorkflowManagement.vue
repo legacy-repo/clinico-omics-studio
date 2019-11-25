@@ -1,30 +1,28 @@
 <template>
   <page-view :title="getTitle()" logo="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png">
-    <!-- actions -->
     <template slot="action">
       <a-button-group style="margin-right: 4px;">
         <a-button @click="onSwitchViewer(switchBtnText)">{{ switchBtnText }}</a-button>
-        <!-- <a-button><a-icon type="ellipsis"/></a-button> -->
       </a-button-group>
-      <a-button type="primary" @click="onSubmitWorkflow">Submit Workflow</a-button>
+      <a-button type="primary" @click="onSubmitWorkflow">Submit Project</a-button>
     </template>
 
-    <table-list v-if="tableViewActive"></table-list>
-    <standard-list v-else></standard-list>
+    <workflow-table v-if="tableViewActive"></workflow-table>
+    <workflow-list v-else></workflow-list>
   </page-view>
 </template>
 
 <script>
 import { PageView } from '@/layouts'
-import TableList from '@/views/list/TableList'
-import StandardList from '@/views/list/StandardList'
+import WorkflowTable from '@/views/workflow/itemList/WorkflowTable'
+import WorkflowList from '@/views/workflow/itemList/WorkflowList'
 
 export default {
   name: 'WorkflowManagement',
   components: {
     PageView,
-    TableList,
-    StandardList
+    WorkflowTable,
+    WorkflowList
   },
   data () {
     return {

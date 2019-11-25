@@ -1,7 +1,7 @@
 <template>
   <a-card :bordered="false">
     <a-steps class="steps" :current="currentTab">
-      <a-step title="Basic Information" />
+      <a-step title="Project Information" />
       <a-step title="Workflow Parameters" />
       <a-step title="Submit" />
     </a-steps>

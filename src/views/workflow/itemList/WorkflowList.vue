@@ -41,7 +41,7 @@
               </template>
               <a-avatar size="large" shape="square" :src="item.cover"/>
             </a-popover>
-            <a slot="title">{{ item.title }}</a>
+            <a slot="title">{{ item.title }} @ {{ item.title }}</a>
           </a-list-item-meta>
           <div slot="actions">
             <a @click="onShowReport(item.title, item.report)" :disabled="!item.report">Report</a>
@@ -76,14 +76,14 @@
         </a-list-item>
       </a-list>
 
-      <!-- <task-form ref="taskForm" /> -->
+      <task-form ref="taskForm" />
     </a-card>
   </div>
 </template>
 
 <script>
 import HeadInfo from '@/components/tools/HeadInfo'
-import TaskForm from './modules/TaskForm'
+import TaskForm from '@/views/list/modules/TaskForm'
 import { getWorkflowList } from '@/api/manage'
 import Avatar from '@/components/Avatar'
 import orderBy from 'lodash.orderby'
@@ -94,6 +94,12 @@ export default {
     Avatar,
     HeadInfo,
     TaskForm
+  },
+  props: {
+    projectId: {
+      type: String,
+      default: ''
+    }
   },
   data () {
     return {

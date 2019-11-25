@@ -1,66 +1,34 @@
 <template>
   <div>
-    <a-card :bordered="false">
-      <a-row>
-        <a-col :sm="6" :xs="24">
-          <head-info title="Running" content="8" :bordered="true"/>
-        </a-col>
-        <a-col :sm="6" :xs="24">
-          <head-info title="Failed" content="32" :bordered="true"/>
-        </a-col>
-        <a-col :sm="6" :xs="24">
-          <head-info title="Finished" content="24" :bordered="true"/>
-        </a-col>
-        <a-col :sm="6" :xs="24">
-          <head-info title="Total" content="64"/>
-        </a-col>
-      </a-row>
-    </a-card>
-
     <a-card
       style="margin-top: 10px"
       :bordered="false"
-      title="Workflow List">
+      title="Project List">
 
       <div slot="extra">
-        <a-radio-group @change="onClickRadioBtn" defaultValue="total" :value="radioGroupValue">
-          <a-radio-button value="total">Total</a-radio-button>
-          <a-radio-button value="running">Running</a-radio-button>
-          <a-radio-button value="failed">Failed</a-radio-button>
-          <a-radio-button value="finished">Finished</a-radio-button>
-        </a-radio-group>
-        <a-input-search style="margin-left: 16px; width: 272px;" placeholder="Please Enter Task Name" @search="onSearch" />
+        <a-input-search style="margin-left: 16px; width: 272px;" placeholder="Please Enter Project Name" @search="onSearch" />
       </div>
 
       <a-list size="large" :pagination="{showSizeChanger: true, showQuickJumper: true, pageSize: perPage, total: total, current: page}">
         <a-list-item :key="index" v-for="(item, index) in data">
           <a-list-item-meta :description="item.description">
-            <a-popover slot="avatar">
-              <template slot="content">
-                <img :src="item.cover" class="popover">
-              </template>
-              <a-avatar size="large" shape="square" :src="item.cover"/>
-            </a-popover>
             <a slot="title">{{ item.title }}</a>
           </a-list-item-meta>
+          <div slot="actions">
+            <a @click="onShowWorkflowList(item.title)">View</a>
+          </div>
           <div slot="actions">
             <a @click="onShowReport(item.title, item.report)" :disabled="!item.report">Report</a>
           </div>
           <div slot="actions">
             <a-dropdown>
               <a-menu slot="overlay">
-                <a-menu-item><a @click="onShowWorkflow(item.title)">View</a></a-menu-item>
-                <a-menu-item><a>Update</a></a-menu-item>
-                <a-menu-item><a>Delete</a></a-menu-item>
+                <a-menu-item><a>Details</a></a-menu-item>
               </a-menu>
               <a>More<a-icon type="down"/></a>
             </a-dropdown>
           </div>
           <div class="list-content">
-            <div class="list-content-item">
-              <span>Owner</span>
-              <p>{{ item.owner }}</p>
-            </div>
             <div class="list-content-item">
               <span>Started</span>
               <p>{{ item.startedAt }}</p>
@@ -75,25 +43,21 @@
           </div>
         </a-list-item>
       </a-list>
-
-      <!-- <task-form ref="taskForm" /> -->
     </a-card>
   </div>
 </template>
 
 <script>
 import HeadInfo from '@/components/tools/HeadInfo'
-import TaskForm from './modules/TaskForm'
 import { getWorkflowList } from '@/api/manage'
 import Avatar from '@/components/Avatar'
 import orderBy from 'lodash.orderby'
 
 export default {
-  name: 'WorkflowList',
+  name: 'ProjectList',
   components: {
     Avatar,
-    HeadInfo,
-    TaskForm
+    HeadInfo
   },
   data () {
     return {
@@ -112,11 +76,11 @@ export default {
       this.radioGroupValue = event.target.value
       console.log('Current Radio Button Value: ', this.radioGroupValue)
     },
-    onShowWorkflow (workflowId) {
+    onShowWorkflowList (projectId) {
       this.$router.push({
-        name: 'workflow-details',
+        name: 'workflow-management',
         params: {
-          workflowId: workflowId
+          projectId: projectId
         }
       })
     },
@@ -160,7 +124,7 @@ export default {
     display: inline-block;
     vertical-align: middle;
     font-size: 14px;
-    margin-left: 40px;
+    margin-left: 20px;
     span {
         line-height: 20px;
     }

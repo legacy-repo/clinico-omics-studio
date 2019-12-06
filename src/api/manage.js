@@ -13,6 +13,14 @@ const api = {
 
 export default api
 
+export function getWebapps () {
+  return axios({
+    url: 'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/choppy/webapps.json',
+    method: 'get',
+    params: {}
+  })
+}
+
 export function getAppList () {
   return axios({
     url: 'http://localhost:3001/apps',

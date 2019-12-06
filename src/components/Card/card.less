@@ -1,0 +1,132 @@
+/* eslint-disable */
+@card-header-font-size: 1.3rem;
+@card-title-font-size: 1.2rem;
+@card-content-font-size: 1.1rem;
+@card-padding: 15px;
+@card-background-color: #b58148;
+@journal-card-background-color: #409eff;
+
+.box-card {
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: all 0.6s;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  .a-button {
+    padding: 5px 0px;
+  }
+
+  .left {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .journal-card-header {
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+    font-size: @card-header-font-size;
+    padding: @card-padding;
+    background-color: @journal-card-background-color;
+    color: #fff;
+
+    .journal {
+      height: 32px;
+      display: flex;
+      flex-direction: row;
+
+      button {
+        display: flex;
+        font-size: @card-header-font-size;
+      }
+    }
+
+    .journal-title {
+      font-size: @card-title-font-size;
+      margin-top: 10px;
+      font-weight: 500;
+      overflow: hidden;
+      display: -webkit-box;
+      line-height: 120%;
+      -webkit-box-orient: vertical; // 参考 https://github.com/postcss/autoprefixer/issues/776
+      -webkit-line-clamp: 2;
+      min-height: 46px;
+    }
+  }
+
+  .card-header {
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+    height: 80px;
+    font-size: @card-header-font-size;
+    padding: @card-padding;
+    background-color: @card-background-color;
+    color: #fff;
+
+    .title {
+      font-size: @card-title-font-size;
+      font-weight: 500;
+      overflow: hidden;
+      display: -webkit-box;
+      line-height: 120%;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+  }
+
+  .content {
+    margin: @card-padding;
+    font-size: @card-content-font-size;
+    overflow: hidden;
+    display: -webkit-box;
+    line-height: 150%;
+    text-align: justify;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+    min-height: 130px;
+  }
+
+  .image {
+    img {
+      width: 100%;
+      height: 200px;
+    }
+  }
+
+  .tag-container {
+    margin: @card-padding;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    height: 21px;
+    overflow: hidden;
+
+    span {
+      display: flex;
+      align-items: center;
+      height: 20px;
+      border: 1px solid #8d8d8d;
+      padding: 1px 8px;
+      border-radius: 20px;
+      margin-right: 5px;
+      margin-bottom: 5px;
+    }
+  }
+
+  .detail {
+    padding: @card-padding;
+    padding-top: 0px;
+    display: flex;
+    flex-direction: row;
+  }
+}

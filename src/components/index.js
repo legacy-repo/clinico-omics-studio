@@ -30,6 +30,8 @@ import ExceptionPage from '@/components/Exception'
 import StandardFormRow from '@/components/StandardFormRow'
 import ReportListContent from '@/components/ReportListContent'
 import FilterList from '@/components/Filter'
+import FormBuilder from '@/components/FormBuilder'
+import Card from '@/components/Card'
 
 export {
   AvatarList,
@@ -63,5 +65,7 @@ export {
   TagSelect,
   StandardFormRow,
   ReportListContent,
-  FilterList
+  FilterList,
+  FormBuilder,
+  Card
 }

@@ -1,5 +1,5 @@
 // eslint-disable-next-line
-import { UserLayout, BasicLayout, RouteView, BlankLayout, PageView, PublicFormLayout } from '@/layouts'
+import { UserLayout, BasicLayout, RouteView, BlankLayout, PageView } from '@/layouts'
 import { bxAnaalyse } from '@/core/icons'
 
 export const asyncRouterMap = [
@@ -271,6 +271,15 @@ export const asyncRouterMap = [
         meta: { title: 'App Store', keepAlive: true, icon: 'appstore', permission: [ 'table' ] }
       },
 
+      // App Store
+      {
+        path: '/test-panel',
+        name: 'test-panel',
+        hidden: false,
+        component: () => import('@/views/appstore/TestPanel'),
+        meta: { title: 'Test Panel', keepAlive: true, icon: 'appstore', permission: [ 'table' ] }
+      },
+
       // Account
       {
         path: '/account',
@@ -416,6 +425,12 @@ export const constantRouterMap = [
   {
     path: '/404',
     component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/404')
+  },
+
+  {
+    path: '/home',
+    name: 'home',
+    component: () => import('@/views/home/Home')
   }
 
 ]

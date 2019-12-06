@@ -23,6 +23,7 @@
     "datains-embed": "github:yjcyxky/datains-embed#tgmc-master",
     "enquire.js": "^2.1.6",
     "handsontable": "^7.2.2",
+    "lodash.filter": "^4.6.0",
     "lodash.get": "^4.4.2",
     "lodash.orderby": "^4.6.0",
     "lodash.pick": "^4.4.0",

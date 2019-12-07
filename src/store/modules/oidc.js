@@ -1,5 +1,6 @@
 import { vuexOidcCreateStoreModule } from 'vuex-oidc'
 import { oidcSettings } from '@/config/oidc'
+// import { WebStorageStateStore } from 'oidc-client'
 
 const oidcStore = vuexOidcCreateStoreModule(
   oidcSettings,

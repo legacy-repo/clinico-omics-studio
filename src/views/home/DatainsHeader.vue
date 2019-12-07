@@ -23,7 +23,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -77,7 +76,9 @@ export default {
   },
   components: {},
   activated () {},
-  created: function () {}
+  created: function () {
+
+  }
 }
 </script>
 

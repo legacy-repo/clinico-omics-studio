@@ -1,6 +1,8 @@
 // eslint-disable-next-line
 import { UserLayout, BasicLayout, RouteView, BlankLayout, PageView } from '@/layouts'
 import { bxAnaalyse } from '@/core/icons'
+import OidcCallback from '@/views/OidcCallback.vue'
+import OidcPopupCallback from '@/views/OidcPopupCallback.vue'
 
 export const asyncRouterMap = [
 
@@ -399,38 +401,28 @@ export const asyncRouterMap = [
  */
 export const constantRouterMap = [
   {
-    path: '/user',
-    component: UserLayout,
-    redirect: '/user/login',
-    hidden: true,
-    children: [
-      {
-        path: 'login',
-        name: 'login',
-        component: () => import(/* webpackChunkName: "user" */ '@/views/user/Login')
-      },
-      {
-        path: 'register',
-        name: 'register',
-        component: () => import(/* webpackChunkName: "user" */ '@/views/user/Register')
-      },
-      {
-        path: 'register-result',
-        name: 'registerResult',
-        component: () => import(/* webpackChunkName: "user" */ '@/views/user/RegisterResult')
-      }
-    ]
-  },
-
-  {
     path: '/404',
     component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/404')
   },
 
   {
-    path: '/home',
+    path: '/welcome',
     name: 'home',
-    component: () => import('@/views/home/Home')
-  }
+    component: () => import('@/views/home/Home'),
+    meta: {
+      isPublic: true
+    }
+  },
 
+  {
+    path: '/oidc-callback', // Needs to match redirectUri in you oidcSettings
+    name: 'oidcCallback',
+    component: OidcCallback
+  },
+
+  {
+    path: '/oidc-popup-callback', // Needs to match popupRedirectUri in you oidcSettings
+    name: 'oidcPopupCallback',
+    component: OidcPopupCallback
+  }
 ]

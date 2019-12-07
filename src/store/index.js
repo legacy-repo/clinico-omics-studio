@@ -5,6 +5,7 @@ import app from './modules/app'
 import user from './modules/user'
 import i18n from './modules/i18n'
 import permission from './modules/permission'
+import oidcStore from './modules/oidc'
 import getters from './getters'
 
 Vue.use(Vuex)
@@ -14,7 +15,8 @@ export default new Vuex.Store({
     app,
     user,
     i18n,
-    permission
+    permission,
+    oidcStore
   },
   state: {
 

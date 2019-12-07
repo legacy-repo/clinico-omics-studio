@@ -35,6 +35,6 @@ export default {
 <style lang="less" scoped>
 #home.home-wrapper {
   height: 100%;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 </style>

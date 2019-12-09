@@ -9,7 +9,7 @@
       </a-col>
       <a-col :xs="12" :sm="14" :md="16" :lg="18" class="menu">
         <a-row class="pc-list" :gutter="16">
-          <a-col :lg="3" :md="3" :sm="4" :xs="6" v-for="item in menu" :key="item.title">
+          <a-col v-for="item in menu" :key="item.title">
             <a :href="item.link">{{ item.title }}</a>
           </a-col>
           <a-col>

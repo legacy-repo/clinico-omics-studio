@@ -52,13 +52,15 @@ router.beforeEach((to, from, next) => {
           })
         })
         .catch(() => {
-          notification.error({
-            message: '错误',
-            description: '请求用户信息失败，请重试'
-          })
-          store.dispatch('Logout').then(() => {
-            next({ path: '/welcome', query: { redirect: to.fullPath } })
-          })
+          // 待解决，部分api无法正常工作
+          // notification.error({
+          //   message: '错误',
+          //   description: '请求用户信息失败，请重试'
+          // })
+          // store.dispatch('Logout').then(() => {
+          //   next({ path: '/welcome', query: { redirect: to.fullPath } })
+          // })
+          next()
         })
     } else {
       next()
@@ -74,6 +76,8 @@ router.beforeEach((to, from, next) => {
         message: 'Warning',
         description: 'You need to login if you want to access private resource.'
       })
+    } else if (to.path === '/') {
+      next({ path: '/welcome', query: { redirect: to.fullPath } })
     } else {
       next()
     }

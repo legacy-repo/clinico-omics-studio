@@ -30,7 +30,7 @@ export function getSmsCaptcha (parameter) {
 
 export function getInfo () {
   return axios({
-    url: '/user/info',
+    url: 'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/choppy/mock-userinfo.json',
     method: 'get',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'

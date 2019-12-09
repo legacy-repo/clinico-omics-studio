@@ -264,22 +264,39 @@ export const asyncRouterMap = [
         ]
       },
 
-      // App Store
+      // Management
       {
-        path: '/app-store',
-        name: 'app-store',
+        path: '/mgmt',
+        name: 'management',
         hidden: false,
-        component: () => import('@/views/appstore/FilterPanel'),
-        meta: { title: 'App Store', keepAlive: true, icon: 'appstore', permission: [ 'table' ] }
-      },
-
-      // App Store
-      {
-        path: '/test-panel',
-        name: 'test-panel',
-        hidden: false,
-        component: () => import('@/views/appstore/TestPanel'),
-        meta: { title: 'Test Panel', keepAlive: true, icon: 'appstore', permission: [ 'table' ] }
+        component: RouteView,
+        redirect: '/mgmt/metabase',
+        meta: { title: 'Management', icon: 'api', permission: [ 'profile' ] },
+        children: [
+          {
+            path: 'http://metabase.3steps.cn',
+            name: 'Metabase',
+            meta: { title: 'Metabase', target: '_blank', permission: [ 'profile' ] }
+          },
+          {
+            path: 'http://yapi.3steps.cn',
+            name: 'API Management',
+            meta: { title: 'API Management', target: '_blank', permission: [ 'profile' ] }
+          },
+          {
+            path: 'http://jupyterhub.3steps.cn',
+            name: 'Jupyter',
+            meta: { title: 'Jupyter', target: '_blank', permission: [ 'profile' ] }
+          },
+          // App Store
+          {
+            path: '/app-store',
+            name: 'app-store',
+            hidden: false,
+            component: () => import('@/views/appstore/FilterPanel'),
+            meta: { title: 'App Store', keepAlive: true, permission: [ 'table' ] }
+          }
+        ]
       },
 
       // Account
@@ -409,9 +426,7 @@ export const constantRouterMap = [
     path: '/welcome',
     name: 'home',
     component: () => import('@/views/home/Home'),
-    meta: {
-      isPublic: true
-    }
+    meta: { isPublic: true, keepAlive: true }
   },
 
   {

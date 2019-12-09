@@ -32,6 +32,7 @@ import ReportListContent from '@/components/ReportListContent'
 import FilterList from '@/components/Filter'
 import FormBuilder from '@/components/FormBuilder'
 import Card from '@/components/Card'
+import FullFrame from '@/components/FullFrame'
 
 export {
   AvatarList,
@@ -67,5 +68,6 @@ export {
   ReportListContent,
   FilterList,
   FormBuilder,
-  Card
+  Card,
+  FullFrame
 }

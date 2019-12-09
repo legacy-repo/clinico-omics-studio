@@ -3,8 +3,7 @@
     <a-row class="search-container">
       <a-col :xs="20" :sm="20" :md="20" :lg="10">
         <a-row class="slogan">{{ slogan }}</a-row>
-        <a-input-search placeholder="Search apps..." @search="onSearch"
-                        enterButton size="large"/>
+        <a-input-search placeholder="Search apps..." @search="onSearch" enterButton size="large" />
       </a-col>
     </a-row>
     <a-row class="show-window">
@@ -16,8 +15,11 @@
       </a-row>
       <a-row class="card-container" :gutter="30">
         <a-col v-for="(card, index) in webapps" :key="index" :xs="24" :sm="12" :md="8" :lg="8">
-          <card :card="card"></card>
+          <card :card="card" @click.native="emitPage(card)"></card>
         </a-col>
+      </a-row>
+      <a-row class="paginator">
+        <a-pagination showSizeChanger @showSizeChange="onShowSizeChange" :total="total" />
       </a-row>
     </a-row>
   </a-row>
@@ -33,20 +35,28 @@ export default {
   props: {},
   data() {
     return {
-      queryString: '',
+      total: 10,
       slogan: 'PGx Webapps in Datains',
       placeholder: 'Search apps...',
-      news: '<a href="http://www.nordata.cn">Webapps for Precision Medicine</a>',
+      news: '<a href="http://datains.3steps.cn">Webapps for Precision Medicine</a>',
       webapps: []
     }
   },
   methods: {
     onSearch(value) {
       getWebapps().then(res => {
+        this.total = res.total
         this.webapps = filter(res.data, function(o) {
           return o.name.match(value) || o.title.match(value) || o.content.match(value)
         })
       })
+    },
+    emitPage(card) {
+      console.log('Emit Page', card)
+      this.$emit('show-page', card)
+    },
+    onShowSizeChange() {
+
     }
   },
   components: { Card },

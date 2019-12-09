@@ -2,7 +2,7 @@
   <a-row class="header">
     <nav class="navbar">
       <a-col :xs="12" :sm="10" :md="8" :lg="6">
-        <a href="/home" class="logo">
+        <a href="/welcome" class="logo">
           <img src="~@/assets/logo.svg" />
           <span>Datains for Precision Medicine</span>
         </a>

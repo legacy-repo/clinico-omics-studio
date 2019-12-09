@@ -5,7 +5,6 @@ import OidcCallback from '@/views/OidcCallback.vue'
 import OidcPopupCallback from '@/views/OidcPopupCallback.vue'
 
 export const asyncRouterMap = [
-
   {
     path: '/',
     name: 'index',
@@ -40,6 +39,14 @@ export const asyncRouterMap = [
             name: 'analysis',
             component: () => import('@/views/dashboard/Analysis'),
             meta: { title: 'Statistics', keepAlive: false, permission: [ 'dashboard' ] }
+          },
+          // App Store
+          {
+            path: '/app-store',
+            name: 'app-store',
+            hidden: false,
+            component: () => import('@/views/appstore/FilterPanel'),
+            meta: { title: 'App Store', keepAlive: true, permission: [ 'table' ] }
           }
         ]
       },
@@ -269,32 +276,27 @@ export const asyncRouterMap = [
         path: '/mgmt',
         name: 'management',
         hidden: false,
-        component: RouteView,
+        component: BlankLayout,
         redirect: '/mgmt/metabase',
         meta: { title: 'Management', icon: 'api', permission: [ 'profile' ] },
         children: [
           {
-            path: 'http://metabase.3steps.cn',
+            path: '/redirect-metabase',
             name: 'Metabase',
-            meta: { title: 'Metabase', target: '_blank', permission: [ 'profile' ] }
+            redirect: '/metabase',
+            meta: { title: 'Metabase' }
           },
           {
-            path: 'http://yapi.3steps.cn',
+            path: '/redirect-api-mgmt',
             name: 'API Management',
-            meta: { title: 'API Management', target: '_blank', permission: [ 'profile' ] }
+            redirect: '/api-mgmt',
+            meta: { title: 'API Management' }
           },
           {
-            path: 'http://jupyterhub.3steps.cn',
+            path: '/redirect-jupyter',
             name: 'Jupyter',
-            meta: { title: 'Jupyter', target: '_blank', permission: [ 'profile' ] }
-          },
-          // App Store
-          {
-            path: '/app-store',
-            name: 'app-store',
-            hidden: false,
-            component: () => import('@/views/appstore/FilterPanel'),
-            meta: { title: 'App Store', keepAlive: true, permission: [ 'table' ] }
+            redirect: '/jupyter',
+            meta: { title: 'Jupyter' }
           }
         ]
       },
@@ -424,7 +426,7 @@ export const constantRouterMap = [
 
   {
     path: '/welcome',
-    name: 'home',
+    name: 'welcome',
     component: () => import('@/views/home/Home'),
     meta: { isPublic: true, keepAlive: true }
   },
@@ -439,5 +441,26 @@ export const constantRouterMap = [
     path: '/oidc-popup-callback', // Needs to match popupRedirectUri in you oidcSettings
     name: 'oidcPopupCallback',
     component: OidcPopupCallback
+  },
+
+  {
+    path: '/metabase',
+    name: 'Metabase Iframe',
+    props: (route) => ({ src: 'http://metabase.3steps.cn' }),
+    component: () => import('@/views/iframe/EmbededFrame')
+  },
+
+  {
+    path: '/api-mgmt',
+    name: 'API Management Iframe',
+    props: (route) => ({ src: 'http://yapi.3steps.cn' }),
+    component: () => import('@/views/iframe/EmbededFrame')
+  },
+
+  {
+    path: '/jupyter',
+    name: 'Jupyter Iframe',
+    props: (route) => ({ src: 'http://jupyterhub.3steps.cn' }),
+    component: () => import('@/views/iframe/EmbededFrame')
   }
 ]

@@ -34,7 +34,7 @@ export default {
     return {
       menu: [
         {
-          title: 'Dashboard',
+          title: 'Console',
           link: '/dashboard/workplace'
         }
       ]

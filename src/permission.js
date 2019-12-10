@@ -6,6 +6,7 @@ import 'nprogress/nprogress.css' // progress bar style
 import notification from 'ant-design-vue/es/notification'
 import { setDocumentTitle, domTitle } from '@/utils/domUtil'
 import { tokenIsExpired, tokenExp } from '@/utils/util'
+import { OIDC_AUTH } from '@/store/mutation-types'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
@@ -13,7 +14,7 @@ const whiteList = ['/', '/welcome', '/oidc-popup-callback'] // no redirect white
 
 function CheckToken (commit) {
   // Token可能过期
-  const user = JSON.parse(localStorage.getItem('oidc.user:https://keycloak.3steps.cn/auth/realms/master/:pgx-clinico-omics'))
+  const user = JSON.parse(localStorage.getItem(OIDC_AUTH))
   var tokenIsValid = null
   if (user) {
     commit('oidcStore/setOidcAuth', user)
@@ -73,8 +74,8 @@ router.beforeEach((to, from, next) => {
       next({ path: '/welcome', query: { redirect: to.fullPath } })
 
       notification.warn({
-        message: 'Warning',
-        description: 'You need to login if you want to access private resource.'
+        message: 'Unauthorized',
+        description: 'Authorization verification failed. You need to login if you want to access private resource.'
       })
     } else if (to.path === '/') {
       next({ path: '/welcome', query: { redirect: to.fullPath } })

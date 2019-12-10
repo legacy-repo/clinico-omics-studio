@@ -41,6 +41,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['Logout']),
     handleSelect: function () {},
     ...mapActions('oidcStore', [
       'authenticateOidcPopup',
@@ -53,8 +54,23 @@ export default {
       console.log('I am listening to the oidc error event in vuex-oidc', e.detail)
     },
     signOut: function () {
-      this.removeOidcUser().then(() => {
-        this.$router.push('/welcome')
+      this.$confirm({
+        title: 'Notice',
+        content: 'Really want to log out ?',
+        onOk: () => {
+          return this.Logout({}).then(() => {
+            setTimeout(() => {
+              window.location.reload()
+            }, 16)
+          }).catch(err => {
+            this.$message.error({
+              title: 'Error',
+              description: err.message
+            })
+          })
+        },
+        onCancel () {
+        }
       })
     }
   },

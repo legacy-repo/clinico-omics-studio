@@ -9,6 +9,7 @@ export const DEFAULT_FIXED_SIDEMENU = 'DEFAULT_FIXED_SIDEMENU'
 export const DEFAULT_FIXED_HEADER_HIDDEN = 'DEFAULT_FIXED_HEADER_HIDDEN'
 export const DEFAULT_CONTENT_WIDTH_TYPE = 'DEFAULT_CONTENT_WIDTH_TYPE'
 export const DEFAULT_MULTI_TAB = 'DEFAULT_MULTI_TAB'
+export const OIDC_AUTH = 'oidc.user:https://keycloak.3steps.cn/auth/realms/master/:pgx-clinico-omics'
 
 export const CONTENT_WIDTH_TYPE = {
   Fluid: 'Fluid',

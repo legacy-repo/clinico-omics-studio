@@ -1,5 +1,6 @@
 import { getInfo } from '@/api/login'
 import { welcome } from '@/utils/util'
+import { OIDC_AUTH } from '@/store/mutation-types'
 
 const user = {
   state: {
@@ -63,7 +64,7 @@ const user = {
       dispatch('oidcStore/removeOidcUser')
         .then(() => {
           console.log('Remove OIDC User')
-          localStorage.removeItem('oidc.user:https://keycloak.3steps.cn/auth/realms/master/:pgx-clinico-omics')
+          localStorage.removeItem(OIDC_AUTH)
         })
     }
   }

@@ -25,6 +25,10 @@ export default {
     src: {
       type: String,
       required: true
+    },
+    toPath: {
+      type: String,
+      required: false
     }
   },
   methods: {
@@ -32,7 +36,11 @@ export default {
       NProgress.done()
     },
     onClickBack() {
-      this.$router.push({ name: 'dashboard' })
+      if (this.toPath) {
+        this.$router.push({ path: this.toPath })
+      }
+      
+      this.$emit('return')
     }
   },
   created() {

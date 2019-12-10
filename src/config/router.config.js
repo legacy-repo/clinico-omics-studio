@@ -446,21 +446,21 @@ export const constantRouterMap = [
   {
     path: '/metabase',
     name: 'Metabase Iframe',
-    props: (route) => ({ src: 'http://metabase.3steps.cn' }),
+    props: (route) => ({ src: 'http://metabase.3steps.cn', toPath: '/dashboard' }),
     component: () => import('@/views/iframe/EmbededFrame')
   },
 
   {
     path: '/api-mgmt',
     name: 'API Management Iframe',
-    props: (route) => ({ src: 'http://yapi.3steps.cn' }),
+    props: (route) => ({ src: 'http://yapi.3steps.cn', toPath: '/dashboard' }),
     component: () => import('@/views/iframe/EmbededFrame')
   },
 
   {
     path: '/jupyter',
     name: 'Jupyter Iframe',
-    props: (route) => ({ src: 'http://jupyterhub.3steps.cn' }),
+    props: (route) => ({ src: 'http://jupyterhub.3steps.cn', toPath: '/dashboard' }),
     component: () => import('@/views/iframe/EmbededFrame')
   }
 ]

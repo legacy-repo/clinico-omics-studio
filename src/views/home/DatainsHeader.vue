@@ -4,7 +4,7 @@
       <a-col :xs="12" :sm="10" :md="8" :lg="6">
         <a href="/welcome" class="logo">
           <img src="~@/assets/logo.svg" />
-          <span>Datains for Precision Medicine</span>
+          <span>ClinicoOmics</span>
         </a>
       </a-col>
       <a-col :xs="12" :sm="14" :md="16" :lg="18" class="menu">

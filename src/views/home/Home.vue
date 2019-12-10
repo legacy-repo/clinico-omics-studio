@@ -1,6 +1,6 @@
 <template>
   <div id="home" :class="['home-wrapper', device]">
-    <embeded-frame :src="src" v-if="showFrame"></embeded-frame>
+    <embeded-frame :src="src" v-if="showFrame" @return="onClickBack"></embeded-frame>
     <a-row class="home-page" v-else>
       <datains-header></datains-header>
       <search-page @show-page="onShowPage"></search-page>

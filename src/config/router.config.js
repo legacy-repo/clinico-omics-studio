@@ -462,5 +462,12 @@ export const constantRouterMap = [
     name: 'Jupyter Iframe',
     props: (route) => ({ src: 'http://jupyterhub.3steps.cn', toPath: '/dashboard' }),
     component: () => import('@/views/iframe/EmbededFrame')
+  },
+
+  {
+    path: '/webapps',
+    name: 'Webapps',
+    props: (route) => ({ src: route.query.src, toPath: '/welcome' }),
+    component: () => import('@/views/iframe/EmbededFrame')
   }
 ]

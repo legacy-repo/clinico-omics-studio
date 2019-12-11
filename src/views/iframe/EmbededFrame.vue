@@ -45,6 +45,10 @@ export default {
   },
   created() {
     NProgress.start()
+    this.$notification['info']({
+      message: 'Notice',
+      description: 'Please be patient, the page may loads slightly.'
+    })
   }
 }
 </script>

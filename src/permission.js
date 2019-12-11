@@ -10,7 +10,7 @@ import { OIDC_AUTH } from '@/store/mutation-types'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
-const whiteList = ['/', '/welcome', '/oidc-popup-callback'] // no redirect whitelist
+const whiteList = ['/', '/webapps', '/welcome', '/oidc-popup-callback'] // no redirect whitelist
 
 function CheckToken (commit) {
   // Token可能过期
@@ -83,8 +83,6 @@ router.beforeEach((to, from, next) => {
       next()
     }
   }
-
-  NProgress.done() // if current page is login will not trigger afterEach hook, so manually handle it
 })
 
 router.afterEach(() => {

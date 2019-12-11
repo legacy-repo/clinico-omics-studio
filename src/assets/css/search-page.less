@@ -31,8 +31,22 @@
       background: #fff;
       margin-top: 10px;
       margin-bottom: 20px;
+      border-radius: 6px;
       border: 1px solid #d9d9d9;
       padding: 10px;
+
+      .form-header {
+        font-size: 1.0rem !important;
+
+        p {
+          margin-bottom: 0px;
+          color: #1890ff;
+        }
+
+        a {
+          font-size: 0.9rem !important;
+        }
+      }
     }
 
     .show-window-header {
@@ -51,6 +65,7 @@
         display: flex;
         border-left: 1px solid #d7d7d7;
         padding-left: 5px;
+        font-weight: bold;
         flex-direction: column;
         font-size: 1.1rem;
 
@@ -68,6 +83,13 @@
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
+    }
+
+    .not-found {
+      min-height: 300px;
+      justify-content: center;
+      align-content: center;
+      font-size: 1.1rem;
     }
 
     .paginator {

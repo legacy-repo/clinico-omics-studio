@@ -15,8 +15,11 @@
         </a-row>
       </a-row>
       <a-form class="search-form" :form="form">
-        <a-row>
-          <a-col :span="24" :style="{ textAlign: 'right' }">
+        <a-row class="form-header">
+          <a-col :span="12" :style="{ textAlign: 'left' }">
+            <p class="slogan">Total of Webapps: {{ webapps.length }}</p>
+          </a-col>
+          <a-col :span="12" :style="{ textAlign: 'right' }">
             <a :style="{ marginLeft: '8px', fontSize: '12px' }" @click="toggle">
               Collapse <a-icon :type="expand ? 'up' : 'down'" />
             </a>
@@ -38,16 +41,18 @@
           </a-col>
         </a-row>
       </a-form>
-      <a-row class="card-container" :gutter="20">
+      <a-row class="card-container" :class="{'not-found': webapps.length == 0}" :gutter="20">
         <a-col v-for="(card, index) in webapps" :key="index"
-               :xs="24" :sm="12" :md="8" :lg="colSpan">
+               :xs="24" :sm="12" :md="8" :lg="colSpan"
+               v-if="webapps.length > 0">
           <simple-card :card="card" @click.native="emitPage(card)" v-if="showSimpleCard"></simple-card>
           <card :card="card" @click.native="emitPage(card)" v-else></card>
         </a-col>
+        <a-col v-if="webapps.length == 0">Not Found</a-col>
       </a-row>
-      <a-row class="paginator">
+      <!-- <a-row class="paginator">
         <a-pagination showSizeChanger @showSizeChange="onShowSizeChange" :total="total" />
-      </a-row>
+      </a-row> -->
     </a-row>
   </a-row>
 </template>
@@ -145,6 +150,7 @@ export default {
         }
 
         this.webapps = sortBy(webapps, function(o) { return o.name })
+        this.total = this.webapps.length
 
         if (typeof(callback) === 'function') {
           callback(this.webapps)
@@ -171,7 +177,7 @@ export default {
       console.log('Emit Page', card)
       this.$emit('show-page', card)
     },
-    onShowSizeChange() {
+    onShowSizeChange(current, size) {
 
     },
     makeOptionList(webapps) {

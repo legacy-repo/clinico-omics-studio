@@ -20,7 +20,7 @@
     <a-card
       style="margin-top: 10px"
       :bordered="false"
-      title="Workflow List">
+      title="Job List">
 
       <div slot="extra">
         <a-radio-group @change="onClickRadioBtn" defaultValue="total" :value="radioGroupValue">
@@ -114,7 +114,7 @@ export default {
     },
     onShowWorkflow (workflowId) {
       this.$router.push({
-        name: 'workflow-details',
+        name: 'job-details',
         params: {
           workflowId: workflowId
         }

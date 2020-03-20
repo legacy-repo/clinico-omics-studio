@@ -29,7 +29,7 @@
           <a-col v-for="field, index in fieldList" :key="index" :lg="8" :md="8" :sm="12" :xs="24"
                  :style="{ display: index < count ? 'block' : 'none' }"
                  class="form-column">
-            <a-form-item :label="field.label">
+            <a-form-item :label="field.label" :label-col="{ xs: 6 }">
               <a-select :placeholder="`Please select ${field.name}`" allowClear
                         :mode="field.mode" v-decorator="[field.name]">
                 <a-select-option v-for="option in field.options" :key="option"
@@ -73,7 +73,7 @@ export default {
   data() {
     return {
       total: 10,
-      slogan: 'PGx Webapps in ClinicoOmics',
+      slogan: 'PGx Webapps in iSEQ Analyzer',
       placeholder: 'Search apps...',
       news: '<a href="http://datains.3steps.cn">Webapps for Precision Medicine</a>',
       webapps: [],

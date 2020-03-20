@@ -24,6 +24,7 @@ export const asyncRouterMap = [
           {
             path: '/dashboard/search',
             name: 'dashboard-search',
+            hidden: true,
             component: () => import('@/views/list/search/SearchLayout'),
             redirect: '/global/search/application',
             meta: { title: 'Search', keepAlive: true, permission: [ 'table' ] }
@@ -31,12 +32,14 @@ export const asyncRouterMap = [
           {
             path: '/dashboard/workplace',
             name: 'workplace',
+            hidden: false,
             component: () => import('@/views/dashboard/Workplace'),
             meta: { title: 'Workplace', keepAlive: true, permission: [ 'dashboard' ] }
           },
           {
             path: '/dashboard/analysis',
             name: 'analysis',
+            hidden: true,
             component: () => import('@/views/dashboard/Analysis'),
             meta: { title: 'Statistics', keepAlive: false, permission: [ 'dashboard' ] }
           },
@@ -44,7 +47,7 @@ export const asyncRouterMap = [
           {
             path: '/app-store',
             name: 'app-store',
-            hidden: false,
+            hidden: true,
             component: () => import('@/views/appstore/FilterPanel'),
             meta: { title: 'App Store', keepAlive: true, permission: [ 'table' ] }
           }
@@ -89,35 +92,51 @@ export const asyncRouterMap = [
         ]
       },
 
+      {
+        path: '/data',
+        name: 'data',
+        component: RouteView,
+        meta: { title: 'Data', icon: 'project', permission: [ 'form' ] },
+        children: [
+          {
+            path: '/data/manager',
+            name: 'Data Management',
+            component: () => import('@/views/filemanager/FileManager'),
+            meta: { title: 'Data Management', keepAlive: true, permission: [ 'form' ] }
+          }
+        ]
+      },
+
       // Pipeline
       {
         path: '/choppy-pipe',
         name: 'choppy-pipe',
         component: RouteView,
         redirect: '/choppy-pipe/submit',
-        meta: { title: 'Workflow', icon: 'play-circle', permission: [ 'table' ] },
+        meta: { title: 'Project', icon: 'play-circle', permission: [ 'table' ] },
         children: [
           {
             path: '/choppy-pipe/submit/:pageNo([1-9]\\d*)?',
-            name: 'submit-workflow',
+            name: 'create-project',
             component: () => import('@/views/workflow/stepForm/StepForm'),
-            meta: { title: 'Submit Workflow', keepAlive: true, permission: [ 'table' ] }
+            meta: { title: 'Create Project', keepAlive: true, permission: [ 'table' ] }
           },
           {
-            path: '/choppy-pipe/workflow-management',
-            name: 'workflow-management',
+            path: '/choppy-pipe/job-management',
+            name: 'job-management',
+            hidden: true,
             hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
             component: () => import('@/views/workflow/WorkflowManagement'),
             props: (route) => ({ projectId: route.query.projectId }),
-            meta: { title: 'Workflow Management', keepAlive: true, permission: [ 'table' ] }
+            meta: { title: 'Job Management', keepAlive: true, permission: [ 'table' ] }
           },
           {
             path: '/choppy-pipe/workflow/:workflowId',
-            name: 'workflow-details',
+            name: 'job-details',
             hidden: true,
             component: () => import('@/views/workflow/WorkflowDetails'),
             props: (route) => ({ readonly: route.query.readonly, description: route.query.description }),
-            meta: { title: 'Workflow Details', keepAlive: true, permission: [ 'table' ] }
+            meta: { title: 'Job Details', keepAlive: true, permission: [ 'table' ] }
           },
           {
             path: '/choppy-pipe/project-management',
@@ -159,6 +178,7 @@ export const asyncRouterMap = [
       {
         path: '/data-source',
         name: 'data-source',
+        hidden: true,
         redirect: '/data-source/discovery',
         component: PageView,
         meta: { title: 'Data Source', icon: 'project', permission: [ 'form' ] },
@@ -172,14 +192,14 @@ export const asyncRouterMap = [
           {
             path: '/data-source/search',
             name: 'search-datasource',
-            hidden: false,
+            hidden: true,
             component: () => import('@/views/datasource/Search'),
             meta: { title: 'Search', hiddenHeaderContent: true, keepAlive: true, permission: [ 'form' ] }
           },
           {
             path: '/data-source/exploration',
             name: 'exploration',
-            hidden: false,
+            hidden: true,
             component: () => import('@/views/datasource/FilterPanel'),
             meta: { title: 'Exploration', hiddenHeaderContent: true, keepAlive: true, permission: [ 'form' ] }
           },
@@ -204,7 +224,7 @@ export const asyncRouterMap = [
       {
         path: '/data-portal',
         name: 'data-portal',
-        hidden: false,
+        hidden: true,
         redirect: '/data-portal/import',
         component: RouteView,
         meta: { title: 'Data Portal', keepAlive: true, icon: 'file-search', permission: [ 'dashboard' ] },
@@ -251,7 +271,7 @@ export const asyncRouterMap = [
       {
         path: '/nccn',
         name: 'nccn',
-        hidden: false,
+        hidden: true,
         component: PageView,
         redirect: '/nccn/editor',
         meta: { title: 'NCCN', icon: bxAnaalyse, permission: [ 'result' ] },
@@ -275,7 +295,7 @@ export const asyncRouterMap = [
       {
         path: '/mgmt',
         name: 'management',
-        hidden: false,
+        hidden: true,
         component: BlankLayout,
         redirect: '/mgmt/metabase',
         meta: { title: 'Management', icon: 'api', permission: [ 'profile' ] },
@@ -304,6 +324,7 @@ export const asyncRouterMap = [
       // Account
       {
         path: '/account',
+        hidden: true,
         component: RouteView,
         redirect: '/account/center',
         name: 'account',
@@ -361,7 +382,7 @@ export const asyncRouterMap = [
       {
         path: '/documentation',
         name: 'documentation',
-        hidden: false,
+        hidden: true,
         component: RouteView,
         meta: { title: 'Docs', keepAlive: false, icon: 'question-circle', permission: [ 'dashboard' ] },
         children: [

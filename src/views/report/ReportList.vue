@@ -85,7 +85,7 @@
 
 <script>
 import HeadInfo from '@/components/tools/HeadInfo'
-import TaskForm from './modules/TaskForm'
+import TaskForm from '@/views/list/modules/TaskForm'
 import { getReportList } from '@/api/manage'
 import Avatar from '@/components/Avatar'
 import orderBy from 'lodash.orderby'

@@ -27,7 +27,7 @@
     </a-row>
     <a-row class="navbar-text">
       <a-row>
-        <img src="~@/assets/logo.svg" />
+        <img src="~@/assets/iseq-logo.png" />
       </a-row>
       <a-row>
         <a-row>
@@ -129,18 +129,18 @@ export default {
           title: 'Cooperation',
           span: 5,
           contentList: [
-            {
-              title: '苏州诺德拓生物科技有限公司',
-              src: 'http://nordata.com.cn/',
-              type: 'link',
-              target: '_blank'
-            },
-            {
-              title: '超存软件科技（苏州）有限公司',
-              src: 'http://supersan.cn/',
-              type: 'link',
-              target: '_blank'
-            },
+            // {
+            //   title: '苏州诺德拓生物科技有限公司',
+            //   src: 'http://nordata.com.cn/',
+            //   type: 'link',
+            //   target: '_blank'
+            // },
+            // {
+            //   title: '超存软件科技（苏州）有限公司',
+            //   src: 'http://supersan.cn/',
+            //   type: 'link',
+            //   target: '_blank'
+            // },
             {
               title: '复旦大学附属肿瘤医院',
               src: 'http://www.shca.org.cn/dazhong2',

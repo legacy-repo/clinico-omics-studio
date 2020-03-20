@@ -20,14 +20,14 @@
           <div slot="actions">
             <a @click="onShowReport(item.title, item.report)" :disabled="!item.report">Report</a>
           </div>
-          <div slot="actions">
+          <!-- <div slot="actions">
             <a-dropdown>
               <a-menu slot="overlay">
                 <a-menu-item><a>Details</a></a-menu-item>
               </a-menu>
               <a>More<a-icon type="down"/></a>
             </a-dropdown>
-          </div>
+          </div> -->
           <div class="list-content">
             <div class="list-content-item">
               <span>Started</span>
@@ -78,7 +78,7 @@ export default {
     },
     onShowWorkflowList (projectId) {
       this.$router.push({
-        name: 'workflow-management',
+        name: 'job-management',
         params: {
           projectId: projectId
         }

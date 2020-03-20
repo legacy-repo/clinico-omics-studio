@@ -7,7 +7,7 @@
     <div slot="extra">
       <a-row class="more-info">
         <a-col :span="8">
-          <head-info :title="$t('dashboard.workplace.workflows')" content="56" :center="false" :bordered="false"/>
+          <head-info :title="$t('dashboard.workplace.projects')" content="56" :center="false" :bordered="false"/>
         </a-col>
         <a-col :span="8">
           <head-info :title="$t('dashboard.workplace.samples')" content="1,299" :center="false" :bordered="false"/>
@@ -22,15 +22,15 @@
       <a-row :gutter="24">
         <a-col :xl="16" :lg="24" :md="24" :sm="24" :xs="24" style="padding-right: 0px;">
           <a-card
-            class="workflow-list"
+            class="project-list"
             :loading="loading"
             style="margin-bottom: 10px;"
             :bordered="false"
-            title="Ongoing Workflows"
+            title="Ongoing Projects"
             :body-style="{ padding: 0 }">
-            <a slot="extra" @click="onShowWorkflowMgmt">All Workflows</a>
+            <a slot="extra" @click="onShowProjectMgmt">All Projects</a>
             <div>
-              <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in workflows">
+              <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in projects">
                 <a-card :bordered="false" :body-style="{ padding: 0 }">
                   <a-card-meta>
                     <div slot="title" class="card-title">
@@ -135,7 +135,7 @@ export default {
       avatar: '',
       user: {},
 
-      workflows: [],
+      projects: [],
       loading: true,
       radarLoading: true,
       activities: [],
@@ -214,9 +214,9 @@ export default {
       const du = moment.duration(currentTime - startedTime, 'ms')
       return du.locale('zh-cn').humanize()
     },
-    onShowWorkflowMgmt () {
+    onShowProjectMgmt () {
       this.$router.push({
-        name: 'workflow-management'
+        name: 'project-management'
       })
     },
     getProjects () {
@@ -225,7 +225,7 @@ export default {
         per_page: 6,
         status: 'active'
       }).then(result => {
-        this.workflows = orderBy(result.data, [item => item.title.toLowerCase()], ['asc'])
+        this.projects = orderBy(result.data, [item => item.title.toLowerCase()], ['asc'])
         this.loading = false
       })
     },
@@ -263,7 +263,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.workflow-list {
+.project-list {
 
   .card-title {
     font-size: 0;
@@ -355,7 +355,7 @@ export default {
 }
 
 .mobile {
-  .workflow-list {
+  .project-list {
 
     .project-card-grid {
       width: 100%;

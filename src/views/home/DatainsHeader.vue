@@ -3,8 +3,8 @@
     <nav class="navbar">
       <a-col :xs="12" :sm="10" :md="8" :lg="6">
         <a href="/welcome" class="logo">
-          <img src="~@/assets/logo.svg" />
-          <span>ClinicoOmics</span>
+          <img src="~@/assets/iseq-logo.png" />
+          <span>iSEQ Analyzer</span>
         </a>
       </a-col>
       <a-col :xs="12" :sm="14" :md="16" :lg="18" class="menu">
@@ -16,6 +16,9 @@
             <a v-if="oidcIsAuthenticated" href @click.prevent="signOut">Sign out</a>
             <a v-else href @click.prevent="authenticateOidcPopup">Sign in</a>
           </a-col>
+          <a-col>
+            <app-store-icon class="action" theme="light"/>
+          </a-col>
         </a-row>
       </a-col>
     </nav>
@@ -24,6 +27,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import AppStoreIcon from '@/components/AppStoreIcon'
 
 export default {
   name: 'DatainsHeader',
@@ -34,7 +38,7 @@ export default {
     return {
       menu: [
         {
-          title: 'Console',
+          title: 'iSEQ Analyzer',
           link: '/dashboard/workplace'
         }
       ]
@@ -90,7 +94,9 @@ export default {
     window.removeEventListener('vuexoidc:userLoaded', this.userLoaded)
     window.removeEventListener('vuexoidc:oidcError', this.oidcError)
   },
-  components: {},
+  components: {
+    AppStoreIcon
+  },
   activated () {},
   created: function () {
 

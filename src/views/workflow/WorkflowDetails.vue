@@ -4,7 +4,7 @@
       <detail-list-item term="Author">{{ report.author }}</detail-list-item>
       <detail-list-item term="Analysis Type">{{ report.analysisType }}</detail-list-item>
       <detail-list-item term="Created Time">{{ report.createdTime }}</detail-list-item>
-      <detail-list-item term="Related Workflow">
+      <detail-list-item term="Related Job">
         <router-link :to="{ name: 'workflow', params: { workflowId: report.relatedWorkflowId }}">{{ report.relatedWorkflowId }}</router-link>
       </detail-list-item>
       <detail-list-item term="Audit Time">{{ report.auditTime }}</detail-list-item>

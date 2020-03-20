@@ -22,3 +22,6 @@ yarn-error.log*
 
 # Ignore mock data
 data
+
+# Aliyun
+ossutil_output

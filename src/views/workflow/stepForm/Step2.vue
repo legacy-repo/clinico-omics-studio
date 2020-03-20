@@ -17,10 +17,8 @@ export default {
   data () {
     return {
       data: [
-        ['', 'Tesla', 'Mercedes', 'Toyota', 'Volvo'],
-        ['2019', 10, 11, 12, 13],
-        ['2020', 20, 11, 14, 13],
-        ['2021', 30, 15, 12, 13]
+        ['project_name', 'sample_id', 'read1', 'read2', 'sample_name'],
+        ['quartet_0225', '1', 'oss://chinese-quartet/quartet-storage-data/Short_reads_fastq/ILM_Nova_ARD_DNA/Quartet_DNA_ILM_Nova_ARD_LCL5_1_20181108_R1.fastq.gz', 'oss://chinese-quartet/quartet-storage-data/Short_reads_fastq/ILM_Nova_ARD_DNA/Quartet_DNA_ILM_Nova_ARD_LCL5_1_20181108_R2.fastq.gz', 'Quartet_DNA_ILM_Nova_ARD_LCL5_1_20181108']
       ],
       hotSettings: {
         colHeaders: true,
@@ -30,13 +28,13 @@ export default {
         autoRowSize: true,
         autoColSize: true,
         stretchH: 'all',
-        height: '600',
+        height: '420',
         colWidths: 100,
         manualColumnFreeze: true,
         manualColumnResize: true,
         maxRows: 100,
         maxCols: 50,
-        minRows: 50,
+        minRows: 20,
         minCols: 10,
         multiColumnSorting: true,
         undo: true,

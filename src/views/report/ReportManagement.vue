@@ -1,7 +1,6 @@
 <template>
   <page-view :title="getTitle()" logo="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png">
-    <table-list v-if="tableViewActive"></table-list>
-    <report-list v-else></report-list>
+    <report-list></report-list>
   </page-view>
 </template>
 

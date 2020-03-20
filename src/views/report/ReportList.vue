@@ -1,45 +1,32 @@
 <template>
   <div>
-    <a-card :bordered="false">
-      <a-row>
-        <a-col :sm="6" :xs="24">
-          <head-info title="Unchecked" content="8" :bordered="true"/>
-        </a-col>
-        <a-col :sm="6" :xs="24">
-          <head-info title="Checked" content="32" :bordered="true"/>
-        </a-col>
-        <a-col :sm="6" :xs="24">
-          <head-info title="Archived" content="24" :bordered="true"/>
-        </a-col>
-        <a-col :sm="6" :xs="24">
-          <head-info title="Total" content="64"/>
-        </a-col>
-      </a-row>
-    </a-card>
-
-    <a-card
-      style="margin-top: 10px"
-      :bordered="false"
-      title="Report List">
-
-      <div slot="extra">
+    <a-card style="margin-top: 10px" :bordered="false">
+      <a-badge slot="extra" :count="total" :numberStyle="{backgroundColor: '#52c41a'}"/>
+      <div slot="title">
         <a-radio-group @change="onClickRadioBtn" defaultValue="total" :value="radioGroupValue">
           <a-radio-button value="total">Total</a-radio-button>
           <a-radio-button value="unchecked">Unchecked</a-radio-button>
           <a-radio-button value="checked">Checked</a-radio-button>
           <a-radio-button value="archived">Archived</a-radio-button>
         </a-radio-group>
-        <a-input-search style="margin-left: 16px; width: 272px;" placeholder="Please Enter Report Name" @search="onSearch" />
+        <a-input-search
+          style="margin-left: 16px; width: 272px;"
+          placeholder="Please Enter Report Name"
+          @search="onSearch"
+        />
       </div>
 
-      <a-list size="large" :pagination="{showSizeChanger: true, showQuickJumper: true, pageSize: perPage, total: total, current: page}">
+      <a-list
+        size="large"
+        :pagination="{ showSizeChanger: true, showQuickJumper: true, pageSize: perPage, total: total, current: page }"
+      >
         <a-list-item :key="index" v-for="(item, index) in data">
           <a-list-item-meta :description="item.description">
             <a-popover slot="avatar">
               <template slot="content">
-                <img :src="item.cover" class="popover">
+                <img :src="item.cover" class="popover" />
               </template>
-              <a-avatar size="large" shape="square" :src="item.cover"/>
+              <a-avatar size="large" shape="square" :src="item.cover" />
             </a-popover>
             <a slot="title">{{ item.title }}</a>
           </a-list-item-meta>
@@ -144,25 +131,25 @@ export default {
 
 <style lang="less" scoped>
 .ant-avatar-lg {
-    width: 48px;
-    height: 48px;
-    line-height: 48px;
+  width: 48px;
+  height: 48px;
+  line-height: 48px;
 }
 
 .list-content-item {
-    color: rgba(0, 0, 0, .45);
-    display: inline-block;
-    vertical-align: middle;
-    font-size: 14px;
-    margin-left: 40px;
-    span {
-        line-height: 20px;
-    }
-    p {
-        margin-top: 4px;
-        margin-bottom: 0;
-        line-height: 22px;
-    }
+  color: rgba(0, 0, 0, 0.45);
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 14px;
+  margin-left: 40px;
+  span {
+    line-height: 20px;
+  }
+  p {
+    margin-top: 4px;
+    margin-bottom: 0;
+    line-height: 22px;
+  }
 }
 
 .popover {

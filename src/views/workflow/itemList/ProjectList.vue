@@ -1,12 +1,19 @@
 <template>
   <div>
-    <a-card
-      style="margin-top: 10px"
-      :bordered="false"
-      title="Project List">
-
-      <div slot="extra">
-        <a-input-search style="margin-left: 16px; width: 272px;" placeholder="Please Enter Project Name" @search="onSearch" />
+    <a-card style="margin-top: 10px" :bordered="false">
+      <a-badge slot="extra" :count="total" :numberStyle="{backgroundColor: '#52c41a'}"/>
+      <div slot="title">
+        <a-radio-group @change="onClickRadioBtn" defaultValue="total" :value="radioGroupValue">
+          <a-radio-button value="total">Total</a-radio-button>
+          <a-radio-button value="running">Running</a-radio-button>
+          <a-radio-button value="finished">Finished</a-radio-button>
+          <a-radio-button value="unfinished">Unfinished</a-radio-button>
+        </a-radio-group>
+        <a-input-search
+          style="margin-left: 16px; width: 272px;"
+          placeholder="Please Enter Project Name"
+          @search="onSearch"
+        />
       </div>
 
       <a-list size="large" :pagination="{showSizeChanger: true, showQuickJumper: true, pageSize: perPage, total: total, current: page}">
@@ -20,14 +27,6 @@
           <div slot="actions">
             <a @click="onShowReport(item.title, item.report)" :disabled="!item.report">Report</a>
           </div>
-          <!-- <div slot="actions">
-            <a-dropdown>
-              <a-menu slot="overlay">
-                <a-menu-item><a>Details</a></a-menu-item>
-              </a-menu>
-              <a>More<a-icon type="down"/></a>
-            </a-dropdown>
-          </div> -->
           <div class="list-content">
             <div class="list-content-item">
               <span>Started</span>

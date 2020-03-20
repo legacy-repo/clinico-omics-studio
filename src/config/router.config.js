@@ -1,6 +1,5 @@
 // eslint-disable-next-line
-import { UserLayout, BasicLayout, RouteView, BlankLayout, PageView } from '@/layouts'
-import { bxAnaalyse } from '@/core/icons'
+import { BasicLayout, RouteView, BlankLayout, PageView } from '@/layouts'
 import OidcCallback from '@/views/OidcCallback.vue'
 import OidcPopupCallback from '@/views/OidcPopupCallback.vue'
 
@@ -184,12 +183,6 @@ export const asyncRouterMap = [
         meta: { title: 'Data Source', icon: 'project', permission: [ 'form' ] },
         children: [
           {
-            path: '/data-source/submit',
-            name: 'submit-data',
-            component: () => import('@/views/form/BasicForm'),
-            meta: { title: 'Submit Data', keepAlive: true, permission: [ 'form' ] }
-          },
-          {
             path: '/data-source/search',
             name: 'search-datasource',
             hidden: true,
@@ -202,20 +195,6 @@ export const asyncRouterMap = [
             hidden: true,
             component: () => import('@/views/datasource/FilterPanel'),
             meta: { title: 'Exploration', hiddenHeaderContent: true, keepAlive: true, permission: [ 'form' ] }
-          },
-          {
-            path: '/data-source/databank',
-            name: 'databank',
-            hidden: true,
-            component: () => import('@/views/form/BasicForm'),
-            meta: { title: 'Data Bank', keepAlive: true, permission: [ 'form' ] }
-          },
-          {
-            path: '/data-source/visualizer',
-            name: 'visualizer',
-            hidden: true,
-            component: () => import('@/views/form/advancedForm/AdvancedForm'),
-            meta: { title: 'Visualizer', keepAlive: true, permission: [ 'form' ] }
           }
         ]
       },
@@ -230,93 +209,9 @@ export const asyncRouterMap = [
         meta: { title: 'Data Portal', keepAlive: true, icon: 'file-search', permission: [ 'dashboard' ] },
         children: [
           {
-            path: '/data-portal/import',
-            name: 'import-data',
-            component: () => import('@/views/form/BasicForm'),
-            meta: { title: 'Import Data', keepAlive: true, permission: [ 'form' ] }
-          },
-          {
             path: 'http://data.3steps.cn',
             name: 'portal',
             meta: { title: 'Choppy Data Portal', target: '_blank' }
-          }
-        ]
-      },
-
-      // Next Service Engine
-      {
-        path: '/next-service-engine',
-        name: 'plugin-service',
-        hidden: true,
-        component: RouteView,
-        redirect: '/next-service-engine/plugins',
-        meta: { title: 'Plugins & Services', icon: 'api', permission: [ 'profile' ] },
-        children: [
-          {
-            path: '/next-service-engine/plugins',
-            name: 'plugins',
-            component: () => import('@/views/profile/basic/Index'),
-            meta: { title: 'Plugin Management', permission: [ 'profile' ] }
-          },
-          {
-            path: '/next-service-engine/services',
-            name: 'services',
-            component: () => import('@/views/profile/advanced/Advanced'),
-            meta: { title: 'Service Management', permission: [ 'profile' ] }
-          }
-        ]
-      },
-
-      // NCCN
-      {
-        path: '/nccn',
-        name: 'nccn',
-        hidden: true,
-        component: PageView,
-        redirect: '/nccn/editor',
-        meta: { title: 'NCCN', icon: bxAnaalyse, permission: [ 'result' ] },
-        children: [
-          {
-            path: '/nccn/editor',
-            name: 'editor',
-            component: () => import(/* webpackChunkName: "result" */ '@/views/result/Success'),
-            meta: { title: 'NCCN Editor', keepAlive: false, hiddenHeaderContent: true, permission: [ 'result' ] }
-          },
-          {
-            path: '/nccn/materials',
-            name: 'materials',
-            component: () => import(/* webpackChunkName: "result" */ '@/views/result/Error'),
-            meta: { title: 'NCCN Materials', keepAlive: false, hiddenHeaderContent: true, permission: [ 'result' ] }
-          }
-        ]
-      },
-
-      // Management
-      {
-        path: '/mgmt',
-        name: 'management',
-        hidden: true,
-        component: BlankLayout,
-        redirect: '/mgmt/metabase',
-        meta: { title: 'Management', icon: 'api', permission: [ 'profile' ] },
-        children: [
-          {
-            path: '/redirect-metabase',
-            name: 'Metabase',
-            redirect: '/metabase',
-            meta: { title: 'Metabase' }
-          },
-          {
-            path: '/redirect-api-mgmt',
-            name: 'API Management',
-            redirect: '/api-mgmt',
-            meta: { title: 'API Management' }
-          },
-          {
-            path: '/redirect-jupyter',
-            name: 'Jupyter',
-            redirect: '/jupyter',
-            meta: { title: 'Jupyter' }
           }
         ]
       },

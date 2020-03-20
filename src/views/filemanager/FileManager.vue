@@ -12,18 +12,14 @@
 
 <script>
 import Vue from 'vue'
+import api from '@/api/manage'
 import { FileManagerPlugin, DetailsView, NavigationPane, Toolbar } from '@syncfusion/ej2-vue-filemanager'
 
 Vue.use(FileManagerPlugin)
 export default {
   data () {
     return {
-      ajaxSettings: {
-        url: 'http://localhost:8090/',
-        getImageUrl: 'http://localhost:8090/GetImage',
-        uploadUrl: 'http://localhost:8090/Upload',
-        downloadUrl: 'http://localhost:8090/Download'
-      },
+      ajaxSettings: api.filemanager,
       allowDragAndDrop: true,
       enablePersistence: true
     }

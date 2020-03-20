@@ -8,7 +8,13 @@ const api = {
   permissionNoPager: '/permission/no-pager',
   orgTree: '/org/tree',
   report: '/report-list',
-  workflow: '/workflow'
+  workflow: '/workflow',
+  filemanager: {
+    url: 'http://localhost:8090/',
+    getImageUrl: 'http://localhost:8090/GetImage',
+    uploadUrl: 'http://localhost:8090/Upload',
+    downloadUrl: 'http://localhost:8090/Download'
+  }
 }
 
 export default api

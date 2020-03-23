@@ -25,8 +25,8 @@
           </a-row>
         </div>
         <div slot="action">
-          <a-button type="primary" @click="finish">Turn Another</a-button>
-          <a-button style="margin-left: 8px" @click="toOrderList">Show Workflow</a-button>
+          <a-button type="primary" @click="showJobs">Show Jobs</a-button>
+          <a-button style="margin-left: 8px" @click="showProjects">Show Projects</a-button>
         </div>
       </result>
     </a-form>
@@ -47,11 +47,11 @@ export default {
     }
   },
   methods: {
-    finish () {
-      this.$emit('finish')
+    showJobs () {
+      this.$router.push({ name: 'job-management' })
     },
-    toOrderList () {
-      this.$router.push('/list/table-list')
+    showProjects () {
+      this.$router.push({ name: 'project-management' })
     }
   }
 }

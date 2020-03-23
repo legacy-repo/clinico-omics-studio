@@ -6,9 +6,10 @@
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
       >
-        <a-input placeholder="Please enter your project name"
-                 @blur="validateProjectNameBlur"
-                 v-decorator="['projectName', { rules: [{required: true, message: 'Project name is required'}] }]" />
+        <a-input
+          placeholder="Please enter your project name"
+          @blur="validateProjectNameBlur"
+          v-decorator="['projectName', { rules: [{required: true, message: 'Project name is required'}] }]" />
       </a-form-item>
       <a-form-item
         label="Description"
@@ -27,18 +28,20 @@
         :labelCol="labelCol"
         :wrapperCol="wrapperCol">
         <a-date-picker
+          allowClear
           name="buildTime"
           style="width: 100%"
           v-decorator="[
             'buildTime',
-            {rules: [{ required: true, message: 'Please choose started time' }]}
+            {initialValue: now(),
+             rules: [{ required: true, message: 'Please choose started time' }]}
           ]"
           show-time
           format="YYYY-MM-DD HH:mm:ss"
         />
       </a-form-item>
       <a-form-item
-        label="Corporation"
+        label="Group"
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
       >
@@ -46,13 +49,9 @@
           style="display: inline-block; vertical-align: middle"
           :compact="true"
         >
-          <a-select defaultValue="organization" style="width: 120px">
-            <a-select-option value="company">Company</a-select-option>
-            <a-select-option value="organization">Organization</a-select-option>
-          </a-select>
           <a-input
             :style="{width: 'calc(100% - 120px)'}"
-            v-decorator="['corporation', { initialValue: 'Fudan University', rules: [{required: true, message: 'Corporation is required'}]}]"
+            v-decorator="['group', { initialValue: 'Fudan University', rules: [{required: true, message: 'Group is required'}]}]"
           />
         </a-input-group>
       </a-form-item>
@@ -64,8 +63,9 @@
         <a-select
           placeholder="Please choose a choppy app"
           v-decorator="['choppyApp', { rules: [{required: true, message: 'Choppy app is required'}] }]">
-          <a-select-option value="Quality_control">Quality_control</a-select-option>
-          <a-select-option value="RNAseq_Variant_Calling">RNAseq_Variant_Calling</a-select-option>
+          <a-select-option :value="item.id" v-for="item in installed_apps" :key="item.id">
+            {{ item.name }}
+          </a-select-option>
         </a-select>
       </a-form-item>
       <a-form-item :wrapperCol="{span: 19, offset: 5}">
@@ -84,25 +84,53 @@
 </template>
 
 <script>
+import { getInstalledAppList, existProjectName } from '@/api/manage'
+import orderBy from 'lodash.orderby'
+import moment from 'moment'
+
 export default {
   name: 'Step1',
   data () {
     return {
       labelCol: { lg: { span: 6 }, sm: { span: 5 } },
       wrapperCol: { lg: { span: 18 }, sm: { span: 19 } },
+      installed_apps: [],
       form: this.$form.createForm(this)
     }
   },
   methods: {
+    now () {
+      return moment(new Date(), 'YYYY-MM-DD HH:mm:ss')
+    },
     validateProjectNameBlur (e) {
-      const validateProjectNameReg = /^[a-z0-9A-Z_]+$/
-      if (e.target.value && !validateProjectNameReg.test(e.target.value)) {
-        const arr = [{
-          message: 'Project Name is not valid, only support [a-z0-9A-Z_]!',
-          field: 'projectName',
+      const validateProjectNameReg = /^[a-zA-Z_]+[0-9a-zA-Z]+$/
+      var arr = []
+      if (e.target.value && (!validateProjectNameReg.test(e.target.value) || e.target.value.length < 5)) {
+        arr = [{
+          message: 'Project name is not valid, only support [a-z0-9A-Z_] and at least five chars!',
+          field: 'projectName'
         }]
+      }
+
+      // TODO: Check if project name exists.
+      if (existProjectName(e.target.value)) {
+        arr = [{
+          message: 'The project name exists!',
+          field: 'projectName'
+        }]
+      }
+
+      if (arr.length > 0) {
         this.form.setFields({ projectName: { value: e.target.value, errors: arr } })
       }
+    },
+    getInstalledApps () {
+      getInstalledAppList().then(res => {
+        console.log('res', res)
+        this.installed_apps = orderBy(res.data, [item => {
+          item.name.toLowerCase()
+        }], ['asc'])
+      })
     },
     nextStep () {
       const { form: { validateFields } } = this
@@ -111,9 +139,13 @@ export default {
         if (!err) {
           console.log('Project information: ', values)
           this.$emit('nextStep')
+          this.$emit('projectData', values)
         }
       })
     }
+  },
+  created () {
+    this.getInstalledApps()
   }
 }
 </script>

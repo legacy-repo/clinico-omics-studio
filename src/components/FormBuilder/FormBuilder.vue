@@ -1,7 +1,6 @@
 <template>
   <div class="a-form-builder">
-    <a-form ref="form" :form="clonedModel" @submit="onAction"
-    >
+    <a-form ref="form" :form="clonedModel" @submit="onAction">
       <a-form-item
         v-for="(field, index) in schema.fields"
         :key="field.label + index"

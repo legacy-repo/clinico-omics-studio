@@ -6,9 +6,11 @@
       <a-step title="Submit" />
     </a-steps>
     <div class="content">
-      <step1 v-if="currentTab === 0" @nextStep="nextStep"/>
-      <step2 v-if="currentTab === 1" @nextStep="nextStep" @prevStep="prevStep"/>
-      <step3 v-if="currentTab === 2" @prevStep="prevStep" @finish="finish"/>
+      <keep-alive>
+        <step1 v-if="currentTab === 0" @nextStep="nextStep"/>
+        <step2 v-if="currentTab === 1" @nextStep="nextStep" @prevStep="prevStep"/>
+        <step3 v-if="currentTab === 2"/>
+      </keep-alive>
     </div>
   </a-card>
 </template>
@@ -27,15 +29,10 @@ export default {
   },
   data () {
     return {
-      description: '将一个冗长或用户不熟悉的表单任务分成多个步骤，指导用户完成。',
-      currentTab: 0,
-
-      // form
-      form: null
+      currentTab: 0
     }
   },
   methods: {
-
     // handler
     nextStep () {
       if (this.currentTab < 2) {
@@ -46,9 +43,6 @@ export default {
       if (this.currentTab > 0) {
         this.currentTab -= 1
       }
-    },
-    finish () {
-      this.currentTab = 0
     }
   }
 }

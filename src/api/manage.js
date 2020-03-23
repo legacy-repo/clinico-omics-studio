@@ -9,6 +9,10 @@ const api = {
   orgTree: '/org/tree',
   report: '/report-list',
   workflow: '/workflow',
+  app_store: {
+    installed_apps: '/installed-apps',
+    apps: '/apps'
+  },
   filemanager: {
     url: 'http://localhost:8090/',
     getImageUrl: 'http://localhost:8090/GetImage',
@@ -29,7 +33,15 @@ export function getWebapps () {
 
 export function getAppList () {
   return axios({
-    url: 'http://localhost:3001/apps',
+    url: api.app_store.apps,
+    method: 'get',
+    params: {}
+  })
+}
+
+export function getInstalledAppList () {
+  return axios({
+    url: api.app_store.installed_apps,
     method: 'get',
     params: {}
   })
@@ -41,6 +53,11 @@ export function getWorkflowList (parameter) {
     method: 'get',
     params: parameter
   })
+}
+
+// TODO: use api instead of false
+export function existProjectName (projectName) {
+  return false
 }
 
 export function getReport () {

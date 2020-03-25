@@ -136,15 +136,27 @@ export default {
   line-height: 48px;
 }
 
+.list-content {
+  display: flex;
+  flex-direction: row;
+}
+
 .list-content-item {
   color: rgba(0, 0, 0, 0.45);
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
   vertical-align: middle;
   font-size: 14px;
   margin-left: 40px;
+
+  .ant-tag {
+    margin-bottom: 5px;
+  }
+
   span {
     line-height: 20px;
   }
+
   p {
     margin-top: 4px;
     margin-bottom: 0;

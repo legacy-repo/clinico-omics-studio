@@ -31,25 +31,34 @@
       <a-button type="primary" >Archive</a-button>
     </template>
 
-    <embeded-frame src="http://localhost:3000/report/project-1/multiqc_report.html"></embeded-frame>
+    <block-style-editor
+      class="report"
+      autofocus
+      ref="editor"
+      holder-id="codex-editor"
+      save-button-id="save-button"
+      :init-data="initData"
+      @ready="onReady"
+      @change="onChange"
+    />
   </page-view>
 </template>
 
 <script>
 import { PageView } from '@/layouts'
-import EmbededFrame from '@/views/iframe/EmbededFrame'
+import BlockStyleEditor from '@/components/BlockStyleEditor'
 import { getReport } from '@/api/manage'
 import DetailList from '@/components/tools/DetailList'
 
 const DetailListItem = DetailList.Item
 
 export default {
-  name: 'ReportDetails',
+  name: 'ReportDetailsEditor',
   components: {
     PageView,
     DetailList,
     DetailListItem,
-    EmbededFrame
+    BlockStyleEditor
   },
   props: {
     readonly: {

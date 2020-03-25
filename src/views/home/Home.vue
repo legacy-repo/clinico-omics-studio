@@ -8,29 +8,26 @@
 </template>
 
 <script>
-import NProgress from 'nprogress' // progress bar
 import { mixinDevice } from '@/utils/mixin'
 import DatainsFooter from './DatainsFooter'
 import DatainsHeader from './DatainsHeader'
 import SearchPage from './SearchPage'
-import EmbededFrame from '@/views/iframe/EmbededFrame';
 
 export default {
   name: 'Home',
   components: {
     DatainsFooter,
     DatainsHeader,
-    SearchPage,
-    EmbededFrame
+    SearchPage
   },
   mixins: [mixinDevice],
-  data() {
+  data () {
     return {
 
     }
   },
   methods: {
-    onShowPage(event) {
+    onShowPage (event) {
       console.log('Show Page: ', event)
       const link = event.link
       // Set src attribute for iframe

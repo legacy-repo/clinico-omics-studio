@@ -840,6 +840,14 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
+"@codekraft-studio/vue-animated@^0.1.5":
+  version "0.1.5"
+  resolved "https://registry.npm.taobao.org/@codekraft-studio/vue-animated/download/@codekraft-studio/vue-animated-0.1.5.tgz#bba6dbd05a3943e126da4f53e3aebf95c6403f33"
+  integrity sha1-u6bb0Fo5Q+Em2k9T466/lcZAPzM=
+  dependencies:
+    animate.css "^3.4.0"
+    vue "^2.2.0"
+
 "@editorjs/checklist@^1.1.0":
   version "1.1.0"
   resolved "https://registry.npm.taobao.org/@editorjs/checklist/download/@editorjs/checklist-1.1.0.tgz#1c5a083a48852f3d86d6086d2e1a6057ac5b0429"
@@ -1892,6 +1900,11 @@ amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
   integrity sha1-SlKCrBZHKek2Gbz9OtFR+BfOkfU=
+
+animate.css@^3.4.0:
+  version "3.7.2"
+  resolved "https://registry.npm.taobao.org/animate.css/download/animate.css-3.7.2.tgz#e73e0d50e92cb1cfef1597d9b38a9481020e08ea"
+  integrity sha1-5z4NUOkssc/vFZfZs4qUgQIOCOo=
 
 ansi-colors@^3.0.0:
   version "3.2.4"
@@ -11713,6 +11726,11 @@ vue@*, vue@^2.6.10:
   version "2.6.10"
   resolved "https://registry.npm.taobao.org/vue/download/vue-2.6.10.tgz#a72b1a42a4d82a721ea438d1b6bf55e66195c637"
   integrity sha1-pysaQqTYKnIepDjRtr9V5mGVxjc=
+
+vue@^2.2.0:
+  version "2.6.11"
+  resolved "https://registry.npm.taobao.org/vue/download/vue-2.6.11.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fvue%2Fdownload%2Fvue-2.6.11.tgz#76594d877d4b12234406e84e35275c6d514125c5"
+  integrity sha1-dllNh31LEiNEBuhONSdcbVFBJcU=
 
 vue@^2.5.3:
   version "2.6.7"

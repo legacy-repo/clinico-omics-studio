@@ -1,22 +1,33 @@
 <template>
   <a-row class="frame-container">
-    <a-button class="button" type="primary" shape="circle" icon="left" size="large" @click="onClickBack" />
-    <vue-friendly-iframe :src="src" class="vue-iframe" @document-load="onLoad"
-                         frameborder="0" allowfullscreen="true" scrolling="auto">
+    <a-button
+      class="button"
+      shape="circle"
+      v-if="toPath"
+      icon="left"
+      size="large"
+      @click="onClickBack"/>
+    <vue-friendly-iframe
+      :src="src"
+      class="vue-iframe"
+      @document-load="onLoad"
+      frameborder="0"
+      allowfullscreen="true"
+      scrolling="auto">
     </vue-friendly-iframe>
   </a-row>
 </template>
 
 <script>
 import NProgress from 'nprogress' // progress bar
-import VueFriendlyIframe from 'vue-friendly-iframe';
+import VueFriendlyIframe from 'vue-friendly-iframe'
 
 export default {
   name: 'EmbededFrame',
   components: {
     VueFriendlyIframe
   },
-  data() {
+  data () {
     return {
 
     }
@@ -28,22 +39,23 @@ export default {
     },
     toPath: {
       type: String,
-      required: false
+      required: false,
+      default: null
     }
   },
   methods: {
-    onLoad() {
+    onLoad () {
       NProgress.done()
     },
-    onClickBack() {
+    onClickBack () {
       if (this.toPath) {
         this.$router.push({ path: this.toPath })
       }
-      
+
       this.$emit('return')
     }
   },
-  created() {
+  created () {
     NProgress.start()
     this.$notification['info']({
       message: 'Notice',
@@ -56,7 +68,7 @@ export default {
 <style lang="less">
 .frame-container {
   width: 100%;
-  height: 100%;
+  min-height: 630px;
 
   .button {
     position: absolute;
@@ -65,12 +77,14 @@ export default {
   }
 
   .vue-iframe {
-    width: 100%;
-    height: 100%;
-
     iframe {
-      width: 100%;
+      border: 0;
       height: 100%;
+      max-height: 650px;
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: 100%;
     }
   }
 }

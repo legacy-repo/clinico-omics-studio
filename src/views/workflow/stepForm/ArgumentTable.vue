@@ -53,7 +53,7 @@ export default {
             'row_below': {}
           }
         },
-        afterChange: (change, changeType) => { 
+        afterChange: (change, changeType) => {
           if (changeType === 'edit') {
             this.saveData()
           }

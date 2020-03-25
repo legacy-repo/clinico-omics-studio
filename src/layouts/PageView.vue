@@ -1,7 +1,7 @@
 <template>
   <div :style="!$route.meta.hiddenHeaderContent ? 'margin: -10px -10px 0px;' : null">
     <!-- pageHeader , route meta :true on hide -->
-    <page-header v-if="!$route.meta.hiddenHeaderContent" :title="pageTitle" :logo="logo" :avatar="avatar">
+    <page-header v-if="!$route.meta.hiddenHeaderContent" :drawerMode="$route.meta.drawerMode" :title="pageTitle" :logo="logo" :avatar="avatar">
       <slot slot="action" name="action"></slot>
       <slot slot="content" name="headerContent"></slot>
       <div slot="content" v-if="!this.$slots.headerContent && description">

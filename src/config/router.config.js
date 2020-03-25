@@ -92,7 +92,7 @@ export const asyncRouterMap = [
             hidden: true,
             component: () => import('@/views/report/ReportDetails'),
             props: route => ({ readonly: route.query.readonly, description: route.query.description }),
-            meta: { title: 'Report Details', keepAlive: true, permission: ['table'] }
+            meta: { title: 'Report Details', drawerMode: true, keepAlive: true, permission: ['table'] }
           }
         ]
       },

@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@antv/data-set": "^0.10.2",
+    "@codekraft-studio/vue-animated": "^0.1.5",
     "@editorjs/editorjs": "^2.15.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.25",
     "@handsontable/vue": "^4.1.1",

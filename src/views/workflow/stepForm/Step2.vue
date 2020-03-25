@@ -1,61 +1,72 @@
 <template>
-  <div>
-    <form-builder v-if="schema" ref="form" v-model="model" :schema="schema" @action="onAction" @update="onUpdate"></form-builder>
-    <argument-table v-else></argument-table>
-  </div>
+  <form-builder ref="form" :fields="fields" @action="onAction" @update="onUpdate"></form-builder>
 </template>
 
 <script>
 import appSchema from '@/appschema'
 import FormBuilder from '@/components/FormBuilder'
-import ArgumentTable from '@/views/workflow/ArgumentTable'
 
 export default {
   name: 'Step2',
   data () {
     return {
-      model: {},
-      schema: {}
+      fields: []
     }
   },
   methods: {
-    nextStep () {
-      const that = this
-      that.loading = true
-      console.log('表单 values', that.data)
-      that.timer = setTimeout(function () {
-        that.loading = false
-        that.$emit('nextStep')
-      }, 1500)
+    loadAppSchema (appName) {
+      return appSchema.huangyechaoAnnovarLatest.fields
+    },
+    onUpdate (data) {
+      console.log('FormBuilder: ', data)
+    },
+    loadLocalData () {
+      const appData = JSON.parse(localStorage.getItem('appData'))
+      const projectData = JSON.parse(localStorage.getItem('projectData'))
+      if (projectData) {
+        return appData
+      } else {
+        this.prevStep()
+      }
     },
     prevStep () {
       this.$emit('prevStep')
     },
-    loadAppSchema (appName) {
-      return appSchema.huangyechaoAnnovarLatest.schema
+    nextStep () {
+      this.$emit('nextStep')
     },
-    onUpdate (data) {
-      console.log('FormBuilder: ', data)
+    initSchema (appSchema, initData) {
+      for (const key in initData) {
+        const idx = appSchema.findIndex((element) => element.model === key)
+        if (appSchema[idx].config) {
+          appSchema[idx].config.initialValue = initData[key]
+        }
+      }
+
+      console.log('appSchema: ', appSchema, initData)
+      return appSchema
     },
     onAction (e) {
       if (e.type === 'cancel') {
         this.prevStep()
       } else if (e.type === 'submit') {
+        localStorage.setItem('appData', JSON.stringify(e.formData))
+        localStorage.setItem('sampleIds', JSON.stringify(e.sampleIds))
         this.nextStep()
       }
     }
   },
   created () {
-    console.log('AppSchema: ', appSchema)
-    this.schema = this.loadAppSchema()
+    this.fields = this.initSchema(this.loadAppSchema(), this.loadLocalData())
   },
   components: {
-    FormBuilder,
-    ArgumentTable
+    FormBuilder
   }
 }
 </script>
 
 <style lang="less" scoped>
-
+.a-form-builder {
+  margin-top: 30px;
+}
 </style>

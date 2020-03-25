@@ -1,16 +1,14 @@
 <template>
   <a-card :bordered="false">
-    <a-steps class="steps" :current="currentTab">
+    <a-steps class="steps" :current="stepNum">
       <a-step title="Project Information" />
-      <a-step title="Workflow Parameters" />
+      <a-step title="Job Parameters" />
       <a-step title="Submit" />
     </a-steps>
     <div class="content">
-      <keep-alive>
-        <step1 v-if="currentTab === 0" @nextStep="nextStep"/>
-        <step2 v-if="currentTab === 1" @nextStep="nextStep" @prevStep="prevStep"/>
-        <step3 v-if="currentTab === 2"/>
-      </keep-alive>
+      <step1 v-if="stepNum === 0" @nextStep="nextStep"/>
+      <step2 v-if="stepNum === 1" @nextStep="nextStep" @prevStep="prevStep"/>
+      <step3 v-if="stepNum === 2" @finish="submitStepForm" @prevStep="prevStep"/>
     </div>
   </a-card>
 </template>
@@ -29,21 +27,42 @@ export default {
   },
   data () {
     return {
-      currentTab: 0
+
+    }
+  },
+  computed: {
+    stepNum () {
+      let num = this.$route.query.step
+      try {
+        num = parseInt(num)
+        if (num >= 0 && num <= 2) {
+          return num
+        } else {
+          return 0
+        }
+      } catch (error) {
+        return 0
+      }
     }
   },
   methods: {
     // handler
     nextStep () {
-      if (this.currentTab < 2) {
-        this.currentTab += 1
+      if (this.stepNum < 2) {
+        this.$router.push({ name: 'create-project', query: { step: this.stepNum + 1 } })
       }
     },
     prevStep () {
-      if (this.currentTab > 0) {
-        this.currentTab -= 1
+      if (this.stepNum > 0) {
+        this.$router.push({ name: 'create-project', query: { step: this.stepNum - 1 } })
       }
+    },
+    submitStepForm (data) {
+      console.log('stepForm: ', data)
     }
+  },
+  created () {
+
   }
 }
 </script>

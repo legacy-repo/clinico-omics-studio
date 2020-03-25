@@ -13,6 +13,10 @@ body {
   }
 }
 
+body::-webkit-scrollbar {
+  width: 0 !important;
+}
+
 .layout.ant-layout {
   height: auto;
   overflow-x: hidden;
@@ -332,6 +336,10 @@ body {
     max-width: 1200px;
     margin: 0 auto;
   }
+}
+
+.ant-drawer-right .ant-drawer-content {
+  position: unset;
 }
 
 // drawer-sider 自定义

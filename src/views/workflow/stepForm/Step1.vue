@@ -1,77 +1,77 @@
 <template>
   <div>
-    <a-form :form="form" style="max-width: 500px; margin: 40px auto 0;">
-      <a-form-item
+    <a-form-model ref="projectForm" :model="projectData" :rules="rules" style="max-width: 500px; margin: 40px auto 0;">
+      <a-form-model-item
         label="Project Name"
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
+        prop="projectName"
+        ref="projectName"
       >
         <a-input
-          placeholder="Please enter your project name"
-          @blur="validateProjectNameBlur"
-          v-decorator="['projectName', { rules: [{required: true, message: 'Project name is required'}] }]" />
-      </a-form-item>
-      <a-form-item
+          v-model="projectData.projectName"
+          @blur="() => {$refs.projectName.onFieldBlur()}"
+          placeholder="Please enter your project name"/>
+      </a-form-model-item>
+      <a-form-model-item
         label="Description"
         :labelCol="labelCol"
+        ref="description"
+        prop="description"
         :wrapperCol="wrapperCol">
         <a-textarea
           rows="4"
+          v-model="projectData.description"
           placeholder="Please enter a description of the project"
-          v-decorator="[
-            'description',
-            {rules: [{ required: true, message: 'Please enter a description of the project' }]}
-          ]" />
-      </a-form-item>
-      <a-form-item
+          @blur="() => {$refs.description.onFieldBlur()}"/>
+      </a-form-model-item>
+      <a-form-model-item
         label="Started Time"
+        prop="buildTime"
+        ref="buildTime"
         :labelCol="labelCol"
         :wrapperCol="wrapperCol">
         <a-date-picker
           allowClear
+          v-model="projectData.buildTime"
           name="buildTime"
           style="width: 100%"
-          v-decorator="[
-            'buildTime',
-            {initialValue: now(),
-             rules: [{ required: true, message: 'Please choose started time' }]}
-          ]"
           show-time
           format="YYYY-MM-DD HH:mm:ss"
         />
-      </a-form-item>
-      <a-form-item
+      </a-form-model-item>
+      <a-form-model-item
         label="Group"
+        prop="group"
+        ref="group"
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
       >
-        <a-input-group
-          style="display: inline-block; vertical-align: middle"
-          :compact="true"
-        >
-          <a-input
-            :style="{width: 'calc(100% - 120px)'}"
-            v-decorator="['group', { initialValue: 'Fudan University', rules: [{required: true, message: 'Group is required'}]}]"
-          />
-        </a-input-group>
-      </a-form-item>
-      <a-form-item
+        <a-input
+          v-model="projectData.group"
+          :style="{width: 'calc(100% - 120px)'}"
+          v-decorator="['group', { initialValue: 'Fudan University', rules: [{required: true, message: 'Group is required'}]}]"
+        />
+      </a-form-model-item>
+      <a-form-model-item
         label="Choppy App"
+        prop="choppyApp"
+        ref="choppyApp"
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
       >
         <a-select
           placeholder="Please choose a choppy app"
-          v-decorator="['choppyApp', { rules: [{required: true, message: 'Choppy app is required'}] }]">
+          v-model="projectData.choppyApp">
           <a-select-option :value="item.id" v-for="item in installed_apps" :key="item.id">
             {{ item.name }}
           </a-select-option>
         </a-select>
-      </a-form-item>
-      <a-form-item :wrapperCol="{span: 19, offset: 5}">
-        <a-button type="primary" @click="nextStep">Next</a-button>
-      </a-form-item>
-    </a-form>
+      </a-form-model-item>
+      <a-form-model-item :wrapperCol="{span: 19, offset: 5}">
+        <a-button type="primary" @click="nextStep('projectForm')">Next</a-button>
+      </a-form-model-item>
+    </a-form-model>
     <a-divider />
     <div class="step-form-style-desc">
       <h3>Notice</h3>
@@ -84,9 +84,14 @@
 </template>
 
 <script>
+/* eslint-disable */
 import { getInstalledAppList, existProjectName } from '@/api/manage'
 import orderBy from 'lodash.orderby'
 import moment from 'moment'
+import Vue from 'vue'
+import { FormModel } from 'ant-design-vue'
+
+Vue.use(FormModel)
 
 export default {
   name: 'Step1',
@@ -95,35 +100,29 @@ export default {
       labelCol: { lg: { span: 6 }, sm: { span: 5 } },
       wrapperCol: { lg: { span: 18 }, sm: { span: 19 } },
       installed_apps: [],
-      form: this.$form.createForm(this)
+      projectData: {},
+      rules: {
+        projectName: [
+          { required: true, message: 'Please input project name.', trigger: 'blur' },
+          { min: 5, max: 32, message: 'Length should be 5 to 32', trigger: 'blur' },
+          { pattern: /^[a-zA-Z_]+[0-9a-zA-Z]+$/, message: 'Project name is not valid, only support [a-z0-9A-Z_]', trigger: 'blur' }
+        ],
+        description: [
+          { required: true, message: 'Please input project description.', trigger: 'blur', whitespace: true }
+        ],
+        buildTime: [
+          { required: true, message: 'Please select started time.', trigger: 'blur' }
+        ],
+        group: [
+          { required: true, message: 'Please input group name.', trigger: 'blur', whitespace: true }
+        ],
+        choppyApp: [
+          { required: true, message: 'Please select choppy app.', trigger: 'blur' }
+        ]
+      }
     }
   },
   methods: {
-    now () {
-      return moment(new Date(), 'YYYY-MM-DD HH:mm:ss')
-    },
-    validateProjectNameBlur (e) {
-      const validateProjectNameReg = /^[a-zA-Z_]+[0-9a-zA-Z]+$/
-      var arr = []
-      if (e.target.value && (!validateProjectNameReg.test(e.target.value) || e.target.value.length < 5)) {
-        arr = [{
-          message: 'Project name is not valid, only support [a-z0-9A-Z_] and at least five chars!',
-          field: 'projectName'
-        }]
-      }
-
-      // TODO: Check if project name exists.
-      if (existProjectName(e.target.value)) {
-        arr = [{
-          message: 'The project name exists!',
-          field: 'projectName'
-        }]
-      }
-
-      if (arr.length > 0) {
-        this.form.setFields({ projectName: { value: e.target.value, errors: arr } })
-      }
-    },
     getInstalledApps () {
       getInstalledAppList().then(res => {
         console.log('res', res)
@@ -132,20 +131,34 @@ export default {
         }], ['asc'])
       })
     },
-    nextStep () {
-      const { form: { validateFields } } = this
-      // 先校验，通过表单校验后，才进入下一步
-      validateFields((err, values) => {
-        if (!err) {
-          console.log('Project information: ', values)
+    loadLocalData () {
+      const localData = JSON.parse(localStorage.getItem('projectData'))
+      if (localData) {
+        localData.buildTime = moment(localData.buildTime, 'YYYY-MM-DD HH:mm:ss')
+        return localData
+      } else {
+        return {
+          buildTime: moment()
+        }
+      }
+    },
+    nextStep (formName) {
+      this.$refs[formName].validate(valid => {
+        // 先校验，通过表单校验后，才进入下一步
+        if (valid) {
+          console.log('Project information: ', this.projectData)
+          localStorage.setItem('projectData', JSON.stringify(this.projectData))
           this.$emit('nextStep')
-          this.$emit('projectData', values)
+        } else {
+          console.log('error submit!!');
+          return false;
         }
       })
     }
   },
   created () {
     this.getInstalledApps()
+    this.projectData = this.loadLocalData()
   }
 }
 </script>

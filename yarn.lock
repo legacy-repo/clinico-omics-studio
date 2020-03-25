@@ -1942,7 +1942,7 @@ ansi-styles@^3.2.0, ansi-styles@^3.2.1:
 
 ant-design-vue@1.5.0-rc.5:
   version "1.5.0-rc.5"
-  resolved "https://registry.npm.taobao.org/ant-design-vue/download/ant-design-vue-1.5.0-rc.5.tgz#852224f02f85bd8ca684f2b4b491050c33276d59"
+  resolved "https://registry.npm.taobao.org/ant-design-vue/download/ant-design-vue-1.5.0-rc.5.tgz?cache=0&sync_timestamp=1584977113791&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fant-design-vue%2Fdownload%2Fant-design-vue-1.5.0-rc.5.tgz#852224f02f85bd8ca684f2b4b491050c33276d59"
   integrity sha1-hSIk8C+FvYymhPK0tJEFDDMnbVk=
   dependencies:
     "@ant-design/icons" "^2.1.1"
@@ -3788,6 +3788,11 @@ current-script-polyfill@^1.0.0:
   resolved "https://registry.npmjs.org/current-script-polyfill/-/current-script-polyfill-1.0.0.tgz#f31cf7e4f3e218b0726e738ca92a02d3488ef615"
   integrity sha1-8xz35PPiGLBybnOMqSoC00iO9hU=
 
+custom-event-polyfill@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.npm.taobao.org/custom-event-polyfill/download/custom-event-polyfill-1.0.7.tgz#9bc993ddda937c1a30ccd335614c6c58c4f87aee"
+  integrity sha1-m8mT3dqTfBowzNM1YUxsWMT4eu4=
+
 custom-event@1.0.0:
   version "1.0.0"
   resolved "https://registry.npm.taobao.org/custom-event/download/custom-event-1.0.0.tgz#2e4628be19dc4b214b5c02630c5971e811618062"
@@ -4418,6 +4423,11 @@ electron-to-chromium@^1.3.133:
   version "1.3.137"
   resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.3.137.tgz#ba7c88024984c038a5c5c434529aabcea7b42944"
   integrity sha512-kGi32g42a8vS/WnYE7ELJyejRT7hbr3UeOOu0WeuYuQ29gCpg9Lrf6RdcTQVXSt/v0bjCfnlb/EWOOsiKpTmkw==
+
+element-matches@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.npm.taobao.org/element-matches/download/element-matches-0.1.2.tgz#7345cb71e965bd2b12f725e524591c102198361a"
+  integrity sha1-c0XLcellvSsS9yXlJFkcECGYNho=
 
 elliptic@^6.0.0:
   version "6.4.1"
@@ -11410,6 +11420,11 @@ uuid@^3.3.3:
   resolved "https://registry.npm.taobao.org/uuid/download/uuid-3.3.3.tgz#4568f0216e78760ee1dbf3a4d2cf53e224112866"
   integrity sha1-RWjwIW54dg7h2/Ok0s9T4iQRKGY=
 
+uuid@^7.0.2:
+  version "7.0.2"
+  resolved "https://registry.npm.taobao.org/uuid/download/uuid-7.0.2.tgz#7ff5c203467e91f5e0d85cfcbaaf7d2ebbca9be6"
+  integrity sha1-f/XCA0Z+kfXg2Fz8uq99LrvKm+Y=
+
 validate-npm-package-license@^3.0.1:
   version "3.0.4"
   resolved "https://registry.npmjs.org/validate-npm-package-license/-/validate-npm-package-license-3.0.4.tgz#fc91f6b9c7ba15c857f4cb2c5defeec39d4f410a"
@@ -11485,6 +11500,11 @@ vm-browserify@^1.0.1:
   version "1.1.0"
   resolved "https://registry.npm.taobao.org/vm-browserify/download/vm-browserify-1.1.0.tgz#bd76d6a23323e2ca8ffa12028dc04559c75f9019"
   integrity sha1-vXbWojMj4sqP+hICjcBFWcdfkBk=
+
+voca@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.npm.taobao.org/voca/download/voca-1.4.0.tgz#e15ac58b38290b72acc0c330366b6cc7984924d7"
+  integrity sha1-4VrFizgpC3KswMMwNmtsx5hJJNc=
 
 vue-avatar@^2.1.7:
   version "2.1.7"
@@ -11639,6 +11659,14 @@ vue-router@^3.1.2:
   version "3.1.2"
   resolved "https://registry.npm.taobao.org/vue-router/download/vue-router-3.1.2.tgz#2e0904703545dabdd42b2b7a2e617f02f99a1969"
   integrity sha1-LgkEcDVF2r3UKyt6LmF/AvmaGWk=
+
+vue-shortkey@^3.1.7:
+  version "3.1.7"
+  resolved "https://registry.npm.taobao.org/vue-shortkey/download/vue-shortkey-3.1.7.tgz#31c09a99ed597331a6a49a45eeff894a78a19eef"
+  integrity sha1-McCame1ZczGmpJpF7v+JSnihnu8=
+  dependencies:
+    custom-event-polyfill "^1.0.7"
+    element-matches "^0.1.2"
 
 vue-style-loader@^4.1.0:
   version "4.1.2"

@@ -4,7 +4,7 @@
 
 <script>
 import appSchema from '@/appschema'
-import FormBuilder from '@/components/FormBuilder'
+import FormBuilder from '@/views/formbuilder/FormBuilder'
 
 export default {
   name: 'Step2',

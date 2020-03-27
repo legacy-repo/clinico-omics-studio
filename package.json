@@ -29,6 +29,7 @@
     "handsontable": "^7.2.2",
     "json-markup": "^1.1.3",
     "lodash.filter": "^4.6.0",
+    "lodash.flatmap": "^4.5.0",
     "lodash.flatten": "^4.4.0",
     "lodash.get": "^4.4.2",
     "lodash.map": "^4.6.0",

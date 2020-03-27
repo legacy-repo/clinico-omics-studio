@@ -1,5 +1,6 @@
 <template>
   <ejs-filemanager
+    ref="ejs-filemanager"
     id="file-manager"
     :height="height"
     :enablePersistence="enablePersistence"
@@ -10,7 +11,9 @@
     :contextMenuSettings="contextMenuSettings"
     :allowMultiSelection="allowMultiSelection"
     :allowDragAndDrop="allowDragAndDrop"
+    :selectedItems="selectedItems"
     :view="view"
+    :path="path"
     :toolbarSettings="toolbarSettings"
   >
   </ejs-filemanager>
@@ -19,6 +22,8 @@
 <script>
 /* eslint-disable */
 import Vue from 'vue'
+import filter from 'lodash.filter'
+import flatMap from 'lodash.flatmap'
 import api from '@/api/manage'
 import { FileManagerPlugin, DetailsView, NavigationPane, Toolbar } from '@syncfusion/ej2-vue-filemanager'
 
@@ -40,6 +45,11 @@ export default {
       required: false,
       type: Boolean
     },
+    path: {
+      default: '/',
+      required: false,
+      type: String
+    },
     view: {
       default: 'Details',
       required: false,
@@ -59,6 +69,11 @@ export default {
       default: true,
       required: false,
       type: Boolean
+    },
+    filterType: {
+      required: false,
+      default: '.vcf',
+      type: String
     },
     enableItems: {
       default: () => [
@@ -89,7 +104,8 @@ export default {
       toolbarSettings: {
         visible: this.toolbarVisible,
         items: this.enableItems
-      }
+      },
+      selectedItems: []
     }
   },
   provide: {
@@ -127,8 +143,24 @@ export default {
     onAjaxFailure(args) {
       console.log('Ajax request has failed')
     },
+    filterByType(files, fileType) {
+      const pattern = new RegExp(fileType)
+      return filter(files, function(o) { return o.type.length > 0 && pattern.test(o.type) })
+    },
+    getFileName(files) {
+      return flatMap(files, (o) => o.name)
+    },
     onSelect(args) {
-      console.log('File selection: ', args)
+      const selectedFiles = this.$refs['ejs-filemanager'].getSelectedFiles()
+      const selectedItems = this.filterByType(selectedFiles, this.filterType)
+
+      if (selectedItems.length !== selectedFiles.length) {
+        this.$message.warn('Only support ' + this.filterType + ' files')
+        this.selectedItems = this.getFileName(selectedItems)
+      }
+
+      this.$emit('file-select', selectedItems)
+      console.log('File selection: ', args, selectedItems, this.selectedItems)
     }
   }
 }

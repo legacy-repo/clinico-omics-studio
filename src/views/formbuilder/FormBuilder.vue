@@ -8,6 +8,19 @@
         :label-col="field.labelCol || { span: 5, offset: 2 }"
         :wrapper-col="field.wrapperCol || { span: 12 }"
       >
+        <template v-if="field.tmplType === 'file'">
+          <a-button type="dashed" @click="selectFiles(field.model)">
+            <a-icon type="plus" /> Select Files
+          </a-button>
+          <a-select
+            mode="multiple"
+            :placeholder="field.placeholder"
+            :maxTagCount="3"
+            :disabled="field.readOnly || !options[field.model]"
+            v-decorator="[field.model, field.config]">
+            <a-select-option v-for="d in options[field.model]" :key="d.value">{{ d.text }}</a-select-option>
+          </a-select>
+        </template>
         <template v-if="field.tmplType === 'sample-id'">
           <a-input-number
             :placeholder="field.placeholder"
@@ -91,16 +104,29 @@
         </template>
       </a-form-item>
     </a-form>
+    <a-row class="box" v-if="fileManagerActive">
+      <a-row class="file-manager-container">
+        <file-manager @file-select="onFileSelect" height="400" allowMultiSelection path="/vcf"></file-manager>
+        <a-button-group>
+          <a-button @click="cancelSelectFiles()">Cancel</a-button>
+          <a-button @click="confirmSelectFiles()">Confirm</a-button>
+        </a-button-group>
+      </a-row>
+    </a-row>
   </div>
 </template>
 
 <script>
 import v from 'voca'
+import flatMap from 'lodash.flatmap'
 import { v4 as uuidv4 } from 'uuid'
+import FileManager from '@/views/filemanager/FileManager'
 
 export default {
   name: 'FormBuilder',
-  components: {},
+  components: {
+    FileManager
+  },
   props: {
     fields: {
       type: Array,
@@ -109,7 +135,10 @@ export default {
   },
   data () {
     return {
-
+      fileManagerActive: false,
+      whichFileManager: '',
+      files: [],
+      options: {}
     }
   },
   created () {
@@ -121,6 +150,36 @@ export default {
     this.$forceUpdate()
   },
   methods: {
+    onFileSelect (files) {
+      console.log('onFileSelect: ', files)
+      this.files = files
+    },
+    selectFiles (model) {
+      this.fileManagerActive = true
+      this.whichFileManager = model
+      this.options[model] = []
+      console.log('Registry File Manager: ', model)
+    },
+    cancelSelectFiles () {
+      this.fileManagerActive = false
+    },
+    getPath (file) {
+      return file.filterPath + file.name
+    },
+    getFilePathLst (files) {
+      const filePaths = flatMap(files, this.getPath)
+      // return filePaths.join('\n')
+      return filePaths
+    },
+    confirmSelectFiles () {
+      this.fileManagerActive = false
+      const fields = {}
+      const filePathList = this.getFilePathLst(this.files)
+      fields[this.whichFileManager] = filePathList
+      this.options[this.whichFileManager] = flatMap(filePathList, (o) => ({ value: o, text: o }))
+      this.clonedModel.setFieldsValue(fields)
+      console.log('Selected Files: ', fields, this.whichFileManager, this.files)
+    },
     genSampleIds (numStr) {
       // Init
       const num = parseInt(this.clonedModel.getFieldValue(numStr))
@@ -141,7 +200,7 @@ export default {
     onAction (e) {
       if (e.validate) {
         this.clonedModel.validateFields((err, values) => {
-          // console.log('Received values of form: ', values)
+          console.log('Received values of form: ', values)
           const sampleIds = this.genSampleIds('sample_id')
 
           if (!err) {
@@ -167,5 +226,29 @@ export default {
 
 .autobox:hover {
   cursor: pointer;
+}
+
+.box {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 10;
+
+  .file-manager-container {
+    position: absolute;
+    top: 150px;
+    left: 10%;
+    width: 80%;
+    margin: 0px auto;
+    z-index: 11;
+
+    .ant-btn-group {
+      margin-top: 5px;
+      float: right;
+    }
+  }
 }
 </style>

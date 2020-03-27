@@ -1,6 +1,16 @@
 const huangyechaoAnnovarLatest = {
   fields: [
     {
+      tmplType: 'file',
+      label: 'Files',
+      model: 'read1',
+      readOnly: false,
+      placeholder: 'Select files for read1.',
+      config: {
+        rules: [{ type: 'array', required: true, message: 'Please select files.' }]
+      }
+    },
+    {
       tmplType: 'sample-id',
       type: 'number',
       label: 'Sample ID',

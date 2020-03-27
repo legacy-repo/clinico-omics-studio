@@ -13,7 +13,8 @@ if (process.env.NODE_ENV !== 'production' || process.env.VUE_APP_PREVIEW === 'tr
   require('./services/article')
   require('./services/workflow')
   require('./services/installed-apps')
-  require('./services/report')
+  require('./services/reports')
+  require('./services/report-detail')
 
   Mock.setup({
     timeout: 800 // setter delay time

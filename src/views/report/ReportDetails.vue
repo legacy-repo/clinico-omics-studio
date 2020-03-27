@@ -2,36 +2,50 @@
   <page-view :title="getTitle()" logo="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png">
     <detail-list slot="headerContent" size="small" :col="2" class="detail-layout">
       <detail-list-item term="Author">{{ report.author }}</detail-list-item>
-      <detail-list-item term="Analysis Type">{{ report.analysisType }}</detail-list-item>
-      <detail-list-item term="Created Time">{{ report.createdTime }}</detail-list-item>
-      <detail-list-item term="Related Job">
-        <router-link :to="{ name: 'job-details', params: { workflowId: report.relatedWorkflowId }}">{{ report.relatedWorkflowId }}</router-link>
-      </detail-list-item>
-      <detail-list-item term="Audit Time">{{ report.auditTime }}</detail-list-item>
+      <detail-list-item term="Report Type">{{ report.reportType }}</detail-list-item>
+      <detail-list-item term="Started Time">{{ report.startedAt }}</detail-list-item>
+      <detail-list-item term="Finished Time">{{ report.finishedAt }}</detail-list-item>
       <detail-list-item term="Description">{{ report.description }}</detail-list-item>
+      <detail-list-item term="Status">
+        <a-tag color="pink" v-if="checked">Checked</a-tag>
+        <a-tag color="blue" v-if="archived">Archived</a-tag>
+      </detail-list-item>
     </detail-list>
     <a-row slot="extra" class="status-list">
-      <a-col :xs="12" :sm="12">
-        <div class="text">Status</div>
-        <div class="heading">{{ report.status }}</div>
+      <a-col :xs="8" :sm="8" >
+        <div class="text">Related Project</div>
+        <div class="heading">
+          <a-button type="primary" size="small" icon="logout" @click.native="backToProjectList(report.relatedProjectId)"/>
+        </div>
       </a-col>
-      <a-col :xs="12" :sm="12">
-        <div class="text">Reviewer</div>
-        <div class="heading">PGx</div>
+      <a-col :xs="8" :sm="8">
+        <div class="text">Team</div>
+        <div class="heading">{{ report.groupName }}</div>
+      </a-col>
+      <a-col :xs="8" :sm="8">
+        <div class="text">Report Log</div>
+        <div class="heading">
+          <a-popover placement="left">
+            <template slot="content">
+              <a-row v-html="report.reportLog" class="log-container"></a-row>
+            </template>
+            <a-button type="primary" size="small" icon="eye"/>
+          </a-popover>
+        </div>
       </a-col>
     </a-row>
     <!-- actions -->
     <template slot="action">
       <a-button-group style="margin-right: 4px;">
-        <a-button @click="onSave">Save</a-button>
-        <a-button>Edit</a-button>
-        <a-button>{{ switchBtnText }}</a-button>
+        <a-button disabled>Save</a-button>
+        <a-button disabled>Edit</a-button>
+        <a-button disabled>{{ switchBtnText }}</a-button>
         <!-- <a-button><a-icon type="ellipsis"/></a-button> -->
       </a-button-group>
-      <a-button type="primary" >Archive</a-button>
+      <a-button type="primary" disabled>Archive</a-button>
     </template>
 
-    <embeded-frame src="http://localhost:3000/report/project-1/multiqc_report.html"></embeded-frame>
+    <embeded-frame :src="reportUrl"></embeded-frame>
   </page-view>
 </template>
 
@@ -55,29 +69,41 @@ export default {
     readonly: {
       type: [Boolean, String],
       default: true
-    },
-    description: {
-      type: String,
-      default: 'Benchmark Report for Quartet Project'
     }
   },
   data () {
     return {
-      report: {
-        author: '曲丽丽',
-        analysisType: 'XX服务',
-        createdDate: '2018-08-07 08:59:00',
-        relatedWorkflowId: '123',
-        auditTime: '2018-08-09 08:59:00',
-        reviewer: 'Choppy',
-        description: '请于两个工作日内确认',
-        status: 'Checked'
-      },
-      initData: {},
-      savedData: {}
+      report: {}
     }
   },
   computed: {
+    reportUrl () {
+      const reportUrl = this.report.reportUrl
+      if (reportUrl) {
+        return reportUrl
+      } else {
+        return ''
+      }
+    },
+    checked () {
+      const status = this.report.status
+      if (status) {
+        return status.checked
+      } else {
+        return false
+      }
+    },
+    archived () {
+      const status = this.report.status
+      if (status) {
+        return status.archived
+      } else {
+        return false
+      }
+    },
+    reportId () {
+      return this.$route.params.reportId
+    },
     switchBtnText () {
       if (this.report.status === 'Checked') {
         return 'Uncheck'
@@ -87,33 +113,28 @@ export default {
     }
   },
   methods: {
+    backToProjectList (projectId) {
+      this.$router.push({ name: 'project-management', params: { projectId: projectId } })
+    },
     getTitle () {
       return this.$route.meta.title
     },
-    async onSave () {
-      const editor = this.$refs.editor.editor
-      if (editor) {
-        const response = await editor.save()
-        this.savedData = response
-        console.log('savedData', this.savedData)
-      }
-    },
-    onReady () {
-      console.log('ready')
-    },
-    onChange () {
-      console.log('changed')
+    searchReport (reportId) {
+      getReport({
+        reportId: reportId
+      }).then(res => {
+        const that = this
+        that.report = res.data
+        console.log('Report Record: ', res.data)
+      })
     }
   },
   mounted () {
-    getReport().then(res => {
-      const that = this
-      that.initData = res
-      console.log('initData', that.initData)
-    })
+
   },
   created () {
-
+    console.log('Request Report: ', this.reportId)
+    this.searchReport(this.reportId)
   }
 }
 </script>
@@ -128,13 +149,17 @@ export default {
 .detail-layout {
   margin-left: 44px;
 }
+
 .text {
+  text-align: right;
   color: rgba(0, 0, 0, .45);
 }
 
 .heading {
+  text-align: right;
+  display: block;
   color: rgba(0, 0, 0, .85);
-  font-size: 20px;
+  font-size: 16px;
 }
 
 .mobile {
@@ -142,12 +167,20 @@ export default {
     margin-left: unset;
   }
 
-  .text {
-
-  }
-
   .status-list {
     text-align: left;
   }
+}
+</style>
+
+<style lang="less">
+.log-container {
+  max-width: 300px;
+  max-height: 200px;
+  overflow: scroll;
+}
+
+.log-container::-webkit-scrollbar {
+  width: 0 !important;
 }
 </style>

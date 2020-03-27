@@ -7,7 +7,7 @@ const api = {
   permission: '/permission',
   permissionNoPager: '/permission/no-pager',
   orgTree: '/org/tree',
-  report: '/report-list',
+  report: '/reports',
   workflow: '/workflow',
   app_store: {
     installed_apps: '/installed-apps',
@@ -60,11 +60,12 @@ export function existProjectName (projectName) {
   return false
 }
 
-export function getReport () {
+export function getReport (parameter) {
+  console.log('getReport: ', parameter)
   return axios({
-    url: 'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/choppy/report-datainsEmbed-20190902.json',
+    url: api.report + '/' + parameter.reportId,
     method: 'get',
-    params: {}
+    params: parameter
   })
 }
 

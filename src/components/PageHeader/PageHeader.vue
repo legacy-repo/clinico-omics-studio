@@ -187,8 +187,8 @@ export default {
       }
       .extra {
         flex: 0 1 auto;
-        margin-left: 88px;
-        min-width: 242px;
+        margin-left: 30px;
+        min-width: 300px;
         text-align: right;
       }
       .action {
@@ -216,7 +216,7 @@ export default {
 
       .content,
       .headerContent {
-        flex: 0 1 70%;
+        flex: 0 1 100%;
 
         .link {
           margin-top: 16px;

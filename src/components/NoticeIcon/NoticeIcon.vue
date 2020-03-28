@@ -1,18 +1,18 @@
 <template>
   <a-popover
     v-model="visible"
-    trigger="click"
-    placement="bottomRight"
+    trigger="hover"
+    placement="bottom"
     overlayClassName="header-notice-wrapper"
     :getPopupContainer="() => $refs.noticeRef.parentElement"
     :autoAdjustOverflow="true"
     :arrowPointAtCenter="true"
-    :overlayStyle="{ width: '300px', top: '50px' }"
+    :overlayStyle="{ width: '400px', top: '50px' }"
   >
     <template slot="content">
       <a-spin :spinning="loadding">
         <a-tabs>
-          <a-tab-pane tab="通知" key="1">
+          <a-tab-pane tab="Notifications" key="1">
             <a-list>
               <a-list-item>
                 <a-list-item-meta title="你收到了 14 份新周报" description="一年前">
@@ -31,16 +31,13 @@
               </a-list-item>
             </a-list>
           </a-tab-pane>
-          <a-tab-pane tab="消息" key="2">
-            123
-          </a-tab-pane>
-          <a-tab-pane tab="待办" key="3">
+          <a-tab-pane tab="Change Logs" key="3">
             123
           </a-tab-pane>
         </a-tabs>
       </a-spin>
     </template>
-    <span @click="fetchNotice" class="header-notice" ref="noticeRef">
+    <span @mouseenter="fetchNotice" @click="redirect" class="header-notice" ref="noticeRef">
       <a-badge count="12">
         <a-icon style="font-size: 16px; padding: 4px" type="bell" />
       </a-badge>
@@ -63,11 +60,14 @@ export default {
         this.loadding = true
         setTimeout(() => {
           this.loadding = false
-        }, 2000)
+        }, 200)
       } else {
         this.loadding = false
       }
       this.visible = !this.visible
+    },
+    redirect () {
+      this.$router.push({ name: 'notifications' }).catch(() => {})
     }
   }
 }

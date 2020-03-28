@@ -2,8 +2,7 @@ export default {
   dashboard: {
     workplace: {
       projects: 'Projects',
-      workflows: 'Workflows',
-      samples: 'Samples',
+      jobs: 'Jobs',
       reports: 'Reports'
     }
   }

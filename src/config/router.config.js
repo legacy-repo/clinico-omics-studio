@@ -43,21 +43,12 @@ export const asyncRouterMap = [
             meta: { title: 'Create Project', keepAlive: true, permission: ['table'] }
           },
           {
-            path: '/choppy-pipe/job-management',
+            path: '/choppy-pipe/job-management/:projectId',
             name: 'job-management',
             hidden: true,
             hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
             component: () => import('@/views/workflow/WorkflowManagement'),
-            props: route => ({ projectId: route.query.projectId }),
             meta: { title: 'Job Management', keepAlive: true, permission: ['table'] }
-          },
-          {
-            path: '/choppy-pipe/workflow/:workflowId',
-            name: 'job-details',
-            hidden: true,
-            component: () => import('@/views/workflow/WorkflowDetails'),
-            props: route => ({ readonly: route.query.readonly, description: route.query.description }),
-            meta: { title: 'Job Details', keepAlive: true, permission: ['table'] }
           },
           {
             path: '/choppy-pipe/project-management',
@@ -70,11 +61,27 @@ export const asyncRouterMap = [
       },
 
       {
+        path: '/notifications',
+        name: 'notifications',
+        hidden: true,
+        component: () => import('@/views/notification/NotificationTable'),
+        meta: { title: 'Notifications', keepAlive: true, icon: 'notification', permission: ['table'] }
+      },
+
+      {
         path: '/report-management',
         name: 'report-management',
         hidden: false,
         component: () => import('@/views/report/ReportManagement'),
-        meta: { title: 'Report', keepAlive: true, permission: ['table'] }
+        meta: { title: 'Report', keepAlive: true, icon: 'file-done', permission: ['table'] }
+      },
+
+      {
+        path: '/statistics',
+        name: 'statistics',
+        hidden: false,
+        component: () => import('@/views/dashboard/Analysis'),
+        meta: { title: 'Statistics', keepAlive: true, icon: 'dot-chart', permission: ['dashboard'] }
       },
 
       // Report

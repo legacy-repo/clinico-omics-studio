@@ -67,15 +67,12 @@
           </div>
         </a-list-item>
       </a-list>
-
-      <task-form ref="taskForm" />
     </a-card>
   </div>
 </template>
 
 <script>
 import HeadInfo from '@/components/tools/HeadInfo'
-import TaskForm from '@/views/list/modules/TaskForm'
 import { getReportList } from '@/api/manage'
 import VueFriendlyIframe from 'vue-friendly-iframe'
 import Avatar from '@/components/Avatar'
@@ -87,7 +84,6 @@ export default {
   components: {
     Avatar,
     HeadInfo,
-    TaskForm,
     VueFriendlyIframe,
     reportLogo
   },

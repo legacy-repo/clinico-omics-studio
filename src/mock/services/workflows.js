@@ -142,4 +142,4 @@ const workflow = (options) => {
   return response
 }
 
-Mock.mock(/\/workflow/, 'get', workflow)
+Mock.mock(/\/workflows/, 'get', workflow)

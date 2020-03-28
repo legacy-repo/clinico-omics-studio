@@ -8,7 +8,9 @@ const api = {
   permissionNoPager: '/permission/no-pager',
   orgTree: '/org/tree',
   report: '/reports',
-  workflow: '/workflow',
+  project: '/projects',
+  workflow: '/workflows',
+  notification: '/notifications',
   app_store: {
     installed_apps: '/installed-apps',
     apps: '/apps'
@@ -72,6 +74,22 @@ export function getReport (parameter) {
 export function getReportList (parameter) {
   return axios({
     url: api.report,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getProjectList (parameter) {
+  return axios({
+    url: api.project,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getNotificationList (parameter) {
+  return axios({
+    url: api.notification,
     method: 'get',
     params: parameter
   })

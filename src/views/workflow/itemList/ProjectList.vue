@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="project-list">
     <a-card style="margin-top: 10px" :bordered="false">
-      <a-badge slot="extra" :count="total" :numberStyle="{backgroundColor: '#52c41a'}"/>
+      <a-badge slot="extra" :count="pagination.total" :numberStyle="{backgroundColor: '#52c41a'}"/>
       <div slot="title">
-        <a-radio-group @change="onClickRadioBtn" defaultValue="total" :value="radioGroupValue">
+        <a-radio-group disabled @change="onClickRadioBtn" defaultValue="total" :value="radioGroupValue">
           <a-radio-button value="total">Total</a-radio-button>
           <a-radio-button value="running">Running</a-radio-button>
           <a-radio-button value="finished">Finished</a-radio-button>
@@ -12,22 +12,28 @@
         <a-input-search
           style="margin-left: 16px; width: 272px;"
           placeholder="Please Enter Project Name"
-          @search="onSearch"
+          :loading="loading"
+          :value="searchStr"
+          @search="searchProject"
         />
       </div>
 
-      <a-list size="large" :pagination="{showSizeChanger: true, showQuickJumper: true, pageSize: perPage, total: total, current: page}">
+      <a-list
+        size="large"
+        :loading="loading"
+        :pagination="pagination">
         <a-list-item :key="index" v-for="(item, index) in data">
-          <a-list-item-meta :description="item.description">
-            <a slot="title">{{ item.title }}</a>
-          </a-list-item-meta>
-          <div slot="actions">
-            <a @click="onShowWorkflowList(item.title)">View</a>
-          </div>
-          <div slot="actions">
-            <a @click="onShowReport(item.title, item.report)" :disabled="!item.report">Report</a>
-          </div>
-          <div class="list-content">
+          <a-col :lg="10" :md="8" :sm="24" :xs="24">
+            <a-list-item-meta>
+              <div slot="description">
+                <span>{{ item.description }}</span>
+                <br>
+                <a-tag color="#108ee9">{{ item.appName }}</a-tag>
+              </div>
+              <a slot="title">{{ item.title }}</a>
+            </a-list-item-meta>
+          </a-col>
+          <a-col class="list-content" :lg="10" :md="12" :sm="24" :xs="24">
             <div class="list-content-item">
               <span>Started</span>
               <p>{{ item.startedAt }}</p>
@@ -37,8 +43,13 @@
               <p>{{ item.finishedAt }}</p>
             </div>
             <div class="list-content-item">
-              <a-progress :percent="item.progress.value" :status="!item.progress.status ? null : item.progress.status" style="width: 180px" />
+              <a-progress :percent="item.percentage" :status="!item.status ? null : item.status" style="width: 180px" />
             </div>
+          </a-col>
+          <div slot="actions">
+            <a @click="onShowWorkflowList(item.id)">View</a>
+            &nbsp;
+            <a @click="onShowReport(item.reportId)" :disabled="!item.reportId">Report</a>
           </div>
         </a-list-item>
       </a-list>
@@ -48,7 +59,7 @@
 
 <script>
 import HeadInfo from '@/components/tools/HeadInfo'
-import { getWorkflowList } from '@/api/manage'
+import { getProjectList } from '@/api/manage'
 import Avatar from '@/components/Avatar'
 import orderBy from 'lodash.orderby'
 
@@ -60,16 +71,41 @@ export default {
   },
   data () {
     return {
+      searchStr: '',
       data: {},
-      total: 0,
-      perPage: 5,
-      page: 1,
+      pagination: {
+        pageSizeOptions: ['5', '10', '20', '30', '40', '50'],
+        showSizeChanger: true,
+        showQuickJumper: true,
+        pageSize: 5,
+        total: 0,
+        current: 1,
+        onChange: (page, pageSize) => {
+          this.searchProject(page, pageSize, this.searchStr)
+        },
+        onShowSizeChange: (current, pageSize) => {
+          this.searchProject(1, pageSize, this.searchStr)
+        }
+      },
+      loading: false,
       radioGroupValue: 'total'
     }
   },
   methods: {
-    onSearch (value, event) {
-      console.log('Search Box: ', value)
+    searchProject (page, pageSize, searchStr) {
+      this.loading = true
+      getProjectList({
+        page: page,
+        per_page: pageSize,
+        query_str: searchStr
+      }).then(result => {
+        const that = this
+        that.data = orderBy(result.data, [item => item.title.toLowerCase()], ['asc'])
+        that.pagination.pageSize = result.per_page
+        that.pagination.total = result.total
+        that.pagination.current = result.page
+        this.loading = false
+      })
     },
     onClickRadioBtn (event) {
       this.radioGroupValue = event.target.value
@@ -83,58 +119,78 @@ export default {
         }
       })
     },
-    onShowReport (workflowName, reportId) {
+    onShowReport (reportId) {
       this.$router.push({
         name: 'report-details',
         params: {
           reportId: reportId
         },
         query: {
-          readonly: true,
-          description: 'The Report of ' + workflowName
+          readonly: true
         }
       })
     }
   },
   created () {
-    getWorkflowList({
-      page: 1,
-      per_page: 5
-    }).then(result => {
-      const that = this
-      that.data = orderBy(result.data, [item => item.title.toLowerCase()], ['asc'])
-      that.perPage = result.per_page
-      that.total = result.total
-      that.page = result.page
-    })
+    this.searchProject(this.pagination.current, this.pagination.pageSize, this.searchStr)
   }
 }
 </script>
 
-<style lang="less" scoped>
-.ant-avatar-lg {
+<style lang="less">
+.project-list {
+  .ant-list-item {
+    flex-wrap: wrap;
+  }
+
+  .ant-avatar-lg {
     width: 48px;
     height: 48px;
     line-height: 48px;
-}
+  }
 
-.list-content-item {
-    color: rgba(0, 0, 0, .45);
-    display: inline-block;
+  .list-content {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .ant-list-item-meta, .list-content-item {
+    margin-top: 5px;
+  }
+
+  .ant-list-item-action {
+    margin-left: 0px;
+    float: right;
+  }
+
+  .list-content-item {
+    color: rgba(0, 0, 0, 0.45);
+    display: flex;
+    flex-direction: column;
     vertical-align: middle;
     font-size: 14px;
-    margin-left: 20px;
+    margin-right: 40px;
+
+    .ant-tag {
+      margin-bottom: 5px;
+    }
+
     span {
-        line-height: 20px;
+      line-height: 20px;
     }
+
     p {
-        margin-top: 4px;
-        margin-bottom: 0;
-        line-height: 22px;
+      margin-top: 4px;
+      margin-bottom: 0;
+      line-height: 22px;
     }
+  }
 }
 
 .popover {
-  width: 300px;
+  iframe {
+    width: 500px;
+    min-height: 300px;
+  }
 }
 </style>

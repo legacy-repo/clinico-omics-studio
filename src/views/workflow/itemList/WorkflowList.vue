@@ -44,7 +44,7 @@
             <a slot="title">{{ item.title }} @ {{ item.title }}</a>
           </a-list-item-meta>
           <div slot="actions">
-            <a @click="onShowReport(item.title, item.report)" :disabled="!item.report">Report</a>
+            <a @click="onShowReport(item.title, item.report)" disabled>Report</a>
           </div>
           <div slot="actions">
             <a-dropdown>
@@ -75,15 +75,12 @@
           </div>
         </a-list-item>
       </a-list>
-
-      <task-form ref="taskForm" />
     </a-card>
   </div>
 </template>
 
 <script>
 import HeadInfo from '@/components/tools/HeadInfo'
-import TaskForm from '@/views/list/modules/TaskForm'
 import { getWorkflowList } from '@/api/manage'
 import Avatar from '@/components/Avatar'
 import orderBy from 'lodash.orderby'
@@ -92,8 +89,7 @@ export default {
   name: 'WorkflowList',
   components: {
     Avatar,
-    HeadInfo,
-    TaskForm
+    HeadInfo
   },
   props: {
     projectId: {

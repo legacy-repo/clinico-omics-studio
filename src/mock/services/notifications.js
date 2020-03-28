@@ -14,7 +14,20 @@ const ids = [
   'ff9de2b8-ebfb-456e-a8b4-565b2ef6ac0b'
 ]
 
-const reportNameLst = [
+const titleLst = [
+  '阿里云账户可能在15天内欠费的提醒',
+  '阿里云文件存储NAS服务升级通知',
+  '参加文件存储NAS满意度调研，说出您的心声，有机会收获100元无门槛代金券',
+  '立省85%！为您奉上OSS存储使用秘籍！',
+  '内置堡垒机，行云主机管家助力云上ECS运维',
+  '阿里云账户可能在7天内欠费的提醒',
+  '阿里云账户可能在3天内欠费的提醒',
+  '【邀您体验】API调试利器—OpenAPI Explorer',
+  '《阿里云提示：您的产品快报已生成，请及时确认》',
+  '服务器异常登录提醒'
+]
+
+const descriptionLst = [
   'High Confidence Region Intergration',
   'RNAseq Variant Calling',
   'NGScheckMates',
@@ -27,20 +40,20 @@ const reportNameLst = [
   'WES Project'
 ]
 
-const owner = [
-  '付小小',
-  '吴加好',
-  '周星星',
-  '林东东',
-  '曲丽丽',
-  'XXYY',
-  'ZZKK',
-  'PPOO',
-  'XXXJJ',
-  'POPO'
+const typeLst = [
+  'sync-app',
+  'created-project',
+  'sync-app',
+  'created-project',
+  'sync-app',
+  'created-project',
+  'sync-app',
+  'created-project',
+  'sync-app',
+  'created-project'
 ]
 
-const startedTimeLst = [
+const createdTimeLst = [
   '2019-09-01 08:30:00',
   '2019-09-01 09:30:00',
   '2019-09-01 09:40:00',
@@ -53,32 +66,20 @@ const startedTimeLst = [
   '2019-09-01 08:32:00'
 ]
 
-const finishedTimeLst = [
-  '2019-09-01 08:30:00',
-  '2019-09-01 09:30:00',
-  '2019-09-01 09:40:00',
-  '2019-09-01 08:35:00',
-  '2019-09-01 08:40:00',
-  '2019-09-01 08:31:00',
-  '2019-09-01 08:28:00',
-  '2019-09-01 08:32:00',
-  '2019-09-01 08:28:00',
-  '2019-09-01 08:32:00'  
+const statusLst = [
+  'read',
+  'unread',
+  'read',
+  'unread',
+  'read',
+  'unread',
+  'read',
+  'unread',
+  'read',
+  'unread'
 ]
 
-const checkedTimeLst = [
-  '2019-09-01 08:30:00',
-  '2019-09-01 09:30:00',
-  '2019-09-01 09:40:00',
-  '2019-09-01 08:35:00'
-]
-
-const archivedTimeLst = [
-  '2019-09-01 08:30:00',
-  '2019-09-01 09:30:00'
-]
-
-const report = (options) => {
+const notification = (options) => {
   const queryParameters = getQueryParameters(options)
   console.log('queryParameters', queryParameters)
   if (queryParameters && !queryParameters.per_page) {
@@ -91,19 +92,12 @@ const report = (options) => {
   const end = queryParameters.per_page * queryParameters.page
   for (let num = start; num < end; num++) {
     data.push({
-      id: ids[num],
-      title: reportNameLst[num],
-      description: '',
-      reportUrl: 'http://localhost:3000/report/project-1/multiqc_report.html',
-      author: owner[num],
-      startedAt: startedTimeLst[num],
-      finishedAt: finishedTimeLst[num],
-      reportType: 'multiqc',
-      status: {
-        checked: Boolean(checkedTimeLst[num]),
-        archived: Boolean(archivedTimeLst[num])
-      },
-      reportLog: 'This is a report log.'
+      key: ids[num],
+      title: titleLst[num],
+      notificationType: typeLst[num],
+      description: descriptionLst[num],
+      createdAt: createdTimeLst[num],
+      status: statusLst[num]
     })
   }
 
@@ -117,4 +111,4 @@ const report = (options) => {
   return response
 }
 
-Mock.mock(/\/reports\?.*/, 'get', report)
+Mock.mock(/\/notifications\?.*/, 'get', notification)

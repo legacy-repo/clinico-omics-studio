@@ -129,8 +129,7 @@ export default {
           reportId: reportId
         },
         query: {
-          readonly: true,
-          description: 'The Report of ' + workflowName
+          readonly: true
         }
       })
     }

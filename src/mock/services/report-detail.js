@@ -44,4 +44,4 @@ const report = (options) => {
   }
 }
 
-Mock.mock(/\/reports\/56689ce2-078f-4bbc-a2a6-a09a61b7c0d1/, 'get', report)
+Mock.mock(/\/reports\/5be4fe22-4b9a-40ae-90c2-251a07388e99/, 'get', report)

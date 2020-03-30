@@ -15,6 +15,7 @@ if (process.env.NODE_ENV !== 'production' || process.env.VUE_APP_PREVIEW === 'tr
   require('./services/projects')
   require('./services/notifications')
   require('./services/reports')
+  require('./services/logs')
   require('./services/report-detail')
 
   Mock.setup({

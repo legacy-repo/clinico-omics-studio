@@ -1,140 +1,177 @@
 import Mock from 'mockjs2'
 import { getQueryParameters } from '../util'
 
-const titles = [
-  'High Confidence Region Intergration',
-  'RNAseq Variant Calling',
-  'NGScheckMates',
-  'Trimmomatic',
-  'Fastqscreen',
-  'concatVCF',
-  'VQSR',
-  'miRNAseq'
+const ids = [
+  '5be4fe22-4b9a-40ae-90c2-251a07388e99',
+  'd6fce494-f145-423f-bbc9-dd1d16059ff3',
+  '2d88296f-06e0-4807-acd4-b5fac719edc6',
+  '5fc360a3-4e1a-4c3b-8559-1776b895aebd',
+  '56689ce2-078f-4bbc-a2a6-a09a61b7c0d1',
+  '647b224a-4b00-4d38-b1df-acf0d1b33b7c',
+  '292e95de-92f0-45be-be86-dd050a89c694',
+  '6e960f73-89fb-48c9-bb11-1e194cf31564',
+  'f5c9cba4-9b67-4162-8afd-1809d117e747',
+  'ff9de2b8-ebfb-456e-a8b4-565b2ef6ac0b'
 ]
 
-const descriptions = [
-  'High Confidence Region Integration',
-  '从RNAseq数据中call突变',
-  '从fastq文件中判断样本间的关系',
-  '',
-  '',
-  '',
-  '',
-  '用于miRNA-seq二代测序数据分析'
+const projectIdList = [
+  '5be4fe22-4b9a-40ae-90c2-251a07388e99',
+  'd6fce494-f145-423f-bbc9-dd1d16059ff3',
+  '2d88296f-06e0-4807-acd4-b5fac719edc6',
+  '5fc360a3-4e1a-4c3b-8559-1776b895aebd',
+  '56689ce2-078f-4bbc-a2a6-a09a61b7c0d1',
+  '647b224a-4b00-4d38-b1df-acf0d1b33b7c',
+  '292e95de-92f0-45be-be86-dd050a89c694',
+  '6e960f73-89fb-48c9-bb11-1e194cf31564',
+  'f5c9cba4-9b67-4162-8afd-1809d117e747',
+  'ff9de2b8-ebfb-456e-a8b4-565b2ef6ac0b'
 ]
 
-const avatar = [
-  'http://choppy.3steps.cn/renluyao/Quality_control/raw/commit/b4eb0d896ea247130b2bde65da83a523ca81fad5/pictures/workflow2.png',
-  'https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png',
-  'https://gw.alipayobjects.com/zos/rmsportal/dURIMkkrRFpPgTuzkwnB.png',
-  'https://gw.alipayobjects.com/zos/rmsportal/sfjbOqnsXXJgNCjCzDBL.png',
-  'https://gw.alipayobjects.com/zos/rmsportal/siCrBXXhmvTQGWPNLBow.png'
+const sampleIdList = [
+  '5be4fe22-4b9a-40ae-90c2-251a07388e99',
+  'd6fce494-f145-423f-bbc9-dd1d16059ff3',
+  '2d88296f-06e0-4807-acd4-b5fac719edc6',
+  '5fc360a3-4e1a-4c3b-8559-1776b895aebd',
+  '56689ce2-078f-4bbc-a2a6-a09a61b7c0d1',
+  '647b224a-4b00-4d38-b1df-acf0d1b33b7c',
+  '292e95de-92f0-45be-be86-dd050a89c694',
+  '6e960f73-89fb-48c9-bb11-1e194cf31564',
+  'f5c9cba4-9b67-4162-8afd-1809d117e747',
+  'ff9de2b8-ebfb-456e-a8b4-565b2ef6ac0b'
 ]
 
-const covers = [
-  'http://choppy.3steps.cn/renluyao/Quality_control/raw/commit/b4eb0d896ea247130b2bde65da83a523ca81fad5/pictures/workflow2.png',
-  'https://gw.alipayobjects.com/zos/rmsportal/iZBVOIhGJiAnhplqjvZW.png',
-  'https://gw.alipayobjects.com/zos/rmsportal/iXjVmWVHbCJAyqvDxdtx.png',
-  'https://gw.alipayobjects.com/zos/rmsportal/gLaIAoVWTtLbBWZNYEMg.png'
+const startedTimeLst = [
+  1585500176200,
+  1585500186200,
+  1585500076200,
+  1585500076200,
+  1585500276200,
+  1585500176200,
+  1585500156200,
+  1585500166200,
+  1585500186200,
+  1585500196200
 ]
 
-const owner = [
-  '付小小',
-  '吴加好',
-  '周星星',
-  '林东东',
-  '曲丽丽'
+const finishedTimeLst = [
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null
 ]
 
-const progress = [
+const jobParamsList = [
   {
-    status: 'active',
-    value: 99
-  }, {
-    status: 'success',
-    value: 100
-  }, {
-    status: 'exception',
-    value: 0
-  }, {
-    status: 'active',
-    value: 30
-  }, {
-    status: 'exception',
-    value: 30
-  }, {
-    status: 'success',
-    value: 100
-  }, {
-    status: 'active',
-    value: 10
-  }, {
-    status: 'success',
-    value: 100
-  }
+    'status': 200,
+    'error': '',
+    'data': [
+      {
+        'news_id': 51184,
+        'title': 'iPhone X Review: Innovative future with real black technology',
+        'source': 'Netease phone'
+      },
+      {
+        'news_id': 51183,
+        'title': 'Traffic paradise: How to design streets for people and unmanned vehicles in the future?',
+        'source': 'Netease smart'
+      },
+      {
+        'news_id': 51182,
+        'title': 'Teslamasks American Business Relations: The government does not pay billions to build factories',
+        'source': 'AI Finance'
+      }
+    ]
+  },
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {}
 ]
 
-const startedAt = [
-  '2019-09-01 08:30:00',
-  '2019-09-01 09:30:00',
-  '2019-09-01 09:40:00',
-  '2019-09-01 08:35:00',
-  '2019-09-01 08:40:00',
-  '2019-09-01 08:31:00',
-  '2019-09-01 08:28:00',
-  '2019-09-01 08:32:00'
+const labelsList = [
+  {
+    'project-name': 'This is a test',
+    'sample-name': 'test',
+    'sample-id': 'test'
+  },
+  {
+    'sample-name': 'test'
+  },
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {}
 ]
 
-const href = 'https://ant.design'
+const percentageList = [
+  99,
+  100,
+  0,
+  30,
+  30,
+  100,
+  10,
+  100,
+  10,
+  100
+]
+
+const statusLst = [
+  'active',
+  'success',
+  'exception',
+  'active',
+  'exception',
+  'success',
+  'active',
+  'success',
+  'active',
+  'success'
+]
 
 const workflow = (options) => {
   const queryParameters = getQueryParameters(options)
   console.log('queryParameters', queryParameters)
   if (queryParameters && !queryParameters.per_page) {
-    queryParameters.per_page = 5
+    queryParameters.per_page = 10
   } else {
     queryParameters.per_page = parseInt(queryParameters.per_page)
   }
   const data = []
-  for (let i = 0; i < queryParameters.per_page; i++) {
-    const tmpKey = i + 1
-    const num = parseInt(Math.random() * (4 + 1), 10)
+  const start = queryParameters.per_page * (queryParameters.page - 1)
+  const end = queryParameters.per_page * queryParameters.page
+  for (let num = start; num < end; num++) {
     data.push({
-      id: tmpKey,
-      avatar: avatar[num],
-      owner: owner[num],
-      href: href,
-      title: titles[ i % 8 ],
-      description: descriptions[ i % 8 ],
-      // startedAt: Mock.mock('@datetime'),
-      startedAt: startedAt[ i % 8 ],
-      finishedAt: Mock.mock('@datetime'),
-      members: [
-        {
-          avatar: 'https://gw.alipayobjects.com/zos/rmsportal/ZiESqWwCXBRQoaPONSJe.png',
-          name: '曲丽丽',
-          id: 'member1'
-        },
-        {
-          avatar: 'https://gw.alipayobjects.com/zos/rmsportal/tBOxZPlITHqwlGjsJWaF.png',
-          name: '王昭君',
-          id: 'member2'
-        },
-        {
-          avatar: 'https://gw.alipayobjects.com/zos/rmsportal/sBxjgqiuHMGRkIjqlQCd.png',
-          name: '董娜娜',
-          id: 'member3'
-        }
-      ],
-      progress: progress[ i % 8 ],
-      report: tmpKey,
-      cover: parseInt(i / 4, 10) % 2 === 0 ? covers[i % 4] : covers[3 - (i % 4)]
+      id: ids[num],
+      sample_id: sampleIdList[num],
+      project_id: projectIdList[num],
+      labels: labelsList[num],
+      started_time: startedTimeLst[num],
+      finished_time: finishedTimeLst[num],
+      job_params: jobParamsList[num],
+      status: statusLst[num],
+      percentage: percentageList[num]
     })
   }
 
   const response = {
-    total: data.length,
-    per_page: parseInt(queryParameters.per_page),
+    total: ids.length,
+    'per-page': parseInt(queryParameters.per_page),
     page: parseInt(queryParameters.page),
     message: 'success',
     data: data
@@ -142,4 +179,4 @@ const workflow = (options) => {
   return response
 }
 
-Mock.mock(/\/workflows/, 'get', workflow)
+Mock.mock(/\/workflows\?.*/, 'get', workflow)

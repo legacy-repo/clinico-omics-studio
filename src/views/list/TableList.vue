@@ -136,7 +136,7 @@ const statusMap = {
 }
 
 export default {
-  name: 'WorkflowTable',
+  name: 'TableList',
   components: {
     STable,
     Ellipsis,

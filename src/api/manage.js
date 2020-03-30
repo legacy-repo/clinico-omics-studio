@@ -10,6 +10,7 @@ const api = {
   report: '/reports',
   project: '/projects',
   workflow: '/workflows',
+  log: '/logs',
   notification: '/notifications',
   app_store: {
     installed_apps: '/installed-apps',
@@ -62,12 +63,10 @@ export function existProjectName (projectName) {
   return false
 }
 
-export function getReport (parameter) {
-  console.log('getReport: ', parameter)
+export function getReport (reportId) {
   return axios({
-    url: api.report + '/' + parameter.reportId,
-    method: 'get',
-    params: parameter
+    url: api.report + '/' + reportId,
+    method: 'get'
   })
 }
 
@@ -84,6 +83,28 @@ export function getProjectList (parameter) {
     url: api.project,
     method: 'get',
     params: parameter
+  })
+}
+
+export function getProject (projectId) {
+  return axios({
+    url: api.project + '/' + projectId,
+    method: 'get'
+  })
+}
+
+export function getLogList (parameter) {
+  return axios({
+    url: api.log,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getLog (url) {
+  return axios({
+    url: url,
+    method: 'get'
   })
 }
 

@@ -1,13 +1,13 @@
 <template>
   <div class="report-list">
     <a-card style="margin-top: 10px" :bordered="false">
-      <a-badge slot="extra" :count="pagination.total" :numberStyle="{backgroundColor: '#52c41a'}"/>
+      <a-badge slot="extra" showZero :count="pagination.total" :numberStyle="{backgroundColor: '#52c41a'}"/>
       <div slot="title">
-        <a-radio-group disabled @change="onClickRadioBtn" defaultValue="total" :value="radioGroupValue">
+        <a-radio-group @change="onClickRadioBtn" defaultValue="total" :value="radioGroupValue">
           <a-radio-button value="total">Total</a-radio-button>
-          <a-radio-button value="unchecked">Unchecked</a-radio-button>
-          <a-radio-button value="checked">Checked</a-radio-button>
-          <a-radio-button value="archived">Archived</a-radio-button>
+          <a-radio-button value="Finished">Finished</a-radio-button>
+          <a-radio-button value="Checked">Checked</a-radio-button>
+          <a-radio-button value="Archived">Archived</a-radio-button>
         </a-radio-group>
         <a-input-search
           style="margin-left: 16px; width: 272px;"
@@ -72,24 +72,19 @@
 </template>
 
 <script>
-import HeadInfo from '@/components/tools/HeadInfo'
-import { getReportList } from '@/api/manage'
 import VueFriendlyIframe from 'vue-friendly-iframe'
-import Avatar from '@/components/Avatar'
 import { reportLogo } from '@/core/icons'
-import orderBy from 'lodash.orderby'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'ReportList',
   components: {
-    Avatar,
-    HeadInfo,
     VueFriendlyIframe,
     reportLogo
   },
   data () {
     return {
-      searchStr: '',
+      searchStr: null,
       data: {},
       pagination: {
         pageSizeOptions: ['5', '10', '20', '30', '40', '50'],
@@ -110,16 +105,19 @@ export default {
     }
   },
   methods: {
-    searchReport (page, pageSize, searchStr) {
+    ...mapActions({
+      getReportList: 'GetReportList'
+    }),
+    searchReport (page, pageSize, status) {
       this.loading = true
-      getReportList({
+      this.getReportList({
         page: page,
-        per_page: pageSize,
-        query_str: searchStr
+        'per-page': pageSize,
+        status: status
       }).then(result => {
         const that = this
-        that.data = orderBy(result.data, [item => item.title.toLowerCase()], ['asc'])
-        that.pagination.pageSize = result.per_page
+        that.data = result.data
+        that.pagination.pageSize = result.perPage
         that.pagination.total = result.total
         that.pagination.current = result.page
         this.loading = false
@@ -128,6 +126,11 @@ export default {
     onClickRadioBtn (event) {
       this.radioGroupValue = event.target.value
       console.log('Current Radio Button Value: ', this.radioGroupValue)
+      if (this.radioGroupValue === 'total') {
+        this.searchReport(this.pagination.current, this.pagination.pageSize)
+      } else {
+        this.searchReport(this.pagination.current, this.pagination.pageSize, this.radioGroupValue)
+      }
     },
     onShowReport (projectName, reportId) {
       this.$router.push({

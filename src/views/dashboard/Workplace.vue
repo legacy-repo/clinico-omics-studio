@@ -22,7 +22,7 @@
       <a-row :gutter="24">
         <a-card
           class="project-list"
-          :loading="loading"
+          :loading="projectLoading"
           style="margin: 0px 12px 10px;"
           :bordered="false"
           title="Ongoing Projects"
@@ -58,20 +58,15 @@
           :md="24"
           :sm="24"
           :xs="24">
-          <a-card title="Quick Start / Navigation" style="margin-bottom: 10px" :bordered="false" :body-style="{padding: 0}">
+          <a-card title="Quick Start / Navigation" style="height: 100px; margin-bottom: 10px" :bordered="false" :body-style="{padding: 0}">
             <div class="item-group">
-              <a>操作一</a>
-              <a>操作二</a>
-              <a>操作三</a>
-              <a>操作四</a>
-              <a>操作五</a>
-              <a>操作六</a>
-              <a-button size="small" type="primary" ghost icon="plus">Add</a-button>
+              <!-- <a>操作一</a> -->
+              <a-button disabled size="small" type="primary" ghost icon="plus">Add</a-button>
             </div>
           </a-card>
-          <a-card :loading="loading" title="Team" style="margin-bottom: 10px" :bordered="false">
+          <a-card :loading="teamLoading" title="Team" style="margin-bottom: 10px" :bordered="false">
             <div class="members">
-              <a-row>
+              <a-row v-if="teams.length > 0">
                 <a-col :span="12" v-for="(item, index) in teams" :key="index">
                   <a>
                     <a-avatar size="small" :src="item.avatar" />
@@ -79,6 +74,7 @@
                   </a>
                 </a-col>
               </a-row>
+              <a-row v-else>No Data</a-row>
             </div>
           </a-card>
         </a-col>
@@ -89,7 +85,7 @@
           :md="24"
           :sm="24"
           :xs="24">
-          <a-card :loading="loading" title="Activity" :bordered="false">
+          <a-card :loading="activityLoading" title="Activity" :bordered="false">
             <a-list>
               <a-list-item :key="index" v-for="(item, index) in activities">
                 <a-list-item-meta>
@@ -114,20 +110,16 @@
 <script>
 import moment from 'moment'
 import { timeFix } from '@/utils/util'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
-import { Radar } from '@/components'
-import { getServiceList, getProjectList } from '@/api/manage'
-import orderBy from 'lodash.orderby'
 
 export default {
   name: 'Workplace',
   components: {
     PageView,
-    HeadInfo,
-    Radar
+    HeadInfo
   },
   data () {
     return {
@@ -136,13 +128,14 @@ export default {
       user: {},
 
       projects: [],
-      projectNums: '56',
-      jobNums: '1200',
-      reportNums: '56',
-      loading: true,
-      radarLoading: true,
       activities: [],
-      teams: []
+      teams: [],
+      projectNums: '0',
+      jobNums: '0',
+      reportNums: '0',
+      projectLoading: false,
+      activityLoading: false,
+      teamLoading: false
     }
   },
   computed: {
@@ -157,19 +150,20 @@ export default {
   created () {
     this.user = this.userInfo
     this.avatar = this.userInfo.avatar
-
-    getServiceList().then(res => {
-      // console.log('workplace -> call getServiceList()', res)
-    })
-  },
-  mounted () {
     this.getProjects()
-    this.getActivity()
-    this.getTeams()
+    this.getReportNums()
+    this.getJobNums()
+    // this.getActivity()
+    // this.getTeams()
   },
   methods: {
+    ...mapActions({
+      getProjectList: 'GetProjectList',
+      getReportList: 'GetReportList',
+      getWorkflowList: 'GetWorkflowList'
+    }),
     showProject (projectId) {
-      this.$router.push({ 
+      this.$router.push({
         name: 'job-management',
         params: {
           projectId: projectId
@@ -207,13 +201,30 @@ export default {
       })
     },
     getProjects () {
-      getProjectList({
+      this.loading = true
+      this.getProjectList({
         page: 1,
-        per_page: 6,
-        status: 'active'
+        'per-page': 12
       }).then(result => {
-        this.projects = orderBy(result.data, [item => item.title.toLowerCase()], ['asc'])
+        this.projects = result.data
+        this.projectNums = result.total.toString()
         this.loading = false
+      })
+    },
+    getReportNums () {
+      this.getReportList({
+        page: 1,
+        'per-page': 1
+      }).then(result => {
+        this.reportNums = result.total.toString()
+      })
+    },
+    getJobNums () {
+      this.getWorkflowList({
+        page: 1,
+        'per-page': 1
+      }).then(result => {
+        this.jobNums = result.total.toString()
       })
     },
     getActivity () {
@@ -298,7 +309,7 @@ export default {
 }
 
 .item-group {
-  padding: 20px 0 8px 24px;
+  padding: 10px 0 10px 24px;
   font-size: 0;
   a {
     color: rgba(0, 0, 0, 0.65);

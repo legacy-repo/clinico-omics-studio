@@ -11,7 +11,9 @@ import appStoreIcon from '@/assets/icons/app-store.svg?inline'
 import projectIcon from '@/assets/icons/project.svg?inline'
 import analysisIcon from '@/assets/icons/analysis.svg?inline'
 import reportLogo from '@/assets/icons/report-logo.svg?inline'
+import configLogo from '@/assets/icons/config.svg?inline'
+import projectLogo from '@/assets/icons/project-logo.svg?inline'
 import caseIcon from '@/assets/icons/case-o.svg?inline'
 import sitemapIcon from '@/assets/icons/sitemap.svg?inline'
 
-export { bxAnaalyse, appStoreIcon, projectIcon, analysisIcon, caseIcon, reportLogo, sitemapIcon }
+export { bxAnaalyse, appStoreIcon, projectIcon, analysisIcon, caseIcon, reportLogo, configLogo, projectLogo, sitemapIcon }

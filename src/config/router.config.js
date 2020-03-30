@@ -79,7 +79,7 @@ export const asyncRouterMap = [
       {
         path: '/statistics',
         name: 'statistics',
-        hidden: false,
+        hidden: true,
         component: () => import('@/views/dashboard/Analysis'),
         meta: { title: 'Statistics', keepAlive: true, icon: 'dot-chart', permission: ['dashboard'] }
       },

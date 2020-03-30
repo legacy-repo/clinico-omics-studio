@@ -120,9 +120,7 @@ export default {
       return this.$route.meta.title
     },
     searchReport (reportId) {
-      getReport({
-        reportId: reportId
-      }).then(res => {
+      getReport(reportId).then(res => {
         const that = this
         that.report = res.data
         console.log('Report Record: ', res.data)

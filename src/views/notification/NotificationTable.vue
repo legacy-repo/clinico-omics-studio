@@ -24,8 +24,7 @@
 
 <script>
 import { PageView } from '@/layouts'
-import orderBy from 'lodash.orderby'
-import { getNotificationList } from '@/api/manage'
+import { mapActions } from 'vuex'
 
 const rowSelection = {
   onChange: (selectedRowKeys, selectedRows) => {
@@ -45,8 +44,6 @@ export default {
     return {
       loading: false,
       data: [],
-      filteredInfo: null,
-      sortedInfo: null,
       rowSelection,
       pagination: {
         pageSizeOptions: ['5', '10', '20', '30', '40', '50'],
@@ -94,20 +91,23 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      getNotificationList: 'GetNotificationList'
+    }),
     setClassName (record, index) {
-      if (record.status === 'read') {
+      if (record.status === 'Read') {
         return 'read'
       }
     },
     searchNotification (page, pageSize) {
       this.loading = true
-      getNotificationList({
+      this.getNotificationList({
         page: page,
-        per_page: pageSize
+        'per-page': pageSize
       }).then(result => {
         const that = this
-        that.data = orderBy(result.data, [item => item.createdAt], ['asc'])
-        that.pagination.pageSize = result.per_page
+        that.data = result.data
+        that.pagination.pageSize = result.perPage
         that.pagination.total = result.total
         that.pagination.current = result.page
         this.loading = false
@@ -118,8 +118,6 @@ export default {
     },
     handleChange (pagination, filters, sorter) {
       console.log('Various parameters', pagination, filters, sorter)
-      this.filteredInfo = filters
-      this.sortedInfo = sorter
     },
     markAsRead () {},
     deleteAll () {},

@@ -14,7 +14,7 @@
       <a-col :xs="8" :sm="8" >
         <div class="text">Related Report</div>
         <div class="heading">
-          <a-button type="primary" size="small" icon="logout" @click.native="redirect(project.reportId)"/>
+          <a-button type="primary" size="small" icon="logout" @click.native="onShowReport(project.id)"/>
         </div>
       </a-col>
       <a-col :xs="16" :sm="16">
@@ -41,6 +41,7 @@
 import { PageView } from '@/layouts'
 import DetailList from '@/components/tools/DetailList'
 import WorkflowList from '@/views/workflow/itemList/WorkflowList'
+import { mapActions } from 'vuex'
 
 const DetailListItem = DetailList.Item
 
@@ -54,29 +55,49 @@ export default {
   },
   data () {
     return {
-      project: {
-        appName: 'huangyechao/annovar-latest',
-        description: 'High Confidence Region Intergration',
-        title: 'High Confidence Region Intergration',
-        startedAt: '2019-09-01 08:30:00',
-        finishedAt: null,
-        reportId: '5be4fe22-4b9a-40ae-90c2-251a07388e99',
-        author: '付小小',
-        status: 'active',
-        percentage: 80
-      }
+      project: {}
+    }
+  },
+  computed: {
+    projectId () {
+      return this.$route.params.projectId
     }
   },
   methods: {
-    redirect (reportId) {
-      this.$router.push({
-        name: 'report-details',
-        params: {
-          reportId: reportId
-        },
-        query: {
-          readonly: true
+    ...mapActions({
+      getProject: 'GetProject',
+      getReportList: 'GetReportList'
+    }),
+    onShowReport (projectId) {
+      this.getReportList({
+        'project-id': projectId
+      }).then(result => {
+        console.log('onShowReport: ', result)
+        if (result.length > 0) {
+          this.$router.push({
+            name: 'report-details',
+            params: {
+              reportId: result[0].id
+            },
+            query: {
+              readonly: true
+            }
+          })
+        } else {
+          this.$message.warn('No related report.')
         }
+      }).catch(error => {
+        console.log('getReportList: ', error)
+        this.$message.warn('No related report.')
+      })
+    },
+    searchProject (projectId) {
+      this.getProject(projectId).then(result => {
+        console.log('searchProject: ', result)
+        this.project = result
+      }).catch(error => {
+        console.log('searchProject: ', error)
+        this.project = {}
       })
     },
     getTitle () {
@@ -87,6 +108,9 @@ export default {
         name: 'create-project'
       })
     }
+  },
+  created () {
+    this.searchProject(this.projectId)
   }
 }
 </script>

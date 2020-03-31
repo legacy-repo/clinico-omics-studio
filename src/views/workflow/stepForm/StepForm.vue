@@ -8,7 +8,7 @@
     <div class="content">
       <step1 v-if="stepNum === 0" @nextStep="nextStep"/>
       <step2 v-if="stepNum === 1" @nextStep="nextStep" @prevStep="prevStep"/>
-      <step3 v-if="stepNum === 2" @finish="submitStepForm" @prevStep="prevStep"/>
+      <step3 v-if="stepNum === 2" @finished="submitStepForm" @prevStep="prevStep"/>
     </div>
   </a-card>
 </template>
@@ -58,7 +58,12 @@ export default {
       }
     },
     submitStepForm (data) {
-      console.log('stepForm: ', data)
+      console.log('Project Id: ', data)
+      localStorage.removeItem('datains_PROJECT_DATA')
+      localStorage.removeItem('datains_APP_DATA')
+      localStorage.removeItem('datains_SAMPLE_IDS')
+      localStorage.removeItem('datains_FINAL_APP_DATA')
+      this.$router.push({ name: 'project-management' })
     }
   },
   created () {

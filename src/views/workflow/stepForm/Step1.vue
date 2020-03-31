@@ -27,14 +27,14 @@
       </a-form-model-item>
       <a-form-model-item
         label="Started Time"
-        prop="buildTime"
-        ref="buildTime"
+        prop="createdTime"
+        ref="createdTime"
         :labelCol="labelCol"
         :wrapperCol="wrapperCol">
         <a-date-picker
           allowClear
-          v-model="projectData.buildTime"
-          name="buildTime"
+          v-model="projectData.createdTime"
+          name="createdTime"
           style="width: 100%"
           show-time
           format="YYYY-MM-DD HH:mm:ss"
@@ -55,15 +55,15 @@
       </a-form-model-item>
       <a-form-model-item
         label="Choppy App"
-        prop="choppyApp"
-        ref="choppyApp"
+        prop="appId"
+        ref="appId"
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
       >
         <a-select
           placeholder="Please choose a choppy app"
-          v-model="projectData.choppyApp">
-          <a-select-option :value="item.id" v-for="item in installed_apps" :key="item.id">
+          v-model="projectData.appId">
+          <a-select-option :value="item.id" v-for="item in installedApps" :key="item.id">
             {{ item.name }}
           </a-select-option>
         </a-select>
@@ -85,8 +85,9 @@
 
 <script>
 /* eslint-disable */
-import { getInstalledAppList, existProjectName } from '@/api/manage'
+import { mapActions } from 'vuex'
 import orderBy from 'lodash.orderby'
+import filter from 'lodash.filter'
 import moment from 'moment'
 import Vue from 'vue'
 import { FormModel } from 'ant-design-vue'
@@ -99,46 +100,65 @@ export default {
     return {
       labelCol: { lg: { span: 6 }, sm: { span: 5 } },
       wrapperCol: { lg: { span: 18 }, sm: { span: 19 } },
-      installed_apps: [],
+      installedApps: [],
       projectData: {},
       rules: {
         projectName: [
           { required: true, message: 'Please input project name.', trigger: 'blur' },
           { min: 5, max: 32, message: 'Length should be 5 to 32', trigger: 'blur' },
-          { pattern: /^[a-zA-Z_]+[0-9a-zA-Z]+$/, message: 'Project name is not valid, only support [a-z0-9A-Z_]', trigger: 'blur' }
+          { pattern: /^[a-zA-Z_]+[0-9a-zA-Z]+$/, message: 'Project name is not valid, only support [a-z0-9A-Z_]', trigger: 'blur' },
+          { validator: this.existProject, trigger: 'blur' }
         ],
         description: [
           { required: true, message: 'Please input project description.', trigger: 'blur', whitespace: true }
         ],
-        buildTime: [
+        createdTime: [
           { required: true, message: 'Please select started time.', trigger: 'blur' }
         ],
         group: [
           { required: true, message: 'Please input group name.', trigger: 'blur', whitespace: true }
         ],
-        choppyApp: [
+        appId: [
           { required: true, message: 'Please select choppy app.', trigger: 'blur' }
         ]
       }
     }
   },
   methods: {
+    ...mapActions({
+      getInstalledAppList: 'GetInstalledAppList',
+      getAppList: 'GetAppList',
+      checkProject: 'ExistProject'
+    }),
+    existProject (rule, value, callback) {
+      this.checkProject(value).then(result => {
+        if (result.total > 0) {
+          callback(new Error('Project name exist!'))
+        } else {
+          callback()
+        }
+      }).catch(error => {
+        console.log('existProject: ', error)
+        callback()
+      })
+    },
     getInstalledApps () {
-      getInstalledAppList().then(res => {
+      this.getInstalledAppList().then(res => {
         console.log('res', res)
-        this.installed_apps = orderBy(res.data, [item => {
+        this.installedApps = orderBy(res.data, [item => {
           item.name.toLowerCase()
         }], ['asc'])
       })
     },
     loadLocalData () {
-      const localData = JSON.parse(localStorage.getItem('projectData'))
+      const localData = JSON.parse(localStorage.getItem('datains_PROJECT_DATA'))
       if (localData) {
-        localData.buildTime = moment(localData.buildTime, 'YYYY-MM-DD HH:mm:ss')
+        localData.createdTime = moment(localData.createdTime)
         return localData
       } else {
         return {
-          buildTime: moment()
+          createdTime: moment(),
+          group: 'Choppy Team'
         }
       }
     },
@@ -146,8 +166,13 @@ export default {
       this.$refs[formName].validate(valid => {
         // 先校验，通过表单校验后，才进入下一步
         if (valid) {
-          console.log('Project information: ', this.projectData)
-          localStorage.setItem('projectData', JSON.stringify(this.projectData))
+          const app = filter(this.installedApps, (o) => { return o.id = this.projectData.appId })
+          console.log('Project information: ', this.projectData, app)
+          localStorage.setItem('datains_PROJECT_DATA', JSON.stringify({
+            ...this.projectData,
+            appName: app[0].name,
+            author: 'Choppy'
+          }))
           this.$emit('nextStep')
         } else {
           console.log('error submit!!');

@@ -1,14 +1,28 @@
 import Mock from 'mockjs2'
 import { getQueryParameters } from '../util'
 
-const titles = [
-  'stderr',
-  'stdout'
+const ids = [
+  '1',
+  '2',
+  '3'
 ]
 
-const links = [
+const titles = [
+  'stderr',
+  'stdout',
+  'bcs-stdout'
+]
+
+const logTypes = [
+  'Link',
+  'Link',
+  'Content'
+]
+
+const contents = [
+  'http://localhost:3000/report/project-1/stderr',
   'http://localhost:3000/report/project-1/stdout',
-  'http://localhost:3000/report/project-1/stderr'
+  'This is a log content from bcs'
 ]
 
 const log = (options) => {
@@ -20,10 +34,12 @@ const log = (options) => {
     queryParameters.per_page = parseInt(queryParameters.per_page)
   }
   const data = []
-  for (let i = 0; i < links.length; i++) {
+  for (let i = 0; i < titles.length; i++) {
     data.push({
+      id: ids[i],
       title: titles[i],
-      link: links[i]
+      logType: logTypes[i],
+      content: contents[i]
     })
   }
 

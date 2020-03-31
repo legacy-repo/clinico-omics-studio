@@ -1,4 +1,4 @@
-import { getProjectList, getProject } from '@/api/manage'
+import { getProjectList, getProject, submitProject } from '@/api/manage'
 import moment from 'moment'
 
 const formatStatus = function (status) {
@@ -24,10 +24,14 @@ const formatStatus = function (status) {
 
 const formatDateTime = function (datetime) {
   if (datetime && datetime > 0) {
-    return moment(datetime).utcOffset('+08:00').format('YYYY-MM-DD HH:mm')
+    return moment(datetime).utcOffset('+16:00').format('YYYY-MM-DD HH:mm')
   } else {
     return '0000-00-00 00:00'
   }
+}
+
+const timeToInt = function (datetime) {
+  return moment(datetime, 'YYYY-MM-DD HH:mm:ss').valueOf()
 }
 
 const formatRecords = function (records) {
@@ -51,6 +55,21 @@ const formatRecords = function (records) {
   }
 
   return newRecords
+}
+
+const formatPostData = function (data) {
+  const newData = {
+    'project-name': data.projectName,
+    'group-name': data.group,
+    'started-time': timeToInt(data.createdTime),
+    'app-name': data.appName,
+    'author': data.author,
+    'app-id': data.appId,
+    'description': data.description,
+    'samples': data.samples
+  }
+
+  return newData
 }
 
 const project = {
@@ -89,6 +108,28 @@ const project = {
         })
       })
     },
+    ExistProject ({ commit }, projectName) {
+      var parameter = {
+        'project-name': projectName
+      }
+
+      return new Promise((resolve, reject) => {
+        getProjectList(parameter).then(response => {
+          console.log('ExistProject: ', parameter, response)
+
+          const data = {
+            perPage: response['per-page'],
+            page: response['page'],
+            total: response['total'],
+            data: formatRecords(response.data)
+          }
+
+          resolve(data)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
     GetProject ({ commit }, projectId) {
       return new Promise((resolve, reject) => {
         getProject(projectId).then(response => {
@@ -99,6 +140,17 @@ const project = {
           commit('SET_PROJECT', data)
 
           resolve(data)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+    SubmitProject ({ commit }, data) {
+      const formatedData = formatPostData(data)
+      console.log('SubmitProject: ', formatedData)
+      return new Promise((resolve, reject) => {
+        submitProject(formatedData).then(response => {
+          resolve(response)
         }).catch(error => {
           reject(error)
         })

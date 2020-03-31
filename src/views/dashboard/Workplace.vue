@@ -47,6 +47,7 @@
                 </div>
               </a-card>
             </a-card-grid>
+            <a-list v-if="projects.length == 0"></a-list>
           </div>
         </a-card>
       </a-row>
@@ -74,7 +75,7 @@
                   </a>
                 </a-col>
               </a-row>
-              <a-row v-else>No Data</a-row>
+              <a-list v-else></a-list>
             </div>
           </a-card>
         </a-col>

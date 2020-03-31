@@ -57,7 +57,7 @@
                 </template>
                 <config-logo class="config-logo" />
               </a-popover>
-              <a slot="title" @click="onShowLog(item.id)">{{ item.title }}</a>
+              <a slot="title" @click="onShowLog(item.id, item.title)">{{ item.title }}</a>
             </a-list-item-meta>
           </a-col>
           <a-col class="list-content" :lg="12" :md="12" :sm="24" :xs="24">
@@ -74,7 +74,7 @@
             </div>
           </a-col>
           <div slot="actions">
-            <a @click="onShowLog(item.id)">Logs</a>
+            <a @click="onShowLog(item.id, item.title)">Logs</a>
             &nbsp;
             <a-dropdown>
               <a-menu slot="overlay">
@@ -89,7 +89,7 @@
       </a-list>
     </a-card>
     <a-row class="box" v-if="logContainerActive">
-      <log-container :logId="workflowId" @close="hideLogContainer()"></log-container>
+      <log-container :entityId="workflowId" :title="workflowName" entityType="workflow" @close="hideLogContainer()"></log-container>
     </a-row>
   </div>
 </template>
@@ -130,6 +130,7 @@ export default {
       radioGroupValue: 'total',
       logContainerActive: false,
       workflowId: '',
+      workflowName: 'Log Container',
       loading: false
     }
   },
@@ -171,8 +172,9 @@ export default {
         this.searchWorkflow(this.pagination.current, this.pagination.pageSize, this.projectId, this.radioGroupValue)
       }
     },
-    onShowLog (workflowId) {
+    onShowLog (workflowId, workflowName) {
       this.workflowId = workflowId
+      this.workflowName = workflowName
       this.logContainerActive = true
     }
   },

@@ -1,15 +1,13 @@
 <template>
   <div class="log-container">
-    <a-icon @click="close" theme="filled" style="font-size: 16px; position: absolute; top: 3px; right: 3px;" type="close-circle" />
+    <a-icon @click="close" theme="filled" style="font-size: 16px; position: absolute; top: 5px; right: 5px;" type="close-circle" />
     <h3>{{ title }}</h3>
     <div class="loading" v-if="loading">
       <a-spin tip="Loading..."></a-spin>
     </div>
-    <div class="loading" v-else-if="logs.length == 0">
-      <a-textarea readOnly placeholder="Not found"/>
-    </div>
-    <a-tabs size="small" animated @change="loadContent" v-else>
-      <a-tab-pane :tab="log.title" :key="log.link" v-for="log in logs">
+    <a-list class="loading" v-else-if="logs.length == 0"></a-list>
+    <a-tabs size="small" animated @change="changeTab" v-else>
+      <a-tab-pane :tab="log.title" :key="log.id" v-for="log in logs">
         <a-textarea readOnly v-model="content"/>
       </a-tab-pane>
     </a-tabs>
@@ -17,30 +15,29 @@
 </template>
 
 <script>
+import filter from 'lodash.filter'
 import { getLogList, getLog } from '@/api/manage'
-import orderBy from 'lodash.orderby'
 
 export default {
   name: 'LogContainer',
   props: {
-    logId: {
+    entityId: {
       required: true,
       type: String
     },
-    logType: {
+    entityType: {
       required: false,
       type: String,
       default: 'workflow'
     },
     title: {
-      required: false,
-      type: String,
-      default: 'Log Container'
+      required: true,
+      type: String
     }
   },
   data () {
     return {
-      content: '',
+      content: 'No content.',
       loading: true,
       logs: []
     }
@@ -49,23 +46,37 @@ export default {
     close () {
       this.$emit('close')
     },
-    loadContent (activeKey) {
-      if (activeKey) {
-        getLog(activeKey).then(result => {
-          const that = this
-          that.content = result
-        }).catch(error => {
-          const that = this
-          console.log('getLog: ', error)
-          that.content = 'No content.'
-        })
+    changeTab (activeKey) {
+      const activeLog = filter(this.logs, function (o) { return o.id === activeKey })
+      console.log('changeTab', activeKey, activeLog)
+      this.loadContent(activeLog[0].logType, activeLog[0].content)
+    },
+    loadContent (logType, content) {
+      console.log('loadContent: ', logType, content)
+      switch (logType) {
+        case 'Link':
+          getLog(content).then(result => {
+            const that = this
+            that.content = result
+          }).catch(error => {
+            const that = this
+            console.log('getLog: ', error)
+            that.content = 'No content.'
+          })
+          break
+        case 'Content':
+          this.content = content
+          break
+        default:
+          this.content = 'No content.'
       }
     }
   },
   watch: {
     logs: function (logs) {
       if (logs.length > 0) {
-        this.loadContent(logs[0].link)
+        const log = logs[0]
+        this.loadContent(log.logType, log.content)
       }
     }
   },
@@ -73,16 +84,16 @@ export default {
     this.loading = true
     getLogList({
       page: 1,
-      per_page: 5,
-      log_id: this.logId,
-      log_type: this.logType
+      'per-page': 5,
+      'entity-id': this.entityId,
+      'entity-type': this.entityType
     }).then(result => {
       const that = this
       console.log('getLogList: ', result)
-      that.logs = orderBy(result.data, [item => item.title.toLowerCase()], ['asc'])
+      that.logs = result.data
       this.loading = false
     }).catch(error => {
-      console.log('getLogList: ', error, this.logId, this.logType)
+      console.log('getLogList: ', error, this.entityId, this.entityType)
       this.loading = false
     })
   }
@@ -91,11 +102,11 @@ export default {
 
 <style lang="less" scoped>
 .log-container {
-  background: #f5f5f5;
+  background: #ffffff;
   overflow: hidden;
 
   .loading {
-    margin-top: 5px;
+    margin-top: 10px;
     height: 300px;
     width: 100%;
     display: flex;
@@ -114,6 +125,10 @@ export default {
 
   .ant-input::-webkit-scrollbar {
     width: 0 !important;
+  }
+
+  textarea {
+    resize: none;
   }
 }
 </style>

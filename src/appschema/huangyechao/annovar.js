@@ -5,6 +5,7 @@ const huangyechaoAnnovarLatest = {
       label: 'Files',
       model: 'read1',
       readOnly: false,
+      filterType: 'fastq|vcf',
       placeholder: 'Select files for read1.',
       config: {
         rules: [{ type: 'array', required: true, message: 'Please select files.' }]

@@ -58,11 +58,6 @@ export function getWorkflowList (parameter) {
   })
 }
 
-// TODO: use api instead of false
-export function existProjectName (projectName) {
-  return false
-}
-
 export function getReport (reportId) {
   return axios({
     url: api.report + '/' + reportId,
@@ -75,6 +70,14 @@ export function getReportList (parameter) {
     url: api.report,
     method: 'get',
     params: parameter
+  })
+}
+
+export function submitProject (data) {
+  return axios({
+    url: api.project,
+    method: 'post',
+    data: data
   })
 }
 

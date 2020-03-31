@@ -9,7 +9,7 @@
         :wrapper-col="field.wrapperCol || { span: 12 }"
       >
         <template v-if="field.tmplType === 'file'">
-          <a-button type="dashed" @click="selectFiles(field.model)">
+          <a-button type="dashed" @click="selectFiles(field.model, field.filterType)">
             <a-icon type="plus" /> Select Files
           </a-button>
           <a-select
@@ -106,7 +106,7 @@
     </a-form>
     <a-row class="box" v-if="fileManagerActive">
       <a-row class="file-manager-container">
-        <file-manager @file-select="onFileSelect" height="400" allowMultiSelection path="/vcf"></file-manager>
+        <file-manager @file-select="onFileSelect" height="400" allowMultiSelection :filterType="filterType"></file-manager>
         <a-button-group>
           <a-button @click="cancelSelectFiles()">Cancel</a-button>
           <a-button @click="confirmSelectFiles()">Confirm</a-button>
@@ -137,6 +137,7 @@ export default {
     return {
       fileManagerActive: false,
       whichFileManager: '',
+      filterType: '',
       files: [],
       options: {}
     }
@@ -154,9 +155,10 @@ export default {
       console.log('onFileSelect: ', files)
       this.files = files
     },
-    selectFiles (model) {
+    selectFiles (model, filterType) {
       this.fileManagerActive = true
       this.whichFileManager = model
+      this.filterType = filterType
       this.options[model] = []
       console.log('Registry File Manager: ', model)
     },

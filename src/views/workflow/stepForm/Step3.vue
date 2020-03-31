@@ -11,7 +11,7 @@
         <a-button block type="default" @click="prevStep">Previous Step</a-button>
         <a-button block type="default" @click="showJobs">Show Jobs</a-button>
         <a-button block type="default" @click="showProjects">Show Projects</a-button>
-        <a-button block type="primary" @click="submitProject">Submit Project</a-button>
+        <a-button block type="primary" @click="postProject">Submit Project</a-button>
       </a-col>
     </a-row>
     <argument-table :header="header" :body="body"></argument-table>
@@ -20,8 +20,10 @@
 
 <script>
 import v from 'voca'
+import zipObject from 'lodash.zipobject'
 import { Result } from '@/components'
 import ArgumentTable from '@/views/workflow/stepForm/ArgumentTable'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'Step3',
@@ -37,9 +39,12 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      submitProject: 'SubmitProject'
+    }),
     loadAppData () {
-      const appData = JSON.parse(localStorage.getItem('appData'))
-      const sampleIds = JSON.parse(localStorage.getItem('sampleIds'))
+      const appData = JSON.parse(localStorage.getItem('datains_APP_DATA'))
+      const sampleIds = JSON.parse(localStorage.getItem('datains_SAMPLE_IDS'))
       const tableHeader = Object.keys(appData)
 
       if (!(sampleIds && appData)) {
@@ -72,7 +77,7 @@ export default {
       }
     },
     loadProjectData () {
-      const projectData = JSON.parse(localStorage.getItem('projectData'))
+      const projectData = JSON.parse(localStorage.getItem('datains_PROJECT_DATA'))
       if (projectData) {
         return projectData
       } else {
@@ -88,13 +93,45 @@ export default {
     prevStep () {
       this.$emit('prevStep')
     },
-    submitProject () {
-      const finalData = JSON.parse(localStorage.getItem('finalData'))
-      const data = {
-        projectData: this.projectData,
-        jobData: finalData
+    finish () {
+      this.$emit('finish')
+    },
+    formatSamples (header, body) {
+      const samples = []
+      for (const record of body) {
+        const sample = zipObject(header, record)
+        console.log('formatSamples: ', sample, header, body)
+        samples.push(sample)
       }
-      console.log('Submit Project: ', data)
+      return samples
+    },
+    prepareJobData () {
+      const finalData = JSON.parse(localStorage.getItem('datains_FINAL_APP_DATA'))
+      const appData = this.loadAppData()
+      let samples = []
+
+      if (finalData && finalData.body) {
+        samples = this.formatSamples(finalData.header, finalData.body)
+      } else {
+        samples = this.formatSamples(appData.header, appData.body)
+      }
+
+      return samples
+    },
+    postProject () {
+      const data = {
+        ...this.projectData,
+        samples: this.prepareJobData()
+      }
+
+      this.submitProject(data).then(result => {
+        console.log('postProject: ', result)
+        this.$message.success('Create Project Successfully.')
+        this.$emit('finished', result)
+      }).catch(error => {
+        console.log('postProject: ', error)
+        this.$message.error('Unkonwn Error, Please Check Your Input.')
+      })
     },
     formatKey (key) {
       return v.titleCase(key)

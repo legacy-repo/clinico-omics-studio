@@ -66,22 +66,26 @@ export default {
       return this.header
     },
     getBody () {
-      const data = JSON.parse(localStorage.getItem('finalAppData'))
-      if (data && data.length > 0) {
-        return data
+      const data = JSON.parse(localStorage.getItem('datains_FINAL_APP_DATA'))
+      if (data && data.body) {
+        return data.body
       } else {
         return this.body
       }
     },
     clearData () {
-      localStorage.removeItem('finalAppData')
+      localStorage.removeItem('datains_FINAL_APP_DATA')
       this.$message.success('Refresh Successfully.')
       this.loadData()
     },
     saveData () {
       const container = this.$refs.hotTable.hotInstance
       const data = container.getData()
-      localStorage.setItem('finalAppData', JSON.stringify(data))
+      const header = this.getHeader()
+      localStorage.setItem('datains_FINAL_APP_DATA', JSON.stringify({
+        header: header,
+        body: data
+      }))
       this.$message.success('Save Successfully.')
     },
     loadData () {

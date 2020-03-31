@@ -21,8 +21,8 @@ export default {
       console.log('FormBuilder: ', data)
     },
     loadLocalData () {
-      const appData = JSON.parse(localStorage.getItem('appData'))
-      const projectData = JSON.parse(localStorage.getItem('projectData'))
+      const appData = JSON.parse(localStorage.getItem('datains_APP_DATA'))
+      const projectData = JSON.parse(localStorage.getItem('datains_PROJECT_DATA'))
       if (projectData) {
         return appData
       } else {
@@ -50,8 +50,8 @@ export default {
       if (e.type === 'cancel') {
         this.prevStep()
       } else if (e.type === 'submit') {
-        localStorage.setItem('appData', JSON.stringify(e.formData))
-        localStorage.setItem('sampleIds', JSON.stringify(e.sampleIds))
+        localStorage.setItem('datains_APP_DATA', JSON.stringify(e.formData))
+        localStorage.setItem('datains_SAMPLE_IDS', JSON.stringify(e.sampleIds))
         this.nextStep()
       }
     }

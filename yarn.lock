@@ -9367,6 +9367,13 @@ pretty@2.0.0:
     extend-shallow "^2.0.1"
     js-beautify "^1.6.12"
 
+prismjs@^1.19.0, prismjs@^1.6.0:
+  version "1.19.0"
+  resolved "https://registry.npm.taobao.org/prismjs/download/prismjs-1.19.0.tgz#713afbd45c3baca4b321569f2df39e17e729d4dc"
+  integrity sha1-cTr71Fw7rKSzIVafLfOeF+cp1Nw=
+  optionalDependencies:
+    clipboard "^2.0.0"
+
 private@^0.1.6, private@^0.1.8:
   version "0.1.8"
   resolved "https://registry.npmjs.org/private/-/private-0.1.8.tgz#2381edb3689f7a53d653190060fcf822d2f368ff"
@@ -11706,6 +11713,13 @@ vue-ls@^3.2.1:
   version "3.2.1"
   resolved "https://registry.npm.taobao.org/vue-ls/download/vue-ls-3.2.1.tgz#25d1c75b3a51c17018129de607b44bb120a3385a"
   integrity sha1-JdHHWzpRwXAYEp3mB7RLsSCjOFo=
+
+vue-prismjs@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.npm.taobao.org/vue-prismjs/download/vue-prismjs-1.2.0.tgz#b137f5ed958685ce1fd55ca6b068289f3359b8b7"
+  integrity sha1-sTf17ZWGhc4f1VymsGgonzNZuLc=
+  dependencies:
+    prismjs "^1.6.0"
 
 vue-property-decorator@^8.2.2:
   version "8.3.0"

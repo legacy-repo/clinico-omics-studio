@@ -24,6 +24,7 @@ import zipObject from 'lodash.zipobject'
 import { Result } from '@/components'
 import ArgumentTable from '@/views/workflow/stepForm/ArgumentTable'
 import { mapActions } from 'vuex'
+import filter from 'lodash.filter'
 
 export default {
   name: 'Step3',
@@ -96,11 +97,17 @@ export default {
     finish () {
       this.$emit('finish')
     },
+    filterData (data) {
+      return filter(data, function (o) {
+        return o.every(function (i) { return i == null }) === false
+      })
+    },
     formatSamples (header, body) {
       const samples = []
-      for (const record of body) {
+      const filteredBody = this.filterData(body)
+      for (const record of filteredBody) {
         const sample = zipObject(header, record)
-        console.log('formatSamples: ', sample, header, body)
+        console.log('formatSamples: ', sample, header, filteredBody)
         samples.push(sample)
       }
       return samples

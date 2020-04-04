@@ -14,6 +14,8 @@ const formatStatus = function (record) {
   } else {
     status.archived = false
   }
+
+  return status
 }
 
 const formatDateTime = function (datetime) {
@@ -34,7 +36,7 @@ const formatRecords = function (records) {
       description: record.description,
       script: record.script,
       reportType: record.report_type,
-      reportUrl: process.env.VUE_APP_API_BASE_URL + record.report_path,
+      reportUrl: process.env.VUE_APP_BASE_URL + record.report_path,
       startedAt: formatDateTime(record.started_time),
       finishedAt: formatDateTime(record.finished_time),
       checkedAt: formatDateTime(record.checked_time),

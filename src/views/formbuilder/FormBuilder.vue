@@ -4,10 +4,15 @@
       <a-form-item
         v-for="(field, index) in fields"
         :key="field.label + index"
-        :label="field.label"
         :label-col="field.labelCol || { span: 5, offset: 2 }"
         :wrapper-col="field.wrapperCol || { span: 12 }"
       >
+        <span slot="label" v-if="field.label">
+          {{ field.label }}&nbsp;
+          <a-tooltip :title="field.question" v-if="field.question">
+            <a-icon type="question-circle-o" />
+          </a-tooltip>
+        </span>
         <template v-if="field.tmplType === 'file'">
           <a-button type="dashed" @click="selectFiles(field.model, field.filterType)">
             <a-icon type="plus" /> Select Files

@@ -13,7 +13,29 @@ import analysisIcon from '@/assets/icons/analysis.svg?inline'
 import reportLogo from '@/assets/icons/report-logo.svg?inline'
 import configLogo from '@/assets/icons/config.svg?inline'
 import projectLogo from '@/assets/icons/project-logo.svg?inline'
+import folderLogo from '@/assets/icons/folder.svg?inline'
+import fileLogo from '@/assets/icons/file.svg?inline'
+import folderStarLogo from '@/assets/icons/folder-star.svg?inline'
+import fileStarLogo from '@/assets/icons/file-star.svg?inline'
+import folderLockLogo from '@/assets/icons/folder-lock.svg?inline'
+import fileLockLogo from '@/assets/icons/file-lock.svg?inline'
 import caseIcon from '@/assets/icons/case-o.svg?inline'
 import sitemapIcon from '@/assets/icons/sitemap.svg?inline'
 
-export { bxAnaalyse, appStoreIcon, projectIcon, analysisIcon, caseIcon, reportLogo, configLogo, projectLogo, sitemapIcon }
+export {
+  bxAnaalyse,
+  appStoreIcon,
+  projectIcon,
+  analysisIcon,
+  caseIcon,
+  reportLogo,
+  configLogo,
+  projectLogo,
+  folderLogo,
+  fileLogo,
+  folderStarLogo,
+  fileStarLogo,
+  folderLockLogo,
+  fileLockLogo,
+  sitemapIcon
+}

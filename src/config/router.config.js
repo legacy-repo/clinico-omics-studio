@@ -77,6 +77,14 @@ export const asyncRouterMap = [
       },
 
       {
+        path: '/git-management',
+        name: 'git-management',
+        hidden: false,
+        component: () => import('@/views/git/GitList'),
+        meta: { title: 'Git', keepAlive: true, icon: 'folder', permission: ['table'] }
+      },
+
+      {
         path: '/statistics',
         name: 'statistics',
         hidden: true,

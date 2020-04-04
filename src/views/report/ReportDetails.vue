@@ -1,7 +1,6 @@
 <template>
   <page-view :title="getTitle()" logo="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png">
     <detail-list slot="headerContent" size="small" :col="2" class="detail-layout">
-      <detail-list-item term="Author">{{ report.author }}</detail-list-item>
       <detail-list-item term="Report Type">{{ report.reportType }}</detail-list-item>
       <detail-list-item term="Started Time">{{ report.startedAt }}</detail-list-item>
       <detail-list-item term="Finished Time">{{ report.finishedAt }}</detail-list-item>
@@ -52,7 +51,7 @@
 <script>
 import { PageView } from '@/layouts'
 import EmbededFrame from '@/views/iframe/EmbededFrame'
-import { getReport } from '@/api/manage'
+import { mapActions } from 'vuex'
 import DetailList from '@/components/tools/DetailList'
 
 const DetailListItem = DetailList.Item
@@ -113,6 +112,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      getReport: 'GetReport'
+    }),
     backToProjectList (projectId) {
       this.$router.push({ name: 'project-management', params: { projectId: projectId } })
     },
@@ -120,10 +122,10 @@ export default {
       return this.$route.meta.title
     },
     searchReport (reportId) {
-      getReport(reportId).then(res => {
+      this.getReport(reportId).then(data => {
         const that = this
-        that.report = res.data
-        console.log('Report Record: ', res.data)
+        that.report = data
+        console.log('Report Record: ', data)
       })
     }
   },

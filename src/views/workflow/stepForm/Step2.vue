@@ -1,21 +1,39 @@
 <template>
-  <form-builder ref="form" :fields="fields" @action="onAction" @update="onUpdate"></form-builder>
+  <div>
+    <form-builder ref="form" :fields="fields" @action="onAction" @update="onUpdate"></form-builder>
+    <prism language="markdown" :code="helpMsg"></prism>
+  </div>
 </template>
 
 <script>
 import appSchema from '@/appschema'
+import v from 'voca'
 import FormBuilder from '@/views/formbuilder/FormBuilder'
+import Prism from 'vue-prismjs'
+import 'prismjs/themes/prism.css'
 
 export default {
   name: 'Step2',
   data () {
     return {
-      fields: []
+      fields: [],
+      helpMsg: ''
     }
   },
   methods: {
+    formatSchema (appName) {
+      const cleanedAppName = appName.replace(/[\W_]+/g, ' ')
+      const schemaName = v.camelCase(cleanedAppName)
+      return schemaName
+    },
     loadAppSchema (appName) {
-      return appSchema.huangyechaoAnnovarLatest.fields
+      const schemaName = this.formatSchema(appName)
+      console.log('App Schema Name: ', schemaName)
+      return appSchema[schemaName].fields
+    },
+    loadHelpMsg (appName) {
+      const schemaName = this.formatSchema(appName)
+      return appSchema[schemaName].help
     },
     onUpdate (data) {
       console.log('FormBuilder: ', data)
@@ -24,7 +42,10 @@ export default {
       const appData = JSON.parse(localStorage.getItem('datains_APP_DATA'))
       const projectData = JSON.parse(localStorage.getItem('datains_PROJECT_DATA'))
       if (projectData) {
-        return appData
+        return {
+          appData: appData,
+          projectData: projectData
+        }
       } else {
         this.prevStep()
       }
@@ -38,7 +59,9 @@ export default {
     initSchema (appSchema, initData) {
       for (const key in initData) {
         const idx = appSchema.findIndex((element) => element.model === key)
-        if (appSchema[idx].config) {
+        if (idx < 0) {
+          return appSchema
+        } else if (appSchema[idx].config) {
           appSchema[idx].config.initialValue = initData[key]
         }
       }
@@ -57,10 +80,14 @@ export default {
     }
   },
   created () {
-    this.fields = this.initSchema(this.loadAppSchema(), this.loadLocalData())
+    const localData = this.loadLocalData()
+    const appName = localData.projectData.appName
+    this.helpMsg = this.loadHelpMsg(appName)
+    this.fields = this.initSchema(this.loadAppSchema(appName), localData.appData)
   },
   components: {
-    FormBuilder
+    FormBuilder,
+    Prism
   }
 }
 </script>
@@ -68,5 +95,12 @@ export default {
 <style lang="less" scoped>
 .a-form-builder {
   margin-top: 30px;
+}
+
+pre {
+  max-width: 800px;
+  margin: 0px auto;
+  background-color: #eff0f1;
+  border-radius: 5px;
 }
 </style>

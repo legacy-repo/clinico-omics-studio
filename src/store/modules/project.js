@@ -50,7 +50,7 @@ const formatRecords = function (records) {
       samples: record.samples,
       labels: record.labels,
       status: formatStatus(record.status),
-      percentage: 10
+      percentage: record.percentage
     })
   }
 

@@ -166,7 +166,7 @@ export default {
       this.$refs[formName].validate(valid => {
         // 先校验，通过表单校验后，才进入下一步
         if (valid) {
-          const app = filter(this.installedApps, (o) => { return o.id = this.projectData.appId })
+          const app = filter(this.installedApps, (o) => { return o.id == this.projectData.appId })
           console.log('Project information: ', this.projectData, app)
           localStorage.setItem('datains_PROJECT_DATA', JSON.stringify({
             ...this.projectData,

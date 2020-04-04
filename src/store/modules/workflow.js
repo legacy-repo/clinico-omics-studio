@@ -41,7 +41,7 @@ const formatRecords = function (records) {
       jobParams: record.job_params,
       labels: record.labels,
       status: formatStatus(record.status),
-      percentage: 10
+      percentage: record.percentage
     })
   }
 

@@ -1,22 +1,16 @@
 const huangyechaoAnnovarLatest = {
+  help: `vcf,sample,sample_id
+# vcf  			需要进行注释的vcf文件
+# sample		输出文件名的前缀
+# sample_id		每个样本任务的识别码。注意：同一个samples文件中，不同样本的ID应该不同`,
   fields: [
-    {
-      tmplType: 'file',
-      label: 'Files',
-      model: 'read1',
-      readOnly: false,
-      filterType: 'fastq|vcf',
-      placeholder: 'Select files for read1.',
-      config: {
-        rules: [{ type: 'array', required: true, message: 'Please select files.' }]
-      }
-    },
     {
       tmplType: 'sample-id',
       type: 'number',
       label: 'Sample ID',
       name: 'sample_id',
-      placeholder: 'Auto Generate Sample ID.',
+      question: 'How many samples? For auto generating sample id.',
+      placeholder: 'How many samples? For auto generating sample id.',
       model: 'sample_id',
       disabled: false,
       min: 1,
@@ -26,62 +20,26 @@ const huangyechaoAnnovarLatest = {
       }
     },
     {
+      tmplType: 'file',
+      label: 'VCF Files',
+      model: 'vcf',
+      readOnly: false,
+      filterType: 'vcf',
+      placeholder: 'Select vcf files.',
+      config: {
+        rules: [{ type: 'array', required: true, message: 'Please select files.' }]
+      }
+    },
+    {
       tmplType: 'input',
       type: 'input',
-      label: 'ID',
-      name: 'input',
-      model: 'id',
+      label: 'Prefix for Output Files',
+      name: 'sample',
+      model: 'sample',
       disabled: false,
       config: {
-        rules: [{ type: 'string', required: true, message: 'Please select time!' }]
+        rules: [{ type: 'string', required: true, message: 'Please input prefix for output files.' }]
       }
-    },
-    {
-      tmplType: 'select',
-      label: 'Skills',
-      model: 'skills',
-      name: 'skills',
-      placeholder: 'Select',
-      mode: 'multiple',
-      options: [
-        { label: 'label 1', value: '1' },
-        { label: 'label 2', value: '2' },
-        { label: 'label 3', value: '3' }
-      ]
-    },
-    {
-      tmplType: 'checkbox',
-      label: 'Status',
-      name: 'status',
-      model: 'status',
-      config: {
-        valuePropName: 'checked'
-      }
-    },
-    {
-      tmplType: 'checkbox',
-      label: 'Addons',
-      name: 'addons',
-      model: 'addons',
-      options: [
-        { label: 'label 1', value: 1 },
-        { label: 'label 2', value: 2 },
-        { label: 'label 3', value: 3 }
-      ],
-      config: {
-        valuePropName: 'checked'
-      }
-    },
-    {
-      tmplType: 'radio',
-      label: 'Delivery',
-      name: 'delivery',
-      model: 'delivery',
-      options: [
-        { label: 'label 1', value: 1 },
-        { label: 'label 2', value: 2 },
-        { label: 'label 3', value: 3 }
-      ]
     },
     {
       tmplType: 'actions',

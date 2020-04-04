@@ -188,13 +188,14 @@ export default {
     getDuration (startedAt, finishedAt) {
       var currentTime = moment()
 
-      if (finishedAt && finishedAt.length > 0) {
+      if (finishedAt !== '0000-00-00 00:00') {
         currentTime = moment(finishedAt)
       }
 
       const startedTime = moment(startedAt)
-      const du = moment.duration(currentTime - startedTime, 'ms')
-      return du.locale('zh-cn').humanize()
+      console.log('getDuration: ', startedTime, finishedAt, currentTime)
+      const du = moment.duration(currentTime - startedTime, 'ms').asMinutes()
+      return du.toFixed(0) + ' Minutes'
     },
     onShowProjectMgmt () {
       this.$router.push({

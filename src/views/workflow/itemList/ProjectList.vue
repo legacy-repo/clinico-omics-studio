@@ -159,11 +159,12 @@ export default {
         'project-id': projectId
       }).then(result => {
         console.log('onShowReport: ', result)
-        if (result.length > 0) {
+        if (result.total > 0) {
+          const data = result.data
           this.$router.push({
             name: 'report-details',
             params: {
-              reportId: result[0].id
+              reportId: data[0].id
             },
             query: {
               readonly: true

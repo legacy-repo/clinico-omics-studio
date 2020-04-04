@@ -14,6 +14,7 @@
 
 <script>
 import { HotTable } from '@handsontable/vue'
+import filter from 'lodash.filter'
 
 export default {
   name: 'ArgumentTable',
@@ -78,13 +79,18 @@ export default {
       this.$message.success('Refresh Successfully.')
       this.loadData()
     },
+    filterData (data) {
+      return filter(data, function (o) {
+        return o.every(function (i) { return i == null }) === false
+      })
+    },
     saveData () {
       const container = this.$refs.hotTable.hotInstance
       const data = container.getData()
       const header = this.getHeader()
       localStorage.setItem('datains_FINAL_APP_DATA', JSON.stringify({
         header: header,
-        body: data
+        body: this.filterData(data)
       }))
       this.$message.success('Save Successfully.')
     },

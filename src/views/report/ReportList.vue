@@ -25,7 +25,8 @@
         <a-list-item :key="index" v-for="(item, index) in data">
           <a-col :lg="10" :md="8" :sm="24" :xs="24">
             <a-list-item-meta>
-              <div slot="description">
+              <div slot="description" v-if="item.status">
+                <span>{{ item.description }}</span>
                 <a-tag color="pink" v-if="item.status.checked">Checked</a-tag>
                 <a-tag color="blue" v-if="item.status.archived">Archived</a-tag>
               </div>
@@ -39,10 +40,6 @@
             </a-list-item-meta>
           </a-col>
           <a-col class="list-content" :lg="10" :md="12" :sm="24" :xs="24">
-            <div class="list-content-item">
-              <span>Author</span>
-              <p>{{ item.author }}</p>
-            </div>
             <div class="list-content-item">
               <span>Started</span>
               <p>{{ item.startedAt }}</p>

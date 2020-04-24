@@ -11,11 +11,15 @@ import 'ant-design-vue/dist/antd.less'
 // ext library
 import VueClipboard from 'vue-clipboard2'
 import PermissionHelper from '@/utils/helper/permission'
+import VueAnimated from '@codekraft-studio/vue-animated'
+
 // import '@/components/use'
 import './directives/action'
 
 VueClipboard.config.autoSetContainer = true
 
+Vue.use(require('vue-shortkey'))
+Vue.use(VueAnimated)
 Vue.use(Antd)
 Vue.use(Viser)
 

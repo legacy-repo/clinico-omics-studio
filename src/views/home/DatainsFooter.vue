@@ -27,14 +27,14 @@
     </a-row>
     <a-row class="navbar-text">
       <a-row>
-        <img src="~@/assets/logo.svg" />
+        <img src="@/assets/iseq-logo.png" />
       </a-row>
       <a-row>
         <a-row>
-          {{ website.name }}{{ website.copyright }}/{{ website.company_name }}
+          {{ website.name }}{{ website.copyright }} / {{ website.company_name }}
           <a href="http://www.miitbeian.gov.cn/" target="_blank">{{ website.icp_num }}</a>
         </a-row>
-        <a-row>Address: {{ website.address }}</a-row>
+        <a-row>{{ website.address }}</a-row>
       </a-row>
     </a-row>
   </a-row>
@@ -46,95 +46,101 @@ export default {
   data () {
     return {
       website: {
-        name: '智汇医圈',
-        href: 'http://www.nordata.cn',
-        product_name: '智汇医圈-ClideSys决策支持系统',
-        company_name: '苏州诺德拓生物科技有限公司',
-        copyright: '©2017-2018 ',
+        name: 'TGMC',
+        href: 'https://fudan.edu.cn',
+        product_name: 'TGMC - ClinicoOMICs',
+        company_name: 'Fudan University',
+        copyright: '©2017-2019 ',
         icp_num: '苏ICP备17025715号-4',
-        address: '上海市杨浦区四平路2158号1305室（地铁五角场3号口）'
+        address: ''
       },
       footerContent: [
+        // {
+        //   title: 'Wechat/Website',
+        //   span: 3,
+        //   contentList: [
+        //     {
+        //       title: '智汇医圈Plus',
+        //       src: require('@/assets/images/genius-community-plus.png'),
+        //       type: 'image'
+        //     },
+        //     {
+        //       title: '智汇医圈训练营',
+        //       src: require('@/assets/images/duanshu.png'),
+        //       type: 'image'
+        //     }
+        //   ]
+        // },
         {
-          title: 'Wechat/Website',
-          span: 3,
-          contentList: [
-            {
-              title: '智汇医圈Plus',
-              src: require('@/assets/images/genius-community-plus.png'),
-              type: 'image'
-            },
-            {
-              title: '智汇医圈训练营',
-              src: require('@/assets/images/duanshu.png'),
-              type: 'image'
-            }
-          ]
-        },
-        {
-          title: '临床决策服务',
-          span: 5,
-          contentList: [
-            {
-              title: 'ClideSys临床决策支持系统',
-              src: '',
-              type: 'link',
-              target: ''
-            },
-            {
-              title: 'Swarm®肿瘤大数据分析平台',
-              src: 'https://iwmtw.duanshu.com/2ejd7567dedb9480b1/#/',
-              type: 'link',
-              target: ''
-            },
-            {
-              title: '肿瘤药物查询系统',
-              src: 'https://nordata.com.cn/journal/index.html#/journals',
-              type: 'link',
-              target: ''
-            }
-          ]
-        },
-        {
-          title: '临床助手服务',
+          title: 'About',
           span: 4,
           contentList: [
             {
-              title: '智汇医圈训练营',
-              src: 'https://iwmtw.duanshu.com/2ejd7567dedb9480b1/#/',
+              title: 'About Us',
+              src: 'https://pgx.fudan.edu.cn',
               type: 'link',
               target: '_blank'
             },
             {
-              title: '期刊/影响因子查询系统',
-              src: 'https://nordata.com.cn/journal/index.html#/journals',
+              title: 'About Choppy',
+              src: 'http://docs.3steps.cn',
               type: 'link',
               target: '_blank'
             },
             {
-              title: '临床科研服务',
-              src: 'https://genius-community-frontend.oss-cn-shanghai.aliyuncs.com/%E5%AE%A3%E4%BC%A0%E5%86%8C.pdf',
+              title: 'Open Source',
+              src: 'https://github.com/go-choppy',
+              type: 'link',
+              target: '_blank'
+            },
+            {
+              title: 'ResearchGate',
+              src: 'https://www.researchgate.net/lab/Leming-Shi-Lab?ec=headerMenu',
               type: 'link',
               target: '_blank'
             }
           ]
         },
         {
-          title: '合作单位/企业',
+          title: 'Production',
           span: 5,
           contentList: [
             {
-              title: '苏州诺德拓生物科技有限公司',
-              src: 'http://nordata.com.cn/',
+              title: 'Choppy Pipeline System',
+              src: 'http://docs.choppy.com',
               type: 'link',
               target: '_blank'
             },
             {
-              title: '超存软件科技（苏州）有限公司',
-              src: 'http://supersan.cn/',
+              title: 'ClinicoOMICs',
+              src: 'http://datains.3steps.cn',
               type: 'link',
               target: '_blank'
             },
+            {
+              title: 'Choppy Data Portal',
+              src: 'http://data.3steps.cn',
+              type: 'link',
+              target: '_blank'
+            }
+          ]
+        },
+        {
+          title: 'Cooperation',
+          span: 5,
+          contentList: [
+            // {
+            //   title: '苏州诺德拓生物科技有限公司',
+            //   src: 'http://nordata.com.cn/',
+            //   type: 'link',
+            //   target: '_blank'
+            // },
+            // {
+            //   title: '超存软件科技（苏州）有限公司',
+            //   src: 'http://supersan.cn/',
+            //   type: 'link',
+            //   target: '_blank'
+            // },
             {
               title: '复旦大学附属肿瘤医院',
               src: 'http://www.shca.org.cn/dazhong2',
@@ -156,8 +162,8 @@ export default {
           ]
         },
         {
-          title: '新闻报道',
-          span: 7,
+          title: 'News',
+          span: 10,
           contentList: [
             {
               title: '接连获批，医疗AI诊断决策支持的春天即将到来？',

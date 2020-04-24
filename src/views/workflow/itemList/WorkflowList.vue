@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-card :bordered="false">
+    <a-card :bordered="false" v-if="false">
       <a-row>
         <a-col :sm="6" :xs="24">
           <head-info title="Running" content="8" :bordered="true"/>
@@ -20,47 +20,47 @@
     <a-card
       style="margin-top: 10px"
       :bordered="false"
-      title="Workflow List">
-
+      title="Job List">
       <div slot="extra">
         <a-radio-group @change="onClickRadioBtn" defaultValue="total" :value="radioGroupValue">
           <a-radio-button value="total">Total</a-radio-button>
-          <a-radio-button value="running">Running</a-radio-button>
-          <a-radio-button value="failed">Failed</a-radio-button>
-          <a-radio-button value="finished">Finished</a-radio-button>
+          <a-radio-button value="Running">Running</a-radio-button>
+          <a-radio-button value="Failed">Failed</a-radio-button>
+          <a-radio-button value="Succeeded">Finished</a-radio-button>
         </a-radio-group>
-        <a-input-search style="margin-left: 16px; width: 272px;" placeholder="Please Enter Task Name" @search="onSearch" />
+        <a-input-search
+          style="margin-left: 16px; width: 272px;"
+          placeholder="Please Enter Job Name"
+          :loading="loading"
+          :value="searchStr"
+          disabled
+          @search="searchWorkflow"
+        />
       </div>
 
-      <a-list size="large" :pagination="{showSizeChanger: true, showQuickJumper: true, pageSize: perPage, total: total, current: page}">
+      <a-list
+        size="large"
+        :loading="loading"
+        :pagination="pagination">
         <a-list-item :key="index" v-for="(item, index) in data">
-          <a-list-item-meta :description="item.description">
-            <a-popover slot="avatar">
-              <template slot="content">
-                <img :src="item.cover" class="popover">
-              </template>
-              <a-avatar size="large" shape="square" :src="item.cover"/>
-            </a-popover>
-            <a slot="title">{{ item.title }} @ {{ item.title }}</a>
-          </a-list-item-meta>
-          <div slot="actions">
-            <a @click="onShowReport(item.title, item.report)" :disabled="!item.report">Report</a>
-          </div>
-          <div slot="actions">
-            <a-dropdown>
-              <a-menu slot="overlay">
-                <a-menu-item><a @click="onShowWorkflow(item.title)">View</a></a-menu-item>
-                <a-menu-item><a>Update</a></a-menu-item>
-                <a-menu-item><a>Delete</a></a-menu-item>
-              </a-menu>
-              <a>More<a-icon type="down"/></a>
-            </a-dropdown>
-          </div>
-          <div class="list-content">
-            <div class="list-content-item">
-              <span>Owner</span>
-              <p>{{ item.owner }}</p>
-            </div>
+          <a-col :lg="8" :md="8" :sm="24" :xs="24">
+            <a-list-item-meta>
+              <div slot="description">
+                <a-tag color="pink" :key="key" v-for="(value, key) in item.labels">
+                  {{ key }} = {{ value }}
+                </a-tag>
+              </div>
+              <a-popover slot="avatar" placement="right" title="Job Parameters">
+                <template slot="content">
+                  <vue-json-pretty class="json-popover" v-if="Object.keys(item.jobParams).length !== 0" :data="item.jobParams"></vue-json-pretty>
+                  <span v-else>No Content</span>
+                </template>
+                <config-logo class="config-logo" />
+              </a-popover>
+              <a slot="title" @click="onShowLog(item.id, item.title)">{{ item.title }}</a>
+            </a-list-item-meta>
+          </a-col>
+          <a-col class="list-content" :lg="12" :md="12" :sm="24" :xs="24">
             <div class="list-content-item">
               <span>Started</span>
               <p>{{ item.startedAt }}</p>
@@ -70,97 +70,121 @@
               <p>{{ item.finishedAt }}</p>
             </div>
             <div class="list-content-item">
-              <a-progress :percent="item.progress.value" :status="!item.progress.status ? null : item.progress.status" style="width: 180px" />
+              <a-progress :percent="item.percentage" :status="!item.status ? null : item.status" style="width: 180px" />
             </div>
+          </a-col>
+          <div slot="actions">
+            <a @click="onShowLog(item.id, item.title)">Logs</a>
+            &nbsp;
+            <a-dropdown>
+              <a-menu slot="overlay">
+                <a-menu-item><a>View</a></a-menu-item>
+                <a-menu-item><a>Update</a></a-menu-item>
+                <a-menu-item><a>Delete</a></a-menu-item>
+              </a-menu>
+              <a disabled>More<a-icon type="down"/></a>
+            </a-dropdown>
           </div>
         </a-list-item>
       </a-list>
-
-      <task-form ref="taskForm" />
     </a-card>
+    <a-row class="box" v-if="logContainerActive">
+      <log-container :entityId="workflowId" :title="workflowName" entityType="workflow" @close="hideLogContainer()"></log-container>
+    </a-row>
   </div>
 </template>
 
 <script>
 import HeadInfo from '@/components/tools/HeadInfo'
-import TaskForm from '@/views/list/modules/TaskForm'
-import { getWorkflowList } from '@/api/manage'
-import Avatar from '@/components/Avatar'
-import orderBy from 'lodash.orderby'
+import LogContainer from '@/components/LogContainer/LogContainer'
+import { configLogo } from '@/core/icons'
+import VueJsonPretty from 'vue-json-pretty'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'WorkflowList',
   components: {
-    Avatar,
     HeadInfo,
-    TaskForm
-  },
-  props: {
-    projectId: {
-      type: String,
-      default: ''
-    }
+    LogContainer,
+    configLogo,
+    VueJsonPretty
   },
   data () {
     return {
-      data: {},
-      total: 0,
-      perPage: 5,
-      page: 1,
-      radioGroupValue: 'total'
+      searchStr: '',
+      data: [],
+      pagination: {
+        pageSizeOptions: ['5', '10', '20', '30', '40', '50'],
+        showSizeChanger: true,
+        showQuickJumper: true,
+        pageSize: 5,
+        total: 0,
+        current: 1,
+        onChange: (page, pageSize) => {
+          this.searchWorkflow(page, pageSize, this.searchStr)
+        },
+        onShowSizeChange: (current, pageSize) => {
+          this.searchWorkflow(1, pageSize, this.searchStr)
+        }
+      },
+      radioGroupValue: 'total',
+      logContainerActive: false,
+      workflowId: '',
+      workflowName: 'Log Container',
+      loading: false
+    }
+  },
+  computed: {
+    projectId () {
+      return this.$route.params.projectId
     }
   },
   methods: {
-    onSearch (value, event) {
-      console.log('Search Box: ', value)
+    ...mapActions({
+      getWorkflowList: 'GetWorkflowList'
+    }),
+    hideLogContainer () {
+      this.logContainerActive = !this.logContainerActive
+    },
+    searchWorkflow (page, pageSize, projectId, status) {
+      this.loading = true
+      this.getWorkflowList({
+        page: page,
+        'per-page': pageSize,
+        'project-id': projectId,
+        status: status
+      }).then(result => {
+        const that = this
+        console.log('searchWorkflow: ', result)
+        that.data = result.data
+        that.pagination.pageSize = result.perPage
+        that.pagination.total = result.total
+        that.pagination.current = result.page
+        this.loading = false
+      })
     },
     onClickRadioBtn (event) {
       this.radioGroupValue = event.target.value
       console.log('Current Radio Button Value: ', this.radioGroupValue)
+      if (this.radioGroupValue === 'total') {
+        this.searchWorkflow(this.pagination.current, this.pagination.pageSize, this.projectId)
+      } else {
+        this.searchWorkflow(this.pagination.current, this.pagination.pageSize, this.projectId, this.radioGroupValue)
+      }
     },
-    onShowWorkflow (workflowId) {
-      this.$router.push({
-        name: 'workflow-details',
-        params: {
-          workflowId: workflowId
-        }
-      })
-    },
-    onShowReport (workflowName, reportId) {
-      this.$router.push({
-        name: 'report-details',
-        params: {
-          reportId: reportId
-        },
-        query: {
-          readonly: true,
-          description: 'The Report of ' + workflowName
-        }
-      })
+    onShowLog (workflowId, workflowName) {
+      this.workflowId = workflowId
+      this.workflowName = workflowName
+      this.logContainerActive = true
     }
   },
   created () {
-    getWorkflowList({
-      page: 1,
-      per_page: 5
-    }).then(result => {
-      const that = this
-      that.data = orderBy(result.data, [item => item.title.toLowerCase()], ['asc'])
-      that.perPage = result.per_page
-      that.total = result.total
-      that.page = result.page
-    })
+    this.searchWorkflow(this.pagination.current, this.pagination.pageSize, this.projectId)
   }
 }
 </script>
 
 <style lang="less" scoped>
-.ant-avatar-lg {
-    width: 48px;
-    height: 48px;
-    line-height: 48px;
-}
-
 .list-content-item {
     color: rgba(0, 0, 0, .45);
     display: inline-block;
@@ -177,7 +201,44 @@ export default {
     }
 }
 
-.popover {
-  width: 300px;
+.json-popover {
+  margin-top: 10px;
+  max-width: 500px;
+  max-height: 300px;
+  overflow: scroll;
+}
+
+.json-popover::-webkit-scrollbar {
+  width: 0 !important;
+}
+
+.box {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 10;
+
+  .log-container {
+    position: absolute;
+    top: 150px;
+    left: 10%;
+    width: 80%;
+    margin: 0px auto;
+    z-index: 11;
+    padding: 20px 30px 30px;
+    border-radius: 5px;
+    min-height: 300px;
+  }
+}
+
+.config-logo {
+  font-size: 16px;
+  padding: 4px;
+  width: 60px;
+  height: 60px;
+  vertical-align: middle;
 }
 </style>

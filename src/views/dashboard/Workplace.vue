@@ -7,93 +7,67 @@
     <div slot="extra">
       <a-row class="more-info">
         <a-col :span="8">
-          <head-info :title="$t('dashboard.workplace.workflows')" content="56" :center="false" :bordered="false"/>
+          <head-info :title="$t('dashboard.workplace.projects')" :content="projectNums" :center="false" :bordered="false"/>
         </a-col>
         <a-col :span="8">
-          <head-info :title="$t('dashboard.workplace.samples')" content="1,299" :center="false" :bordered="false"/>
+          <head-info :title="$t('dashboard.workplace.jobs')" :content="jobNums" :center="false" :bordered="false"/>
         </a-col>
         <a-col :span="8">
-          <head-info :title="$t('dashboard.workplace.reports')" content="56" :center="false" />
+          <head-info :title="$t('dashboard.workplace.reports')" :content="reportNums" :center="false" />
         </a-col>
       </a-row>
     </div>
 
     <div>
       <a-row :gutter="24">
-        <a-col :xl="16" :lg="24" :md="24" :sm="24" :xs="24" style="padding-right: 0px;">
-          <a-card
-            class="workflow-list"
-            :loading="loading"
-            style="margin-bottom: 10px;"
-            :bordered="false"
-            title="Ongoing Workflows"
-            :body-style="{ padding: 0 }">
-            <a slot="extra" @click="onShowWorkflowMgmt">All Workflows</a>
-            <div>
-              <a-card-grid class="project-card-grid" :key="i" v-for="(item, i) in workflows">
-                <a-card :bordered="false" :body-style="{ padding: 0 }">
-                  <a-card-meta>
-                    <div slot="title" class="card-title">
-                      <a-avatar size="small" :src="item.cover"/>
-                      <a>{{ item.title }}</a>
-                    </div>
-                    <div slot="description" class="card-description">
-                      {{ item.description }}
-                    </div>
-                  </a-card-meta>
-                  <div class="project-item">
-                    <a :href="item.href">{{ item.owner }}</a>
-                    <span class="datetime">{{ getDuration(item.startedAt) }}</span>
+        <a-card
+          class="project-list"
+          :loading="projectLoading"
+          style="margin: 0px 12px 10px;"
+          :bordered="false"
+          title="Ongoing Projects"
+          :body-style="{ padding: 0 }">
+          <a slot="extra" @click="onShowProjectMgmt">All Projects</a>
+          <div>
+            <a-card-grid @click.native="showProject(item.id)" style="width:25%;" class="project-card-grid" :key="i" v-for="(item, i) in projects">
+              <a-card :bordered="false" :body-style="{ padding: 0 }">
+                <a-card-meta>
+                  <div slot="title" class="card-title">
+                    <a-icon v-if="runningStatus(item)" theme="filled" spin type="clock-circle" style="color: #52c41a"/>
+                    <a-badge v-else :count="item.percentage" :overflowCount="100" showZero :numberStyle="{backgroundColor: whichColor(item.status)}"/>>
+                    <a>{{ item.title }}</a>
                   </div>
-                </a-card>
-              </a-card-grid>
-            </div>
-          </a-card>
-
-          <a-card :loading="loading" title="动态" :bordered="false">
-            <a-list>
-              <a-list-item :key="index" v-for="(item, index) in activities">
-                <a-list-item-meta>
-                  <a-avatar slot="avatar" :src="item.user.avatar" />
-                  <div slot="title">
-                    <span>{{ item.user.nickname }}</span>&nbsp;
-                    在&nbsp;<a href="#">{{ item.project.name }}</a>&nbsp;
-                    <span>{{ item.project.action }}</span>&nbsp;
-                    <a href="#">{{ item.project.event }}</a>
+                  <div slot="description" class="card-description">
+                    {{ item.description }}
                   </div>
-                  <div slot="description">{{ item.time }}</div>
-                </a-list-item-meta>
-              </a-list-item>
-            </a-list>
-          </a-card>
-        </a-col>
+                </a-card-meta>
+                <div class="project-item">
+                  <a>{{ item.author }}</a>
+                  <span class="datetime">{{ getDuration(item.startedAt, item.finishedAt) }}</span>
+                </div>
+              </a-card>
+            </a-card-grid>
+            <a-list v-if="projects.length == 0"></a-list>
+          </div>
+        </a-card>
+      </a-row>
+      <a-row :gutter="24">
         <a-col
-          style="padding: 0 12px"
+          style="padding: 0 12px;"
           :xl="8"
           :lg="24"
           :md="24"
           :sm="24"
           :xs="24">
-          <a-card title="Quick Start / Navigation" style="margin-bottom: 10px" :bordered="false" :body-style="{padding: 0}">
+          <a-card title="Quick Start / Navigation" style="height: 100px; margin-bottom: 10px" :bordered="false" :body-style="{padding: 0}">
             <div class="item-group">
-              <a>操作一</a>
-              <a>操作二</a>
-              <a>操作三</a>
-              <a>操作四</a>
-              <a>操作五</a>
-              <a>操作六</a>
-              <a-button size="small" type="primary" ghost icon="plus">Add</a-button>
+              <!-- <a>操作一</a> -->
+              <a-button disabled size="small" type="primary" ghost icon="plus">Add</a-button>
             </div>
           </a-card>
-          <a-card title="XX Index" style="margin-bottom: 10px" :loading="radarLoading" :bordered="false" :body-style="{ padding: 0 }">
-            <div style="min-height: 400px;">
-              <!-- :scale="scale" :axis1Opts="axis1Opts" :axis2Opts="axis2Opts"  -->
-              <radar :data="radarData" />
-            </div>
-          </a-card>
-          <a-card :loading="loading" title="Team" :bordered="false">
+          <a-card :loading="teamLoading" title="Team" style="margin-bottom: 10px" :bordered="false">
             <div class="members">
-              <a-row>
+              <a-row v-if="teams.length > 0">
                 <a-col :span="12" v-for="(item, index) in teams" :key="index">
                   <a>
                     <a-avatar size="small" :src="item.avatar" />
@@ -101,7 +75,32 @@
                   </a>
                 </a-col>
               </a-row>
+              <a-list v-else></a-list>
             </div>
+          </a-card>
+        </a-col>
+        <a-col
+          style="padding-left: 0px;"
+          :xl="16"
+          :lg="24"
+          :md="24"
+          :sm="24"
+          :xs="24">
+          <a-card :loading="activityLoading" title="Activity" :bordered="false">
+            <a-list>
+              <a-list-item :key="index" v-for="(item, index) in activities">
+                <a-list-item-meta>
+                  <a-avatar slot="avatar" :src="item.user.avatar" />
+                  <div slot="title">
+                    <span>{{ item.user.nickname }}</span>&nbsp;
+                    On&nbsp;<a href="#">{{ item.project.name }}</a>&nbsp;
+                    <span>{{ item.project.action }}</span>&nbsp;
+                    <a href="#">{{ item.project.event }}</a>
+                  </div>
+                  <div slot="description">{{ item.time }}</div>
+                </a-list-item-meta>
+              </a-list-item>
+            </a-list>
           </a-card>
         </a-col>
       </a-row>
@@ -112,22 +111,16 @@
 <script>
 import moment from 'moment'
 import { timeFix } from '@/utils/util'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 import { PageView } from '@/layouts'
 import HeadInfo from '@/components/tools/HeadInfo'
-import { Radar } from '@/components'
-import { getRoleList, getServiceList, getWorkflowList } from '@/api/manage'
-import orderBy from 'lodash.orderby'
-
-const DataSet = require('@antv/data-set')
 
 export default {
   name: 'Workplace',
   components: {
     PageView,
-    HeadInfo,
-    Radar
+    HeadInfo
   },
   data () {
     return {
@@ -135,49 +128,15 @@ export default {
       avatar: '',
       user: {},
 
-      workflows: [],
-      loading: true,
-      radarLoading: true,
+      projects: [],
       activities: [],
       teams: [],
-
-      // data
-      axis1Opts: {
-        dataKey: 'item',
-        line: null,
-        tickLine: null,
-        grid: {
-          lineStyle: {
-            lineDash: null
-          },
-          hideFirstLine: false
-        }
-      },
-      axis2Opts: {
-        dataKey: 'score',
-        line: null,
-        tickLine: null,
-        grid: {
-          type: 'polygon',
-          lineStyle: {
-            lineDash: null
-          }
-        }
-      },
-      scale: [{
-        dataKey: 'score',
-        min: 0,
-        max: 80
-      }],
-      axisData: [
-        { item: '引用', a: 70, b: 30, c: 40 },
-        { item: '口碑', a: 60, b: 70, c: 40 },
-        { item: '产量', a: 50, b: 60, c: 40 },
-        { item: '贡献', a: 40, b: 50, c: 40 },
-        { item: '热度', a: 60, b: 70, c: 40 },
-        { item: '引用', a: 70, b: 50, c: 40 }
-      ],
-      radarData: []
+      projectNums: '0',
+      jobNums: '0',
+      reportNums: '0',
+      projectLoading: false,
+      activityLoading: false,
+      teamLoading: false
     }
   },
   computed: {
@@ -192,41 +151,82 @@ export default {
   created () {
     this.user = this.userInfo
     this.avatar = this.userInfo.avatar
-
-    getRoleList().then(res => {
-      // console.log('workplace -> call getRoleList()', res)
-    })
-
-    getServiceList().then(res => {
-      // console.log('workplace -> call getServiceList()', res)
-    })
-  },
-  mounted () {
     this.getProjects()
-    this.getActivity()
-    this.getTeams()
-    this.initRadar()
+    this.getReportNums()
+    this.getJobNums()
+    // this.getActivity()
+    // this.getTeams()
   },
   methods: {
-    getDuration (startedAt) {
-      const currentTime = moment()
-      const startedTime = moment(startedAt)
-      const du = moment.duration(currentTime - startedTime, 'ms')
-      return du.locale('zh-cn').humanize()
-    },
-    onShowWorkflowMgmt () {
+    ...mapActions({
+      getProjectList: 'GetProjectList',
+      getReportList: 'GetReportList',
+      getWorkflowList: 'GetWorkflowList'
+    }),
+    showProject (projectId) {
       this.$router.push({
-        name: 'workflow-management'
+        name: 'job-management',
+        params: {
+          projectId: projectId
+        }
+      })
+    },
+    runningStatus (project) {
+      return project.percentage < 100 && project.status === 'active'
+    },
+    whichColor (status) {
+      if (status === 'success') {
+        return '#52c41a'
+      } else if (status === 'active') {
+        return '#fff'
+      } else if (status === 'exception') {
+        return 'red'
+      } else {
+        return 'cyan'
+      }
+    },
+    getDuration (startedAt, finishedAt) {
+      var currentTime = moment()
+
+      if (finishedAt !== '0000-00-00 00:00') {
+        currentTime = moment(finishedAt)
+      }
+
+      const startedTime = moment(startedAt)
+      console.log('getDuration: ', startedTime, finishedAt, currentTime)
+      const du = moment.duration(currentTime - startedTime, 'ms').asMinutes()
+      return du.toFixed(0) + ' Minutes'
+    },
+    onShowProjectMgmt () {
+      this.$router.push({
+        name: 'project-management'
       })
     },
     getProjects () {
-      getWorkflowList({
+      this.loading = true
+      this.getProjectList({
         page: 1,
-        per_page: 6,
-        status: 'active'
+        'per-page': 12
       }).then(result => {
-        this.workflows = orderBy(result.data, [item => item.title.toLowerCase()], ['asc'])
+        this.projects = result.data
+        this.projectNums = result.total.toString()
         this.loading = false
+      })
+    },
+    getReportNums () {
+      this.getReportList({
+        page: 1,
+        'per-page': 1
+      }).then(result => {
+        this.reportNums = result.total.toString()
+      })
+    },
+    getJobNums () {
+      this.getWorkflowList({
+        page: 1,
+        'per-page': 1
+      }).then(result => {
+        this.jobNums = result.total.toString()
       })
     },
     getActivity () {
@@ -240,33 +240,25 @@ export default {
         .then(res => {
           this.teams = res.result
         })
-    },
-    initRadar () {
-      this.radarLoading = true
-
-      this.$http.get('/workplace/radar')
-        .then(res => {
-          const dv = new DataSet.View().source(res.result)
-          dv.transform({
-            type: 'fold',
-            fields: ['个人', '团队', '部门'],
-            key: 'user',
-            value: 'score'
-          })
-
-          this.radarData = dv.rows
-          this.radarLoading = false
-        })
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
-.workflow-list {
+.project-list {
+
+  .project-card-grid {
+    cursor: pointer;
+  }
 
   .card-title {
     font-size: 0;
+
+    .anticon, .ant-badge {
+      font-size: 20px;
+      margin-top: 2px;
+    }
 
     a {
       color: rgba(0, 0, 0, 0.85);
@@ -319,7 +311,7 @@ export default {
 }
 
 .item-group {
-  padding: 20px 0 8px 24px;
+  padding: 10px 0 10px 24px;
   font-size: 0;
   a {
     color: rgba(0, 0, 0, 0.65);
@@ -355,7 +347,7 @@ export default {
 }
 
 .mobile {
-  .workflow-list {
+  .project-list {
 
     .project-card-grid {
       width: 100%;

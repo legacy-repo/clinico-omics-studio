@@ -3,10 +3,10 @@
     <div class="container">
       <div class="top">
         <div class="header">
-          <a href="/">
-            <img src="~@/assets/logo.svg" class="logo" alt="logo">
+          <router-link :to="{ name: 'welcome' }">
+            <img src="@/assets/iseq-logo.png" class="logo" alt="logo">
             <span class="title">Datains</span>
-          </a>
+          </router-link>
         </div>
         <div class="desc">
           Datains for Clinico OMICS & BioMedGPS

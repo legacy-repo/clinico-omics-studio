@@ -7,8 +7,21 @@ const api = {
   permission: '/permission',
   permissionNoPager: '/permission/no-pager',
   orgTree: '/org/tree',
-  report: '/report-list',
-  workflow: '/workflow'
+  report: '/reports',
+  project: '/projects',
+  workflow: '/workflows',
+  log: '/logs',
+  notification: '/notifications',
+  app_store: {
+    installed_apps: '/installed-apps',
+    apps: '/apps'
+  },
+  filemanager: {
+    url: 'http://localhost:8090/',
+    getImageUrl: 'http://localhost:8090/GetImage',
+    uploadUrl: 'http://localhost:8090/Upload',
+    downloadUrl: 'http://localhost:8090/Download'
+  }
 }
 
 export default api
@@ -23,7 +36,15 @@ export function getWebapps () {
 
 export function getAppList () {
   return axios({
-    url: 'http://localhost:3001/apps',
+    url: api.app_store.apps,
+    method: 'get',
+    params: {}
+  })
+}
+
+export function getInstalledAppList () {
+  return axios({
+    url: api.app_store.installed_apps,
     method: 'get',
     params: {}
   })
@@ -37,17 +58,62 @@ export function getWorkflowList (parameter) {
   })
 }
 
-export function getReport () {
+export function getReport (reportId) {
   return axios({
-    url: 'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/choppy/report-datainsEmbed-20190902.json',
-    method: 'get',
-    params: {}
+    url: api.report + '/' + reportId,
+    method: 'get'
   })
 }
 
 export function getReportList (parameter) {
   return axios({
     url: api.report,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function submitProject (data) {
+  return axios({
+    url: api.project,
+    method: 'post',
+    data: data
+  })
+}
+
+export function getProjectList (parameter) {
+  return axios({
+    url: api.project,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getProject (projectId) {
+  return axios({
+    url: api.project + '/' + projectId,
+    method: 'get'
+  })
+}
+
+export function getLogList (parameter) {
+  return axios({
+    url: api.log,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getLog (url) {
+  return axios({
+    url: url,
+    method: 'get'
+  })
+}
+
+export function getNotificationList (parameter) {
+  return axios({
+    url: api.notification,
     method: 'get',
     params: parameter
   })

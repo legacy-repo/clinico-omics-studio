@@ -1,14 +1,14 @@
 <template>
   <a-card :bordered="false">
-    <a-steps class="steps" :current="currentTab">
+    <a-steps class="steps" :current="stepNum">
       <a-step title="Project Information" />
-      <a-step title="Workflow Parameters" />
+      <a-step title="Job Parameters" />
       <a-step title="Submit" />
     </a-steps>
     <div class="content">
-      <step1 v-if="currentTab === 0" @nextStep="nextStep"/>
-      <step2 v-if="currentTab === 1" @nextStep="nextStep" @prevStep="prevStep"/>
-      <step3 v-if="currentTab === 2" @prevStep="prevStep" @finish="finish"/>
+      <step1 v-if="stepNum === 0" @nextStep="nextStep"/>
+      <step2 v-if="stepNum === 1" @nextStep="nextStep" @prevStep="prevStep"/>
+      <step3 v-if="stepNum === 2" @finished="submitStepForm" @prevStep="prevStep"/>
     </div>
   </a-card>
 </template>
@@ -27,29 +27,47 @@ export default {
   },
   data () {
     return {
-      description: '将一个冗长或用户不熟悉的表单任务分成多个步骤，指导用户完成。',
-      currentTab: 0,
 
-      // form
-      form: null
+    }
+  },
+  computed: {
+    stepNum () {
+      let num = this.$route.query.step
+      try {
+        num = parseInt(num)
+        if (num >= 0 && num <= 2) {
+          return num
+        } else {
+          return 0
+        }
+      } catch (error) {
+        return 0
+      }
     }
   },
   methods: {
-
     // handler
     nextStep () {
-      if (this.currentTab < 2) {
-        this.currentTab += 1
+      if (this.stepNum < 2) {
+        this.$router.push({ name: 'create-project', query: { step: this.stepNum + 1 } })
       }
     },
     prevStep () {
-      if (this.currentTab > 0) {
-        this.currentTab -= 1
+      if (this.stepNum > 0) {
+        this.$router.push({ name: 'create-project', query: { step: this.stepNum - 1 } })
       }
     },
-    finish () {
-      this.currentTab = 0
+    submitStepForm (data) {
+      console.log('Project Id: ', data)
+      localStorage.removeItem('datains_PROJECT_DATA')
+      localStorage.removeItem('datains_APP_DATA')
+      localStorage.removeItem('datains_SAMPLE_IDS')
+      localStorage.removeItem('datains_FINAL_APP_DATA')
+      this.$router.push({ name: 'project-management' })
     }
+  },
+  created () {
+
   }
 }
 </script>

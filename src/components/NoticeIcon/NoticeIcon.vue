@@ -1,47 +1,40 @@
 <template>
   <a-popover
     v-model="visible"
-    trigger="click"
-    placement="bottomRight"
+    trigger="hover"
+    placement="bottom"
     overlayClassName="header-notice-wrapper"
     :getPopupContainer="() => $refs.noticeRef.parentElement"
     :autoAdjustOverflow="true"
     :arrowPointAtCenter="true"
-    :overlayStyle="{ width: '300px', top: '50px' }"
+    :overlayStyle="{ width: '400px', top: '50px' }"
   >
     <template slot="content">
       <a-spin :spinning="loadding">
         <a-tabs>
-          <a-tab-pane tab="通知" key="1">
+          <a-tab-pane tab="Notifications" key="1">
             <a-list>
-              <a-list-item>
-                <a-list-item-meta title="你收到了 14 份新周报" description="一年前">
-                  <a-avatar style="background-color: white" slot="avatar" src="https://gw.alipayobjects.com/zos/rmsportal/ThXAXghbEsBCCSDihZxY.png"/>
-                </a-list-item-meta>
-              </a-list-item>
-              <a-list-item>
-                <a-list-item-meta title="你推荐的 曲妮妮 已通过第三轮面试" description="一年前">
-                  <a-avatar style="background-color: white" slot="avatar" src="https://gw.alipayobjects.com/zos/rmsportal/OKJXDXrmkNshAMvwtvhu.png"/>
-                </a-list-item-meta>
-              </a-list-item>
-              <a-list-item>
-                <a-list-item-meta title="这种模板可以区分多种通知类型" description="一年前">
-                  <a-avatar style="background-color: white" slot="avatar" src="https://gw.alipayobjects.com/zos/rmsportal/kISTdvpyTAhtGxpovNWd.png"/>
+              <a-list-item :key="index" v-for="(item, index) in data">
+                <a-list-item-meta :title="item.title" :description="item.description">
+                  <a-avatar style="background-color: white" slot="avatar" src="https://nordata-cdn.oss-cn-shanghai.aliyuncs.com/choppy/notification.png"/>
                 </a-list-item-meta>
               </a-list-item>
             </a-list>
           </a-tab-pane>
-          <a-tab-pane tab="消息" key="2">
-            123
-          </a-tab-pane>
-          <a-tab-pane tab="待办" key="3">
-            123
+          <a-tab-pane tab="Change Logs" key="2">
+            <a-list>
+              <a-list-item>
+                <a-list-item-meta title="Release v0.1.1" description="iSEQ Analyzer is released on April 10.">
+                  <a-avatar style="background-color: white" slot="avatar" src="https://gw.alipayobjects.com/zos/rmsportal/ThXAXghbEsBCCSDihZxY.png"/>
+                </a-list-item-meta>
+              </a-list-item>
+            </a-list>
           </a-tab-pane>
         </a-tabs>
       </a-spin>
     </template>
-    <span @click="fetchNotice" class="header-notice" ref="noticeRef">
-      <a-badge count="12">
+    <span @mouseenter="searchNotification(1, 10, 'Unread')" @click="redirect" class="header-notice" ref="noticeRef">
+      <a-badge :count="total" showZero :numberStyle="{backgroundColor: backgroundColor} ">
         <a-icon style="font-size: 16px; padding: 4px" type="bell" />
       </a-badge>
     </span>
@@ -49,26 +42,50 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   name: 'HeaderNotice',
   data () {
     return {
       loadding: false,
-      visible: false
+      visible: false,
+      data: [],
+      total: 0
+    }
+  },
+  computed: {
+    backgroundColor () {
+      if (this.total > 0) {
+        return '#f5222d'
+      } else {
+        return '#52c41a'
+      }
     }
   },
   methods: {
-    fetchNotice () {
-      if (!this.visible) {
-        this.loadding = true
-        setTimeout(() => {
-          this.loadding = false
-        }, 2000)
-      } else {
-        this.loadding = false
-      }
-      this.visible = !this.visible
+    ...mapActions({
+      getNotificationList: 'GetNotificationList'
+    }),
+    searchNotification (page, pageSize, status) {
+      this.loading = true
+      this.getNotificationList({
+        page: page,
+        'per-page': pageSize,
+        status: status
+      }).then(result => {
+        const that = this
+        that.data = result.data
+        that.total = result.total
+        this.loading = false
+      })
+    },
+    redirect () {
+      this.$router.push({ name: 'notifications' }).catch(() => {})
     }
+  },
+  created () {
+    this.searchNotification(1, 1, 'Unread')
   }
 }
 </script>

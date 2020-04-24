@@ -1,7 +1,7 @@
 <template>
   <div class="user-wrapper">
     <div class="content-box">
-      <a href="http://choppy.3steps.cn" target="_blank">
+      <a href="https://fudan-pgx.yuque.com/choppy-platform/clinico-omics" target="_blank">
         <span class="action">
           <a-icon type="question-circle-o"></a-icon>
         </span>

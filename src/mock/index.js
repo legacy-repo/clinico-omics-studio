@@ -8,11 +8,15 @@ if (process.env.NODE_ENV !== 'production' || process.env.VUE_APP_PREVIEW === 'tr
   require('./services/auth')
   require('./services/user')
   require('./services/manage')
-  require('./services/other')
   require('./services/tagCloud')
   require('./services/article')
-  require('./services/workflow')
-  require('./services/report')
+  require('./services/workflows')
+  require('./services/installed-apps')
+  require('./services/projects')
+  require('./services/notifications')
+  require('./services/reports')
+  require('./services/logs')
+  require('./services/report-detail')
 
   Mock.setup({
     timeout: 800 // setter delay time

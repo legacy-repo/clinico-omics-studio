@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { FormBuilder } from '@/components'
+import { FormBuilder } from '@/views/formbuilder/FormBuilder'
 
 export default {
   name: 'TestPanel',

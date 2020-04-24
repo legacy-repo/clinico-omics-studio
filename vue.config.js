@@ -6,8 +6,11 @@ function resolve (dir) {
   return path.join(__dirname, dir)
 }
 
+const isProd = process.env.NODE_ENV === 'production'
+
 // vue.config.js
 const vueConfig = {
+  publicPath: isProd ? './' : '/',
   configureWebpack: {
     plugins: [
       // Ignore all locale files of moment.js
@@ -53,7 +56,7 @@ const vueConfig = {
 
   devServer: {
     // development server port 8000
-    port: 3000
+    port: 3001
     // If you want to turn on the proxy, please remove the mockjs /src/main.js L11
     // proxy: {
     //   '/api': {
@@ -62,6 +65,21 @@ const vueConfig = {
     //     changeOrigin: true
     //   }
     // }
+  },
+
+  pages: {
+    app: {
+      entry: 'src/main.js',
+      template: 'public/index.html',
+      filename: 'index.html',
+      excludeChunks: ['silent-renew-oidc']
+    },
+    silentrenewoidc: {
+      entry: 'src/silent-renew-oidc.js',
+      template: 'public/silent-renew-oidc.html',
+      filename: 'silent-renew-oidc.html',
+      excludeChunks: ['app']
+    }
   },
 
   // disable source map in production

@@ -3,8 +3,8 @@
     v-model="visible"
     trigger="click"
     placement="bottomRight"
-    overlayClassName="header-notice-wrapper"
-    :getPopupContainer="() => $refs.noticeRef.parentElement"
+    overlayClassName="header-app-panel-wrapper"
+    :getPopupContainer="() => $refs.appIconRef.parentElement"
     :autoAdjustOverflow="true"
     :arrowPointAtCenter="true"
     :overlayStyle="{ width: '300px', top: '50px' }"
@@ -17,8 +17,8 @@
         </a-col>
       </a-row>
     </template>
-    <span @click="fetchNotice" class="header-notice" ref="noticeRef">
-      <app-store-icon class="custom-icon" />
+    <span @click="showAppPanel" class="header-app-panel" ref="appIconRef">
+      <app-store-icon class="custom-icon" :class="{light: theme === 'light'}" />
     </span>
   </a-popover>
 </template>
@@ -31,6 +31,13 @@ export default {
   components: {
     appStoreIcon
   },
+  props: {
+    theme: {
+      type: String,
+      required: false,
+      default: 'dark'
+    }
+  },
   data () {
     return {
       loadding: false,
@@ -39,31 +46,30 @@ export default {
         {
           name: 'TGMC Home',
           icon: 'home',
-          link: 'https://www.3steps.cn'
-        },
-        {
-          name: 'Data Portal',
-          icon: 'file-search',
-          link: 'http://data.3steps.cn'
+          link: 'http://datains.3steps.cn'
         },
         {
           name: 'Fast File Transfer',
           icon: 'thunderbolt',
           link: 'http://docs.3steps.cn/docs/datains/datains-intro.html#ossutil'
         }, {
-          name: 'Datains Browser',
+          name: 'File Browser',
           icon: 'global',
           link: 'http://docs.3steps.cn/docs/datains/datains-intro.html#%E4%B8%8B%E8%BD%BD%E5%B9%B6%E5%AE%89%E8%A3%85-datains-browser'
         }, {
-          name: 'Datains API',
+          name: 'API Management',
           icon: 'api',
-          link: ''
+          link: 'http://yapi.3steps.cn/'
+        }, {
+          name: 'Documentation',
+          icon: 'file-markdown',
+          link: 'https://fudan-pgx.yuque.com/choppy-platform'
         }
       ]
     }
   },
   methods: {
-    fetchNotice () {
+    showAppPanel () {
       if (!this.visible) {
         this.loadding = true
         setTimeout(() => {
@@ -88,13 +94,13 @@ export default {
 </script>
 
 <style lang="css">
-  .header-notice-wrapper {
+  .header-app-panel-wrapper {
     top: 60px !important;
   }
 </style>
 
 <style lang="less" scoped>
-.header-notice{
+.header-app-panel{
   display: inline-block;
   transition: all 0.3s;
 
@@ -108,6 +114,10 @@ export default {
     width: 36px;
     height: 36px;
     vertical-align: middle;
+  }
+
+  .light {
+    color: #fff;
   }
 }
 

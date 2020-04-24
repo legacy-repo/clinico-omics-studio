@@ -1,100 +1,106 @@
 <template>
-  <div class="hot-table">
-    <hot-table :data="data" :settings="hotSettings" licenseKey="non-commercial-and-evaluation">
-    </hot-table>
-    <a-row class="btn-group">
-      <a-button :loading="loading" type="primary" @click="nextStep">Submit</a-button>
-      <a-button style="margin-left: 8px" @click="prevStep">Previous Step</a-button>
-    </a-row>
+  <div>
+    <form-builder ref="form" :fields="fields" @action="onAction" @update="onUpdate"></form-builder>
+    <prism language="markdown" :code="helpMsg"></prism>
   </div>
 </template>
 
 <script>
-import { HotTable } from '@handsontable/vue'
+import appSchema from '@/appschema'
+import v from 'voca'
+import FormBuilder from '@/views/formbuilder/FormBuilder'
+import Prism from 'vue-prismjs'
+import 'prismjs/themes/prism.css'
 
 export default {
   name: 'Step2',
   data () {
     return {
-      data: [
-        ['', 'Tesla', 'Mercedes', 'Toyota', 'Volvo'],
-        ['2019', 10, 11, 12, 13],
-        ['2020', 20, 11, 14, 13],
-        ['2021', 30, 15, 12, 13]
-      ],
-      hotSettings: {
-        colHeaders: true,
-        filters: true,
-        rowHeaders: true,
-        dropdownMenu: true,
-        autoRowSize: true,
-        autoColSize: true,
-        stretchH: 'all',
-        height: '600',
-        colWidths: 100,
-        manualColumnFreeze: true,
-        manualColumnResize: true,
-        maxRows: 100,
-        maxCols: 50,
-        minRows: 50,
-        minCols: 10,
-        multiColumnSorting: true,
-        undo: true,
-        contextMenu: {
-          items: {
-            'row_above': {
-              name: 'Insert row above this one (custom name)'
-            },
-            'row_below': {},
-            'clear_custom': {
-              name: 'Clear all cells (custom)',
-              callback: function () {
-                this.clear()
-              }
-            }
-          }
-        }
-      },
-      loading: false
+      fields: [],
+      helpMsg: ''
     }
   },
   methods: {
-    nextStep () {
-      const that = this
-      that.loading = true
-      console.log('表单 values', that.data)
-      that.timer = setTimeout(function () {
-        that.loading = false
-        that.$emit('nextStep')
-      }, 1500)
+    formatSchema (appName) {
+      const cleanedAppName = appName.replace(/[\W_]+/g, ' ')
+      const schemaName = v.camelCase(cleanedAppName)
+      return schemaName
+    },
+    loadAppSchema (appName) {
+      const schemaName = this.formatSchema(appName)
+      console.log('App Schema Name: ', schemaName)
+      return appSchema[schemaName].fields
+    },
+    loadHelpMsg (appName) {
+      const schemaName = this.formatSchema(appName)
+      return appSchema[schemaName].help
+    },
+    onUpdate (data) {
+      console.log('FormBuilder: ', data)
+    },
+    loadLocalData () {
+      const appData = JSON.parse(localStorage.getItem('datains_APP_DATA'))
+      const projectData = JSON.parse(localStorage.getItem('datains_PROJECT_DATA'))
+      if (projectData) {
+        return {
+          appData: appData,
+          projectData: projectData
+        }
+      } else {
+        this.prevStep()
+      }
     },
     prevStep () {
       this.$emit('prevStep')
+    },
+    nextStep () {
+      this.$emit('nextStep')
+    },
+    initSchema (appSchema, initData) {
+      for (const key in initData) {
+        const idx = appSchema.findIndex((element) => element.model === key)
+        if (idx < 0) {
+          return appSchema
+        } else if (appSchema[idx].config) {
+          appSchema[idx].config.initialValue = initData[key]
+        }
+      }
+
+      console.log('appSchema: ', appSchema, initData)
+      return appSchema
+    },
+    onAction (e) {
+      if (e.type === 'cancel') {
+        this.prevStep()
+      } else if (e.type === 'submit') {
+        localStorage.setItem('datains_APP_DATA', JSON.stringify(e.formData))
+        localStorage.setItem('datains_SAMPLE_IDS', JSON.stringify(e.sampleIds))
+        this.nextStep()
+      }
     }
   },
-  beforeDestroy () {
-    clearTimeout(this.timer)
+  created () {
+    const localData = this.loadLocalData()
+    const appName = localData.projectData.appName
+    this.helpMsg = this.loadHelpMsg(appName)
+    this.fields = this.initSchema(this.loadAppSchema(appName), localData.appData)
   },
   components: {
-    HotTable
+    FormBuilder,
+    Prism
   }
 }
 </script>
 
 <style lang="less" scoped>
-.hot-table {
-  width: 100%;
-  height: 100%;
-
-  .btn-group {
-    margin-top: 20px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-  }
+.a-form-builder {
+  margin-top: 30px;
 }
-</style>
 
-<style lang="css">
-@import '~handsontable/dist/handsontable.full.css';
+pre {
+  max-width: 800px;
+  margin: 0px auto;
+  background-color: #eff0f1;
+  border-radius: 5px;
+}
 </style>

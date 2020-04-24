@@ -1,7 +1,7 @@
 <template>
   <page-view :title="getTitle()" logo="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png">
     <template slot="action">
-      <a-button type="primary" @click="onSubmitWorkflow">Submit Project</a-button>
+      <a-button type="primary" @click="onCreateProject">Create Project</a-button>
     </template>
 
     <project-list></project-list>
@@ -27,9 +27,9 @@ export default {
     getTitle () {
       return this.$route.meta.title
     },
-    onSubmitWorkflow () {
+    onCreateProject () {
       this.$router.push({
-        name: 'submit-workflow'
+        name: 'create-project'
       })
     }
   }

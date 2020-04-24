@@ -1,32 +1,43 @@
 <template>
-  <div class="page-header">
-    <div class="page-header-index-wide">
-      <s-breadcrumb />
-      <div class="detail">
-        <div class="main" v-if="!$route.meta.hiddenHeaderContent">
-          <div class="row">
-            <img v-if="logo" :src="logo" class="logo"/>
-            <h1 v-if="title" class="title">{{ title }}</h1>
-            <div class="action">
-              <slot name="action"></slot>
+  <div class="page-header" :class="{ 'drawer-mode': drawerMode }">
+    <Animated enter="slideInDown" leave="slideOutUp">
+      <div class="page-header-index-wide" v-show="activeHeader">
+        <s-breadcrumb />
+        <div class="detail">
+          <div class="main" v-if="!$route.meta.hiddenHeaderContent">
+            <div class="row">
+              <img v-if="logo" :src="logo" class="logo"/>
+              <h1 v-if="title" class="title">{{ title }}</h1>
+              <div class="action">
+                <slot name="action"></slot>
+              </div>
             </div>
-          </div>
-          <div class="row">
-            <div v-if="avatar" class="avatar">
-              <a-avatar :src="avatar" />
+            <div class="row">
+              <div v-if="avatar" class="avatar">
+                <a-avatar :src="avatar" />
+              </div>
+              <div v-if="this.$slots.content" class="headerContent">
+                <slot name="content"></slot>
+              </div>
+              <div v-if="this.$slots.extra" class="extra">
+                <slot name="extra"></slot>
+              </div>
             </div>
-            <div v-if="this.$slots.content" class="headerContent">
-              <slot name="content"></slot>
+            <div>
+              <slot name="pageMenu"></slot>
             </div>
-            <div v-if="this.$slots.extra" class="extra">
-              <slot name="extra"></slot>
-            </div>
-          </div>
-          <div>
-            <slot name="pageMenu"></slot>
           </div>
         </div>
       </div>
+    </Animated>
+    <div class="on-off-btn" v-if="drawerMode" @click="switchHeader()" :class="{ 'drawer-mode-btn': !activeHeader }">
+      <a-tooltip placement="bottom">
+        <template slot="title">
+          <span>Click me and show more details.</span>
+        </template>
+        <a-icon theme="filled" type="up-circle" v-show="activeHeader"/>
+        <a-icon theme="filled" type="down-circle" v-show="!activeHeader"/>
+      </a-tooltip>
     </div>
   </div>
 </template>
@@ -54,19 +65,58 @@ export default {
       type: String,
       default: '',
       required: false
+    },
+    drawerMode: {
+      type: Boolean,
+      default: false,
+      required: false
+    }
+  },
+  methods: {
+    switchHeader () {
+      this.activeHeader = !this.activeHeader
     }
   },
   data () {
-    return {}
+    return {
+      activeHeader: !this.drawerMode
+    }
   }
 }
 </script>
 
 <style lang="less" scoped>
+.drawer-mode {
+  position: absolute;
+  z-index: 10;
+}
+
 .page-header {
-  background: #fff;
-  padding: 16px 32px 0;
-  border-bottom: 1px solid #e8e8e8;
+  width: 100%;
+
+  .page-header-index-wide {
+    border-bottom: 1px solid #e8e8e8;
+    background: #fff;
+    padding: 10px 32px 0;
+  }
+
+  .on-off-btn {
+    cursor: pointer;
+    text-align: center;
+    margin-bottom: -15px;
+    position: relative;
+    top: -10px;
+
+    .anticon {
+      font-size: 20px;
+    }
+  }
+
+  .drawer-mode-btn {
+    // Hide
+    margin-bottom: 5px;
+    top: 5px;
+  }
 
   .breadcrumb {
     margin-bottom: 16px;
@@ -137,8 +187,8 @@ export default {
       }
       .extra {
         flex: 0 1 auto;
-        margin-left: 88px;
-        min-width: 242px;
+        margin-left: 30px;
+        min-width: 300px;
         text-align: right;
       }
       .action {
@@ -166,7 +216,7 @@ export default {
 
       .content,
       .headerContent {
-        flex: 0 1 70%;
+        flex: 0 1 100%;
 
         .link {
           margin-top: 16px;

@@ -1,5 +1,5 @@
 <template lang="html">
-  <a-card class="box-card" @click="onClick(card.link)">
+  <a-card class="box-card">
     <a-row :class="{ 'journal-card-header': journalMode, 'card-header': !journalMode }">
       <a-row class="journal" v-if="journalMode">
         <a-col :span="18" class="left">{{ card.name }}</a-col>
@@ -10,7 +10,7 @@
       </a-row>
     </a-row>
     <a-row class="image" v-if="showImage">
-      <img :src="card.imageSrc" />
+      <img :src="card.image_src" />
     </a-row>
     <a-row class="content">
       {{ card.content }}
@@ -51,15 +51,11 @@ export default {
     showRate: {
       type: Boolean,
       required: false,
-      default: true
+      default: false
     }
   },
   methods: {
-    onClick (link) {
-      if (link) {
-        window.open(link, '_blank')
-      }
-    }
+
   }
 }
 </script>

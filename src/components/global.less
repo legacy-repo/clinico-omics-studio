@@ -13,6 +13,10 @@ body {
   }
 }
 
+body::-webkit-scrollbar {
+  width: 0 !important;
+}
+
 .layout.ant-layout {
   height: auto;
   overflow-x: hidden;
@@ -334,6 +338,10 @@ body {
   }
 }
 
+.ant-drawer-right .ant-drawer-content {
+  position: unset;
+}
+
 // drawer-sider 自定义
 .ant-drawer.drawer-sider {
   .sider {
@@ -502,4 +510,9 @@ body {
   width: 36px;
   height: 36px;
   vertical-align: middle;
+}
+
+.ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected,
+.ant-menu.ant-menu-dark .ant-menu-item-selected {
+  background-color: unset !important;
 }

@@ -60,7 +60,7 @@ router.beforeEach((to, from, next) => {
           //   description: '请求用户信息失败，请重试'
           // })
           store.dispatch('Logout').then(() => {
-            next({ path: '/welcome', query: { redirect: to.fullPath } })
+            next({ name: 'welcome', query: { redirect: to.fullPath } })
           })
           next()
         })
@@ -72,14 +72,14 @@ router.beforeEach((to, from, next) => {
     store.dispatch('Logout')
 
     if (!whiteList.includes(to.path)) {
-      next({ path: '/welcome', query: { redirect: to.fullPath } })
+      next({ name: 'welcome', query: { redirect: to.fullPath } })
 
       notification.warn({
         message: 'Unauthorized',
         description: 'Authorization verification failed. You need to login if you want to access private resource.'
       })
     } else if (to.path === '/') {
-      next({ path: '/welcome', query: { redirect: to.fullPath } })
+      next({ name: 'welcome', query: { redirect: to.fullPath } })
     } else {
       next()
     }

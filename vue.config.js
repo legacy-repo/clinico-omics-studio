@@ -6,8 +6,11 @@ function resolve (dir) {
   return path.join(__dirname, dir)
 }
 
+const isProd = process.env.NODE_ENV === 'production'
+
 // vue.config.js
 const vueConfig = {
+  publicPath: isProd ? './' : '/',
   configureWebpack: {
     plugins: [
       // Ignore all locale files of moment.js

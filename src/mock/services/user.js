@@ -12,7 +12,7 @@ const info = (options) => {
     'organization': 'Fudan University',
     'address': 'Shanghai',
     'password': '',
-    'avatar': '/avatar2.png',
+    'avatar': '@/assets/avatar2.png',
     'status': 1,
     'telephone': '',
     'lastLoginIp': '27.154.74.117',

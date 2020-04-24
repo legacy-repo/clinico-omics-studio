@@ -49,7 +49,7 @@ export default {
       confirmLoading: false,
 
       options: {
-        img: '/avatar2.png',
+        img: require('@/assets/avatar2.png'),
         autoCrop: true,
         autoCropWidth: 200,
         autoCropHeight: 200,

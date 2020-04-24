@@ -49,7 +49,7 @@ export default {
     },
     onClickBack () {
       if (this.toPath) {
-        this.$router.push({ path: this.toPath })
+        this.$router.push({ name: this.toPath })
       }
 
       this.$emit('return')

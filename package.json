@@ -1,6 +1,6 @@
 {
   "name": "datains-frontend",
-  "version": "2.0.0",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "publish-code": "vue-cli-service build && ossutilmac64 cp -r -u ./dist/ oss://datains-frontend/ -c ~/.ossutilconfig-tgmc",

@@ -3,6 +3,8 @@ English | [简体中文](./README.zh-CN.md)
 <h1 align="center">iSEQ Analyzer</h1>
 <div align="center">
 An out-of-box Pipeline Analyzer for sequencing data, e.g. RNA-Seq, WES, WGS etc.
+
+The datains-frontend is a frontend of datains, but we set it's product name as `iSEQ Analyzer` for matching it's original purpose.
 </div>
 
 <div align="center">

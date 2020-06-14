@@ -179,6 +179,12 @@ export const asyncRouterMap = [
             hideChildrenInMenu: true,
             children: [
               {
+                path: '/account/settings/service',
+                name: 'service-settings',
+                component: () => import('@/views/account/settings/ServiceSetting'),
+                meta: { title: 'Service Setting', hidden: true, permission: ['user'] }
+              },
+              {
                 path: '/account/settings/base',
                 name: 'base-settings',
                 component: () => import('@/views/account/settings/BaseSetting'),

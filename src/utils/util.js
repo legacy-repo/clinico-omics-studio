@@ -4,6 +4,32 @@ export function timeFix () {
   return hour < 9 ? 'Good Morning' : hour <= 11 ? 'Good Morning' : hour <= 13 ? 'Good Afternoon' : hour < 20 ? 'Good Afternoon' : 'Good Evening'
 }
 
+export function apiService () {
+  const apiService = localStorage.getItem('serviceHost') + localStorage.getItem('endpointPrefix')
+  console.log(`API_URL: ${apiService}`)
+  return apiService
+}
+
+export function endpointPrefix () {
+  const endpointPrefix = localStorage.getItem('endpointPrefix')
+  console.log(`ENDPOINT_PREFIX: ${endpointPrefix}`)
+  return endpointPrefix
+}
+
+export function saveEndpointPrefix (endpointPrefix) {
+  localStorage.setItem('endpointPrefix', endpointPrefix)
+}
+
+export function serviceHost () {
+  const serviceHost = localStorage.getItem('serviceHost')
+  console.log(`API_URL: ${serviceHost}`)
+  return serviceHost
+}
+
+export function saveServiceHost (serviceHost) {
+  localStorage.setItem('serviceHost', serviceHost)
+}
+
 export function welcome () {
   const arr = []
   const index = Math.floor(Math.random() * arr.length)

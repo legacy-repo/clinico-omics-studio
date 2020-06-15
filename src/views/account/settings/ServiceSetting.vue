@@ -42,8 +42,8 @@ export default {
         if (!errors) {
           console.log('Save service into webstorage.', values)
 
-          saveEndpointPrefix(this.values.prefix)
-          saveServiceHost(this.values.service)
+          saveEndpointPrefix(values.prefix)
+          saveServiceHost(values.service)
 
           setTimeout(() => {
             this.visible = false

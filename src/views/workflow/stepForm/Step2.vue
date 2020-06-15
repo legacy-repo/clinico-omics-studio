@@ -1,7 +1,20 @@
 <template>
   <div>
+    <a-button class="help-btn" type="primary" shape="circle" icon="question" @click="toggleHelp" />
     <form-builder ref="form" :fields="fields" @action="onAction" @update="onUpdate"></form-builder>
-    <prism language="markdown" :code="helpMsg"></prism>
+    <a-drawer
+      :title="helpTitle"
+      placement="right"
+      width="500"
+      :get-container="false"
+      :wrap-style="{ position: 'absolute' }"
+      :mask="false"
+      :closable="true"
+      :visible="visible"
+      @close="toggleHelp"
+    >
+      <vue-markdown :source="helpMsg" @rendered="update"></vue-markdown>
+    </a-drawer>
   </div>
 </template>
 
@@ -9,18 +22,28 @@
 import appSchema from '@/appschema'
 import v from 'voca'
 import FormBuilder from '@/views/formbuilder/FormBuilder'
-import Prism from 'vue-prismjs'
-import 'prismjs/themes/prism.css'
+import VueMarkdown from 'vue-markdown'
+import Prism from 'prismjs'
 
 export default {
   name: 'Step2',
   data () {
     return {
       fields: [],
-      helpMsg: ''
+      helpMsg: '',
+      visible: false,
+      helpTitle: 'Help Documentation'
     }
   },
   methods: {
+    update () {
+      this.$nextTick(() => {
+        Prism.highlightAll()
+      })
+    },
+    toggleHelp () {
+      this.visible = !this.visible
+    },
     formatSchema (appName) {
       const cleanedAppName = appName.replace(/[\W_]+/g, ' ')
       const schemaName = v.camelCase(cleanedAppName)
@@ -32,8 +55,18 @@ export default {
       return appSchema[schemaName].fields
     },
     loadHelpMsg (appName) {
-      const schemaName = this.formatSchema(appName)
-      return appSchema[schemaName].help
+      const helpLink = '/apps' + appName + '/README.md' // http://10.157.72.53:3000/apps/junshang/iseq_qc-latest/README.md
+      this.$http({
+        url: helpLink,
+        method: 'get',
+        params: {}
+      }).then(content => {
+        this.helpMsg = content
+        console.log('loadHelpMsg: ', content)
+      }).catch(error => {
+        this.helpMsg = 'No help document.'
+        console.log('loadHelpMsg Error: ', error)
+      })
     },
     onUpdate (data) {
       console.log('FormBuilder: ', data)
@@ -82,12 +115,13 @@ export default {
   created () {
     const localData = this.loadLocalData()
     const appName = localData.projectData.appName
-    this.helpMsg = this.loadHelpMsg(appName)
+    this.helpTitle = appName
+    this.loadHelpMsg(appName)
     this.fields = this.initSchema(this.loadAppSchema(appName), localData.appData)
   },
   components: {
     FormBuilder,
-    Prism
+    VueMarkdown
   }
 }
 </script>
@@ -97,10 +131,29 @@ export default {
   margin-top: 30px;
 }
 
+.help-btn {
+  position: fixed;
+  right: 15%;
+  width: 32px;
+  height: 32px;
+  z-index: 1000;
+}
+
+.help-btn:hover {
+  cursor: pointer;
+}
+
 pre {
   max-width: 800px;
   margin: 0px auto;
   background-color: #eff0f1;
   border-radius: 5px;
+}
+</style>
+
+<style lang="less">
+blockquote {
+  border-left: 4px solid #CCC;
+  padding-left: 16px;
 }
 </style>

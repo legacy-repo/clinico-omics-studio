@@ -52,7 +52,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import '../index.less';
+@import (reference) '../index.less';
 
 .antd-pro-components-report-list-content-index-listContent {
   .description {

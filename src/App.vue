@@ -22,7 +22,10 @@ export default {
   }
 }
 </script>
-<style>
+
+<style lang="less">
+@import url('./components/global.less');
+
 #app {
   height: 100%;
 }

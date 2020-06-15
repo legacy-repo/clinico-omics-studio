@@ -4,6 +4,7 @@
     <form-builder ref="form" :fields="fields" @action="onAction" @update="onUpdate"></form-builder>
     <a-drawer
       :title="helpTitle"
+      class="help-viewer"
       placement="right"
       width="500"
       :get-container="false"
@@ -136,7 +137,7 @@ export default {
   right: 15%;
   width: 32px;
   height: 32px;
-  z-index: 1000;
+  z-index: 10;
 }
 
 .help-btn:hover {
@@ -155,5 +156,13 @@ pre {
 blockquote {
   border-left: 4px solid #CCC;
   padding-left: 16px;
+}
+</style>
+
+<style lang="less">
+.help-viewer {
+  .ant-drawer {
+    z-index: 10;
+  }
 }
 </style>

@@ -54,7 +54,7 @@ const app = {
           console.log('GetAppList: ', parameter, response)
 
           const data = {
-            perPage: response['per-page'],
+            perPage: response['per_page'],
             page: response['page'],
             total: response['total'],
             data: formatRecords(response.data)
@@ -73,7 +73,7 @@ const app = {
           console.log('GetInstalledAppList: ', parameter, response)
 
           const data = {
-            perPage: response['per-page'],
+            perPage: response['per_page'],
             page: response['page'],
             total: response['total'],
             data: formatInstalledApps(response.data)

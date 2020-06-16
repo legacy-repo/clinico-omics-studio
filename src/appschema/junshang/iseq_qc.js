@@ -1,7 +1,7 @@
 const junshangIseqQcLatest = {
   fields: [
     {
-      tmplType: 'sample-id',
+      tmplType: 'sample_id',
       type: 'number',
       label: 'Sample ID',
       name: 'sample_id',

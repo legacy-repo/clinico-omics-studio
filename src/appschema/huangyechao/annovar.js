@@ -5,7 +5,7 @@ const huangyechaoAnnovarLatest = {
 # sample_id		每个样本任务的识别码。注意：同一个samples文件中，不同样本的ID应该不同`,
   fields: [
     {
-      tmplType: 'sample-id',
+      tmplType: 'sample_id',
       type: 'number',
       label: 'Sample ID',
       name: 'sample_id',

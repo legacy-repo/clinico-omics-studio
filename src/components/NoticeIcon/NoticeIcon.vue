@@ -71,7 +71,7 @@ export default {
       this.loading = true
       this.getNotificationList({
         page: page,
-        'per-page': pageSize,
+        per_page: pageSize,
         status: status
       }).then(result => {
         const that = this

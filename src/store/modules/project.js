@@ -59,14 +59,14 @@ const formatRecords = function (records) {
 
 const formatPostData = function (data) {
   const newData = {
-    'project-name': data.projectName,
-    'group-name': data.group,
-    'started-time': timeToInt(data.createdTime),
-    'app-name': data.appName,
-    'author': data.author,
-    'app-id': data.appId,
-    'description': data.description,
-    'samples': data.samples
+    project_name: data.projectName,
+    group_name: data.group,
+    started_time: timeToInt(data.createdTime),
+    app_name: data.appName,
+    author: data.author,
+    app_id: data.appId,
+    description: data.description,
+    samples: data.samples
   }
 
   return newData
@@ -95,7 +95,7 @@ const project = {
           console.log('GetProjectList: ', parameter, response)
 
           const data = {
-            perPage: response['per-page'],
+            perPage: response['per_page'],
             page: response['page'],
             total: response['total'],
             data: formatRecords(response.data)
@@ -110,7 +110,7 @@ const project = {
     },
     ExistProject ({ commit }, projectName) {
       var parameter = {
-        'project-name': projectName
+        project_name: projectName
       }
 
       return new Promise((resolve, reject) => {
@@ -118,7 +118,7 @@ const project = {
           console.log('ExistProject: ', parameter, response)
 
           const data = {
-            perPage: response['per-page'],
+            perPage: response['per_page'],
             page: response['page'],
             total: response['total'],
             data: formatRecords(response.data)

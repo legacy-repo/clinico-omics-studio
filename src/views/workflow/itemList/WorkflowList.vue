@@ -150,8 +150,8 @@ export default {
       this.loading = true
       this.getWorkflowList({
         page: page,
-        'per-page': pageSize,
-        'project-id': projectId,
+        per_page: pageSize,
+        project_id: projectId,
         status: status
       }).then(result => {
         const that = this

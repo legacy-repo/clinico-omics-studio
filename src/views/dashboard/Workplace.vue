@@ -206,7 +206,7 @@ export default {
       this.loading = true
       this.getProjectList({
         page: 1,
-        'per-page': 12
+        per_page: 12
       }).then(result => {
         this.projects = result.data
         this.projectNums = result.total.toString()
@@ -216,7 +216,7 @@ export default {
     getReportNums () {
       this.getReportList({
         page: 1,
-        'per-page': 1
+        per_page: 1
       }).then(result => {
         this.reportNums = result.total.toString()
       })
@@ -224,7 +224,7 @@ export default {
     getJobNums () {
       this.getWorkflowList({
         page: 1,
-        'per-page': 1
+        per_page: 1
       }).then(result => {
         this.jobNums = result.total.toString()
       })

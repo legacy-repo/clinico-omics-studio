@@ -109,7 +109,7 @@ export default {
       this.loading = true
       this.getProjectList({
         page: page,
-        'per-page': pageSize,
+        per_page: pageSize,
         status: status
       }).then(result => {
         const that = this
@@ -156,7 +156,7 @@ export default {
     },
     onShowReport (projectId) {
       this.getReportList({
-        'project-id': projectId
+        'project_id': projectId
       }).then(result => {
         console.log('onShowReport: ', result)
         if (result.total > 0) {
@@ -229,7 +229,7 @@ export default {
   }
 }
 
-.json-popover {
+.json-popover, .table-popover {
   margin-top: 10px;
   max-width: 500px;
   max-height: 300px;

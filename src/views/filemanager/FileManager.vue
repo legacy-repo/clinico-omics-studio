@@ -144,8 +144,9 @@ export default {
       console.log('Ajax request has failed')
     },
     filterByType(files, fileType) {
+      console.log(files, fileType)
       const pattern = new RegExp(fileType)
-      return filter(files, function(o) { return o.type.length > 0 && pattern.test(o.type) })
+      return filter(files, function(o) { return o.name.length > 0 && pattern.test(o.name) })
     },
     getFileName(files) {
       return flatMap(files, (o) => o.name)

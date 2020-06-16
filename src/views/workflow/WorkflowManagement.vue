@@ -70,7 +70,7 @@ export default {
     }),
     onShowReport (projectId) {
       this.getReportList({
-        'project-id': projectId
+        'project_id': projectId
       }).then(result => {
         console.log('onShowReport: ', result)
         if (result.length > 0) {

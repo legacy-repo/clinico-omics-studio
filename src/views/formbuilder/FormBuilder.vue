@@ -26,7 +26,7 @@
             <a-select-option v-for="d in options[field.model]" :key="d.value">{{ d.text }}</a-select-option>
           </a-select>
         </template>
-        <template v-if="field.tmplType === 'sample-id'">
+        <template v-if="field.tmplType === 'sample_id'">
           <a-input-number
             :placeholder="field.placeholder"
             :key="field.name + index"

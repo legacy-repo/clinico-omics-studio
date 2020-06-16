@@ -103,7 +103,7 @@ export default {
       this.loading = true
       this.getNotificationList({
         page: page,
-        'per-page': pageSize
+        per_page: pageSize
       }).then(result => {
         const that = this
         that.data = result.data

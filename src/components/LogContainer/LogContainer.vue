@@ -84,9 +84,9 @@ export default {
     this.loading = true
     getLogList({
       page: 1,
-      'per-page': 5,
-      'entity-id': this.entityId,
-      'entity-type': this.entityType
+      per_page: 5,
+      entity_id: this.entityId,
+      entity_type: this.entityType
     }).then(result => {
       const that = this
       console.log('getLogList: ', result)

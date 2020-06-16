@@ -101,12 +101,12 @@ const jobParamsList = [
 
 const labelsList = [
   {
-    'project-name': 'This is a test',
-    'sample-name': 'test',
-    'sample-id': 'test'
+    project_name: 'This is a test',
+    sample_name: 'test',
+    sample_id: 'test'
   },
   {
-    'sample-name': 'test'
+    sample_name: 'test'
   },
   {},
   {},
@@ -171,7 +171,7 @@ const workflow = (options) => {
 
   const response = {
     total: ids.length,
-    'per-page': parseInt(queryParameters.per_page),
+    per_page: parseInt(queryParameters.per_page),
     page: parseInt(queryParameters.page),
     message: 'success',
     data: data

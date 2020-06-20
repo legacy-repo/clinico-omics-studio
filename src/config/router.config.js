@@ -16,8 +16,15 @@ export const asyncRouterMap = [
         path: '/dashboard',
         name: 'dashboard',
         hidden: false,
-        component: () => import('@/views/dashboard/Workplace'),
+        component: () => import('@/views/datasource/Search'),
         meta: { title: 'Dashboard', keepAlive: true, icon: 'dashboard', permission: ['dashboard'] }
+      },
+      {
+        path: '/workplace',
+        name: 'workplace',
+        hidden: false,
+        component: () => import('@/views/dashboard/Workplace'),
+        meta: { title: 'Workplace', keepAlive: true, icon: 'dashboard', permission: ['dashboard'] }
       },
 
       {
@@ -60,14 +67,33 @@ export const asyncRouterMap = [
         ]
       },
 
+      // App Store
       {
-        path: '/notifications',
-        name: 'notifications',
-        hidden: true,
-        component: () => import('@/views/notification/NotificationTable'),
-        meta: { title: 'Notifications', keepAlive: true, icon: 'notification', permission: ['table'] }
+        path: '/app-store',
+        name: 'appstore',
+        hidden: false,
+        component: () => import('@/views/appstore/FilterPanel'),
+        meta: { title: 'App Store', keepAlive: true, icon: 'file-done', permission: ['table'] }
       },
 
+      {
+        path: '/tool',
+        name: 'tool',
+        hidden: true,
+        component: RouteView,
+        meta: { title: 'Tool', keepAlive: true, icon: 'folder', permission: ['table'] },
+        children: [
+          {
+            path: '/tool/xps2pdf',
+            name: 'xps2pdf',
+            hidden: true,
+            component: () => import('@/views/tools/XPS2PDF'),
+            meta: { title: 'XPS2PDF', keepAlive: true }
+          }
+        ]
+      },
+
+      // Report
       {
         path: '/report-management',
         name: 'report-management',
@@ -76,23 +102,6 @@ export const asyncRouterMap = [
         meta: { title: 'Report', keepAlive: true, icon: 'file-done', permission: ['table'] }
       },
 
-      {
-        path: '/git-management',
-        name: 'git-management',
-        hidden: true,
-        component: () => import('@/views/git/GitList'),
-        meta: { title: 'Git', keepAlive: true, icon: 'folder', permission: ['table'] }
-      },
-
-      {
-        path: '/statistics',
-        name: 'statistics',
-        hidden: true,
-        component: () => import('@/views/dashboard/Analysis'),
-        meta: { title: 'Statistics', keepAlive: true, icon: 'dot-chart', permission: ['dashboard'] }
-      },
-
-      // Report
       {
         path: '/datains-report',
         name: 'datains-report',
@@ -153,6 +162,30 @@ export const asyncRouterMap = [
             meta: { title: 'Choppy Data Portal', target: '_blank' }
           }
         ]
+      },
+
+      {
+        path: '/notifications',
+        name: 'notifications',
+        hidden: true,
+        component: () => import('@/views/notification/NotificationTable'),
+        meta: { title: 'Notifications', keepAlive: true, icon: 'notification', permission: ['table'] }
+      },
+
+      {
+        path: '/git-management',
+        name: 'git-management',
+        hidden: true,
+        component: () => import('@/views/git/GitList'),
+        meta: { title: 'Git', keepAlive: true, icon: 'folder', permission: ['table'] }
+      },
+
+      {
+        path: '/statistics',
+        name: 'statistics',
+        hidden: true,
+        component: () => import('@/views/dashboard/Analysis'),
+        meta: { title: 'Statistics', keepAlive: true, icon: 'dot-chart', permission: ['dashboard'] }
       },
 
       // Account

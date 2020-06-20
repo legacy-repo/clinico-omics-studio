@@ -1,43 +1,9 @@
 <template>
   <a-row class="search-page">
-    <a-col class="left" :xl="14" :lg="14" :md="24" :sm="24">
+    <a-col class="left" :xl="8" :lg="8" :md="8" :sm="12">
       <a-row class="header-content">
         <span class="title">{{ title }}</span>
         <p class="description" v-html="description"></p>
-      </a-row>
-      <a-row class="btn-group" :gutter="16">
-        <a-col :xl="6" :lg="6" :md="6" :sm="12" :xs="12">
-          <a-tooltip placement="top" title="View Project Data" :arrowPointAtCenter="true">
-            <a class="span-btn" aria-current="false" href="/data-source/exploration" style="background-color: rgb(28, 121, 96);">
-              <span class="span-icon"><a-icon type="project" /></span>&nbsp;
-              <span style="vertical-align: middle;">Projects</span>
-            </a>
-          </a-tooltip>
-        </a-col>
-        <a-col :xl="6" :lg="6" :md="6" :sm="12" :xs="12">
-          <a-tooltip placement="top" title="Discover Cases, Genes and Mutations" :arrowPointAtCenter="true">
-            <a class="span-btn" aria-current="false" href="/exploration" style="background-color: rgb(117, 54, 133);">
-              <span class="span-icon"><a-icon type="dot-chart" /></span>&nbsp;
-              <span style="vertical-align: middle;">Exploration</span>
-            </a>
-          </a-tooltip>
-        </a-col>
-        <a-col :xl="6" :lg="6" :md="6" :sm="12" :xs="12">
-          <a-tooltip placement="top" title="Launch Various Analysis using Custom Sets" :arrowPointAtCenter="true">
-            <a class="span-btn" aria-current="false" href="/analysis" style="background-color: rgb(102, 104, 195);">
-              <span class="span-icon"><a-icon type="deployment-unit" /></span>&nbsp;
-              <span style="vertical-align: middle;">Analysis</span>
-            </a>
-          </a-tooltip>
-        </a-col>
-        <a-col :xl="6" :lg="6" :md="6" :sm="12" :xs="12">
-          <a-tooltip placement="top" title="Browse and Download Data" :arrowPointAtCenter="true">
-            <a class="span-btn" aria-current="false" href="/repository" style="background-color: rgb(3, 111, 173);">
-              <span class="span-icon"><a-icon type="hdd" /></span>&nbsp;
-              <span style="vertical-align: middle;">Repository</span>
-            </a>
-          </a-tooltip>
-        </a-col>
       </a-row>
       <a-input-search
         placeholder="Search for a Project, Primary Site, Case"
@@ -46,14 +12,48 @@
         size="large"
         class="search-bar"
       />
-      <a-row class="title">
-        <span>Data Portal Summary</span>&nbsp;&nbsp;&nbsp;
-        <span class="date">Data Release 18.0 - July 08, 2019</span>
+      <a-row class="btn-group" :gutter="16">
+        <a-col>
+          <a-tooltip placement="top" title="View Project Data" :arrowPointAtCenter="true">
+            <a class="span-btn" aria-current="false" href="/data-source/exploration" style="background-color: #FFC65D;">
+              <span class="span-icon"><a-icon type="experiment" /></span>&nbsp;
+              <span style="vertical-align: middle;">Materials</span>
+            </a>
+          </a-tooltip>
+        </a-col>
+        <a-col>
+          <a-tooltip placement="top" title="Discover Cases, Genes and Mutations" :arrowPointAtCenter="true">
+            <a class="span-btn" aria-current="false" href="/exploration" style="background-color: #F16745;">
+              <span class="span-icon"><a-icon type="deployment-unit" /></span>&nbsp;
+              <span style="vertical-align: middle;">Data</span>
+            </a>
+          </a-tooltip>
+        </a-col>
+        <a-col>
+          <a-tooltip placement="top" title="Launch Various Analysis using Custom Sets" :arrowPointAtCenter="true">
+            <a class="span-btn" aria-current="false" href="/analysis" style="background-color: #4CC3D9;">
+              <span class="span-icon"><a-icon type="dot-chart" /></span>&nbsp;
+              <span style="vertical-align: middle;">Visualization</span>
+            </a>
+          </a-tooltip>
+        </a-col>
+        <a-col>
+          <a-tooltip placement="top" title="Browse and Download Data" :arrowPointAtCenter="true">
+            <a class="span-btn" aria-current="false" href="/repository" style="background-color: #7BC8A4;">
+              <span class="span-icon"><a-icon type="hdd" /></span>&nbsp;
+              <span style="vertical-align: middle;">QC Tools</span>
+            </a>
+          </a-tooltip>
+        </a-col>
       </a-row>
-      <fact class="fact-container"></fact>
+      <a-row class="title">
+        <span>Version: </span>
+        <span class="date">Data Release 1.0 - July 15, 2020</span>
+      </a-row>
     </a-col>
-    <a-col class="right" :xl="10" :lg="10" :md="24" :sm="24">
-      <img style="width: 560px; margin: 50px 0px;" src="http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/choppy/bodymap.png">
+    <a-col class="right" :xl="16" :lg="16" :md="16" :sm="24">
+      <fact class="fact-container"></fact>
+      <img style="width: 100%;" src="https://nordata-cdn.oss-cn-shanghai.aliyuncs.com/choppy/quality-platform-framework-v3.png">
     </a-col>
   </a-row>
 </template>
@@ -65,8 +65,8 @@ export default {
   name: 'Search',
   data () {
     return {
-      title: 'Genomic Data Commons Data Portal',
-      description: 'The GDC Data Portal is a robust data-driven platform that allows cancer researchers and bioinformaticians to search and download cancer data for analysis.<br><br><b><i>Get Started by Exploring:</i></b>'
+      title: 'The QUALITY Platform',
+      description: 'The QUARLITY Platform is an open and standard multi-omics data infrastructure for unlocking technical errors, improving high-throughput multi-omics technologies reproducibility, accelerating research and clinical decision-making with reference data, and enhancing the quality consciousness.<br><br><b><i>Get Started by Exploring:</i></b>'
     }
   },
   props: {},
@@ -81,14 +81,6 @@ export default {
 }
 </script>
 
-<style lang="less">
-.search-bar {
-  .ant-input-search-button {
-    height: 50px;
-  }
-}
-</style>
-
 <style lang="less" scoped>
 .search-page {
   height: 100%;
@@ -98,7 +90,14 @@ export default {
 
   .right {
     display: flex;
+    flex-direction: column;
     justify-content: center;
+
+    .fact-container {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      width: 100%;
+    }
   }
 
   .left {
@@ -106,29 +105,39 @@ export default {
 
     .header-content {
       .description {
-        font-size: 14px;
-        margin: 20px 0px;
+        font-size: 1rem;
+        margin: 20px 0px 0px;
+        text-align: justify;
+      }
+
+      .title {
+        font-size: 2rem;
       }
     }
 
     .title {
-      margin-bottom: 1rem;
-      font-size: 1.5rem;
+      font-size: 1.1rem;
+      font-weight: 500;
       text-align: center;
 
       .date {
         font-size: 1rem;
+        font-weight: 400;
       }
     }
 
-    .fact-container {
+    .search-bar {
       width: 100%;
+      margin: 10px auto;
     }
 
     .btn-group {
+      display: flex;
+      flex-direction: column;
+
       .span-btn {
         display: inline-block;
-        white-space: nowrap;
+        white-space: wrap;
         text-align: left;
         font-size: 1rem;
         height: 3rem;
@@ -158,13 +167,6 @@ export default {
       .span-btn:hover {
         opacity: 0.8;
       }
-    }
-
-    .search-bar {
-      width: 100%;
-      height: 50px;
-      margin-bottom: 2rem;
-      margin-top: 2rem;
     }
   }
 }

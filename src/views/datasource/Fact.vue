@@ -61,6 +61,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
 
   .fact-link:hover,
   .fact-link:active,
@@ -80,13 +81,29 @@ export default {
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    // background-color: #d7d7d7;
+    padding: 5px 15px;
+    border-radius: 6px;
+    width: 90%;
+    cursor: pointer;
 
     .fact-icon {
-      fill: blue;
+      -webkit-box-align: center;
+      -webkit-box-pack: center;
+      // background-color: rgba(255, 255, 255, 0.35);
+      width: 2rem;
+      height: 2.1rem;
+      vertical-align: middle;
+      font-size: 1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0.5rem;
       margin-right: 5px;
     }
 
     .fact-num {
+      // color: #fff;
       font-size: 2.1rem;
     }
   }

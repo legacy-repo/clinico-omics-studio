@@ -4,30 +4,64 @@ export function timeFix () {
   return hour < 9 ? 'Good Morning' : hour <= 11 ? 'Good Morning' : hour <= 13 ? 'Good Afternoon' : hour < 20 ? 'Good Afternoon' : 'Good Evening'
 }
 
-export function apiService () {
-  const apiService = localStorage.getItem('serviceHost') + localStorage.getItem('endpointPrefix')
-  console.log(`API_URL: ${apiService}`)
+// SeqFlow
+export function initSeqFlowApiPrefix () {
+  const seqFlowApiPrefix = localStorage.getItem('seqFlowApiPrefix')
+  console.log(`SEQ_FLOW_API_PREFIX: ${seqFlowApiPrefix}`)
+  return seqFlowApiPrefix || '/api'
+}
+
+export function saveSeqFlowApiPrefix (seqFlowApiPrefix) {
+  localStorage.setItem('seqFlowApiPrefix', seqFlowApiPrefix)
+}
+
+export function initSeqFlowHost () {
+  const seqFlowHost = localStorage.getItem('seqFlowHost')
+  console.log(`SEQ_FLOW_HOST: ${seqFlowHost}`)
+  return seqFlowHost || 'http://localhost:3000'
+}
+
+export function saveSeqFlowHost (seqFlowHost) {
+  localStorage.setItem('seqFlowHost', seqFlowHost)
+}
+
+// BASE_API
+export function initApiService () {
+  const apiService = initSeqFlowHost() + initSeqFlowApiPrefix()
+  console.log(`BASE_API_URL: ${apiService}`)
   return apiService
 }
 
-export function endpointPrefix () {
-  const endpointPrefix = localStorage.getItem('endpointPrefix')
-  console.log(`ENDPOINT_PREFIX: ${endpointPrefix}`)
-  return endpointPrefix
+// TService
+export function initTServiceApiPrefix () {
+  const tServiceApiPrefix = localStorage.getItem('tServiceApiPrefix')
+  console.log(`TSERVICE_API_PREFIX: ${tServiceApiPrefix}`)
+  return tServiceApiPrefix || '/api'
 }
 
-export function saveEndpointPrefix (endpointPrefix) {
-  localStorage.setItem('endpointPrefix', endpointPrefix)
+export function saveTServiceApiPrefix (tServiceApiPrefix) {
+  localStorage.setItem('tServiceApiPrefix', tServiceApiPrefix)
 }
 
-export function serviceHost () {
-  const serviceHost = localStorage.getItem('serviceHost')
-  console.log(`API_URL: ${serviceHost}`)
-  return serviceHost
+export function initTServiceHost () {
+  const tServiceHost = localStorage.getItem('tServiceHost')
+  console.log(`TSERVICE_HOST: ${tServiceHost}`)
+  return tServiceHost || 'http://localhost:3000'
 }
 
-export function saveServiceHost (serviceHost) {
-  localStorage.setItem('serviceHost', serviceHost)
+export function saveTServiceHost (tServiceHost) {
+  localStorage.setItem('tServiceHost', tServiceHost)
+}
+
+// File Manager
+export function initFileManagerHost () {
+  const fileManagerHost = localStorage.getItem('fileManagerHost')
+  console.log(`FILE_MANAGER_HOST: ${fileManagerHost}`)
+  return fileManagerHost || 'http://localhost:3000'
+}
+
+export function saveFileManagerHOst (fileManagerHost) {
+  localStorage.setItem('fileManagerHost', fileManagerHost)
 }
 
 export function welcome () {

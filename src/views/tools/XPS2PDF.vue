@@ -36,13 +36,13 @@
             <a-table :columns="columns" :data-source="data" size="small">
               <span slot="pdf" slot-scope="pdf, record">
                 <a
-                  :href="'http://localhost:3000/' + pdf"
+                  :href="tServiceHost + '/' + pdf"
                   :disabled="record.status !== 'success'"
                 >Download</a>
               </span>
               <span slot="zip" slot-scope="zip, record">
                 <a
-                  :href="'http://localhost:3000/' + zip"
+                  :href="tServiceHost + '/' + zip"
                   :disabled="record.status !== 'success'"
                 >Download</a>
               </span>
@@ -68,6 +68,7 @@ import { PageView } from '@/layouts'
 import VueMarkdown from 'vue-markdown'
 import Prism from 'prismjs'
 import moment from 'moment'
+import { initTServiceHost, initTServiceApiPrefix } from '@/utils/util'
 
 const columns = [
   {
@@ -115,7 +116,9 @@ export default {
       columns,
       fileList: [],
       uploading: false,
-      activeKey: ['1']
+      activeKey: ['1'],
+      tServiceHost: initTServiceHost(),
+      tServiceApiPrefix: initTServiceApiPrefix()
     }
   },
   methods: {
@@ -151,7 +154,7 @@ export default {
       var xps2pdfHistory = history !== null ? history : []
 
       this.$http({
-        url: 'http://localhost:3000/api/xps2pdf',
+        url: this.tServiceHost + this.tServiceApiPrefix + '/xps2pdf',
         method: 'post',
         data: {
           filepath: file.filepath
@@ -196,7 +199,7 @@ export default {
 
       // You can use any AJAX library you like
       this.$http({
-        url: 'http://localhost:3000/api/upload',
+        url: this.tServiceHost + this.tServiceApiPrefix + '/upload',
         method: 'post',
         processData: false,
         data: formData

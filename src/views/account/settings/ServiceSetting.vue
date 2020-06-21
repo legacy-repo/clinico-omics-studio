@@ -4,12 +4,44 @@
       <a-col :md="24" :lg="16">
         <a-spin :spinning="confirmLoading">
           <a-form layout="vertical" :form="form" @submit="handleSubmit">
-            <a-form-item label="Service Host / Domain">
-              <a-input :placeholder="placeholder" v-decorator="['service', {initialValue: localServiceHost, rules:[{required: true, message: 'Please enter a service host or domain, e.g. http://10.157.72.53'}]}]" />
-            </a-form-item>
-            <a-form-item label="Endpoint Prefix">
-              <a-input placeholder="e.g. /api" v-decorator="['prefix', {initialValue: localEndpointPrefix, rules:[{required: true, message: 'Please enter a endpoint prefix, e.g. /api'}]}]" />
-            </a-form-item>
+            <!-- SeqFlow -->
+            <a-row :gutter="24">
+              <a-col :span="12">
+                <a-form-item label="Service Host / Domain for SeqFlow(Pipeline)">
+                  <a-input
+                    :placeholder="placeholder"
+                    v-decorator="['seqFlowHost', {initialValue: seqFlowHost, rules:[{required: true, message: 'Please enter a service host or domain, e.g. http://10.157.72.53'}]}]"
+                  />
+                </a-form-item>
+              </a-col>
+              <a-col :span="12">
+                <a-form-item label="Endpoint Prefix for SeqFlow(Pipeline)">
+                  <a-input
+                    placeholder="e.g. /api"
+                    v-decorator="['seqFlowApiPrefix', {initialValue: seqFlowApiPrefix, rules:[{required: true, message: 'Please enter a endpoint prefix, e.g. /api'}]}]"
+                  />
+                </a-form-item>
+              </a-col>
+            </a-row>
+            <!-- TService -->
+            <a-row :gutter="24">
+              <a-col :span="12">
+                <a-form-item label="Service Host / Domain for TService(tools)">
+                  <a-input
+                    :placeholder="placeholder"
+                    v-decorator="['tServiceHost', {initialValue: tServiceHost, rules:[{required: true, message: 'Please enter a service host or domain, e.g. http://10.157.72.53'}]}]"
+                  />
+                </a-form-item>
+              </a-col>
+              <a-col :span="12">
+                <a-form-item label="Endpoint Prefix for TService(tools)">
+                  <a-input
+                    placeholder="e.g. /api"
+                    v-decorator="['tServiceApiPrefix', {initialValue: tServiceApiPrefix, rules:[{required: true, message: 'Please enter a endpoint prefix, e.g. /api'}]}]"
+                  />
+                </a-form-item>
+              </a-col>
+            </a-row>
             <a-form-item>
               <a-button style="margin-left: 8px" html-type="submit">Save</a-button>
             </a-form-item>
@@ -21,7 +53,16 @@
 </template>
 
 <script>
-import { serviceHost, saveServiceHost, endpointPrefix, saveEndpointPrefix } from '@/utils/util'
+import {
+  initSeqFlowHost,
+  saveSeqFlowHost,
+  initSeqFlowApiPrefix,
+  saveSeqFlowApiPrefix,
+  initTServiceHost,
+  saveTServiceHost,
+  initTServiceApiPrefix,
+  saveTServiceApiPrefix
+} from '@/utils/util'
 
 export default {
   components: {},
@@ -30,20 +71,29 @@ export default {
       form: this.$form.createForm(this),
       placeholder: 'Which service do you want to connect to?',
       confirmLoading: false,
-      localServiceHost: serviceHost() || 'http://localhost:3000',
-      localEndpointPrefix: endpointPrefix() || '/api'
+      seqFlowHost: initSeqFlowHost(),
+      seqFlowApiPrefix: initSeqFlowApiPrefix(),
+      tServiceHost: initTServiceHost(),
+      tServiceApiPrefix: initTServiceApiPrefix()
     }
   },
   methods: {
     handleSubmit () {
-      const { form: { validateFields } } = this
+      const {
+        form: { validateFields }
+      } = this
       this.confirmLoading = true
       validateFields((errors, values) => {
         if (!errors) {
           console.log('Save service into webstorage.', values)
 
-          saveEndpointPrefix(values.prefix)
-          saveServiceHost(values.service)
+          // SeqFlow
+          saveSeqFlowHost(values.seqFlowHost)
+          saveSeqFlowApiPrefix(values.seqFlowApiPrefix)
+
+          // TService
+          saveTServiceHost(values.tServiceHost)
+          saveTServiceApiPrefix(values.tServiceApiPrefix)
 
           setTimeout(() => {
             this.visible = false

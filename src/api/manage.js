@@ -1,4 +1,7 @@
 import { axios } from '@/utils/request'
+import { initFileManagerHost } from '@/utils/util'
+
+const fileManagerHost = initFileManagerHost()
 
 const api = {
   user: '/user',
@@ -17,10 +20,10 @@ const api = {
     apps: '/apps'
   },
   filemanager: {
-    url: 'http://10.157.72.53:8090/',
-    getImageUrl: 'http://10.157.72.53:8090/GetImage',
-    uploadUrl: 'http://10.157.72.53:8090/Upload',
-    downloadUrl: 'http://10.157.72.53:8090/Download'
+    url: fileManagerHost,
+    getImageUrl: fileManagerHost + '/GetImage',
+    uploadUrl: fileManagerHost + '/Upload',
+    downloadUrl: fileManagerHost + '/Download'
   }
 }
 

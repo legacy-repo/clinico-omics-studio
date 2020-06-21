@@ -73,7 +73,7 @@ export default {
   data() {
     return {
       total: 10,
-      slogan: 'PGx Webapps in iSEQ Analyzer',
+      slogan: 'PGx Webapps in QUALITY',
       placeholder: 'Search apps...',
       news: '<a href="http://datains.3steps.cn">Webapps for Precision Medicine</a>',
       webapps: [],

@@ -1,7 +1,7 @@
 <template>
   <div class="logo">
     <router-link :to="{ name: 'welcome' }">
-      <img src="@/assets/iseq-logo.png" alt="logo" />
+      <img src="@/assets/logo.png" width="50px" height="50px" alt="logo" />
       <h1 v-if="showTitle">{{ title }}</h1>
     </router-link>
   </div>
@@ -13,7 +13,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: 'iSEQ Analyzer',
+      default: 'QUALITY',
       required: false
     },
     showTitle: {

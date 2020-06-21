@@ -42,6 +42,17 @@
                 </a-form-item>
               </a-col>
             </a-row>
+            <!-- FileManager -->
+            <a-row :gutter="24">
+              <a-col :span="12">
+                <a-form-item label="Service Host / Domain for FileManager">
+                  <a-input
+                    :placeholder="placeholder"
+                    v-decorator="['fileManagerHost', {initialValue: fileManagerHost, rules:[{required: true, message: 'Please enter a service host or domain, e.g. http://10.157.72.53'}]}]"
+                  />
+                </a-form-item>
+              </a-col>
+            </a-row>
             <a-form-item>
               <a-button style="margin-left: 8px" html-type="submit">Save</a-button>
             </a-form-item>
@@ -61,7 +72,9 @@ import {
   initTServiceHost,
   saveTServiceHost,
   initTServiceApiPrefix,
-  saveTServiceApiPrefix
+  saveTServiceApiPrefix,
+  initFileManagerHost,
+  saveFileManagerHost
 } from '@/utils/util'
 
 export default {
@@ -74,7 +87,8 @@ export default {
       seqFlowHost: initSeqFlowHost(),
       seqFlowApiPrefix: initSeqFlowApiPrefix(),
       tServiceHost: initTServiceHost(),
-      tServiceApiPrefix: initTServiceApiPrefix()
+      tServiceApiPrefix: initTServiceApiPrefix(),
+      fileManagerHost: initFileManagerHost()
     }
   },
   methods: {
@@ -94,6 +108,9 @@ export default {
           // TService
           saveTServiceHost(values.tServiceHost)
           saveTServiceApiPrefix(values.tServiceApiPrefix)
+
+          // FileManager
+          saveFileManagerHost(values.fileManagerHost)
 
           setTimeout(() => {
             this.visible = false

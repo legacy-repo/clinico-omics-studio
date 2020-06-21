@@ -60,7 +60,7 @@ export function initFileManagerHost () {
   return fileManagerHost || 'http://localhost:3000'
 }
 
-export function saveFileManagerHOst (fileManagerHost) {
+export function saveFileManagerHost (fileManagerHost) {
   localStorage.setItem('fileManagerHost', fileManagerHost)
 }
 

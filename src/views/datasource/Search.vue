@@ -1,6 +1,6 @@
 <template>
   <a-row class="search-page">
-    <a-col class="left" :xl="8" :lg="8" :md="8" :sm="12">
+    <a-col class="left" :xl="8" :lg="8" :md="24" :sm="24">
       <a-row class="header-content">
         <span class="title">{{ title }}</span>
         <p class="description" v-html="description"></p>
@@ -14,35 +14,35 @@
       />
       <a-row class="btn-group" :gutter="16">
         <a-col>
-          <a-tooltip placement="top" title="View Project Data" :arrowPointAtCenter="true">
-            <a class="span-btn" aria-current="false" href="/data-source/exploration" style="background-color: #FFC65D;">
+          <a-tooltip placement="top" title="View Materials Status" :arrowPointAtCenter="true">
+            <router-link class="span-btn" aria-current="false" :to="{ name: 'materials'}" style="background-color: #FFC65D;">
               <span class="span-icon"><a-icon type="experiment" /></span>&nbsp;
               <span style="vertical-align: middle;">Materials</span>
-            </a>
-          </a-tooltip>
-        </a-col>
-        <a-col>
-          <a-tooltip placement="top" title="Discover Cases, Genes and Mutations" :arrowPointAtCenter="true">
-            <a class="span-btn" aria-current="false" href="/exploration" style="background-color: #F16745;">
-              <span class="span-icon"><a-icon type="deployment-unit" /></span>&nbsp;
-              <span style="vertical-align: middle;">Data</span>
-            </a>
-          </a-tooltip>
-        </a-col>
-        <a-col>
-          <a-tooltip placement="top" title="Launch Various Analysis using Custom Sets" :arrowPointAtCenter="true">
-            <a class="span-btn" aria-current="false" href="/analysis" style="background-color: #4CC3D9;">
-              <span class="span-icon"><a-icon type="dot-chart" /></span>&nbsp;
-              <span style="vertical-align: middle;">Visualization</span>
-            </a>
+            </router-link>
           </a-tooltip>
         </a-col>
         <a-col>
           <a-tooltip placement="top" title="Browse and Download Data" :arrowPointAtCenter="true">
-            <a class="span-btn" aria-current="false" href="/repository" style="background-color: #7BC8A4;">
+            <router-link class="span-btn" aria-current="false" :to="{ name: 'data' }" style="background-color: #F16745;">
+              <span class="span-icon"><a-icon type="deployment-unit" /></span>&nbsp;
+              <span style="vertical-align: middle;">Data</span>
+            </router-link>
+          </a-tooltip>
+        </a-col>
+        <a-col>
+          <a-tooltip placement="top" title="Discovery Project Data" :arrowPointAtCenter="true">
+            <router-link class="span-btn" aria-current="false" :to="{ name: 'visualization' }" style="background-color: #4CC3D9;">
+              <span class="span-icon"><a-icon type="dot-chart" /></span>&nbsp;
+              <span style="vertical-align: middle;">Visualization</span>
+            </router-link>
+          </a-tooltip>
+        </a-col>
+        <a-col>
+          <a-tooltip placement="top" title="Launch Various Analysis using Custom Sets" :arrowPointAtCenter="true">
+            <router-link class="span-btn" aria-current="false" :to="{ name: 'appstore' }" style="background-color: #7BC8A4;">
               <span class="span-icon"><a-icon type="hdd" /></span>&nbsp;
               <span style="vertical-align: middle;">QC Tools</span>
-            </a>
+            </router-link>
           </a-tooltip>
         </a-col>
       </a-row>
@@ -51,7 +51,7 @@
         <span class="date">Data Release 1.0 - July 15, 2020</span>
       </a-row>
     </a-col>
-    <a-col class="right" :xl="16" :lg="16" :md="16" :sm="24">
+    <a-col class="right">
       <fact class="fact-container"></fact>
       <img style="width: 100%;" src="https://nordata-cdn.oss-cn-shanghai.aliyuncs.com/choppy/quality-platform-framework-v3.png">
     </a-col>
@@ -92,6 +92,8 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    margin-right: 20px;
+    min-width: 500px;
 
     .fact-container {
       margin-top: 2rem;

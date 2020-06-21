@@ -19,173 +19,95 @@ export const asyncRouterMap = [
         component: () => import('@/views/datasource/Search'),
         meta: { title: 'Dashboard', keepAlive: true, icon: 'dashboard', permission: ['dashboard'] }
       },
+
+      // Materials
       {
-        path: '/workplace',
-        name: 'workplace',
+        path: '/materials',
+        name: 'materials',
         hidden: false,
-        component: () => import('@/views/dashboard/Workplace'),
-        meta: { title: 'Workplace', keepAlive: true, icon: 'dashboard', permission: ['dashboard'] }
+        component: () => import('@/views/filemanager/FileManager'),
+        meta: { title: 'Materials', icon: 'experiment', keepAlive: true }
       },
 
+      // Data (Level 0 - 4)
       {
         path: '/data',
         name: 'data',
         hidden: false,
         component: () => import('@/views/filemanager/FileManager'),
-        meta: { title: 'Data', icon: 'codepen-circle', keepAlive: true }
+        meta: { title: 'Data', icon: 'deployment-unit', keepAlive: true }
       },
 
-      // Pipeline
+      // Visualization
       {
-        path: '/choppy-pipe',
-        name: 'choppy-pipe',
+        path: '/visualization',
+        name: 'visualization',
+        hidden: false,
+        component: () => import('@/views/filemanager/FileManager'),
+        meta: { title: 'Visualization', icon: 'dot-chart', keepAlive: true }
+      },
+
+      // SeqFlow
+      {
+        path: '/seq-flow',
+        name: 'seq-flow',
         component: RouteView,
-        redirect: '/choppy-pipe/submit',
-        meta: { title: 'Project', icon: 'project', permission: ['table'] },
+        redirect: '/seq-flow/submit',
+        meta: { title: 'SeqFlow', icon: 'project', permission: ['table'] },
         children: [
           {
-            path: '/choppy-pipe/submit/:pageNo([1-9]\\d*)?',
+            path: '/seq-flow/workplace',
+            name: 'workplace',
+            component: () => import('@/views/dashboard/Workplace'),
+            meta: { title: 'Workplace', keepAlive: true, icon: 'dashboard', permission: ['dashboard'] }
+          },
+
+          {
+            path: '/seq-flow/submit/:pageNo([1-9]\\d*)?',
             name: 'create-project',
             component: () => import('@/views/workflow/stepForm/StepForm'),
-            meta: { title: 'Create Project', keepAlive: true, permission: ['table'] }
+            meta: { title: 'Create Project', icon: 'file-add', keepAlive: true, permission: ['table'] }
           },
           {
-            path: '/choppy-pipe/job-management/:projectId',
+            path: '/seq-flow/job-management/:projectId',
             name: 'job-management',
             hidden: true,
             hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
             component: () => import('@/views/workflow/WorkflowManagement'),
-            meta: { title: 'Job Management', drawerMode: false, keepAlive: true, permission: ['table'] }
+            meta: { title: 'Job Manager', icon: 'file-sync', drawerMode: false, keepAlive: true, permission: ['table'] }
           },
           {
-            path: '/choppy-pipe/project-management',
+            path: '/seq-flow/project-management',
             name: 'project-management',
             hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
             component: () => import('@/views/workflow/ProjectManagement'),
-            meta: { title: 'Project Management', keepAlive: true, permission: ['table'] }
-          }
-        ]
-      },
-
-      // App Store
-      {
-        path: '/app-store',
-        name: 'appstore',
-        hidden: false,
-        component: () => import('@/views/appstore/FilterPanel'),
-        meta: { title: 'App Store', keepAlive: true, icon: 'file-done', permission: ['table'] }
-      },
-
-      {
-        path: '/tool',
-        name: 'tool',
-        hidden: true,
-        component: RouteView,
-        meta: { title: 'Tool', keepAlive: true, icon: 'folder', permission: ['table'] },
-        children: [
-          {
-            path: '/tool/xps2pdf',
-            name: 'xps2pdf',
-            hidden: true,
-            component: () => import('@/views/tools/XPS2PDF'),
-            meta: { title: 'XPS2PDF', keepAlive: true }
-          }
-        ]
-      },
-
-      // Report
-      {
-        path: '/report-management',
-        name: 'report-management',
-        hidden: false,
-        component: () => import('@/views/report/ReportManagement'),
-        meta: { title: 'Report', keepAlive: true, icon: 'file-done', permission: ['table'] }
-      },
-
-      {
-        path: '/datains-report',
-        name: 'datains-report',
-        component: RouteView,
-        hidden: true,
-        redirect: '/datains-report/report-management',
-        meta: { title: 'Report', icon: 'solution', permission: ['table'] },
-        children: [
-          {
-            path: '/datains-report/:reportId',
-            name: 'report-details',
-            hidden: true,
-            component: () => import('@/views/report/ReportDetails'),
-            props: route => ({ readonly: route.query.readonly }),
-            meta: { title: 'Report Details', drawerMode: true, keepAlive: true, permission: ['table'] }
-          }
-        ]
-      },
-
-      // Data Source
-      {
-        path: '/data-source',
-        name: 'data-source',
-        hidden: true,
-        redirect: '/data-source/discovery',
-        component: PageView,
-        meta: { title: 'Data Source', icon: 'project', permission: ['form'] },
-        children: [
-          {
-            path: '/data-source/search',
-            name: 'search-datasource',
-            hidden: true,
-            component: () => import('@/views/datasource/Search'),
-            meta: { title: 'Search', hiddenHeaderContent: true, keepAlive: true, permission: ['form'] }
+            meta: { title: 'Project Manager', icon: 'solution', keepAlive: true, permission: ['table'] }
           },
+
           {
-            path: '/data-source/exploration',
-            name: 'exploration',
-            hidden: true,
-            component: () => import('@/views/datasource/FilterPanel'),
-            meta: { title: 'Exploration', hiddenHeaderContent: true, keepAlive: true, permission: ['form'] }
+            path: '/seq-flow/report-management',
+            name: 'report-management',
+            hidden: false,
+            component: () => import('@/views/report/ReportManagement'),
+            meta: { title: 'Report Manager', keepAlive: true, icon: 'file-done', permission: ['table'] }
+          },
+
+          {
+            path: '/seq-flow/file-manager',
+            name: 'file-manager',
+            hidden: false,
+            component: () => import('@/views/filemanager/FileManager'),
+            meta: { title: 'File Manager', icon: 'codepen-circle', keepAlive: true }
+          },
+
+          {
+            path: '/seq-flow/app-store',
+            name: 'appstore',
+            hidden: false,
+            component: () => import('@/views/appstore/FilterPanel'),
+            meta: { title: 'App Store', keepAlive: true, icon: 'appstore', permission: ['table'] }
           }
         ]
-      },
-
-      // Data Portal
-      {
-        path: '/data-portal',
-        name: 'data-portal',
-        hidden: true,
-        redirect: '/data-portal/import',
-        component: RouteView,
-        meta: { title: 'Data Portal', keepAlive: true, icon: 'file-search', permission: ['dashboard'] },
-        children: [
-          {
-            path: 'http://data.3steps.cn',
-            name: 'portal',
-            meta: { title: 'Choppy Data Portal', target: '_blank' }
-          }
-        ]
-      },
-
-      {
-        path: '/notifications',
-        name: 'notifications',
-        hidden: true,
-        component: () => import('@/views/notification/NotificationTable'),
-        meta: { title: 'Notifications', keepAlive: true, icon: 'notification', permission: ['table'] }
-      },
-
-      {
-        path: '/git-management',
-        name: 'git-management',
-        hidden: true,
-        component: () => import('@/views/git/GitList'),
-        meta: { title: 'Git', keepAlive: true, icon: 'folder', permission: ['table'] }
-      },
-
-      {
-        path: '/statistics',
-        name: 'statistics',
-        hidden: true,
-        component: () => import('@/views/dashboard/Analysis'),
-        meta: { title: 'Statistics', keepAlive: true, icon: 'dot-chart', permission: ['dashboard'] }
       },
 
       // Account
@@ -252,6 +174,7 @@ export const asyncRouterMap = [
         ]
       },
 
+      // Documentation
       {
         path: '/documentation',
         name: 'documentation',
@@ -270,6 +193,114 @@ export const asyncRouterMap = [
             meta: { title: 'Advanced Docs', target: '_blank' }
           }
         ]
+      },
+
+      // Subcomponent - App Store
+      {
+        path: '/tool',
+        name: 'tool',
+        hidden: true,
+        component: RouteView,
+        meta: { title: 'Tool', keepAlive: true, icon: 'folder', permission: ['table'] },
+        children: [
+          {
+            path: '/tool/xps2pdf',
+            name: 'xps2pdf',
+            hidden: true,
+            component: () => import('@/views/tools/XPS2PDF'),
+            meta: { title: 'XPS2PDF', keepAlive: true }
+          }
+        ]
+      },
+
+      // Subcomponent - Report
+      {
+        path: '/datains-report',
+        name: 'datains-report',
+        component: RouteView,
+        hidden: true,
+        redirect: '/datains-report/report-management',
+        meta: { title: 'Report', icon: 'solution', permission: ['table'] },
+        children: [
+          {
+            path: '/datains-report/:reportId',
+            name: 'report-details',
+            hidden: true,
+            component: () => import('@/views/report/ReportDetails'),
+            props: route => ({ readonly: route.query.readonly }),
+            meta: { title: 'Report Details', drawerMode: true, keepAlive: true, permission: ['table'] }
+          }
+        ]
+      },
+
+      // Subcomponent - Data Source
+      {
+        path: '/data-source',
+        name: 'data-source',
+        hidden: true,
+        redirect: '/data-source/discovery',
+        component: PageView,
+        meta: { title: 'Data Source', icon: 'project', permission: ['form'] },
+        children: [
+          {
+            path: '/data-source/search',
+            name: 'search-datasource',
+            hidden: true,
+            component: () => import('@/views/datasource/Search'),
+            meta: { title: 'Search', hiddenHeaderContent: true, keepAlive: true, permission: ['form'] }
+          },
+          {
+            path: '/data-source/exploration',
+            name: 'exploration',
+            hidden: true,
+            component: () => import('@/views/datasource/FilterPanel'),
+            meta: { title: 'Exploration', hiddenHeaderContent: true, keepAlive: true, permission: ['form'] }
+          }
+        ]
+      },
+
+      // Subcomponent - Data Portal
+      {
+        path: '/data-portal',
+        name: 'data-portal',
+        hidden: true,
+        redirect: '/data-portal/import',
+        component: RouteView,
+        meta: { title: 'Data Portal', keepAlive: true, icon: 'file-search', permission: ['dashboard'] },
+        children: [
+          {
+            path: 'http://data.3steps.cn',
+            name: 'portal',
+            meta: { title: 'Choppy Data Portal', target: '_blank' }
+          }
+        ]
+      },
+
+      // Subcomponent - Notification
+      {
+        path: '/notifications',
+        name: 'notifications',
+        hidden: true,
+        component: () => import('@/views/notification/NotificationTable'),
+        meta: { title: 'Notifications', keepAlive: true, icon: 'notification', permission: ['table'] }
+      },
+
+      // Subcomponent - Git
+      {
+        path: '/git-management',
+        name: 'git-management',
+        hidden: true,
+        component: () => import('@/views/git/GitList'),
+        meta: { title: 'Git', keepAlive: true, icon: 'history', permission: ['table'] }
+      },
+
+      // Subcomponent - Statistics
+      {
+        path: '/statistics',
+        name: 'statistics',
+        hidden: true,
+        component: () => import('@/views/dashboard/Analysis'),
+        meta: { title: 'Statistics', keepAlive: true, icon: 'dot-chart', permission: ['dashboard'] }
       },
 
       // Exception

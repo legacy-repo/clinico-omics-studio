@@ -25,7 +25,7 @@
           <p class="ant-upload-drag-icon">
             <a-icon type="inbox" />
           </p>
-          <p class="ant-upload-text">Click or drag file to this area to upload</p>
+          <p class="ant-upload-text">Click this area to upload</p>
           <p class="ant-upload-hint">
             Support for a single or bulk upload. Strictly prohibit from uploading company data or other
             band files
@@ -111,6 +111,8 @@ export default {
   },
   data () {
     return {
+      appName: 'xps2pdf',
+      helpLink: 'https://nordata-cdn.oss-cn-shanghai.aliyuncs.com/clinico-omics/xps2pdf.md',
       helpMsg: 'No Help Documentation.',
       data: [],
       columns,
@@ -131,6 +133,20 @@ export default {
     update () {
       this.$nextTick(() => {
         Prism.highlightAll()
+      })
+    },
+    loadHelpMsg () {
+      const helpLink = this.helpLink
+      this.$http({
+        url: helpLink,
+        method: 'get',
+        params: {}
+      }).then(content => {
+        this.helpMsg = content
+        console.log('loadHelpMsg: ', content)
+      }).catch(error => {
+        this.helpMsg = 'No help document.'
+        console.log('loadHelpMsg Error: ', error)
       })
     },
     handleRemove (file) {
@@ -228,6 +244,7 @@ export default {
   },
   created () {
     this.loadHistory()
+    this.loadHelpMsg()
   }
 }
 </script>

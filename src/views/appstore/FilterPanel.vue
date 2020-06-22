@@ -157,7 +157,7 @@ export default {
     border-radius: 4px;
     border: 1px solid #d9d9d9;
     background-color: #fff;
-    min-height: 500px;
+    min-height: 650px;
 
     .graph-tab {
       h4 {

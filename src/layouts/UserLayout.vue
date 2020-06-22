@@ -4,12 +4,12 @@
       <div class="top">
         <div class="header">
           <router-link :to="{ name: 'welcome' }">
-            <img src="@/assets/iseq-logo.png" class="logo" alt="logo">
-            <span class="title">Datains</span>
+            <img src="@/assets/logo.png" class="logo" alt="logo">
+            <span class="title">QUALITY</span>
           </router-link>
         </div>
         <div class="desc">
-          Datains for Clinico OMICS & BioMedGPS
+          The QUALITY Platform for Clinico OMICS & BioMedGPS
         </div>
       </div>
 

@@ -3,7 +3,7 @@
     <nav class="navbar">
       <a-col :xs="12" :sm="10" :md="8" :lg="6">
         <router-link :to="{ name: 'welcome' }" class="logo">
-          <img src="@/assets/iseq-logo.png" />
+          <img src="@/assets/logo.png" />
           <span>QUALITY</span>
         </router-link>
       </a-col>

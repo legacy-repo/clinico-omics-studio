@@ -27,7 +27,7 @@
     </a-row>
     <a-row class="navbar-text">
       <a-row>
-        <img src="@/assets/iseq-logo.png" />
+        <img src="@/assets/logo.png" />
       </a-row>
       <a-row>
         <a-row>

@@ -21,6 +21,7 @@
       style="margin-top: 10px"
       :bordered="false"
       title="Job List">
+      <!-- <div slot="title"><a-tag color="#87d068">Jobs {{ data.length }}</a-tag></div> -->
       <div slot="extra">
         <a-radio-group @change="onClickRadioBtn" defaultValue="total" :value="radioGroupValue">
           <a-radio-button value="total">Total</a-radio-button>
@@ -57,7 +58,7 @@
                 </template>
                 <config-logo class="config-logo" />
               </a-popover>
-              <a slot="title" @click="onShowLog(item.id, item.title)">{{ item.title }}</a>
+              <a slot="title" @click="onShowLog(item.workflowId, item.title)">{{ item.title }}</a>
             </a-list-item-meta>
           </a-col>
           <a-col class="list-content" :lg="12" :md="12" :sm="24" :xs="24">
@@ -74,7 +75,7 @@
             </div>
           </a-col>
           <div slot="actions">
-            <a @click="onShowLog(item.id, item.title)">Logs</a>
+            <a @click="onShowLog(item.workflowId, item.title)">Logs</a>
             &nbsp;
             <a-dropdown>
               <a-menu slot="overlay">
@@ -89,14 +90,15 @@
       </a-list>
     </a-card>
     <a-row class="box" v-if="logContainerActive">
-      <log-container :entityId="workflowId" :title="workflowName" entityType="workflow" @close="hideLogContainer()"></log-container>
+      <log-container :workflowId="workflowId" :title="workflowName" @close="hideLogContainer()"></log-container>
     </a-row>
   </div>
 </template>
 
 <script>
 import HeadInfo from '@/components/tools/HeadInfo'
-import LogContainer from '@/components/LogContainer/LogContainer'
+// import LogContainer from '@/components/LogContainer/LogContainer'
+import LogContainer from '@/views/workflow/LogContainer'
 import { configLogo } from '@/core/icons'
 import VueJsonPretty from 'vue-json-pretty'
 import { mapActions } from 'vuex'
@@ -121,10 +123,10 @@ export default {
         total: 0,
         current: 1,
         onChange: (page, pageSize) => {
-          this.searchWorkflow(page, pageSize, this.searchStr)
+          this.searchWorkflow(page, pageSize, this.projectId)
         },
         onShowSizeChange: (current, pageSize) => {
-          this.searchWorkflow(1, pageSize, this.searchStr)
+          this.searchWorkflow(1, pageSize, this.projectId)
         }
       },
       radioGroupValue: 'total',
@@ -180,6 +182,14 @@ export default {
   },
   created () {
     this.searchWorkflow(this.pagination.current, this.pagination.pageSize, this.projectId)
+  },
+  mounted () {
+    this.timer = setInterval(() => {
+      this.searchWorkflow(this.pagination.current, this.pagination.pageSize, this.projectId)
+    }, 60000)
+  },
+  beforeDestroy () {
+    clearInterval(this.timer)
   }
 }
 </script>

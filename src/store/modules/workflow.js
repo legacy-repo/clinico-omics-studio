@@ -36,12 +36,13 @@ const formatRecords = function (records) {
     newRecords.push({
       id: record.id,
       title: record.sample_id,
+      workflowId: record.workflow_id, // Cromwell Workflow ID.
       startedAt: formatDateTime(record.started_time),
       finishedAt: formatDateTime(record.finished_time),
       jobParams: record.job_params,
       labels: record.labels,
       status: formatStatus(record.status),
-      percentage: record.percentage
+      percentage: Math.floor(record.percentage * 100) / 100
     })
   }
 

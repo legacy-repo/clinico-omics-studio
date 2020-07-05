@@ -30,6 +30,11 @@ import { FileManagerPlugin, DetailsView, NavigationPane, Toolbar } from '@syncfu
 Vue.use(FileManagerPlugin)
 export default {
   props: {
+    standlone: {
+      default: true,
+      required: false,
+      type: Boolean
+    },
     height: {
       default: '560px',
       required: false,
@@ -153,15 +158,20 @@ export default {
     },
     onSelect(args) {
       const selectedFiles = this.$refs['ejs-filemanager'].getSelectedFiles()
-      const selectedItems = this.filterByType(selectedFiles, this.filterType)
 
-      if (selectedItems.length !== selectedFiles.length) {
-        this.$message.warn('Only support ' + this.filterType + ' files')
-        this.selectedItems = this.getFileName(selectedItems)
+      if (this.standlone) {
+        this.selectedItems = this.getFileName(selectedFiles)
+      } else {
+        const selectedItems = this.filterByType(selectedFiles, this.filterType)
+
+        if (selectedItems.length !== selectedFiles.length) {
+          this.$message.warn('Only support ' + this.filterType + ' files')
+          this.selectedItems = this.getFileName(selectedItems)
+        }
+
+        this.$emit('file-select', selectedItems)
+        console.log('File selection: ', args, selectedItems, this.selectedItems)
       }
-
-      this.$emit('file-select', selectedItems)
-      console.log('File selection: ', args, selectedItems, this.selectedItems)
     }
   }
 }

@@ -1,4 +1,4 @@
-import { getProjectList, getProject, submitProject } from '@/api/manage'
+import { getProjectList, getProject, submitProject, getProjectStat } from '@/api/manage'
 import moment from 'moment'
 
 const formatStatus = function (status) {
@@ -50,7 +50,14 @@ const formatRecords = function (records) {
       samples: record.samples,
       labels: record.labels,
       status: formatStatus(record.status),
-      percentage: record.percentage
+      statusDetails: {
+        success: 10,
+        running: 0,
+        submitted: 0,
+        total: record.samples.length,
+        error: 40
+      },
+      percentage: Math.floor(record.percentage * 100) / 100
     })
   }
 
@@ -140,6 +147,17 @@ const project = {
           commit('SET_PROJECT', data)
 
           resolve(data)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+    GetProjectStat ({ commit }, projectId) {
+      return new Promise((resolve, reject) => {
+        getProjectStat(projectId).then(response => {
+          // console.log('GetProject: ', projectId, response)
+
+          resolve(response)
         }).catch(error => {
           reject(error)
         })

@@ -99,18 +99,18 @@ export function getProject (projectId) {
   })
 }
 
-export function getLogList (parameter) {
+export function getProjectStat (projectId) {
   return axios({
-    url: api.log,
-    method: 'get',
-    params: parameter
+    url: api.project + '/' + projectId + '/stats',
+    method: 'get'
   })
 }
 
-export function getLog (url) {
+export function getLogList (workflowId, parameter) {
   return axios({
-    url: url,
-    method: 'get'
+    url: api.workflow + '/' + workflowId + '/logs',
+    method: 'get',
+    params: parameter
   })
 }
 

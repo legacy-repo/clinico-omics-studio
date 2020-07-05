@@ -55,9 +55,10 @@ export default {
           }
         },
         afterChange: (change, changeType) => {
-          if (changeType === 'edit') {
+          if (changeType === 'edit' || changeType === 'Autofill.fill') {
             this.saveData()
           }
+          console.log('ArgumentTable: ', change, changeType)
         }
       }
     }

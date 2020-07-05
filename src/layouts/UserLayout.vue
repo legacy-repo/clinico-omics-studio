@@ -5,11 +5,11 @@
         <div class="header">
           <router-link :to="{ name: 'welcome' }">
             <img src="@/assets/logo.png" class="logo" alt="logo">
-            <span class="title">QUALITY</span>
+            <span class="title">ClinicoOmics</span>
           </router-link>
         </div>
         <div class="desc">
-          The QUALITY Platform for Clinico OMICS & BioMedGPS
+          The ClinicoOmics Platform for Clinico OMICS & BioMedGPS
         </div>
       </div>
 

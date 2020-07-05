@@ -25,6 +25,7 @@ import v from 'voca'
 import FormBuilder from '@/views/formbuilder/FormBuilder'
 import VueMarkdown from 'vue-markdown'
 import Prism from 'prismjs'
+import { initSeqFlowApiPrefix, initSeqFlowHost } from '@/utils/util'
 
 export default {
   name: 'Step2',
@@ -33,7 +34,9 @@ export default {
       fields: [],
       helpMsg: '',
       visible: false,
-      helpTitle: 'Help Documentation'
+      helpTitle: 'Help Documentation',
+      seqFlowHost: initSeqFlowHost(),
+      seqFlowApiPrefix: initSeqFlowApiPrefix()
     }
   },
   methods: {
@@ -56,7 +59,7 @@ export default {
       return appSchema[schemaName].fields
     },
     loadHelpMsg (appName) {
-      const helpLink = '/apps' + appName + '/README.md' // http://10.157.72.53:3000/apps/junshang/iseq_qc-latest/README.md
+      const helpLink = this.seqFlowHost + '/apps/' + appName + '/README.md' // http://10.157.72.53:3000/apps/junshang/iseq_qc-latest/README.md
       this.$http({
         url: helpLink,
         method: 'get',

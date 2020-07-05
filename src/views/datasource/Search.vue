@@ -65,7 +65,7 @@ export default {
   name: 'Search',
   data () {
     return {
-      title: 'The QUALITY Platform',
+      title: 'The ClinicoOmics Platform',
       description: 'The QUARLITY Platform is an open and standard multi-omics data infrastructure for unlocking technical errors, improving high-throughput multi-omics technologies reproducibility, accelerating research and clinical decision-making with reference data, and enhancing the quality consciousness.<br><br><b><i>Get Started by Exploring:</i></b>'
     }
   },

@@ -38,26 +38,18 @@ export const asyncRouterMap = [
         meta: { title: 'Data', icon: 'deployment-unit', keepAlive: true }
       },
 
-      // Visualization
-      {
-        path: '/visualization',
-        name: 'visualization',
-        hidden: false,
-        component: () => import('@/views/filemanager/FileManager'),
-        meta: { title: 'Visualization', icon: 'dot-chart', keepAlive: true }
-      },
-
       // SeqFlow
       {
         path: '/seq-flow',
         name: 'seq-flow',
         component: RouteView,
         redirect: '/seq-flow/submit',
-        meta: { title: 'SeqFlow', icon: 'project', permission: ['table'] },
+        meta: { title: 'Analyze', icon: 'project', permission: ['table'] },
         children: [
           {
             path: '/seq-flow/workplace',
             name: 'workplace',
+            hidden: true,
             component: () => import('@/views/dashboard/Workplace'),
             meta: { title: 'Workplace', keepAlive: true, icon: 'dashboard', permission: ['dashboard'] }
           },
@@ -65,6 +57,7 @@ export const asyncRouterMap = [
           {
             path: '/seq-flow/submit/:pageNo([1-9]\\d*)?',
             name: 'create-project',
+            hidden: false,
             component: () => import('@/views/workflow/stepForm/StepForm'),
             meta: { title: 'Create Project', icon: 'file-add', keepAlive: true, permission: ['table'] }
           },
@@ -95,7 +88,7 @@ export const asyncRouterMap = [
           {
             path: '/seq-flow/file-manager',
             name: 'file-manager',
-            hidden: false,
+            hidden: true,
             component: () => import('@/views/filemanager/FileManager'),
             meta: { title: 'File Manager', icon: 'codepen-circle', keepAlive: true }
           },
@@ -103,11 +96,20 @@ export const asyncRouterMap = [
           {
             path: '/seq-flow/app-store',
             name: 'appstore',
-            hidden: false,
+            hidden: true,
             component: () => import('@/views/appstore/FilterPanel'),
             meta: { title: 'App Store', keepAlive: true, icon: 'appstore', permission: ['table'] }
           }
         ]
+      },
+
+      // Visualization
+      {
+        path: '/visualization',
+        name: 'visualization',
+        hidden: false,
+        component: () => import('@/views/filemanager/FileManager'),
+        meta: { title: 'Visualization', icon: 'dot-chart', keepAlive: true }
       },
 
       // Account

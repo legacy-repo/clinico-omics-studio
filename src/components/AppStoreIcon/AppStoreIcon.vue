@@ -63,7 +63,7 @@ export default {
         }, {
           name: 'Documentation',
           icon: 'file-markdown',
-          link: 'https://yuque.com/clinico-omics'
+          link: 'https://yuque.com/clinico-omics/help'
         }
       ]
     }

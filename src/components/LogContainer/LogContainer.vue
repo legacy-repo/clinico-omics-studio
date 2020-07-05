@@ -8,7 +8,7 @@
     <a-list class="loading" v-else-if="logs.length == 0"></a-list>
     <a-tabs size="small" animated @change="changeTab" v-else>
       <a-tab-pane :tab="log.title" :key="log.id" v-for="log in logs">
-        <a-textarea readOnly v-model="content"/>
+        <a-textarea read-only v-model="content"/>
       </a-tab-pane>
     </a-tabs>
   </div>

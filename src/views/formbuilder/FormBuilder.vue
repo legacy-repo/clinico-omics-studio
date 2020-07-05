@@ -14,11 +14,11 @@
           </a-tooltip>
         </span>
         <template v-if="field.tmplType === 'file'">
-          <a-button type="dashed" @click="selectFiles(field.model, field.filterType)">
+          <a-button type="dashed" @click="selectFiles(field.model, field.multiple, field.filterType)">
             <a-icon type="plus" /> Select Files
           </a-button>
           <a-select
-            mode="multiple"
+            :mode="field.multiple ? 'multiple' : 'default'"
             :placeholder="field.placeholder"
             :maxTagCount="3"
             :disabled="field.readOnly || !options[field.model]"
@@ -111,7 +111,7 @@
     </a-form>
     <a-row class="box" v-if="fileManagerActive">
       <a-row class="file-manager-container">
-        <file-manager @file-select="onFileSelect" height="400" allowMultiSelection :filterType="filterType"></file-manager>
+        <file-manager @file-select="onFileSelect" :standlone="false" height="400" :allowMultiSelection="multiple" :filterType="filterType"></file-manager>
         <a-button-group>
           <a-button @click="cancelSelectFiles()">Cancel</a-button>
           <a-button @click="confirmSelectFiles()">Confirm</a-button>
@@ -143,6 +143,7 @@ export default {
       fileManagerActive: false,
       whichFileManager: '',
       filterType: '',
+      multiple: true,
       files: [],
       options: {}
     }
@@ -160,10 +161,11 @@ export default {
       console.log('onFileSelect: ', files)
       this.files = files
     },
-    selectFiles (model, filterType) {
+    selectFiles (model, multiple, filterType) {
       this.fileManagerActive = true
       this.whichFileManager = model
       this.filterType = filterType
+      this.multiple = multiple
       this.options[model] = []
       console.log('Registry File Manager: ', model)
     },
@@ -171,7 +173,11 @@ export default {
       this.fileManagerActive = false
     },
     getPath (file) {
-      return file.filterPath + file.name
+      if (file.fullPath) {
+        return file.fullPath
+      } else {
+        return file.filterPath + file.name
+      }
     },
     getFilePathLst (files) {
       const filePaths = flatMap(files, this.getPath)

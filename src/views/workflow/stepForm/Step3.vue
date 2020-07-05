@@ -43,6 +43,13 @@ export default {
     ...mapActions({
       submitProject: 'SubmitProject'
     }),
+    getResetIdx (current, length) {
+      if (current < length) {
+        return current
+      } else {
+        return this.getResetIdx(current - length, length)
+      }
+    },
     loadAppData () {
       const appData = JSON.parse(localStorage.getItem('datains_APP_DATA'))
       const sampleIds = JSON.parse(localStorage.getItem('datains_SAMPLE_IDS'))
@@ -57,7 +64,13 @@ export default {
         const record = []
         for (const key of tableHeader) {
           if (typeof appData[key] === 'object') {
-            record.push(appData[key][idx])
+            const length = appData[key].length
+            if (idx >= length) {
+              const resetIdx = this.getResetIdx(idx, length)
+              record.push(appData[key][resetIdx])
+            } else {
+              record.push(appData[key][idx])
+            }
           } else {
             if (key === 'sample_id') {
               record.push(sampleIds[idx])
@@ -65,6 +78,7 @@ export default {
               record.push(appData[key])
             }
           }
+          // console.log('appData[key]: ', key, appData[key], record)
         }
 
         tableBody.push(record)

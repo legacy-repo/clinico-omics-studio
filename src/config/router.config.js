@@ -96,7 +96,7 @@ export const asyncRouterMap = [
           {
             path: '/seq-flow/app-store',
             name: 'appstore',
-            hidden: true,
+            hidden: false,
             component: () => import('@/views/appstore/FilterPanel'),
             meta: { title: 'App Store', keepAlive: true, icon: 'appstore', permission: ['table'] }
           }

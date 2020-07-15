@@ -180,9 +180,9 @@ export default {
           this.uploading = false
           this.$message.success('Convert successfully.')
 
-          file['pdf'] = resp['pdf-url']
-          file['zip'] = resp['zip-url']
-          file['log'] = resp['log-url']
+          file['pdf'] = resp['pdf_url']
+          file['zip'] = resp['zip_url']
+          file['log'] = resp['log_url']
           file['status'] = 'success'
           xps2pdfHistory.splice(0, 0, file)
           localStorage.setItem('xps2pdf-history', JSON.stringify(xps2pdfHistory))
@@ -227,7 +227,7 @@ export default {
             filename: fileList[0].name + ' et al.',
             createdTime: moment().toString(),
             key: moment().toString(),
-            filepath: resp['upload-path']
+            filepath: resp['upload_path']
           }
           this.handleConvert(file)
         })

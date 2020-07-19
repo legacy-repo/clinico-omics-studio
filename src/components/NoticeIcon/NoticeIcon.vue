@@ -24,7 +24,7 @@
           <a-tab-pane tab="Change Logs" key="2">
             <a-list>
               <a-list-item>
-                <a-list-item-meta title="Release v0.1.1" description="The ClinicoOmics Platform is released on April 10.">
+                <a-list-item-meta title="Release v0.1.1" description="The QUALITY Platform is released on April 10.">
                   <a-avatar style="background-color: white" slot="avatar" src="https://gw.alipayobjects.com/zos/rmsportal/ThXAXghbEsBCCSDihZxY.png"/>
                 </a-list-item-meta>
               </a-list-item>

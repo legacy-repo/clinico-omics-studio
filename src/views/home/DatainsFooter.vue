@@ -48,7 +48,7 @@ export default {
       website: {
         name: 'TGMC',
         href: 'https://fudan.edu.cn',
-        product_name: 'TGMC - ClinicoOMICs',
+        product_name: 'TGMC - QUALITY',
         company_name: 'Fudan University',
         copyright: '©2017-2019 ',
         icp_num: '苏ICP备17025715号-4',
@@ -112,7 +112,7 @@ export default {
               target: '_blank'
             },
             {
-              title: 'ClinicoOMICs',
+              title: 'QUALITY',
               src: 'http://datains.3steps.cn',
               type: 'link',
               target: '_blank'

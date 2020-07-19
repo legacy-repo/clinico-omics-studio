@@ -1,4 +1,5 @@
 const junshangRnaseqEngineeringLatest = {
+  formMode: 'batch', // batch or single
   fields: [
     {
       tmplType: 'sample_id',
@@ -48,7 +49,7 @@ const junshangRnaseqEngineeringLatest = {
       filterType: 'conf',
       placeholder: 'Select file for fastq screen.',
       config: {
-        rules: [{ type: 'array', required: true, message: 'Please select file for fastq screen.' }]
+        rules: [{ required: true, message: 'Please select file for fastq screen.' }]
       }
     },
     {
@@ -60,7 +61,7 @@ const junshangRnaseqEngineeringLatest = {
       multiple: false,
       placeholder: 'Select directory for Fastq Screen References.',
       config: {
-        rules: [{ type: 'array', required: true, message: 'Select directory for Fastq Screen References.' }]
+        rules: [{ required: true, message: 'Select directory for Fastq Screen References.' }]
       }
     },
     {
@@ -72,7 +73,7 @@ const junshangRnaseqEngineeringLatest = {
       multiple: false,
       placeholder: 'Select directory for idx.',
       config: {
-        rules: [{ type: 'array', required: true, message: 'Please select directory for idx.' }]
+        rules: [{ required: true, message: 'Please select directory for idx.' }]
       }
     },
     {
@@ -80,11 +81,11 @@ const junshangRnaseqEngineeringLatest = {
       label: 'GTF File',
       model: 'gtf',
       readOnly: false,
-      multiple: true,
+      multiple: false,
       filterType: 'gtf',
       placeholder: 'Select file for gtf.',
       config: {
-        rules: [{ type: 'array', required: true, message: 'Please select file for gtf.' }]
+        rules: [{ required: true, message: 'Please select file for gtf.' }]
       }
     },
     {
@@ -116,12 +117,9 @@ const junshangRnaseqEngineeringLatest = {
           buttonLabel: 'Next Step',
           validate: true
         }
-      ],
-      wrapperCol: { span: 19, offset: 10 }
+      ]
     }
   ]
 }
 
-export {
-  junshangRnaseqEngineeringLatest
-}
+export { junshangRnaseqEngineeringLatest }

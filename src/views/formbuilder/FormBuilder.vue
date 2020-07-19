@@ -1,12 +1,9 @@
 <template>
   <div class="a-form-builder">
-    <a-form ref="form" :form="clonedModel" @submit="onAction">
+    <a-form ref="form" :form="clonedModel" @submit="onAction" layout="vertical">
       <a-form-item
         v-for="(field, index) in fields"
-        :key="field.label + index"
-        :label-col="field.labelCol || { span: 5, offset: 2 }"
-        :wrapper-col="field.wrapperCol || { span: 12 }"
-      >
+        :key="field.label + index">
         <span slot="label" v-if="field.label">
           {{ field.label }}&nbsp;
           <a-tooltip :title="field.question" v-if="field.question">
@@ -14,7 +11,7 @@
           </a-tooltip>
         </span>
         <template v-if="field.tmplType === 'file'">
-          <a-button type="dashed" @click="selectFiles(field.model, field.multiple, field.filterType)">
+          <a-button @click="selectFiles(field.model, field.multiple, field.filterType)">
             <a-icon type="plus" /> Select Files
           </a-button>
           <a-select
@@ -98,14 +95,16 @@
         </template>
         <!-- Actions -->
         <template v-if="field.tmplType === 'actions'">
-          <a-button
-            v-for="(i, idx) in field.buttons"
-            :key="idx"
-            :type="i.buttonType"
-            @click="onAction(i)"
-            class="form-btn">
-            {{ i.buttonLabel }}
-          </a-button>
+          <div class="actions">
+            <a-button
+              v-for="(i, idx) in field.buttons"
+              :key="idx"
+              :type="i.buttonType"
+              @click="onAction(i)"
+              class="form-btn">
+              {{ i.buttonLabel }}
+            </a-button>
+          </div>
         </template>
       </a-form-item>
     </a-form>
@@ -188,7 +187,12 @@ export default {
       this.fileManagerActive = false
       const fields = {}
       const filePathList = this.getFilePathLst(this.files)
-      fields[this.whichFileManager] = filePathList
+      if (this.multiple) {
+        fields[this.whichFileManager] = filePathList
+      } else {
+        fields[this.whichFileManager] = filePathList[0]
+      }
+
       this.options[this.whichFileManager] = flatMap(filePathList, (o) => ({ value: o, text: o }))
       this.clonedModel.setFieldsValue(fields)
       console.log('Selected Files: ', fields, this.whichFileManager, this.files)
@@ -228,39 +232,68 @@ export default {
 }
 </script>
 
+<style lang="less">
+.a-form-builder {
+  .ant-form {
+    .ant-form-item-label {
+      font-weight: 500;
+    }
+
+    .ant-form-item {
+      margin: 0px auto;
+      margin-bottom: 10px;
+    }
+  }
+}
+</style>
+
 <style lang="less" scoped>
-.form-btn {
-  margin-left: 10px;
-}
+.a-form-builder {
+  width: 60%;
+  margin: 0px auto;
+  min-width: 450px;
 
-.ant-input-number {
-  width: 100%;
-}
+  .ant-btn {
+    margin-bottom: 5px;
+  }
 
-.autobox:hover {
-  cursor: pointer;
-}
+  .actions {
+    float: right;
 
-.box {
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background: rgba(0,0,0,0.3);
-  z-index: 10;
+    .form-btn {
+      margin-left: 10px;
+    }
+  }
 
-  .file-manager-container {
-    position: absolute;
-    top: 150px;
-    left: 10%;
-    width: 80%;
-    margin: 0px auto;
-    z-index: 11;
+  .ant-input-number {
+    width: 100%;
+  }
 
-    .ant-btn-group {
-      margin-top: 5px;
-      float: right;
+  .autobox:hover {
+    cursor: pointer;
+  }
+
+  .box {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0,0,0,0.3);
+    z-index: 10;
+
+    .file-manager-container {
+      position: absolute;
+      top: 150px;
+      left: 10%;
+      width: 80%;
+      margin: 0px auto;
+      z-index: 11;
+
+      .ant-btn-group {
+        margin-top: 5px;
+        float: right;
+      }
     }
   }
 }

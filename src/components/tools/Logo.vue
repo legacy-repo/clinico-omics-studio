@@ -13,7 +13,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: 'ClinicoOmics',
+      default: 'QUALITY',
       required: false
     },
     showTitle: {

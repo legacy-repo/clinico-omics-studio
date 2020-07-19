@@ -15,8 +15,8 @@ const api = {
   workflow: '/workflows',
   log: '/logs',
   notification: '/notifications',
-  app_store: {
-    installed_apps: '/installed-apps',
+  appStore: {
+    installedApps: '/installed-apps',
     apps: '/apps'
   },
   filemanager: {
@@ -29,6 +29,86 @@ const api = {
 
 export default api
 
+// Minio/OSS/S3: Bucket + Object
+export function getBuckets () {
+  return axios({
+    url: '/buckets',
+    method: 'get',
+    params: {}
+  })
+}
+
+export function addBucket (data) {
+  // data - {"name": "bucket_name"}
+  return axios({
+    url: '/buckets',
+    method: 'post',
+    data: data
+  })
+}
+
+export function getObjects (bucketName, parameter) {
+  // parameter - {"page": 1, "per_page": 10}
+  return axios({
+    url: '/buckets/' + bucketName,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function makeDirectory (bucketName, parameter) {
+  // parameter - {"key": "test"}
+  return axios({
+    url: '/buckets/' + bucketName,
+    method: 'post',
+    params: parameter
+  })
+}
+
+export function deleteBucket (bucketName) {
+  return axios({
+    url: '/buckets/' + bucketName,
+    method: 'delete'
+  })
+}
+
+export function makeDownloadUrl (bucketName, parameter) {
+  // parameter - {"key": "test"}
+  return axios({
+    url: '/buckets/' + bucketName + '/object',
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function makeUploadUrl (bucketName, parameter) {
+  // parameter - {"key": "test"}
+  return axios({
+    url: '/buckets/' + bucketName + '/object',
+    method: 'post',
+    params: parameter
+  })
+}
+
+export function deleteObject (bucketName, parameter) {
+  // parameter - {"key": "test"}
+  return axios({
+    url: '/buckets/' + bucketName + '/object',
+    method: 'delete',
+    params: parameter
+  })
+}
+
+export function existObject (bucketName, parameter) {
+  // parameter - {"key": "test"}
+  return axios({
+    url: '/buckets/' + bucketName + '/object-meta',
+    method: 'get',
+    params: parameter
+  })
+}
+
+// App Store
 export function getWebapps () {
   return axios({
     url: 'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/choppy/webapps.json',
@@ -39,7 +119,7 @@ export function getWebapps () {
 
 export function getAppList () {
   return axios({
-    url: api.app_store.apps,
+    url: api.appStore.apps,
     method: 'get',
     params: {}
   })
@@ -47,7 +127,7 @@ export function getAppList () {
 
 export function getInstalledAppList () {
   return axios({
-    url: api.app_store.installed_apps,
+    url: api.appStore.installedApps,
     method: 'get',
     params: {}
   })

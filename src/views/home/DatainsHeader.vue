@@ -4,7 +4,7 @@
       <a-col :xs="12" :sm="10" :md="8" :lg="6">
         <router-link :to="{ name: 'welcome' }" class="logo">
           <img src="@/assets/logo.png" />
-          <span>ClinicoOmics</span>
+          <span>QUALITY</span>
         </router-link>
       </a-col>
       <a-col :xs="12" :sm="14" :md="16" :lg="18" class="menu">
@@ -38,7 +38,7 @@ export default {
     return {
       menu: [
         {
-          title: 'ClinicoOmics',
+          title: 'QUALITY',
           link: 'dashboard'
         }
       ]

@@ -38,13 +38,22 @@ export const asyncRouterMap = [
         meta: { title: 'Data', icon: 'deployment-unit', keepAlive: true }
       },
 
+      // Visualization
+      {
+        path: '/visualization',
+        name: 'visualization',
+        hidden: false,
+        component: () => import('@/views/filemanager/FileManager'),
+        meta: { title: 'Visualization', icon: 'dot-chart', keepAlive: true }
+      },
+
       // SeqFlow
       {
         path: '/seq-flow',
         name: 'seq-flow',
         component: RouteView,
         redirect: '/seq-flow/submit',
-        meta: { title: 'Analyze', icon: 'project', permission: ['table'] },
+        meta: { title: 'QC Tools', icon: 'project', permission: ['table'] },
         children: [
           {
             path: '/seq-flow/workplace',
@@ -101,15 +110,6 @@ export const asyncRouterMap = [
             meta: { title: 'App Store', keepAlive: true, icon: 'appstore', permission: ['table'] }
           }
         ]
-      },
-
-      // Visualization
-      {
-        path: '/visualization',
-        name: 'visualization',
-        hidden: false,
-        component: () => import('@/views/filemanager/FileManager'),
-        meta: { title: 'Visualization', icon: 'dot-chart', keepAlive: true }
       },
 
       // Account
@@ -294,6 +294,15 @@ export const asyncRouterMap = [
         hidden: true,
         component: () => import('@/views/git/GitList'),
         meta: { title: 'Git', keepAlive: true, icon: 'history', permission: ['table'] }
+      },
+
+      // Subcomponent - FileBrowser
+      {
+        path: '/file-management',
+        name: 'file-management',
+        hidden: true,
+        component: () => import('@/views/filemanager/FileBrowser'),
+        meta: { title: 'File Browser', keepAlive: true, icon: 'history', permission: ['table'] }
       },
 
       // Subcomponent - Statistics

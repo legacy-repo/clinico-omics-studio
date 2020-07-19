@@ -32,6 +32,7 @@ export default {
   data () {
     return {
       fields: [],
+      formMode: 'batch',
       helpMsg: '',
       visible: false,
       helpTitle: 'Help Documentation',
@@ -56,7 +57,7 @@ export default {
     loadAppSchema (appName) {
       const schemaName = this.formatSchema(appName)
       console.log('App Schema Name: ', schemaName)
-      return appSchema[schemaName].fields
+      return appSchema[schemaName]
     },
     loadHelpMsg (appName) {
       const helpLink = this.seqFlowHost + '/apps/' + appName + '/README.md' // http://10.157.72.53:3000/apps/junshang/iseq_qc-latest/README.md
@@ -112,6 +113,7 @@ export default {
       } else if (e.type === 'submit') {
         localStorage.setItem('datains_APP_DATA', JSON.stringify(e.formData))
         localStorage.setItem('datains_SAMPLE_IDS', JSON.stringify(e.sampleIds))
+        localStorage.setItem('datains_formMode', this.formMode)
         this.nextStep()
       }
     }
@@ -121,7 +123,9 @@ export default {
     const appName = localData.projectData.appName
     this.helpTitle = appName
     this.loadHelpMsg(appName)
-    this.fields = this.initSchema(this.loadAppSchema(appName), localData.appData)
+    const schema = this.loadAppSchema(appName)
+    this.fields = this.initSchema(schema.fields, localData.appData)
+    this.formMode = schema.formMode
   },
   components: {
     FormBuilder,

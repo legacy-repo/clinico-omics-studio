@@ -16,4 +16,4 @@ export const setDocumentTitle = function (title) {
   }
 }
 
-export const domTitle = 'The ClinicoOmics Platform'
+export const domTitle = 'The QUALITY Platform'

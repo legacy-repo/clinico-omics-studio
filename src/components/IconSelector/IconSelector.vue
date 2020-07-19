@@ -61,26 +61,26 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  @import (reference) "../index.less";
+@import (reference) "../index.less";
 
-  ul{
-    list-style: none;
-    padding: 0;
-    overflow-y: scroll;
-    height: 250px;
+ul{
+  list-style: none;
+  padding: 0;
+  overflow-y: scroll;
+  height: 250px;
 
-    li{
-      display: inline-block;
-      padding: @padding-sm;
-      margin: 3px 0;
-      border-radius: @border-radius-base;
+  li{
+    display: inline-block;
+    padding: @padding-sm;
+    margin: 3px 0;
+    border-radius: @border-radius-base;
 
-      &:hover, &.active{
-        // box-shadow: 0px 0px 5px 2px @primary-color;
-        cursor: pointer;
-        color: @white;
-        background-color: @primary-color;
-      }
+    &:hover, &.active{
+      // box-shadow: 0px 0px 5px 2px @primary-color;
+      cursor: pointer;
+      color: @white;
+      background-color: @primary-color;
     }
   }
+}
 </style>

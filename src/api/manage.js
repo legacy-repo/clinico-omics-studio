@@ -99,7 +99,7 @@ export function deleteObject (bucketName, parameter) {
   })
 }
 
-export function existObject (bucketName, parameter) {
+export function getObjectMeta (bucketName, parameter) {
   // parameter - {"key": "test"}
   return axios({
     url: '/buckets/' + bucketName + '/object-meta',

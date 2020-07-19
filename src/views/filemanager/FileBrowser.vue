@@ -2,12 +2,17 @@
   <div class="file-list" ref="fileBrowser">
     <a-card :bordered="false">
       <a-col slot="title" :lg="20" :md="20" :sm="24" :xs="24">
-        <a-button @click="switchUploadPanel"><a-icon type="upload"/>Upload</a-button>
+        <a-select :defaultValue="bucketName" style="width: 200px" @change="selectBucket">
+          <a-select-option v-for="bucket in buckets" :key="bucket">
+            {{ bucket }}
+          </a-select-option>
+        </a-select>
+        <a-button style="margin-left: 5px;" @click="switchUploadPanel"><a-icon type="upload"/>Upload</a-button>
         <a-button style="margin-left: 5px;" @click="switchFolderDialog"><a-icon type="folder-add"/>Create Folder</a-button>
         <a-button style="margin-left: 5px;" @click="refresh"><a-icon type="cloud-sync"/>Refresh</a-button>
       </a-col>
       <a-col slot="title" style="display: flex; flex-direction: row; float: right;">
-        <a-input-search placeholder="Enter a file name prefix" style="width: 200px;" @search="onSearch" />
+        <a-input-search placeholder="Enter a file name prefix" allowClear style="width: 200px;" @search="onSearch" />
       </a-col>
       <a-row class="control-header">
         <a-breadcrumb>
@@ -38,7 +43,7 @@
           <a-icon type="folder-open" theme="filled" :style="{fontSize: '20px', color: '#ffcb01'}" v-else />
         </span>
         <span slot="size" slot-scope="text, record">{{ formatBytes(text) }}</span>
-        <span slot="action" slot-scope="text, record">
+        <span slot="action" slot-scope="text, record" v-if="record.storageClass">
           <a style="margin-right: 10px;" @click="switchDetailsPanel(record)">Details</a>
           <a class="ant-dropdown-link" disabled> More <a-icon type="down" /> </a>
         </span>
@@ -52,14 +57,13 @@
       width="600"
       :visible="uploadPanelVisible"
       :maskClosable="false"
-      :wrap-style="{ position: 'absolute' }"
-      @close="switchUploadPanel"
+      @close="closeUploadPanel"
     >
       <a-row>
         <span class="label">Upload To:</span>
         <a-tooltip placement="top">
           <template slot="title">
-            <a @click="doCopy">Copy Link</a>
+            <a @click="doCopy(currentPath)">Copy Link</a>
           </template>
           <a-input :value="currentPath" allow-clear disabled/>
         </a-tooltip>
@@ -67,10 +71,9 @@
       <a-row>
         <span class="label">Upload:</span>
         <a-upload-dragger
-          name="file"
+          :remove="handleRemove"
           :multiple="true"
-          :action="currentPath"
-          @change="handleChange"
+          :customRequest="uploadFile"
         >
           <p class="ant-upload-drag-icon">
             <a-icon type="inbox" />
@@ -99,10 +102,35 @@
       width="600"
       :visible="detailsPanelVisible"
       :maskClosable="true"
-      :wrap-style="{ position: 'absolute' }"
-      @close="switchDetailsPanel"
+      @close="closeDetailsPanel"
     >
-
+      <a-row class="preview">
+        <pre v-if="previewContent" class="content">
+          <code>{{ previewContent }}</code>
+        </pre>
+        <span v-else>Not Support to Preview</span>
+      </a-row>
+      <a-row v-if="recordDetail" class="object-details">
+        <a-row class="detail-item" :gutter="gutter">
+          <a-col :span="labelSpan" class="label">File Name</a-col>
+          <a-col :span="contentSpan">{{ recordDetail.name }}</a-col>
+        </a-row>
+        <a-row class="detail-item" :gutter="gutter">
+          <a-col :span="labelSpan" class="label">ETag</a-col>
+          <a-col :span="contentSpan">{{ recordDetail.etag.replace(/"/g, "") }}</a-col>
+        </a-row>
+        <a-row class="detail-item" :gutter="gutter">
+          <a-col :span="labelSpan" class="label">URL</a-col>
+          <a-col :span="contentSpan">
+            <a-textarea :value="downloadUrl" :rows="8" />
+            <a-row>
+              <a @click="downloadFile(downloadUrl)">Download</a>
+              <span style="margin: 0px 10px;">|</span>
+              <a @click="doCopy(downloadUrl)">Copy URL</a>
+            </a-row>
+          </a-col>
+        </a-row>
+      </a-row>
     </a-drawer>
     <div class="mask-window" v-if="folderDialogVisible"></div>
     <a-row v-if="folderDialogVisible" class="folder-dialog">
@@ -125,6 +153,8 @@
 
 <script>
 import { mapActions } from 'vuex'
+import VueMarkdown from 'vue-markdown'
+import axios from 'axios'
 
 const folderNameRule = [
   { required: true, message: 'Please input your folder name!' },
@@ -188,11 +218,20 @@ const rowSelection = {
   },
   onSelectAll: (selected, selectedRows, changeRows) => {
     console.log(selected, selectedRows, changeRows)
-  }
+  },
+  getCheckboxProps: record => ({
+    props: {
+      disabled: !record.storageClass, // Column configuration not to be checked
+      name: record.name
+    }
+  })
 }
 
 export default {
   name: 'FileList',
+  components: {
+    VueMarkdown
+  },
   data () {
     return {
       columns,
@@ -203,9 +242,17 @@ export default {
       uploadPanelVisible: false,
       detailsPanelVisible: false,
       recordDetail: null,
+      downloadUrl: '',
+      previewContent: '',
+      contentType: '', // for preview
+      gutter: 16,
+      labelSpan: 4,
+      contentSpan: 20,
       pathList: [],
+      fileList: {},
       currentPath: '',
       loading: false,
+      buckets: [],
       bucketName: 'test',
       prefix: undefined,
       pagination: {
@@ -230,28 +277,42 @@ export default {
       getBuckets: 'GetBuckets',
       getObjects: 'GetObjects',
       makeDirectory: 'MakeDirectory',
-      makeUploadUrl: 'MakeUploadUrl'
+      makeUploadUrl: 'MakeUploadUrl',
+      makeDownloadUrl: 'MakeDownloadUrl',
+      getObjectMeta: 'GetObjectMeta',
+      uploadObject: 'UploadObject'
     }),
-    doCopy () {
-      this.$copyText(this.currentPath).then(message => {
+    selectBucket (value) {
+      this.bucketName = value
+      this.prefix = null
+      this.refresh()
+    },
+    doCopy (text) {
+      this.$copyText(text).then(message => {
         console.log('copy', message)
-        this.$message.success('复制完毕')
+        this.$message.success('Copied')
       }).catch(err => {
         console.log('copy.err', err)
-        this.$message.error('复制失败')
+        this.$message.error('Failed')
       })
     },
-    getUploadUrl () {
-      const key = this.pathList.join('/')
-
-      this.makeUploadUrl({
+    downloadFile (link) {
+      const downloadAnchorNode = document.createElement('a')
+      downloadAnchorNode.setAttribute('href', link)
+      downloadAnchorNode.setAttribute('target', '_blank')
+      document.body.appendChild(downloadAnchorNode)
+      downloadAnchorNode.click()
+      downloadAnchorNode.remove()
+    },
+    getDownloadUrl () {
+      this.makeDownloadUrl({
         name: this.bucketName,
-        key: key
+        key: this.recordDetail.name
       }).then(response => {
-        this.currentPath = response.upload_url
+        this.downloadUrl = response.download_url
       }).catch(error => {
         this.$message.error('Unknown Error!')
-        console.log('getUploadUrl: ', error)
+        console.log('getDownloadUrl: ', error)
       })
     },
     switchFolderDialog () {
@@ -278,21 +339,19 @@ export default {
 
     },
     refresh () {
-      let prefix = null
-      if (this.pathList.length > 0) {
-        prefix = this.pathList.join('/') + '/'
-      }
-
-      this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, prefix)
+      this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, this.prefix)
     },
     redirectHome () {
       this.pathList = []
-      this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize)
+      this.prefix = null
+      this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, this.prefix)
     },
     redirect (item, index, pathList) {
       this.pathList = pathList.slice(0, index + 1)
       console.log('redirect: ', this.pathList, index)
-      this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, this.pathList.join('/') + '/')
+
+      this.prefix = this.getPrefix('')
+      this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, this.prefix)
     },
     searchObjects (bucketName, page, pageSize, prefix) {
       this.loading = true
@@ -302,6 +361,7 @@ export default {
         'pageSize': pageSize,
         'prefix': prefix
       }).then(response => {
+        this.currentPath = response.location
         this.data = response.data
         this.pagination.total = response.total
         this.pagination.current = response.page
@@ -315,18 +375,19 @@ export default {
       })
     },
     switchUploadPanel () {
-      const key = this.pathList.join('/')
-
-      if (key !== '') {
-        this.currentPath = key
-      } else {
-        this.currentPath = '/'
-      }
       this.uploadPanelVisible = !this.uploadPanelVisible
+    },
+    closeUploadPanel () {
+      this.refresh()
+      this.switchUploadPanel()
+      this.fileList = {}
     },
     switchDetailsPanel (record) {
       this.detailsPanelVisible = !this.detailsPanelVisible
       this.recordDetail = record
+    },
+    closeDetailsPanel () {
+      this.detailsPanelVisible = false
     },
     trimSlash (str) {
       if (str.match(/.*\/$/)) {
@@ -344,8 +405,8 @@ export default {
       }
 
       console.log('enterDirectory: ', this.pathList, record)
-      // this.pathList.join('/') + '/': Prefix need a slash when you are a directory
-      this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, this.pathList.join('/') + '/')
+      this.prefix = this.getPrefix('')
+      this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, this.prefix)
     },
     formatFileName (name) {
       return name.replace(this.pathList.join('/') + '/', '')
@@ -361,36 +422,117 @@ export default {
 
       return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
     },
-    onSearch (searchStr) {
-
-    },
-    uploadFiles () {
-
-    },
-    handleChange (value) {
-      console.log(`selected ${value}`)
-    },
-    handleBlur () {
-      console.log('blur')
-    },
-    handleFocus () {
-      console.log('focus')
-    },
-    filterOption (input, option) {
-      return (
-        option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
-      )
-    },
-    getColor (status) {
-      if (status === 'modified') {
-        return '#f50'
-      } else if (status === 'unchanged') {
-        return '#87d068'
+    getPrefix (searchStr) {
+      // this.pathList.join('/') + '/': Prefix need a slash when you are a directory
+      // When need to list directory, searchStr must be an empty string
+      const prefix = this.pathList.join('/') + '/' + searchStr
+      if (prefix === '/') {
+        return null
+      } else {
+        return prefix
       }
+    },
+    onSearch (searchStr) {
+      this.prefix = this.getPrefix(searchStr)
+
+      this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, this.prefix)
+    },
+    handleRemove (file) {
+      const request = this.fileList[this.getPrefix(file.name)]
+      request.cancel('Canceling Upload.')
+      this.refresh()
+    },
+    uploadFile ({
+      action,
+      data,
+      file,
+      filename,
+      headers,
+      onError,
+      onProgress,
+      onSuccess,
+      withCredentials
+    }) {
+      console.log('uploadFiles: ', file)
+      this.makeUploadUrl({
+        name: this.bucketName,
+        key: this.getPrefix(file.name)
+      }).then(response => {
+        const request = axios.CancelToken.source()
+        this.fileList[this.getPrefix(file.name)] = request
+        const action = response.upload_url
+        const formData = new FormData()
+        if (data) {
+          Object.keys(data).forEach(key => {
+            formData.append(key, data[key])
+          })
+        }
+        formData.append(filename, file)
+
+        axios({
+          url: action,
+          method: 'put',
+          data: file,
+          processData: false,
+          contentType: false,
+          onUploadProgress: ({ total, loaded }) => {
+            console.log('onUploadProgress: ', total, loaded, Math.round(loaded / total * 100).toFixed(2))
+            onProgress({ percent: Math.round(loaded / total * 100) }, file)
+          },
+          cancelToken: request.token
+        })
+          .then(({ data: response }) => {
+            console.log('Upload Files: ', response, file)
+            onSuccess(response, file)
+          })
+          .catch(error => {
+            console.log('Upload Files (Error): ', error)
+            onError(error)
+          })
+
+        return {
+          abort () {
+            console.log('upload progress is aborted.')
+          }
+        }
+      }).catch(error => {
+        console.log('getUploadUrl: ', error)
+      })
+    }
+  },
+  watch: {
+    recordDetail: function () {
+      // Reset
+      this.previewContent = ''
+
+      this.getDownloadUrl()
+      this.getObjectMeta({
+        name: this.bucketName,
+        key: this.recordDetail.name
+      }).then(response => {
+        this.contentType = response.contentType
+
+        // 1048576 = 1024 * 1024 = 1MB
+        if (this.recordDetail.size < 1048576) {
+          this.$http.get(this.downloadUrl).then(response => {
+            this.previewContent = response
+          })
+        }
+      })
     }
   },
   created () {
     this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, this.prefix)
+    this.getBuckets()
+      .then(response => {
+        this.buckets = response.data
+      })
+      .catch(error => {
+        this.buckets = []
+        this.bucketName = 'Not Found'
+        this.$message.error('Unknown Error!')
+        console.log('getBuckets: ', error)
+      })
   }
 }
 </script>
@@ -517,6 +659,39 @@ export default {
       margin-top: 10px;
       border-radius: 5px;
     }
+  }
+}
+
+.object-details {
+  .detail-item {
+    margin-bottom: 10px;
+
+    .label {
+      text-align: right;
+    }
+  }
+}
+
+.preview {
+  width: 100%;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #eee;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  margin-bottom: 10px;
+
+  .content {
+    width: 100%;
+    height: calc(100% - 40px);
+    text-align: left;
+    display: flex;
+    justify-content: left;
+    align-items: left;
+    margin: 20px;
+    overflow: scroll;
   }
 }
 </style>

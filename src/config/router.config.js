@@ -25,7 +25,7 @@ export const asyncRouterMap = [
         path: '/materials',
         name: 'materials',
         hidden: false,
-        component: () => import('@/views/filemanager/FileManager'),
+        component: () => import('@/views/filemanager/FileBrowser'),
         meta: { title: 'Materials', icon: 'experiment', keepAlive: true }
       },
 
@@ -34,7 +34,7 @@ export const asyncRouterMap = [
         path: '/data',
         name: 'data',
         hidden: false,
-        component: () => import('@/views/filemanager/FileManager'),
+        component: () => import('@/views/filemanager/FileBrowser'),
         meta: { title: 'Data', icon: 'deployment-unit', keepAlive: true }
       },
 
@@ -43,7 +43,7 @@ export const asyncRouterMap = [
         path: '/visualization',
         name: 'visualization',
         hidden: false,
-        component: () => import('@/views/filemanager/FileManager'),
+        component: () => import('@/views/filemanager/FileBrowser'),
         meta: { title: 'Visualization', icon: 'dot-chart', keepAlive: true }
       },
 
@@ -98,7 +98,7 @@ export const asyncRouterMap = [
             path: '/seq-flow/file-manager',
             name: 'file-manager',
             hidden: true,
-            component: () => import('@/views/filemanager/FileManager'),
+            component: () => import('@/views/filemanager/FileBrowser'),
             meta: { title: 'File Manager', icon: 'codepen-circle', keepAlive: true }
           },
 

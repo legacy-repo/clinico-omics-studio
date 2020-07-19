@@ -7,7 +7,7 @@ import {
   makeDirectory,
   deleteBucket,
   deleteObject,
-  existObject
+  getObjectMeta
 } from '@/api/manage'
 import moment from 'moment'
 
@@ -22,13 +22,27 @@ const formatDateTime = function (datetime) {
 const formatBuckets = function (records) {
   const newRecords = []
   for (const record of records) {
-    newRecords.push({
-      createdAt: record.CreationDate,
-      name: record.Name
-    })
+    // newRecords.push({
+    //   createdAt: record.CreationDate,
+    //   name: record.Name
+    // })
+    newRecords.push(record.Name)
   }
 
   return newRecords
+}
+
+const formatMeta = function (record) {
+  const meta = record.meta
+  return {
+    etag: meta.ETag,
+    name: meta.name,
+    key: meta.key,
+    createdTime: formatDateTime(meta.createdTime),
+    contentType: meta['content-type'],
+    size: meta.length,
+    bucket: meta.bucket
+  }
 }
 
 const formatObjects = function (records) {
@@ -85,7 +99,9 @@ const fs = {
               pageSize: response['per_page'],
               page: response['page'],
               total: response['total'],
-              data: formatObjects(response.data)
+              data: formatObjects(response.data),
+              bucket: response['bucket'],
+              location: response['location']
             }
 
             resolve(data)
@@ -119,6 +135,36 @@ const fs = {
             console.log('Make Upload Url: ', parameter, response)
 
             resolve(response)
+          })
+          .catch(error => {
+            reject(error)
+          })
+      })
+    },
+    MakeDownloadUrl ({ commit }, parameter) {
+      return new Promise((resolve, reject) => {
+        makeDownloadUrl(parameter.name, {
+          key: parameter.key
+        })
+          .then(response => {
+            console.log('Make Download Url: ', parameter, response)
+
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error)
+          })
+      })
+    },
+    GetObjectMeta ({ commit }, parameter) {
+      return new Promise((resolve, reject) => {
+        getObjectMeta(parameter.name, {
+          key: parameter.key
+        })
+          .then(response => {
+            console.log('Get Object Meta: ', parameter, response)
+
+            resolve(formatMeta(response))
           })
           .catch(error => {
             reject(error)

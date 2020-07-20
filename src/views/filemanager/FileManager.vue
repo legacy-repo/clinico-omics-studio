@@ -30,7 +30,7 @@ import { FileManagerPlugin, DetailsView, NavigationPane, Toolbar } from '@syncfu
 Vue.use(FileManagerPlugin)
 export default {
   props: {
-    standlone: {
+    standalone: {
       default: true,
       required: false,
       type: Boolean
@@ -159,7 +159,7 @@ export default {
     onSelect(args) {
       const selectedFiles = this.$refs['ejs-filemanager'].getSelectedFiles()
 
-      if (this.standlone) {
+      if (this.standalone) {
         this.selectedItems = this.getFileName(selectedFiles)
       } else {
         const selectedItems = this.filterByType(selectedFiles, this.filterType)

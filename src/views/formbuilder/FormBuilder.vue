@@ -110,7 +110,7 @@
     </a-form>
     <a-row class="box" v-if="fileManagerActive">
       <a-row class="file-manager-container">
-        <file-manager @file-select="onFileSelect" :standlone="false" height="400" :allowMultiSelection="multiple" :filterType="filterType"></file-manager>
+        <file-browser @file-select="onFileSelect" :selected="selected" :standalone="false" :height="400" :allowMultiSelection="multiple" :filterType="filterType"></file-browser>
         <a-button-group>
           <a-button @click="cancelSelectFiles()">Cancel</a-button>
           <a-button @click="confirmSelectFiles()">Confirm</a-button>
@@ -124,12 +124,12 @@
 import v from 'voca'
 import flatMap from 'lodash.flatmap'
 import { v4 as uuidv4 } from 'uuid'
-import FileManager from '@/views/filemanager/FileManager'
+import FileBrowser from '@/views/filemanager/FileBrowser'
 
 export default {
   name: 'FormBuilder',
   components: {
-    FileManager
+    FileBrowser
   },
   props: {
     fields: {
@@ -144,6 +144,7 @@ export default {
       filterType: '',
       multiple: true,
       files: [],
+      selected: [],
       options: {}
     }
   },
@@ -161,22 +162,20 @@ export default {
       this.files = files
     },
     selectFiles (model, multiple, filterType) {
+      // Reset all related values
       this.fileManagerActive = true
       this.whichFileManager = model
       this.filterType = filterType
       this.multiple = multiple
       this.options[model] = []
-      console.log('Registry File Manager: ', model)
+      this.selected = this.clonedModel.getFieldValue(model)
+      console.log('Registry File Manager: ', model, multiple, filterType, this.selected)
     },
     cancelSelectFiles () {
       this.fileManagerActive = false
     },
     getPath (file) {
-      if (file.fullPath) {
-        return file.fullPath
-      } else {
-        return file.filterPath + file.name
-      }
+      return file.path
     },
     getFilePathLst (files) {
       const filePaths = flatMap(files, this.getPath)
@@ -284,7 +283,7 @@ export default {
 
     .file-manager-container {
       position: absolute;
-      top: 150px;
+      top: 100px;
       left: 10%;
       width: 80%;
       margin: 0px auto;

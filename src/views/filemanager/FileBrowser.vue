@@ -1,15 +1,20 @@
 <template>
   <div class="file-list" ref="fileBrowser">
-    <a-card :bordered="false">
-      <a-col slot="title" :lg="20" :md="20" :sm="24" :xs="24">
+    <a-card :bordered="false" :class="{ standalone: standalone }" :style="{height: (height + 100) + 'px'}">
+      <a-col slot="title" :lg="18" :md="18" :sm="24" :xs="24">
         <a-select :defaultValue="bucketName" style="width: 200px" @change="selectBucket">
           <a-select-option v-for="bucket in buckets" :key="bucket">
             {{ bucket }}
           </a-select-option>
         </a-select>
-        <a-button style="margin-left: 5px;" @click="switchUploadPanel"><a-icon type="upload"/>Upload</a-button>
-        <a-button style="margin-left: 5px;" @click="switchFolderDialog"><a-icon type="folder-add"/>Create Folder</a-button>
+        <a-button style="margin-left: 5px;" @click="switchUploadPanel" v-if="standalone"><a-icon type="upload"/>Upload</a-button>
+        <a-button style="margin-left: 5px;" @click="switchFolderDialog" v-if="standalone"><a-icon type="folder-add"/>Create Folder</a-button>
         <a-button style="margin-left: 5px;" @click="refresh"><a-icon type="cloud-sync"/>Refresh</a-button>
+        <span style="margin-left: 5px; font-size: 14px; font-weight: 400;">
+          <template v-if="hasSelected">
+            {{ `Selected ${selectedRowKeys.length} items` }}
+          </template>
+        </span>
       </a-col>
       <a-col slot="title" style="display: flex; flex-direction: row; float: right;">
         <a-input-search placeholder="Enter a file name prefix" allowClear style="width: 200px;" @search="onSearch" />
@@ -31,9 +36,10 @@
         :loading="loading"
         :pagination="pagination"
         :columns="columns"
-        rowKey="name"
+        rowKey="path"
+        :scroll="{y: height - 100}"
         :data-source="data"
-        :row-selection="rowSelection">
+        :row-selection="{ ...rowSelection, selectedRowKeys: selectedRowKeys }">
         <span slot="name" slot-scope="text, record">
           <a @click="switchDetailsPanel(record)" v-if="record.storageClass">{{ formatFileName(text) }}</a>
           <a @click="enterDirecotry(record)" v-else>{{ formatFileName(text) }}</a>
@@ -49,6 +55,7 @@
         </span>
       </a-table>
     </a-card>
+    <!-- Popup Windows -->
     <a-drawer
       class="upload-panel"
       title="Upload"
@@ -155,6 +162,8 @@
 import { mapActions } from 'vuex'
 import VueMarkdown from 'vue-markdown'
 import axios from 'axios'
+import filter from 'lodash.filter'
+import flatMap from 'lodash.flatmap'
 
 const folderNameRule = [
   { required: true, message: 'Please input your folder name!' },
@@ -209,33 +218,86 @@ const columns = [
   }
 ]
 
-const rowSelection = {
-  onChange: (selectedRowKeys, selectedRows) => {
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
-  },
-  onSelect: (record, selected, selectedRows) => {
-    console.log(record, selected, selectedRows)
-  },
-  onSelectAll: (selected, selectedRows, changeRows) => {
-    console.log(selected, selectedRows, changeRows)
-  },
-  getCheckboxProps: record => ({
-    props: {
-      disabled: !record.storageClass, // Column configuration not to be checked
-      name: record.name
-    }
-  })
-}
-
 export default {
   name: 'FileList',
   components: {
     VueMarkdown
   },
+  props: {
+    standalone: {
+      required: false,
+      default: true,
+      type: Boolean
+    },
+    allowMultiSelection: {
+      required: false,
+      default: true,
+      type: Boolean
+    },
+    selected: {
+      required: false,
+      default: () => [],
+      type: Array
+    },
+    height: {
+      required: false,
+      default: 540,
+      type: Number
+    },
+    filterType: {
+      required: false,
+      default: '.*',
+      type: String
+    }
+  },
   data () {
     return {
       columns,
-      rowSelection,
+      selectedRowKeys: [],
+      rowSelection: {
+        onChange: (selectedRowKeys, selectedRows) => {
+          console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
+          this.selectedRowKeys = selectedRowKeys
+        },
+        onSelect: (record, selected, selectedRows) => {
+          const selectedItems = this.filterByType(selectedRows, this.filterType)
+
+          if (selectedItems.length !== selectedRows.length) {
+            this.$message.warn('Only support ' + this.filterType + ' files')
+            this.selectedRowKeys = this.getFilePath(selectedItems)
+          }
+
+          this.$emit('file-select', selectedItems)
+          console.log('File selection: ', selectedRows, selectedItems, this.selectedRowKeys)
+        },
+        onSelectAll: (selected, selectedRows, changeRows) => {
+          console.log(selected, selectedRows, changeRows)
+        },
+        getCheckboxProps: record => ({
+          props: {
+            disabled: this.standalone && !record.storageClass, // Column configuration not to be checked
+            name: record.name
+          }
+        }),
+        type: this.allowMultiSelection ? 'checkbox' : 'radio',
+        hideDefaultSelections: true,
+        selections: [
+          {
+            key: 'none',
+            text: 'Unselect All Rows',
+            onSelect: () => {
+              this.selectedRowKeys = []
+            }
+          },
+          {
+            key: 'all-rows',
+            text: 'Select All Rows',
+            onSelect: () => {
+              this.selectedRowKeys = this.getFilePath(this.data)
+            }
+          }
+        ]
+      },
       folderDialog: this.$form.createForm(this, { name: 'folder-dialog' }),
       folderNameRule,
       folderDialogVisible: false,
@@ -249,13 +311,14 @@ export default {
       labelSpan: 4,
       contentSpan: 20,
       pathList: [],
-      fileList: {},
+      fileList: {}, // for canceling upload request
       currentPath: '',
       loading: false,
       buckets: [],
       bucketName: 'test',
       prefix: undefined,
       pagination: {
+        size: 'small',
         pageSizeOptions: ['30', '50', '100'],
         showSizeChanger: true,
         showQuickJumper: true,
@@ -282,6 +345,14 @@ export default {
       getObjectMeta: 'GetObjectMeta',
       uploadObject: 'UploadObject'
     }),
+    getFilePath (files) {
+      return flatMap(files, (o) => o.path)
+    },
+    filterByType (files, fileType) {
+      console.log(files, fileType)
+      const pattern = new RegExp(fileType)
+      return filter(files, function (o) { return o.name.length > 0 && pattern.test(o.name) })
+    },
     selectBucket (value) {
       this.bucketName = value
       this.prefix = null
@@ -366,9 +437,7 @@ export default {
         this.pagination.total = response.total
         this.pagination.current = response.page
         this.pagination.pageSize = response.pageSize
-        setTimeout(() => {
-          this.loading = false
-        }, 300)
+        this.loading = false
       }).catch(error => {
         console.log('searchObjects: ', error)
         this.loading = false
@@ -521,7 +590,17 @@ export default {
       })
     }
   },
+  computed: {
+    hasSelected () {
+      return this.selectedRowKeys.length > 0
+    }
+  },
   created () {
+    // Restore Selected
+    if (!this.standalone) {
+      this.selectedRowKeys = this.selected
+    }
+
     this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, this.prefix)
     this.getBuckets()
       .then(response => {
@@ -582,9 +661,14 @@ export default {
     padding: 12px 16px;
   }
 
-  .ant-card {
+  .standalone {
     .ant-card-body {
       min-height: 540px;
+    }
+  }
+
+  .ant-card {
+    .ant-card-body {
       padding: 0px 24px 10px;
     }
   }

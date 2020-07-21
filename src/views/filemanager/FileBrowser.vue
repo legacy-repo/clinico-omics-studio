@@ -2,7 +2,7 @@
   <div class="file-list" ref="fileBrowser">
     <a-card :bordered="false" :class="{ standalone: standalone }" :style="{height: (height + 100) + 'px'}">
       <a-col slot="title" :lg="18" :md="18" :sm="24" :xs="24">
-        <a-select :defaultValue="bucketName" style="width: 200px" @change="selectBucket">
+        <a-select :value="bucketName" style="width: 200px" @change="selectBucket">
           <a-select-option v-for="bucket in buckets" :key="bucket">
             {{ bucket }}
           </a-select-option>
@@ -315,7 +315,7 @@ export default {
       currentPath: '',
       loading: false,
       buckets: [],
-      bucketName: 'test',
+      bucketName: '',
       prefix: undefined,
       pagination: {
         size: 'small',
@@ -354,9 +354,9 @@ export default {
       return filter(files, function (o) { return o.name.length > 0 && pattern.test(o.name) })
     },
     selectBucket (value) {
+      // Reset File Browser
       this.bucketName = value
-      this.prefix = null
-      this.refresh()
+      this.redirectHome()
     },
     doCopy (text) {
       this.$copyText(text).then(message => {
@@ -601,10 +601,13 @@ export default {
       this.selectedRowKeys = this.selected
     }
 
-    this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, this.prefix)
     this.getBuckets()
       .then(response => {
         this.buckets = response.data
+        if (this.buckets.length > 0) {
+          this.bucketName = this.buckets[0]
+          this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, this.prefix)
+        }
       })
       .catch(error => {
         this.buckets = []

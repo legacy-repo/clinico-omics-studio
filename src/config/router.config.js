@@ -97,7 +97,7 @@ export const asyncRouterMap = [
           {
             path: '/seq-flow/file-manager',
             name: 'file-manager',
-            hidden: true,
+            hidden: false,
             component: () => import('@/views/filemanager/FileBrowser'),
             meta: { title: 'File Manager', icon: 'codepen-circle', keepAlive: true }
           },

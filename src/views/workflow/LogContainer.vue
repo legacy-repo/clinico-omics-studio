@@ -47,12 +47,7 @@ export default {
   data () {
     return {
       loading: false,
-      logs: {
-        fastqc: {
-          stdout: 'http://10.157.72.53:3000/cromwell/test_rna_seq/4e4a30f2-745e-4ae9-a8bd-6a151ab77c4d/call-fastqc/execution/stdout',
-          stderr: 'http://10.157.72.53:3000/cromwell/test_rna_seq/4e4a30f2-745e-4ae9-a8bd-6a151ab77c4d/call-fastqc/execution/stderr'
-        }
-      },
+      logs: {},
       stdoutContent: 'Choose a log key from the dropdown menu.',
       stderrContent: 'Choose a log key from the dropdown menu.',
       currentLogKey: '',

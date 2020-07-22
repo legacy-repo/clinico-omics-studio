@@ -68,7 +68,7 @@ import { PageView } from '@/layouts'
 import VueMarkdown from 'vue-markdown'
 import Prism from 'prismjs'
 import moment from 'moment'
-import { initTServiceHost, initTServiceApiPrefix } from '@/utils/util'
+import { initTServiceHost } from '@/utils/util'
 
 const columns = [
   {
@@ -119,8 +119,7 @@ export default {
       fileList: [],
       uploading: false,
       activeKey: ['1'],
-      tServiceHost: initTServiceHost(),
-      tServiceApiPrefix: initTServiceApiPrefix()
+      tServiceHost: initTServiceHost()
     }
   },
   methods: {
@@ -170,7 +169,7 @@ export default {
       var xps2pdfHistory = history !== null ? history : []
 
       this.$http({
-        url: this.tServiceHost + this.tServiceApiPrefix + '/xps2pdf',
+        url: this.tServiceHost + '/api/xps2pdf',
         method: 'post',
         data: {
           filepath: file.filepath
@@ -215,7 +214,7 @@ export default {
 
       // You can use any AJAX library you like
       this.$http({
-        url: this.tServiceHost + this.tServiceApiPrefix + '/upload',
+        url: this.tServiceHost + '/api/upload',
         method: 'post',
         processData: false,
         data: formData

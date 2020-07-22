@@ -20,12 +20,11 @@
 </template>
 
 <script>
-import appSchema from '@/appschema'
+import { mapActions } from 'vuex'
 import v from 'voca'
 import FormBuilder from '@/views/formbuilder/FormBuilder'
 import VueMarkdown from 'vue-markdown'
 import Prism from 'prismjs'
-import { initSeqFlowApiPrefix, initSeqFlowHost } from '@/utils/util'
 
 export default {
   name: 'Step2',
@@ -35,12 +34,14 @@ export default {
       formMode: 'batch',
       helpMsg: '',
       visible: false,
-      helpTitle: 'Help Documentation',
-      seqFlowHost: initSeqFlowHost(),
-      seqFlowApiPrefix: initSeqFlowApiPrefix()
+      helpTitle: 'Help Documentation'
     }
   },
   methods: {
+    ...mapActions({
+      getAppSchema: 'GetAppSchema',
+      getHelpMsg: 'GetHelpMsg'
+    }),
     update () {
       this.$nextTick(() => {
         Prism.highlightAll()
@@ -54,20 +55,16 @@ export default {
       const schemaName = v.camelCase(cleanedAppName)
       return schemaName
     },
-    loadAppSchema (appName) {
-      const schemaName = this.formatSchema(appName)
-      console.log('App Schema Name: ', schemaName)
-      return appSchema[schemaName]
+    loadAppSchema (appName, localData) {
+      this.getAppSchema(appName).then(response => {
+        this.fields = this.initSchema(response.fields, localData.appData)
+        this.formMode = response.formMode
+      })
     },
     loadHelpMsg (appName) {
-      const helpLink = this.seqFlowHost + '/apps/' + appName + '/README.md' // http://10.157.72.53:3000/apps/junshang/iseq_qc-latest/README.md
-      this.$http({
-        url: helpLink,
-        method: 'get',
-        params: {}
-      }).then(content => {
-        this.helpMsg = content
-        console.log('loadHelpMsg: ', content)
+      this.getHelpMsg(appName).then(response => {
+        this.helpMsg = response
+        console.log('loadHelpMsg: ', response)
       }).catch(error => {
         this.helpMsg = 'No help document.'
         console.log('loadHelpMsg Error: ', error)
@@ -123,9 +120,7 @@ export default {
     const appName = localData.projectData.appName
     this.helpTitle = appName
     this.loadHelpMsg(appName)
-    const schema = this.loadAppSchema(appName)
-    this.fields = this.initSchema(schema.fields, localData.appData)
-    this.formMode = schema.formMode
+    this.loadAppSchema(appName, localData)
   },
   components: {
     FormBuilder,

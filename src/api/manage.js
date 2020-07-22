@@ -10,15 +10,18 @@ const api = {
   permission: '/permission',
   permissionNoPager: '/permission/no-pager',
   orgTree: '/org/tree',
-  report: '/reports',
-  project: '/projects',
-  workflow: '/workflows',
-  log: '/logs',
-  notification: '/notifications',
+  // Custom
+  report: '/api/reports',
+  project: '/api/projects',
+  workflow: '/api/workflows',
+  log: '/api/logs',
+  notification: '/api/notifications',
   appStore: {
-    installedApps: '/installed-apps',
-    apps: '/apps'
+    installedApps: '/api/installed-apps',
+    apps: '/api/apps'
   },
+  fsBuckets: '/api/buckets',
+  apps: '/apps',
   filemanager: {
     url: fileManagerHost,
     getImageUrl: fileManagerHost + '/GetImage',
@@ -32,7 +35,7 @@ export default api
 // Minio/OSS/S3: Bucket + Object
 export function getBuckets () {
   return axios({
-    url: '/buckets',
+    url: api.fsBuckets,
     method: 'get',
     params: {}
   })
@@ -41,7 +44,7 @@ export function getBuckets () {
 export function addBucket (data) {
   // data - {"name": "bucket_name"}
   return axios({
-    url: '/buckets',
+    url: api.fsBuckets,
     method: 'post',
     data: data
   })
@@ -50,7 +53,7 @@ export function addBucket (data) {
 export function getObjects (bucketName, parameter) {
   // parameter - {"page": 1, "per_page": 10}
   return axios({
-    url: '/buckets/' + bucketName,
+    url: api.fsBuckets + '/' + bucketName,
     method: 'get',
     params: parameter
   })
@@ -59,7 +62,7 @@ export function getObjects (bucketName, parameter) {
 export function makeDirectory (bucketName, parameter) {
   // parameter - {"key": "test"}
   return axios({
-    url: '/buckets/' + bucketName,
+    url: api.fsBuckets + '/' + bucketName,
     method: 'post',
     params: parameter
   })
@@ -67,7 +70,7 @@ export function makeDirectory (bucketName, parameter) {
 
 export function deleteBucket (bucketName) {
   return axios({
-    url: '/buckets/' + bucketName,
+    url: api.fsBuckets + '/' + bucketName,
     method: 'delete'
   })
 }
@@ -75,7 +78,7 @@ export function deleteBucket (bucketName) {
 export function makeDownloadUrl (bucketName, parameter) {
   // parameter - {"key": "test"}
   return axios({
-    url: '/buckets/' + bucketName + '/object',
+    url: api.fsBuckets + '/' + bucketName + '/object',
     method: 'get',
     params: parameter
   })
@@ -84,7 +87,7 @@ export function makeDownloadUrl (bucketName, parameter) {
 export function makeUploadUrl (bucketName, parameter) {
   // parameter - {"key": "test"}
   return axios({
-    url: '/buckets/' + bucketName + '/object',
+    url: api.fsBuckets + '/' + bucketName + '/object',
     method: 'post',
     params: parameter
   })
@@ -93,7 +96,7 @@ export function makeUploadUrl (bucketName, parameter) {
 export function deleteObject (bucketName, parameter) {
   // parameter - {"key": "test"}
   return axios({
-    url: '/buckets/' + bucketName + '/object',
+    url: api.fsBuckets + '/' + bucketName + '/object',
     method: 'delete',
     params: parameter
   })
@@ -102,7 +105,7 @@ export function deleteObject (bucketName, parameter) {
 export function getObjectMeta (bucketName, parameter) {
   // parameter - {"key": "test"}
   return axios({
-    url: '/buckets/' + bucketName + '/object-meta',
+    url: api.fsBuckets + '/' + bucketName + '/object-meta',
     method: 'get',
     params: parameter
   })
@@ -130,6 +133,26 @@ export function getInstalledAppList () {
     url: api.appStore.installedApps,
     method: 'get',
     params: {}
+  })
+}
+
+export function getAppSchema (appName) {
+  return axios({
+    url: api.apps + '/' + appName + '/schema.json',
+    method: 'get',
+    params: {}
+  })
+}
+
+export function getHelpMsg (appName) {
+  return axios({
+    url: api.apps + '/' + appName + '/README.md',
+    method: 'get',
+    params: {},
+    responseType: 'text',
+    headers: {
+      'Content-Type': 'text/plain'
+    }
   })
 }
 

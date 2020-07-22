@@ -1,4 +1,4 @@
-import { getAppList, getInstalledAppList } from '@/api/manage'
+import { getAppList, getInstalledAppList, getAppSchema, getHelpMsg } from '@/api/manage'
 
 const formatRecords = function (records) {
   const newRecords = []
@@ -81,6 +81,28 @@ const app = {
           commit('SET_INSTALLED_APP_LIST', data)
 
           resolve(data)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+    GetAppSchema ({ commit }, appName) {
+      return new Promise((resolve, reject) => {
+        getAppSchema(appName).then(response => {
+          console.log('GetAppSchema: ', appName, response)
+
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+    GetHelpMsg ({ commit }, appName) {
+      return new Promise((resolve, reject) => {
+        getHelpMsg(appName).then(response => {
+          console.log('GetHelpMsg: ', appName, response)
+
+          resolve(response)
         }).catch(error => {
           reject(error)
         })

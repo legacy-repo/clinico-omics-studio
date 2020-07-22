@@ -170,7 +170,6 @@ import VueMarkdown from 'vue-markdown'
 import axios from 'axios'
 import filter from 'lodash.filter'
 import flatMap from 'lodash.flatmap'
-import debounce from 'lodash/debounce'
 
 const folderNameRule = [
   { required: true, message: 'Please input your folder name!' },
@@ -684,6 +683,7 @@ export default {
 
 @header-top: 5px;
 @header-left: @header-top;
+@header-bottom: @header-top;
 
 .file-list {
   .folder-dialog {
@@ -716,11 +716,15 @@ export default {
   }
 
   .ant-card {
+    .ant-card-head, .ant-card-body {
+      padding: 0px 16px 0px;
+    }
+
     .ant-card-head {
       min-height: unset;
 
       .ant-card-head-title {
-        padding: 0px 0px @header-top 0px;
+        padding: @header-top 0px @header-bottom 0px;
 
         .ant-col > * {
           margin-left: @header-left;
@@ -737,8 +741,6 @@ export default {
     }
 
     .ant-card-body {
-      padding: 0px 24px 10px;
-
       .control-header {
         margin: @header-top 0px;
 

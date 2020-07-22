@@ -14,14 +14,6 @@
                   />
                 </a-form-item>
               </a-col>
-              <a-col :span="12">
-                <a-form-item label="Endpoint Prefix for SeqFlow(Pipeline)">
-                  <a-input
-                    placeholder="e.g. /api"
-                    v-decorator="['seqFlowApiPrefix', {initialValue: seqFlowApiPrefix, rules:[{required: true, message: 'Please enter a endpoint prefix, e.g. /api'}]}]"
-                  />
-                </a-form-item>
-              </a-col>
             </a-row>
             <!-- TService -->
             <a-row :gutter="24">
@@ -33,17 +25,9 @@
                   />
                 </a-form-item>
               </a-col>
-              <a-col :span="12">
-                <a-form-item label="Endpoint Prefix for TService(tools)">
-                  <a-input
-                    placeholder="e.g. /api"
-                    v-decorator="['tServiceApiPrefix', {initialValue: tServiceApiPrefix, rules:[{required: true, message: 'Please enter a endpoint prefix, e.g. /api'}]}]"
-                  />
-                </a-form-item>
-              </a-col>
             </a-row>
             <!-- FileManager -->
-            <a-row :gutter="24">
+            <!-- <a-row :gutter="24">
               <a-col :span="12">
                 <a-form-item label="Service Host / Domain for FileManager">
                   <a-input
@@ -52,7 +36,7 @@
                   />
                 </a-form-item>
               </a-col>
-            </a-row>
+            </a-row> -->
             <a-form-item>
               <a-button style="margin-left: 8px" html-type="submit">Save</a-button>
             </a-form-item>
@@ -67,12 +51,8 @@
 import {
   initSeqFlowHost,
   saveSeqFlowHost,
-  initSeqFlowApiPrefix,
-  saveSeqFlowApiPrefix,
   initTServiceHost,
   saveTServiceHost,
-  initTServiceApiPrefix,
-  saveTServiceApiPrefix,
   initFileManagerHost,
   saveFileManagerHost
 } from '@/utils/util'
@@ -85,9 +65,7 @@ export default {
       placeholder: 'Which service do you want to connect to?',
       confirmLoading: false,
       seqFlowHost: initSeqFlowHost(),
-      seqFlowApiPrefix: initSeqFlowApiPrefix(),
       tServiceHost: initTServiceHost(),
-      tServiceApiPrefix: initTServiceApiPrefix(),
       fileManagerHost: initFileManagerHost()
     }
   },
@@ -103,11 +81,9 @@ export default {
 
           // SeqFlow
           saveSeqFlowHost(values.seqFlowHost)
-          saveSeqFlowApiPrefix(values.seqFlowApiPrefix)
 
           // TService
           saveTServiceHost(values.tServiceHost)
-          saveTServiceApiPrefix(values.tServiceApiPrefix)
 
           // FileManager
           saveFileManagerHost(values.fileManagerHost)

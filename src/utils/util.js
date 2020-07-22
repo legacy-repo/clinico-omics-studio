@@ -5,16 +5,6 @@ export function timeFix () {
 }
 
 // SeqFlow
-export function initSeqFlowApiPrefix () {
-  const seqFlowApiPrefix = localStorage.getItem('seqFlowApiPrefix')
-  console.log(`SEQ_FLOW_API_PREFIX: ${seqFlowApiPrefix}`)
-  return seqFlowApiPrefix || '/api'
-}
-
-export function saveSeqFlowApiPrefix (seqFlowApiPrefix) {
-  localStorage.setItem('seqFlowApiPrefix', seqFlowApiPrefix)
-}
-
 export function initSeqFlowHost () {
   const seqFlowHost = localStorage.getItem('seqFlowHost')
   console.log(`SEQ_FLOW_HOST: ${seqFlowHost}`)
@@ -27,22 +17,12 @@ export function saveSeqFlowHost (seqFlowHost) {
 
 // BASE_API
 export function initApiService () {
-  const apiService = initSeqFlowHost() + initSeqFlowApiPrefix()
+  const apiService = initSeqFlowHost()
   console.log(`BASE_API_URL: ${apiService}`)
   return apiService
 }
 
 // TService
-export function initTServiceApiPrefix () {
-  const tServiceApiPrefix = localStorage.getItem('tServiceApiPrefix')
-  console.log(`TSERVICE_API_PREFIX: ${tServiceApiPrefix}`)
-  return tServiceApiPrefix || '/api'
-}
-
-export function saveTServiceApiPrefix (tServiceApiPrefix) {
-  localStorage.setItem('tServiceApiPrefix', tServiceApiPrefix)
-}
-
 export function initTServiceHost () {
   const tServiceHost = localStorage.getItem('tServiceHost')
   console.log(`TSERVICE_HOST: ${tServiceHost}`)

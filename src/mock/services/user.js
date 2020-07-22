@@ -12,7 +12,7 @@ const info = (options) => {
     'organization': 'Fudan University',
     'address': 'Shanghai',
     'password': '',
-    'avatar': 'https://github.com/clinico-omics/datains-frontend/blob/a4e3d283653652e34f1a697fa48258650b58e203/src/assets/avatar2.png',
+    'avatar': 'https://nordata-cdn.oss-cn-shanghai.aliyuncs.com/clinico-omics/avatar2.png',
     'status': 1,
     'telephone': '',
     'lastLoginIp': '27.154.74.117',

@@ -1,23 +1,26 @@
 <template>
   <div class="file-list" ref="fileBrowser">
     <a-card :bordered="false" :class="{ standalone: standalone }" :style="{height: (height + 100) + 'px'}">
-      <a-col slot="title" :lg="18" :md="18" :sm="24" :xs="24">
+      <a-col slot="title" :lg="11" :md="11" :sm="24" :xs="24">
         <a-select :value="bucketName" style="width: 200px" @change="selectBucket">
           <a-select-option v-for="bucket in buckets" :key="bucket">
             {{ bucket }}
           </a-select-option>
         </a-select>
-        <a-button style="margin-left: 5px;" @click="switchUploadPanel" v-if="standalone"><a-icon type="upload"/>Upload</a-button>
-        <a-button style="margin-left: 5px;" @click="switchFolderDialog" v-if="standalone"><a-icon type="folder-add"/>Create Folder</a-button>
-        <a-button style="margin-left: 5px;" @click="refresh"><a-icon type="cloud-sync"/>Refresh</a-button>
-        <span style="margin-left: 5px; font-size: 14px; font-weight: 400;">
-          <template v-if="hasSelected">
-            {{ `Selected ${selectedRowKeys.length} items` }}
-          </template>
-        </span>
+        <a-button @click="switchUploadPanel" v-if="standalone"><a-icon type="upload"/>Upload</a-button>
+        <a-button @click="switchFolderDialog" v-if="standalone"><a-icon type="folder-add"/>Add Folder</a-button>
+        <a-button @click="refresh"><a-icon type="cloud-sync"/>Refresh</a-button>
       </a-col>
-      <a-col slot="title" style="display: flex; flex-direction: row; float: right;">
-        <a-input-search placeholder="Enter a file name prefix" allowClear style="width: 200px;" @search="onSearch" />
+      <a-col slot="title" :lg="13" :md="13" :sm="24" :xs="24">
+        <a-select show-search :value="currentPath" @change="onSearch" style="width: calc(100% - 276px);">
+          <a-select-option v-for="address in addressList" :key="address">
+            {{ address }}
+          </a-select-option>
+        </a-select>
+        <a-button style="line-height: unset; margin-top: 0px; padding: 0px 10px;" @click="handleBookmark">
+          <a-icon type="star" :theme="theme" />
+        </a-button>
+        <a-input-search placeholder="Enter a file name prefix" allowClear style="width: 230px;" @search="onSearch" />
       </a-col>
       <a-row class="control-header">
         <a-breadcrumb>
@@ -28,9 +31,12 @@
             </a>
           </a-breadcrumb-item>
           <a-breadcrumb-item v-for="(item, index) in pathList" :key="index">
-            <a @click="redirect(item, index, pathList)"><span>{{ item }}</span></a>
+            <a @click="redirectPath(item, index, pathList)"><span>{{ item }}</span></a>
           </a-breadcrumb-item>
         </a-breadcrumb>
+        <span style="font-size: 14px; font-weight: 400; position: absolute; top: 0; right: 0;" v-if="hasSelected">
+          {{ `Selected ${selectedRowKeys.length} items` }}
+        </span>
       </a-row>
       <a-table
         :loading="loading"
@@ -120,15 +126,15 @@
       <a-row v-if="recordDetail" class="object-details">
         <a-row class="detail-item" :gutter="gutter">
           <a-col :span="labelSpan" class="label">File Name</a-col>
-          <a-col :span="contentSpan">{{ recordDetail.name }}</a-col>
+          <a-col :span="24 - labelSpan">{{ recordDetail.name }}</a-col>
         </a-row>
         <a-row class="detail-item" :gutter="gutter">
           <a-col :span="labelSpan" class="label">ETag</a-col>
-          <a-col :span="contentSpan">{{ recordDetail.etag.replace(/"/g, "") }}</a-col>
+          <a-col :span="24 - labelSpan">{{ recordDetail.etag.replace(/"/g, "") }}</a-col>
         </a-row>
         <a-row class="detail-item" :gutter="gutter">
           <a-col :span="labelSpan" class="label">URL</a-col>
-          <a-col :span="contentSpan">
+          <a-col :span="24 - labelSpan">
             <a-textarea :value="downloadUrl" :rows="8" />
             <a-row>
               <a @click="downloadFile(downloadUrl)">Download</a>
@@ -164,6 +170,7 @@ import VueMarkdown from 'vue-markdown'
 import axios from 'axios'
 import filter from 'lodash.filter'
 import flatMap from 'lodash.flatmap'
+import debounce from 'lodash/debounce'
 
 const folderNameRule = [
   { required: true, message: 'Please input your folder name!' },
@@ -298,9 +305,12 @@ export default {
           }
         ]
       },
+      // Folder
       folderDialog: this.$form.createForm(this, { name: 'folder-dialog' }),
       folderNameRule,
       folderDialogVisible: false,
+      // Record
+      fileList: {}, // for canceling upload request
       uploadPanelVisible: false,
       detailsPanelVisible: false,
       recordDetail: null,
@@ -309,14 +319,16 @@ export default {
       contentType: '', // for preview
       gutter: 16,
       labelSpan: 4,
-      contentSpan: 20,
-      pathList: [],
-      fileList: {}, // for canceling upload request
-      currentPath: '',
-      loading: false,
+      // Key Variables
+      data: [],
       buckets: [],
       bucketName: '',
-      prefix: undefined,
+      currentPath: '',
+      pathList: [],
+      addressList: [],
+      // Others
+      savedBookmark: false,
+      loading: false,
       pagination: {
         size: 'small',
         pageSizeOptions: ['30', '50', '100'],
@@ -326,13 +338,12 @@ export default {
         total: 0,
         current: 1,
         onChange: (page, pageSize) => {
-          this.searchObjects(this.bucketName, page, pageSize, this.prefix)
+          this.searchObjects(this.bucketName, page, pageSize, this.getPrefix(this.pathList, ''))
         },
         onShowSizeChange: (current, pageSize) => {
-          this.searchObjects(this.bucketName, 1, pageSize, this.prefix)
+          this.searchObjects(this.bucketName, 1, pageSize, this.getPrefix(this.pathList, ''))
         }
-      },
-      data: []
+      }
     }
   },
   methods: {
@@ -352,6 +363,57 @@ export default {
       console.log(files, fileType)
       const pattern = new RegExp(fileType)
       return filter(files, function (o) { return o.name.length > 0 && pattern.test(o.name) })
+    },
+    loadBookmarks () {
+      const addressList = JSON.parse(localStorage.getItem('datains_BOOKMARKS'))
+      if (addressList) {
+        this.addressList = addressList
+      } else {
+        this.addressList = []
+      }
+
+      if (this.addressList.indexOf(this.currentPath) >= 0) {
+        this.savedBookmark = true
+      } else {
+        this.savedBookmark = false
+      }
+
+      console.log('loadBookmarks: ', this.savedBookmark, this.addressList, this.currentPath)
+    },
+    handleBookmark () {
+      let allBookmarks = JSON.parse(localStorage.getItem('datains_BOOKMARKS'))
+      if (!allBookmarks) {
+        allBookmarks = []
+      }
+
+      if (!this.savedBookmark) {
+        allBookmarks.push(this.currentPath)
+      } else {
+        const index = allBookmarks.indexOf(this.currentPath)
+        if (index > -1) {
+          allBookmarks.splice(index, 1)
+        }
+      }
+
+      localStorage.setItem('datains_BOOKMARKS', JSON.stringify(allBookmarks))
+      this.loadBookmarks()
+    },
+    onSearch (searchStr) {
+      console.log('onSearch: ', searchStr)
+      if (searchStr) {
+        const parsedList = searchStr.match(/.*:\/\/([a-zA-Z0-9\-._:]+)\/(.*)/)
+        if (parsedList) {
+          // Search with oss://|s3:// link
+          this.bucketName = parsedList[1]
+          const pathList = this.trimSlash(parsedList[2]).split('/')
+          this.redirect(pathList)
+          return
+        }
+      }
+
+      // Search in current directory
+      this.prefix = this.getPrefix(this.pathList, searchStr)
+      this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, this.prefix)        
     },
     selectBucket (value) {
       // Reset File Browser
@@ -410,19 +472,19 @@ export default {
 
     },
     refresh () {
-      this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, this.prefix)
+      const prefix = this.getPrefix(this.pathList, '')
+      this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, prefix)
     },
     redirectHome () {
-      this.pathList = []
-      this.prefix = null
-      this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, this.prefix)
+      this.redirect([])
     },
-    redirect (item, index, pathList) {
-      this.pathList = pathList.slice(0, index + 1)
-      console.log('redirect: ', this.pathList, index)
-
-      this.prefix = this.getPrefix('')
-      this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, this.prefix)
+    redirectPath (item, index, pathList) {
+      this.redirect(pathList.slice(0, index + 1))
+    },
+    redirect (pathList) {
+      this.pathList = pathList
+      const prefix = this.getPrefix(pathList, '')
+      this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, prefix)
     },
     searchObjects (bucketName, page, pageSize, prefix) {
       this.loading = true
@@ -437,6 +499,7 @@ export default {
         this.pagination.total = response.total
         this.pagination.current = response.page
         this.pagination.pageSize = response.pageSize
+        this.loadBookmarks()
         this.loading = false
       }).catch(error => {
         console.log('searchObjects: ', error)
@@ -474,8 +537,7 @@ export default {
       }
 
       console.log('enterDirectory: ', this.pathList, record)
-      this.prefix = this.getPrefix('')
-      this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, this.prefix)
+      this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, this.getPrefix(this.pathList, ''))
     },
     formatFileName (name) {
       return name.replace(this.pathList.join('/') + '/', '')
@@ -491,23 +553,18 @@ export default {
 
       return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
     },
-    getPrefix (searchStr) {
+    getPrefix (pathList, searchStr) {
       // this.pathList.join('/') + '/': Prefix need a slash when you are a directory
       // When need to list directory, searchStr must be an empty string
-      const prefix = this.pathList.join('/') + '/' + searchStr
+      const prefix = pathList.join('/') + '/' + searchStr
       if (prefix === '/') {
         return null
       } else {
         return prefix
       }
     },
-    onSearch (searchStr) {
-      this.prefix = this.getPrefix(searchStr)
-
-      this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, this.prefix)
-    },
     handleRemove (file) {
-      const request = this.fileList[this.getPrefix(file.name)]
+      const request = this.fileList[this.getPrefix(this.pathList, file.name)]
       request.cancel('Canceling Upload.')
       this.refresh()
     },
@@ -525,10 +582,10 @@ export default {
       console.log('uploadFiles: ', file)
       this.makeUploadUrl({
         name: this.bucketName,
-        key: this.getPrefix(file.name)
+        key: this.getPrefix(this.pathList, file.name)
       }).then(response => {
         const request = axios.CancelToken.source()
-        this.fileList[this.getPrefix(file.name)] = request
+        this.fileList[this.getPrefix(this.pathList, file.name)] = request
         const action = response.upload_url
         const formData = new FormData()
         if (data) {
@@ -593,6 +650,9 @@ export default {
   computed: {
     hasSelected () {
       return this.selectedRowKeys.length > 0
+    },
+    theme () {
+      return this.savedBookmark ? 'filled' : 'outlined'
     }
   },
   created () {
@@ -606,7 +666,7 @@ export default {
         this.buckets = response.data
         if (this.buckets.length > 0) {
           this.bucketName = this.buckets[0]
-          this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, this.prefix)
+          this.redirectHome()
         }
       })
       .catch(error => {
@@ -621,6 +681,9 @@ export default {
 
 <style lang="less">
 @import (reference) "~@/components/index.less";
+
+@header-top: 5px;
+@header-left: @header-top;
 
 .file-list {
   .folder-dialog {
@@ -652,77 +715,48 @@ export default {
     opacity: 0.2;
   }
 
-  .ant-card-head-title {
-    padding: 0px 0px 10px 0px;
-
-    .ant-btn, .ant-input-search {
-      margin-top: 10px;
-    }
-  }
-
-  .ant-table-thead > tr > th, .ant-table-tbody > tr > td {
-    padding: 12px 16px;
-  }
-
-  .standalone {
-    .ant-card-body {
-      min-height: 540px;
-    }
-  }
-
   .ant-card {
+    .ant-card-head {
+      min-height: unset;
+
+      .ant-card-head-title {
+        padding: 0px 0px @header-top 0px;
+
+        .ant-col > * {
+          margin-left: @header-left;
+        }
+
+        .ant-col > *:first-child {
+          margin-left: 0px;
+        }
+
+        .ant-btn, .ant-input-search, .ant-select {
+          margin-top: @header-top;
+        }
+      }
+    }
+
     .ant-card-body {
       padding: 0px 24px 10px;
-    }
-  }
 
-  .ant-list-item {
-    flex-wrap: wrap;
-  }
+      .control-header {
+        margin: @header-top 0px;
 
-  .list-content {
-    display: flex;
-    flex-direction: row;
-  }
+        .ant-breadcrumb-link:hover {
+          cursor: pointer;
+          color: @primary-color;
+        }
+      }
 
-  .ant-list-item-meta, .list-content-item {
-    margin-top: 5px;
-  }
-
-  .ant-list-item-action {
-    margin-left: 0px;
-    float: right;
-  }
-
-  .list-content-item {
-    color: rgba(0, 0, 0, 0.45);
-    display: flex;
-    flex-direction: column;
-    vertical-align: middle;
-    font-size: 14px;
-    margin-right: 40px;
-
-    .ant-tag {
-      margin-bottom: 5px;
+      .ant-table-thead > tr > th, .ant-table-tbody > tr > td {
+        padding: 12px 16px;
+      }
     }
 
-    span {
-      line-height: 20px;
-    }
-
-    p {
-      margin-top: 4px;
-      margin-bottom: 0;
-      line-height: 22px;
-    }
-  }
-
-  .control-header {
-    margin: 10px 0px;
-
-    .ant-breadcrumb-link:hover {
-      cursor: pointer;
-      color: @primary-color;
+    .standalone {
+      .ant-card-body {
+        min-height: 540px;
+      }
     }
   }
 }

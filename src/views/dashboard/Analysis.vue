@@ -1,38 +1,43 @@
 <template>
   <div class="page-header-index-wide">
+    <!-- <a-row class="control-header">
+      <a-button @click="requestMaterials"><a-icon type="file-protect"/>Request Materials</a-button>
+    </a-row> -->
     <a-row :gutter="24">
       <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '10px', paddingRight: '0px' }">
-        <chart-card :loading="loading" title="总销售额" total="￥126,560">
-          <a-tooltip title="指标说明" slot="action">
+        <chart-card :loading="loading" title="Materials Requests" total="126,560">
+          <a-tooltip title="Details" slot="action">
             <a-icon type="info-circle-o" />
           </a-tooltip>
-          <div>
-            <trend flag="up" style="margin-right: 16px;">
+          <div style="display: flex; justify-content: space-between;">
+            <!-- <trend flag="up" style="margin-right: 16px;">
               <span slot="term">周同比</span>
               12%
             </trend>
             <trend flag="down">
               <span slot="term">日同比</span>
               11%
-            </trend>
+            </trend> -->
+            <a-button @click="requestMaterials"><a-icon type="file-protect"/>Request</a-button>
+            <a-button @click="requestMaterials"><a-icon type="message"/>Feedback</a-button>
           </div>
-          <template slot="footer">日均销售额<span>￥ 234.56</span></template>
+          <template slot="footer">Located in PGx Lab from Fudan University</template>
         </chart-card>
       </a-col>
       <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '10px', paddingRight: '0px' }">
-        <chart-card :loading="loading" title="访问量" :total="8846 | NumberFormat">
-          <a-tooltip title="指标说明" slot="action">
+        <chart-card :loading="loading" title="Request" :total="8846 | NumberFormat">
+          <a-tooltip title="Details" slot="action">
             <a-icon type="info-circle-o" />
           </a-tooltip>
           <div>
             <mini-area />
           </div>
-          <template slot="footer">日访问量<span> {{ '1234' | NumberFormat }}</span></template>
+          <template slot="footer">Today Requests<span> {{ '1234' | NumberFormat }}</span></template>
         </chart-card>
       </a-col>
       <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '10px', paddingRight: '0px' }">
         <chart-card :loading="loading" title="支付笔数" :total="6560 | NumberFormat">
-          <a-tooltip title="指标说明" slot="action">
+          <a-tooltip title="Details" slot="action">
             <a-icon type="info-circle-o" />
           </a-tooltip>
           <div>
@@ -43,7 +48,7 @@
       </a-col>
       <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '10px' }">
         <chart-card :loading="loading" title="运营活动效果" total="78%">
-          <a-tooltip title="指标说明" slot="action">
+          <a-tooltip title="Details" slot="action">
             <a-icon type="info-circle-o" />
           </a-tooltip>
           <div>
@@ -68,30 +73,30 @@
         <a-tabs default-active-key="1" size="large" :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}">
           <div class="extra-wrapper" slot="tabBarExtraContent">
             <div class="extra-item">
-              <a>今日</a>
-              <a>本周</a>
-              <a>本月</a>
-              <a>本年</a>
+              <a>Today</a>
+              <a>Week</a>
+              <a>Month</a>
+              <a>Year</a>
             </div>
             <a-range-picker :style="{width: '256px'}" />
           </div>
-          <a-tab-pane loading="true" tab="销售额" key="1">
+          <a-tab-pane loading="true" tab="Materials" key="1">
             <a-row>
               <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                <bar :data="barData" title="销售额排行" />
+                <bar :data="barData" title="Usage Ranking" />
               </a-col>
               <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-                <rank-list title="门店销售排行榜" :list="rankList"/>
+                <rank-list title="Usage Ranking in Lab" :list="rankList"/>
               </a-col>
             </a-row>
           </a-tab-pane>
-          <a-tab-pane tab="访问量" key="2">
+          <a-tab-pane tab="Data" key="2">
             <a-row>
               <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
                 <bar :data="barData2" title="销售额趋势" />
               </a-col>
               <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-                <rank-list title="门店销售排行榜" :list="rankList"/>
+                <rank-list title="Usage Ranking in Lab" :list="rankList"/>
               </a-col>
             </a-row>
           </a-tab-pane>
@@ -121,7 +126,7 @@
                 <number-info :total="12321" :sub-total="17.1">
                   <span slot="subtitle">
                     <span>搜索用户数</span>
-                    <a-tooltip title="指标说明" slot="action">
+                    <a-tooltip title="Details" slot="action">
                       <a-icon type="info-circle-o" :style="{ marginLeft: '8px' }" />
                     </a-tooltip>
                   </span>
@@ -135,7 +140,7 @@
                 <number-info :total="2.7" :sub-total="26.2" status="down">
                   <span slot="subtitle">
                     <span>人均搜索次数</span>
-                    <a-tooltip title="指标说明" slot="action">
+                    <a-tooltip title="Details" slot="action">
                       <a-icon type="info-circle-o" :style="{ marginLeft: '8px' }" />
                     </a-tooltip>
                   </span>
@@ -232,7 +237,7 @@ for (let i = 0; i < 12; i += 1) {
 const rankList = []
 for (let i = 0; i < 7; i++) {
   rankList.push({
-    name: '白鹭岛 ' + (i + 1) + ' 号店',
+    name: 'Fudan University ' + '-' + ' Lab' + (i + 1),
     total: 1234.56 - i * 100
   })
 }
@@ -353,6 +358,11 @@ export default {
       }
     }
   },
+  methods: {
+    requestMaterials () {
+
+    }
+  },
   created () {
     setTimeout(() => {
       this.loading = !this.loading
@@ -362,52 +372,70 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .extra-wrapper {
-    line-height: 55px;
-    padding-right: 24px;
-
-    .extra-item {
-      display: inline-block;
-      margin-right: 24px;
-
-      a {
-        margin-left: 24px;
-      }
-    }
-  }
-
-  .antd-pro-pages-dashboard-analysis-twoColLayout {
-    position: relative;
+.page-header-index-wide {
+  .control-header {
+    width: 100%;
+    // height: 48px;
+    // border: 1px solid #fff;
+    // background-color: #fff;
+    border-radius: 3px;
+    margin-bottom: 10px;
     display: flex;
-    display: block;
-    flex-flow: row wrap;
+    justify-content: flex-end;
+    align-items: center;
 
-    &.desktop div[class^=ant-col]:last-child {
-      position: absolute;
-      right: 0;
-      height: 100%;
+    > * {
+      margin-right: 5px;
     }
   }
+}
 
-  .antd-pro-pages-dashboard-analysis-salesCard {
-    height: calc(100% - 24px);
-    /deep/ .ant-card-head {
-      position: relative;
+.extra-wrapper {
+  line-height: 55px;
+  padding-right: 24px;
+
+  .extra-item {
+    display: inline-block;
+    margin-right: 24px;
+
+    a {
+      margin-left: 24px;
     }
   }
+}
 
-  .dashboard-analysis-iconGroup {
-    i {
-      margin-left: 16px;
-      color: rgba(0,0,0,.45);
-      cursor: pointer;
-      transition: color .32s;
-      color: black;
-    }
-  }
-  .analysis-salesTypeRadio {
+.antd-pro-pages-dashboard-analysis-twoColLayout {
+  position: relative;
+  display: flex;
+  display: block;
+  flex-flow: row wrap;
+
+  &.desktop div[class^=ant-col]:last-child {
     position: absolute;
-    right: 54px;
-    bottom: 12px;
+    right: 0;
+    height: 100%;
   }
+}
+
+.antd-pro-pages-dashboard-analysis-salesCard {
+  height: calc(100% - 24px);
+  /deep/ .ant-card-head {
+    position: relative;
+  }
+}
+
+.dashboard-analysis-iconGroup {
+  i {
+    margin-left: 16px;
+    color: rgba(0,0,0,.45);
+    cursor: pointer;
+    transition: color .32s;
+    color: black;
+  }
+}
+.analysis-salesTypeRadio {
+  position: absolute;
+  right: 54px;
+  bottom: 12px;
+}
 </style>

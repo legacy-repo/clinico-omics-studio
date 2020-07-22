@@ -25,7 +25,7 @@ export const asyncRouterMap = [
         path: '/materials',
         name: 'materials',
         hidden: false,
-        component: () => import('@/views/filemanager/FileBrowser'),
+        component: () => import('@/views/dashboard/Analysis'),
         meta: { title: 'Materials', icon: 'experiment', keepAlive: true }
       },
 
@@ -43,7 +43,8 @@ export const asyncRouterMap = [
         path: '/visualization',
         name: 'visualization',
         hidden: false,
-        component: () => import('@/views/filemanager/FileBrowser'),
+        component: () => import('@/components/FullFrame'),
+        props: route => ({ src: 'http://10.157.72.53:8081/quartet-vis/' }),
         meta: { title: 'Visualization', icon: 'dot-chart', keepAlive: true }
       },
 

@@ -37,12 +37,14 @@
               <span slot="pdf" slot-scope="pdf, record">
                 <a
                   :href="tServiceHost + '/' + pdf"
+                  target="_blank"
                   :disabled="record.status !== 'success'"
                 >Download</a>
               </span>
               <span slot="zip" slot-scope="zip, record">
                 <a
                   :href="tServiceHost + '/' + zip"
+                  target="_blank"
                   :disabled="record.status !== 'success'"
                 >Download</a>
               </span>

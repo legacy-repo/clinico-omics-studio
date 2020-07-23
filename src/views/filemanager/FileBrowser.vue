@@ -174,7 +174,7 @@ import flatMap from 'lodash.flatmap'
 const folderNameRule = [
   { required: true, message: 'Please input your folder name!' },
   { min: 1, max: 63, message: 'Length should be 1 to 63', trigger: 'blur' },
-  { pattern: /^[a-zA-Z_]+[0-9a-zA-Z]+$/, message: 'Project name is not valid, only support [a-z0-9A-Z_]', trigger: 'blur' },
+  { pattern: /^[^/]+$/, message: 'Folder name is not valid', trigger: 'blur' },
   // { validator: this.existFolder, trigger: 'blur' }
 ]
 

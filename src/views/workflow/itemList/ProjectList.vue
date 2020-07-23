@@ -293,6 +293,14 @@ export default {
   },
   created () {
     this.searchProject(this.pagination.current, this.pagination.pageSize, this.searchStr)
+  },
+  mounted () {
+    this.timer = setInterval(() => {
+      this.searchProject(this.pagination.current, this.pagination.pageSize, this.searchStr)
+    }, 60000)
+  },
+  beforeDestroy () {
+    clearInterval(this.timer)
   }
 }
 </script>

@@ -152,6 +152,14 @@ export default {
   },
   created () {
     this.searchProject(this.projectId)
+  },
+  mounted () {
+    this.timer = setInterval(() => {
+      this.searchProject(this.projectId)
+    }, 60000)
+  },
+  beforeDestroy () {
+    clearInterval(this.timer)
   }
 }
 </script>

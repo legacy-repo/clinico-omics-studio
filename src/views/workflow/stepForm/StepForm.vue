@@ -1,5 +1,5 @@
 <template>
-  <a-card :bordered="false">
+  <a-card :bordered="false" class="step-form">
     <a-steps class="steps" :current="stepNum">
       <a-step title="Project Information" />
       <a-step title="Job Parameters" />
@@ -73,8 +73,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.step-form {
+  min-height: 600px;
+
   .steps {
     max-width: 750px;
     margin: 16px auto;
   }
+}
 </style>

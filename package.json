@@ -84,6 +84,7 @@
     "babel-plugin-import": "^1.11.0",
     "babel-plugin-prismjs": "^2.0.1",
     "eslint": "^5.8.0",
+    "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-html": "^5.0.0",
     "eslint-plugin-vue": "^5.2.3",
     "less": "3.9.0",

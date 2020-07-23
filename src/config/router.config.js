@@ -77,14 +77,14 @@ export const asyncRouterMap = [
             hidden: true,
             hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
             component: () => import('@/views/workflow/WorkflowManagement'),
-            meta: { title: 'Job Manager', icon: 'file-sync', drawerMode: false, keepAlive: true, permission: ['table'] }
+            meta: { title: 'Job Management', icon: 'file-sync', drawerMode: false, keepAlive: true, permission: ['table'] }
           },
           {
             path: '/seq-flow/project-management',
             name: 'project-management',
             hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
             component: () => import('@/views/workflow/ProjectManagement'),
-            meta: { title: 'Project Manager', icon: 'solution', keepAlive: true, permission: ['table'] }
+            meta: { title: 'Project Management', icon: 'solution', keepAlive: true, permission: ['table'] }
           },
 
           {
@@ -92,7 +92,7 @@ export const asyncRouterMap = [
             name: 'report-management',
             hidden: false,
             component: () => import('@/views/report/ReportManagement'),
-            meta: { title: 'Report Manager', keepAlive: true, icon: 'file-done', permission: ['table'] }
+            meta: { title: 'Report Management', keepAlive: true, icon: 'file-done', permission: ['table'] }
           },
 
           {
@@ -100,7 +100,8 @@ export const asyncRouterMap = [
             name: 'file-manager',
             hidden: false,
             component: () => import('@/views/filemanager/FileBrowser'),
-            meta: { title: 'File Manager', icon: 'codepen-circle', keepAlive: true }
+            props: route => ({ path: route.query.path }),
+            meta: { title: 'File Management', icon: 'codepen-circle', keepAlive: true }
           },
 
           {

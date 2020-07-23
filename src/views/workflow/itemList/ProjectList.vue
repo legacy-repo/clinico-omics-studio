@@ -10,12 +10,12 @@
           <a-radio-button value="Succeeded">Finished</a-radio-button>
         </a-radio-group>
         <a-input-search
-          disabled
           style="margin-left: 16px; width: 272px;"
           placeholder="Please Enter Project Name"
           :loading="loading"
-          :value="searchStr"
-          @search="searchProject"
+          allowClear
+          disabled
+          @search="onSearchProject"
         />
       </div>
 
@@ -133,10 +133,10 @@ export default {
       data: [],
       statusDetails: {},
       pagination: {
-        pageSizeOptions: ['5', '10', '20', '30', '40', '50'],
+        pageSizeOptions: ['30', '50', '100'],
         showSizeChanger: true,
         showQuickJumper: true,
-        pageSize: 5,
+        pageSize: 30,
         total: 0,
         current: 1,
         onChange: (page, pageSize) => {
@@ -159,7 +159,7 @@ export default {
         rowsPerPageLabel: 'Rows per page',
         ofLabel: 'of',
         pageLabel: 'page', // for 'pages' mode
-        allLabel: 'All',
+        allLabel: 'All'
       },
       loading: false,
       radioGroupValue: 'total',
@@ -173,6 +173,9 @@ export default {
       getProjectStat: 'GetProjectStat',
       getReportList: 'GetReportList'
     }),
+    onSearchProject (value) {
+      this.searchProject(this.pagination.page, this.pagination.pageSize, value)
+    },
     searchProject (page, pageSize, status) {
       this.loading = true
       this.getProjectList({
@@ -239,7 +242,7 @@ export default {
       }
     },
     baseName (str) {
-      return new String(str).substring(str.lastIndexOf('/') + 1)
+      return String(str).substring(str.lastIndexOf('/') + 1)
     },
     onClickRadioBtn (event) {
       this.radioGroupValue = event.target.value

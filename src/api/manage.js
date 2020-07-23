@@ -164,6 +164,14 @@ export function getWorkflowList (parameter) {
   })
 }
 
+export function getWorkflow (workflowId) {
+  return axios({
+    url: api.workflow + '/' + workflowId,
+    method: 'get',
+    params: {}
+  })
+}
+
 export function getReport (reportId) {
   return axios({
     url: api.report + '/' + reportId,

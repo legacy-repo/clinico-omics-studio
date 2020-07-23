@@ -6,7 +6,7 @@
       style="font-size: 16px; position: absolute; top: 5px; right: 5px;"
       type="close-circle"
     />
-    <h3>{{ title }}</h3>
+    <h3>{{ workflowId }}</h3>
     <div class="loading" v-if="loading">
       <a-spin tip="Loading..."></a-spin>
     </div>

@@ -92,7 +92,9 @@ export default {
   },
   data () {
     return {
-      project: {}
+      project: {
+        statusDetails: {}
+      }
     }
   },
   computed: {

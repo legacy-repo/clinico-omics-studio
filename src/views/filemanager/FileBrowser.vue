@@ -230,6 +230,11 @@ export default {
     VueMarkdown
   },
   props: {
+    path: {
+      required: false,
+      default: '',
+      type: String
+    },
     standalone: {
       required: false,
       default: true,
@@ -397,6 +402,15 @@ export default {
       localStorage.setItem('datains_BOOKMARKS', JSON.stringify(allBookmarks))
       this.loadBookmarks()
     },
+    parseBucketName (link) {
+      const parsedList = link.match(/.*:\/\/([a-zA-Z0-9\-._:]+)\/(.*)/)
+      if (parsedList) {
+        // bucketName
+        return parsedList[1]
+      } else {
+        return null
+      }
+    },
     onSearch (searchStr) {
       console.log('onSearch: ', searchStr)
       if (searchStr) {
@@ -498,7 +512,6 @@ export default {
         this.pagination.total = response.total
         this.pagination.current = response.page
         this.pagination.pageSize = response.pageSize
-        this.loadBookmarks()
         this.loading = false
       }).catch(error => {
         console.log('searchObjects: ', error)
@@ -660,12 +673,27 @@ export default {
       this.selectedRowKeys = this.selected
     }
 
+    this.loadBookmarks()
+
     this.getBuckets()
       .then(response => {
         this.buckets = response.data
         if (this.buckets.length > 0) {
-          this.bucketName = this.buckets[0]
-          this.redirectHome()
+          if (this.path.startsWith('s3://') || this.path.startsWith('oss://')) {
+            const bucketName = this.parseBucketName(this.path)
+            if (bucketName) {
+              this.onSearch(this.path)
+            } else {
+              this.$message.error('No such link.')
+              // Back
+              this.$router.go(-1)
+            }
+          } else {
+            this.bucketName = this.buckets[0]
+            this.redirectHome()
+          }
+        } else {
+          this.$message.error('No such link.')
         }
       })
       .catch(error => {

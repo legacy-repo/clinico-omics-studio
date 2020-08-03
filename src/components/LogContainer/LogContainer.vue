@@ -8,7 +8,7 @@
     <a-list class="loading" v-else-if="logs.length == 0"></a-list>
     <a-tabs size="small" animated @change="changeTab" v-else>
       <a-tab-pane :tab="log.title" :key="log.id" v-for="log in logs">
-        <a-textarea readOnly v-model="content"/>
+        <a-textarea read-only v-model="content"/>
       </a-tab-pane>
     </a-tabs>
   </div>
@@ -84,9 +84,9 @@ export default {
     this.loading = true
     getLogList({
       page: 1,
-      'per-page': 5,
-      'entity-id': this.entityId,
-      'entity-type': this.entityType
+      per_page: 5,
+      entity_id: this.entityId,
+      entity_type: this.entityType
     }).then(result => {
       const that = this
       console.log('getLogList: ', result)

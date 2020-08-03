@@ -1,39 +1,74 @@
 <template>
   <div>
+    <a-button class="help-btn" type="primary" shape="circle" icon="question" @click="toggleHelp" />
     <form-builder ref="form" :fields="fields" @action="onAction" @update="onUpdate"></form-builder>
-    <prism language="markdown" :code="helpMsg"></prism>
+    <a-drawer
+      :title="helpTitle"
+      class="help-viewer"
+      placement="right"
+      width="500"
+      :get-container="false"
+      :wrap-style="{ position: 'absolute' }"
+      :mask="false"
+      :closable="true"
+      :visible="visible"
+      @close="toggleHelp"
+    >
+      <vue-markdown :source="helpMsg" @rendered="update"></vue-markdown>
+    </a-drawer>
   </div>
 </template>
 
 <script>
-import appSchema from '@/appschema'
+import { mapActions } from 'vuex'
 import v from 'voca'
 import FormBuilder from '@/views/formbuilder/FormBuilder'
-import Prism from 'vue-prismjs'
-import 'prismjs/themes/prism.css'
+import VueMarkdown from 'vue-markdown'
+import Prism from 'prismjs'
 
 export default {
   name: 'Step2',
   data () {
     return {
       fields: [],
-      helpMsg: ''
+      formMode: 'batch',
+      helpMsg: '',
+      visible: false,
+      helpTitle: 'Help Documentation'
     }
   },
   methods: {
+    ...mapActions({
+      getAppSchema: 'GetAppSchema',
+      getHelpMsg: 'GetHelpMsg'
+    }),
+    update () {
+      this.$nextTick(() => {
+        Prism.highlightAll()
+      })
+    },
+    toggleHelp () {
+      this.visible = !this.visible
+    },
     formatSchema (appName) {
       const cleanedAppName = appName.replace(/[\W_]+/g, ' ')
       const schemaName = v.camelCase(cleanedAppName)
       return schemaName
     },
-    loadAppSchema (appName) {
-      const schemaName = this.formatSchema(appName)
-      console.log('App Schema Name: ', schemaName)
-      return appSchema[schemaName].fields
+    loadAppSchema (appName, localData) {
+      this.getAppSchema(appName).then(response => {
+        this.fields = this.initSchema(response.fields, localData.appData)
+        this.formMode = response.formMode
+      })
     },
     loadHelpMsg (appName) {
-      const schemaName = this.formatSchema(appName)
-      return appSchema[schemaName].help
+      this.getHelpMsg(appName).then(response => {
+        this.helpMsg = response
+        console.log('loadHelpMsg: ', response)
+      }).catch(error => {
+        this.helpMsg = 'No help document.'
+        console.log('loadHelpMsg Error: ', error)
+      })
     },
     onUpdate (data) {
       console.log('FormBuilder: ', data)
@@ -75,6 +110,7 @@ export default {
       } else if (e.type === 'submit') {
         localStorage.setItem('datains_APP_DATA', JSON.stringify(e.formData))
         localStorage.setItem('datains_SAMPLE_IDS', JSON.stringify(e.sampleIds))
+        localStorage.setItem('datains_formMode', this.formMode)
         this.nextStep()
       }
     }
@@ -82,12 +118,13 @@ export default {
   created () {
     const localData = this.loadLocalData()
     const appName = localData.projectData.appName
-    this.helpMsg = this.loadHelpMsg(appName)
-    this.fields = this.initSchema(this.loadAppSchema(appName), localData.appData)
+    this.helpTitle = appName
+    this.loadHelpMsg(appName)
+    this.loadAppSchema(appName, localData)
   },
   components: {
     FormBuilder,
-    Prism
+    VueMarkdown
   }
 }
 </script>
@@ -97,10 +134,37 @@ export default {
   margin-top: 30px;
 }
 
+.help-btn {
+  position: fixed;
+  right: 15%;
+  width: 32px;
+  height: 32px;
+  z-index: 10;
+}
+
+.help-btn:hover {
+  cursor: pointer;
+}
+
 pre {
   max-width: 800px;
   margin: 0px auto;
   background-color: #eff0f1;
   border-radius: 5px;
+}
+</style>
+
+<style lang="less">
+blockquote {
+  border-left: 4px solid #CCC;
+  padding-left: 16px;
+}
+</style>
+
+<style lang="less">
+.help-viewer {
+  .ant-drawer {
+    z-index: 10;
+  }
 }
 </style>

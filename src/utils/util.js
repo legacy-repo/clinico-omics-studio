@@ -4,6 +4,46 @@ export function timeFix () {
   return hour < 9 ? 'Good Morning' : hour <= 11 ? 'Good Morning' : hour <= 13 ? 'Good Afternoon' : hour < 20 ? 'Good Afternoon' : 'Good Evening'
 }
 
+// SeqFlow
+export function initSeqFlowHost () {
+  const seqFlowHost = localStorage.getItem('seqFlowHost')
+  console.log(`SEQ_FLOW_HOST: ${seqFlowHost}`)
+  return seqFlowHost || 'http://localhost:3000'
+}
+
+export function saveSeqFlowHost (seqFlowHost) {
+  localStorage.setItem('seqFlowHost', seqFlowHost)
+}
+
+// BASE_API
+export function initApiService () {
+  const apiService = initSeqFlowHost()
+  console.log(`BASE_API_URL: ${apiService}`)
+  return apiService
+}
+
+// TService
+export function initTServiceHost () {
+  const tServiceHost = localStorage.getItem('tServiceHost')
+  console.log(`TSERVICE_HOST: ${tServiceHost}`)
+  return tServiceHost || 'http://localhost:3000'
+}
+
+export function saveTServiceHost (tServiceHost) {
+  localStorage.setItem('tServiceHost', tServiceHost)
+}
+
+// File Manager
+export function initFileManagerHost () {
+  const fileManagerHost = localStorage.getItem('fileManagerHost')
+  console.log(`FILE_MANAGER_HOST: ${fileManagerHost}`)
+  return fileManagerHost || 'http://localhost:3000'
+}
+
+export function saveFileManagerHost (fileManagerHost) {
+  localStorage.setItem('fileManagerHost', fileManagerHost)
+}
+
 export function welcome () {
   const arr = []
   const index = Math.floor(Math.random() * arr.length)

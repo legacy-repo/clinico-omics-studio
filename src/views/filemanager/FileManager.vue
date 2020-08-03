@@ -30,6 +30,11 @@ import { FileManagerPlugin, DetailsView, NavigationPane, Toolbar } from '@syncfu
 Vue.use(FileManagerPlugin)
 export default {
   props: {
+    standalone: {
+      default: true,
+      required: false,
+      type: Boolean
+    },
     height: {
       default: '560px',
       required: false,
@@ -144,23 +149,29 @@ export default {
       console.log('Ajax request has failed')
     },
     filterByType(files, fileType) {
+      console.log(files, fileType)
       const pattern = new RegExp(fileType)
-      return filter(files, function(o) { return o.type.length > 0 && pattern.test(o.type) })
+      return filter(files, function(o) { return o.name.length > 0 && pattern.test(o.name) })
     },
     getFileName(files) {
       return flatMap(files, (o) => o.name)
     },
     onSelect(args) {
       const selectedFiles = this.$refs['ejs-filemanager'].getSelectedFiles()
-      const selectedItems = this.filterByType(selectedFiles, this.filterType)
 
-      if (selectedItems.length !== selectedFiles.length) {
-        this.$message.warn('Only support ' + this.filterType + ' files')
-        this.selectedItems = this.getFileName(selectedItems)
+      if (this.standalone) {
+        this.selectedItems = this.getFileName(selectedFiles)
+      } else {
+        const selectedItems = this.filterByType(selectedFiles, this.filterType)
+
+        if (selectedItems.length !== selectedFiles.length) {
+          this.$message.warn('Only support ' + this.filterType + ' files')
+          this.selectedItems = this.getFileName(selectedItems)
+        }
+
+        this.$emit('file-select', selectedItems)
+        console.log('File selection: ', args, selectedItems, this.selectedItems)
       }
-
-      this.$emit('file-select', selectedItems)
-      console.log('File selection: ', args, selectedItems, this.selectedItems)
     }
   }
 }

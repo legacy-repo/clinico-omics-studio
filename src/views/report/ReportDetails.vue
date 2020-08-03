@@ -44,7 +44,7 @@
       <a-button type="primary" disabled>Archive</a-button>
     </template>
 
-    <embeded-frame :src="reportUrl"></embeded-frame>
+    <embeded-frame :src="reportUrl" class="embeded-frame"></embeded-frame>
   </page-view>
 </template>
 
@@ -140,6 +140,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.embeded-frame {
+  height: 680px;
+}
+
 .report {
   padding: 20px 80px 0px 20px;
   background: white;

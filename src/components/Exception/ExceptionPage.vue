@@ -38,7 +38,7 @@ export default {
 }
 </script>
 <style lang="less">
-@import "~ant-design-vue/lib/style/index";
+@import (reference) "~ant-design-vue/lib/style/index";
 
 .exception {
   display: flex;

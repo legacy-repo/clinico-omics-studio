@@ -123,59 +123,59 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .content {
-    margin: 10px 10px 0;
-    .link {
-      margin-top: 16px;
-      &:not(:empty) {
-        margin-bottom: 16px;
+.content {
+  margin: 10px 10px 0;
+  .link {
+    margin-top: 16px;
+    &:not(:empty) {
+      margin-bottom: 16px;
+    }
+    a {
+      margin-right: 32px;
+      height: 24px;
+      line-height: 24px;
+      display: inline-block;
+      i {
+        font-size: 24px;
+        margin-right: 8px;
+        vertical-align: middle;
       }
-      a {
-        margin-right: 32px;
+      span {
         height: 24px;
         line-height: 24px;
         display: inline-block;
-        i {
-          font-size: 24px;
-          margin-right: 8px;
-          vertical-align: middle;
-        }
-        span {
-          height: 24px;
-          line-height: 24px;
-          display: inline-block;
-          vertical-align: middle;
-        }
+        vertical-align: middle;
       }
     }
   }
-  .page-menu-search {
-    text-align: center;
-    margin-bottom: 16px;
-  }
-  .page-menu-tabs {
-    margin-top: 10px;
-  }
+}
+.page-menu-search {
+  text-align: center;
+  margin-bottom: 16px;
+}
+.page-menu-tabs {
+  margin-top: 10px;
+}
 
-  .extra-img {
-    margin-top: -60px;
-    text-align: center;
-    width: 195px;
+.extra-img {
+  margin-top: -60px;
+  text-align: center;
+  width: 195px;
 
-    img {
+  img {
+    width: 100%;
+  }
+}
+
+.mobile {
+  .extra-img{
+    margin-top: 0;
+    text-align: center;
+    width: 96px;
+
+    img{
       width: 100%;
     }
   }
-
-  .mobile {
-    .extra-img{
-      margin-top: 0;
-      text-align: center;
-      width: 96px;
-
-      img{
-        width: 100%;
-      }
-    }
-  }
+}
 </style>

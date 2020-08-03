@@ -1,4 +1,4 @@
-import { getProjectList, getProject, submitProject } from '@/api/manage'
+import { getProjectList, getProject, submitProject, getProjectStat } from '@/api/manage'
 import moment from 'moment'
 
 const formatStatus = function (status) {
@@ -50,7 +50,14 @@ const formatRecords = function (records) {
       samples: record.samples,
       labels: record.labels,
       status: formatStatus(record.status),
-      percentage: record.percentage
+      statusDetails: {
+        success: 10,
+        running: 0,
+        submitted: 0,
+        total: record.samples.length,
+        error: 40
+      },
+      percentage: Math.floor(record.percentage * 100) / 100
     })
   }
 
@@ -59,14 +66,14 @@ const formatRecords = function (records) {
 
 const formatPostData = function (data) {
   const newData = {
-    'project-name': data.projectName,
-    'group-name': data.group,
-    'started-time': timeToInt(data.createdTime),
-    'app-name': data.appName,
-    'author': data.author,
-    'app-id': data.appId,
-    'description': data.description,
-    'samples': data.samples
+    project_name: data.projectName,
+    group_name: data.group,
+    started_time: timeToInt(data.createdTime),
+    app_name: data.appName,
+    author: data.author,
+    app_id: data.appId,
+    description: data.description,
+    samples: data.samples
   }
 
   return newData
@@ -95,7 +102,7 @@ const project = {
           console.log('GetProjectList: ', parameter, response)
 
           const data = {
-            perPage: response['per-page'],
+            perPage: response['per_page'],
             page: response['page'],
             total: response['total'],
             data: formatRecords(response.data)
@@ -110,7 +117,7 @@ const project = {
     },
     ExistProject ({ commit }, projectName) {
       var parameter = {
-        'project-name': projectName
+        project_name: projectName
       }
 
       return new Promise((resolve, reject) => {
@@ -118,7 +125,7 @@ const project = {
           console.log('ExistProject: ', parameter, response)
 
           const data = {
-            perPage: response['per-page'],
+            perPage: response['per_page'],
             page: response['page'],
             total: response['total'],
             data: formatRecords(response.data)
@@ -140,6 +147,17 @@ const project = {
           commit('SET_PROJECT', data)
 
           resolve(data)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+    GetProjectStat ({ commit }, projectId) {
+      return new Promise((resolve, reject) => {
+        getProjectStat(projectId).then(response => {
+          // console.log('GetProject: ', projectId, response)
+
+          resolve(response)
         }).catch(error => {
           reject(error)
         })

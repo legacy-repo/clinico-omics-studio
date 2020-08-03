@@ -10,12 +10,12 @@
           <a-radio-button value="Succeeded">Finished</a-radio-button>
         </a-radio-group>
         <a-input-search
-          disabled
           style="margin-left: 16px; width: 272px;"
           placeholder="Please Enter Project Name"
           :loading="loading"
-          :value="searchStr"
-          @search="searchProject"
+          allowClear
+          disabled
+          @search="onSearchProject"
         />
       </div>
 
@@ -32,7 +32,19 @@
                   App Name: <a-tag color="#87d068" style="font-size: 16px;">{{ item.appName }}</a-tag>
                 </template>
                 <template slot="content">
-                  <vue-good-table class="table-popover" styleClass="vgt-table striped" :columns="genColumns(item.samples)" :rows="item.samples" v-if="item.samples.length !== 0"/>
+                  <vue-good-table class="table-popover" :search-options="{ enabled: true }"
+                                  styleClass="vgt-table striped bordered condensed" :columns="genColumns(item.samples)" 
+                                  :rows="item.samples" v-if="item.samples.length !== 0"
+                                  :pagination-options="paginationOptions" :line-numbers="true">
+                    <template slot="table-row" slot-scope="props">
+                      <a-tooltip placement="top">
+                        <template slot="title">
+                          <span>{{ props.formattedRow[props.column.field] }}</span>
+                        </template>
+                        <span>{{ formatRow(props.formattedRow[props.column.field]) }}</span>
+                      </a-tooltip>
+                    </template>
+                  </vue-good-table>
                   <span v-else>No Content</span>
                 </template>
                 <project-logo class="project-logo" />
@@ -40,18 +52,55 @@
               <a slot="title" @click="onShowWorkflowList(item.id)">{{ item.title }}</a>
             </a-list-item-meta>
           </a-col>
-          <a-col class="list-content" :lg="12" :md="12" :sm="24" :xs="24">
-            <div class="list-content-item">
+          <a-col class="list-content" :lg="12" :md="12" :sm="24" :xs="24" :gutter="16">
+            <a-col class="list-content-item" :span="8">
               <span>Started</span>
               <p>{{ item.startedAt }}</p>
-            </div>
-            <div class="list-content-item">
+            </a-col>
+            <a-col class="list-content-item" :span="8">
               <span>Finished</span>
               <p>{{ item.finishedAt }}</p>
-            </div>
-            <div class="list-content-item">
-              <a-progress :percent="item.percentage" :status="!item.status ? null : item.status" style="width: 180px" />
-            </div>
+            </a-col>
+            <a-col class="list-content-item" :span="8">
+              <!-- <a-progress :stroke-color="strokeColor" :percent="item.percentage" :status="!item.status ? null : item.status" style="width: 180px" /> -->
+              <span>Status</span>
+              <a-row class="badge-list" :gutter="10">
+                <a-tooltip placement="top">
+                  <template slot="title">
+                    <span>Total Jobs</span>
+                  </template>
+                  <a-col class="badge" :style="{ backgroundColor: '#a2a2a2', color: '#fff' }">{{ item.statusDetails.total }}</a-col>
+                </a-tooltip>
+                <!-- Running -->
+                <a-tooltip placement="top">
+                  <template slot="title">
+                    <span>Running Jobs</span>
+                  </template>
+                  <a-col class="badge" :style="{ backgroundColor: '#108ee9', color: '#fff' }">{{ item.statusDetails.running }}</a-col>
+                </a-tooltip>
+                <!-- Red -->
+                <a-tooltip placement="top">
+                  <template slot="title">
+                    <span>Failed Jobs</span>
+                  </template>
+                  <a-col class="badge" :style="{ backgroundColor: '#f5222d', color: '#fff' }">{{ item.statusDetails.error }}</a-col>
+                </a-tooltip>
+                <!-- Green -->
+                <a-tooltip placement="top">
+                  <template slot="title">
+                    <span>Succeeded Jobs</span>
+                  </template>
+                  <a-col class="badge" :style="{ backgroundColor: '#52c41a', color: '#fff' }">{{ item.statusDetails.success }}</a-col>
+                </a-tooltip>
+                <!-- Yellow -->
+                <a-tooltip placement="top">
+                  <template slot="title">
+                    <span>Warning Jobs</span>
+                  </template>
+                  <a-col class="badge" :style="{ backgroundColor: '#faad14', color: '#fff' }">0</a-col>
+                </a-tooltip>
+              </a-row>
+            </a-col>
           </a-col>
           <div slot="actions">
             <a @click="onShowWorkflowList(item.id)">View</a>
@@ -67,6 +116,7 @@
 <script>
 import { mapActions } from 'vuex'
 import v from 'voca'
+import sortBy from 'lodash.sortby'
 import { VueGoodTable } from 'vue-good-table'
 import 'vue-good-table/dist/vue-good-table.css'
 import { projectLogo } from '@/core/icons'
@@ -80,12 +130,13 @@ export default {
   data () {
     return {
       searchStr: null,
-      data: {},
+      data: [],
+      statusDetails: {},
       pagination: {
-        pageSizeOptions: ['5', '10', '20', '30', '40', '50'],
+        pageSizeOptions: ['30', '50', '100'],
         showSizeChanger: true,
         showQuickJumper: true,
-        pageSize: 5,
+        pageSize: 30,
         total: 0,
         current: 1,
         onChange: (page, pageSize) => {
@@ -95,25 +146,59 @@ export default {
           this.searchProject(1, pageSize, this.searchStr)
         }
       },
+      paginationOptions: {
+        enabled: true,
+        mode: 'records',
+        perPage: 5,
+        position: 'top',
+        perPageDropdown: [5, 10, 15, 20],
+        dropdownAllowAll: false,
+        setCurrentPage: 1,
+        nextLabel: 'next',
+        prevLabel: 'prev',
+        rowsPerPageLabel: 'Rows per page',
+        ofLabel: 'of',
+        pageLabel: 'page', // for 'pages' mode
+        allLabel: 'All'
+      },
       loading: false,
-      radioGroupValue: 'total'
+      radioGroupValue: 'total',
+      strokeColor: { '0%': '#108ee9', '100%': '#87d068' }
     }
   },
   computed: {},
   methods: {
     ...mapActions({
       getProjectList: 'GetProjectList',
+      getProjectStat: 'GetProjectStat',
       getReportList: 'GetReportList'
     }),
+    onSearchProject (value) {
+      this.searchProject(this.pagination.page, this.pagination.pageSize, value)
+    },
     searchProject (page, pageSize, status) {
       this.loading = true
       this.getProjectList({
         page: page,
-        'per-page': pageSize,
+        per_page: pageSize,
         status: status
       }).then(result => {
         const that = this
         that.data = result.data
+
+        const statusDetails = []
+        for (const idx in that.data) {
+          const item = that.data[idx]
+          const projectId = item.id
+          statusDetails.push(this.getProjectStat(projectId))
+        }
+
+        Promise.all(statusDetails).then((values) => {
+          for (const idx in values) {
+            Object.assign(that.data[idx].statusDetails, values[idx])
+          }
+        })
+
         that.pagination.pageSize = result.perPage
         that.pagination.total = result.total
         that.pagination.current = result.page
@@ -124,18 +209,40 @@ export default {
       return v.titleCase(key)
     },
     genColumns (rows) {
-      const columns = []
+      var columns = []
       if (rows.length > 0) {
         const record = rows[0]
         for (const [key, value] of Object.entries(record)) {
-          columns.push({
-            label: this.formatKey(key),
-            field: key
-          })
+          const config = {
+            // label: this.formatKey(key),
+            label: key,
+            field: key,
+            width: '180px',
+            tdClass: 'text-center',
+            thClass: 'text-center'
+          }
+
+          if (key === 'sample_id') {
+            config['hidden'] = true
+          }
+
+          columns.push(config)
         }
       }
 
-      return columns
+      return sortBy(columns, (o) => {
+        return o.label
+      })
+    },
+    formatRow (value) {
+      if (value.match(/^\/(\w+\/?)+/)) {
+        return this.baseName(value)
+      } else {
+        return value
+      }
+    },
+    baseName (str) {
+      return String(str).substring(str.lastIndexOf('/') + 1)
     },
     onClickRadioBtn (event) {
       this.radioGroupValue = event.target.value
@@ -156,7 +263,7 @@ export default {
     },
     onShowReport (projectId) {
       this.getReportList({
-        'project-id': projectId
+        'project_id': projectId
       }).then(result => {
         console.log('onShowReport: ', result)
         if (result.total > 0) {
@@ -179,13 +286,33 @@ export default {
       })
     }
   },
+  watch: {
+    statusDetails: {
+      handler (newName, oldName) {
+        this.$forceUpdate()
+      },
+      deep: true
+    }
+  },
   created () {
     this.searchProject(this.pagination.current, this.pagination.pageSize, this.searchStr)
+  },
+  mounted () {
+    this.timer = setInterval(() => {
+      this.searchProject(this.pagination.current, this.pagination.pageSize, this.searchStr)
+    }, 60000)
+  },
+  beforeDestroy () {
+    clearInterval(this.timer)
   }
 }
 </script>
 
 <style lang="less">
+.text-center {
+  text-align: center;
+}
+
 .project-list {
   .ant-list-item {
     flex-wrap: wrap;
@@ -211,7 +338,6 @@ export default {
     flex-direction: column;
     vertical-align: middle;
     font-size: 14px;
-    margin-right: 40px;
 
     .ant-tag {
       margin-bottom: 5px;
@@ -227,11 +353,30 @@ export default {
       line-height: 22px;
     }
   }
+
+  .badge-list {
+    display: flex;
+    flex-direction: row;
+    margin-top: 4px;
+    margin-left: 0px !important;
+    margin-bottom: 0px;
+
+    .badge {
+      margin-right: 5px;
+      border-radius: 50px;
+      width: 25px;
+      height: 25px;
+      font-size: 12px;
+      justify-content: center;
+      align-items: center;
+      display: flex;
+    }
+  }
 }
 
-.json-popover {
-  margin-top: 10px;
-  max-width: 500px;
+.json-popover, .table-popover {
+  margin-top: 0px;
+  max-width: 600px;
   max-height: 300px;
   overflow: scroll;
 }

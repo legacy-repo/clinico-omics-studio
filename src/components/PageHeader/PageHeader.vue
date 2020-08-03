@@ -187,8 +187,8 @@ export default {
       }
       .extra {
         flex: 0 1 auto;
-        margin-left: 30px;
-        min-width: 300px;
+        margin-left: 10px;
+        min-width: 360px;
         text-align: right;
       }
       .action {

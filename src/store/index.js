@@ -8,6 +8,7 @@ import report from './modules/report'
 import project from './modules/project'
 import notification from './modules/notification'
 import choppyApp from './modules/choppy_app'
+import fs from './modules/fs'
 import i18n from './modules/i18n'
 import permission from './modules/permission'
 import oidcStore from './modules/oidc'
@@ -24,6 +25,7 @@ export default new Vuex.Store({
     project,
     notification,
     choppyApp,
+    fs,
     i18n,
     permission,
     oidcStore

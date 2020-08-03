@@ -63,7 +63,7 @@ export default {
         }, {
           name: 'Documentation',
           icon: 'file-markdown',
-          link: 'https://fudan-pgx.yuque.com/choppy-platform'
+          link: 'https://yuque.com/clinico-omics/help'
         }
       ]
     }

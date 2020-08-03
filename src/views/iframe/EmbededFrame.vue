@@ -68,19 +68,20 @@ export default {
 <style lang="less">
 .frame-container {
   width: 100%;
-  min-height: 630px;
+  min-height: 100%;
 
   .button {
     position: absolute;
     top: 20px;
     left: 20px;
+    z-index: 1000;
   }
 
   .vue-iframe {
     iframe {
       border: 0;
       height: 100%;
-      max-height: 650px;
+      // max-height: 650px;
       left: 0;
       position: absolute;
       top: 0;

@@ -12,7 +12,7 @@ const info = (options) => {
     'organization': 'Fudan University',
     'address': 'Shanghai',
     'password': '',
-    'avatar': '@/assets/avatar2.png',
+    'avatar': 'https://nordata-cdn.oss-cn-shanghai.aliyuncs.com/clinico-omics/avatar2.png',
     'status': 1,
     'telephone': '',
     'lastLoginIp': '27.154.74.117',

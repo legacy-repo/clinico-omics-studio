@@ -182,6 +182,11 @@ const project = (options) => {
       groupName: groupNameLst[num],
       reportId: reportIds[num],
       status: statusLst[num],
+      statusDetails: {
+        success: 10,
+        total: 100,
+        error: 90
+      },
       percentage: percentageList[num]
     })
   }

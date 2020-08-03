@@ -1,4 +1,7 @@
 import { axios } from '@/utils/request'
+import { initFileManagerHost } from '@/utils/util'
+
+const fileManagerHost = initFileManagerHost()
 
 const api = {
   user: '/user',
@@ -7,25 +10,109 @@ const api = {
   permission: '/permission',
   permissionNoPager: '/permission/no-pager',
   orgTree: '/org/tree',
-  report: '/reports',
-  project: '/projects',
-  workflow: '/workflows',
-  log: '/logs',
-  notification: '/notifications',
-  app_store: {
-    installed_apps: '/installed-apps',
-    apps: '/apps'
+  // Custom
+  report: '/api/reports',
+  project: '/api/projects',
+  workflow: '/api/workflows',
+  log: '/api/logs',
+  notification: '/api/notifications',
+  appStore: {
+    installedApps: '/api/installed-apps',
+    apps: '/api/apps',
+    manifest: '/api/app-manifest'
   },
+  fsBuckets: '/api/buckets',
+  apps: '/apps',
   filemanager: {
-    url: 'http://localhost:8090/',
-    getImageUrl: 'http://localhost:8090/GetImage',
-    uploadUrl: 'http://localhost:8090/Upload',
-    downloadUrl: 'http://localhost:8090/Download'
+    url: fileManagerHost,
+    getImageUrl: fileManagerHost + '/GetImage',
+    uploadUrl: fileManagerHost + '/Upload',
+    downloadUrl: fileManagerHost + '/Download'
   }
 }
 
 export default api
 
+// Minio/OSS/S3: Bucket + Object
+export function getBuckets () {
+  return axios({
+    url: api.fsBuckets,
+    method: 'get',
+    params: {}
+  })
+}
+
+export function addBucket (data) {
+  // data - {"name": "bucket_name"}
+  return axios({
+    url: api.fsBuckets,
+    method: 'post',
+    data: data
+  })
+}
+
+export function getObjects (bucketName, parameter) {
+  // parameter - {"page": 1, "per_page": 10}
+  return axios({
+    url: api.fsBuckets + '/' + bucketName,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function makeDirectory (bucketName, parameter) {
+  // parameter - {"key": "test"}
+  return axios({
+    url: api.fsBuckets + '/' + bucketName,
+    method: 'post',
+    params: parameter
+  })
+}
+
+export function deleteBucket (bucketName) {
+  return axios({
+    url: api.fsBuckets + '/' + bucketName,
+    method: 'delete'
+  })
+}
+
+export function makeDownloadUrl (bucketName, parameter) {
+  // parameter - {"key": "test"}
+  return axios({
+    url: api.fsBuckets + '/' + bucketName + '/object',
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function makeUploadUrl (bucketName, parameter) {
+  // parameter - {"key": "test"}
+  return axios({
+    url: api.fsBuckets + '/' + bucketName + '/object',
+    method: 'post',
+    params: parameter
+  })
+}
+
+export function deleteObject (bucketName, parameter) {
+  // parameter - {"key": "test"}
+  return axios({
+    url: api.fsBuckets + '/' + bucketName + '/object',
+    method: 'delete',
+    params: parameter
+  })
+}
+
+export function getObjectMeta (bucketName, parameter) {
+  // parameter - {"key": "test"}
+  return axios({
+    url: api.fsBuckets + '/' + bucketName + '/object-meta',
+    method: 'get',
+    params: parameter
+  })
+}
+
+// App Store
 export function getWebapps () {
   return axios({
     url: 'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/choppy/webapps.json',
@@ -36,7 +123,15 @@ export function getWebapps () {
 
 export function getAppList () {
   return axios({
-    url: api.app_store.apps,
+    url: api.appStore.apps,
+    method: 'get',
+    params: {}
+  })
+}
+
+export function getAppManifest () {
+  return axios({
+    url: api.appStore.manifest,
     method: 'get',
     params: {}
   })
@@ -44,9 +139,29 @@ export function getAppList () {
 
 export function getInstalledAppList () {
   return axios({
-    url: api.app_store.installed_apps,
+    url: api.appStore.installedApps,
     method: 'get',
     params: {}
+  })
+}
+
+export function getAppSchema (appName) {
+  return axios({
+    url: api.apps + '/' + appName + '/schema.json',
+    method: 'get',
+    params: {}
+  })
+}
+
+export function getHelpMsg (appName) {
+  return axios({
+    url: api.apps + '/' + appName + '/README.md',
+    method: 'get',
+    params: {},
+    responseType: 'text',
+    headers: {
+      'Content-Type': 'text/plain'
+    }
   })
 }
 
@@ -55,6 +170,14 @@ export function getWorkflowList (parameter) {
     url: api.workflow,
     method: 'get',
     params: parameter
+  })
+}
+
+export function getWorkflow (workflowId) {
+  return axios({
+    url: api.workflow + '/' + workflowId,
+    method: 'get',
+    params: {}
   })
 }
 
@@ -96,18 +219,18 @@ export function getProject (projectId) {
   })
 }
 
-export function getLogList (parameter) {
+export function getProjectStat (projectId) {
   return axios({
-    url: api.log,
-    method: 'get',
-    params: parameter
+    url: api.project + '/' + projectId + '/stats',
+    method: 'get'
   })
 }
 
-export function getLog (url) {
+export function getLogList (workflowId, parameter) {
   return axios({
-    url: url,
-    method: 'get'
+    url: api.workflow + '/' + workflowId + '/logs',
+    method: 'get',
+    params: parameter
   })
 }
 

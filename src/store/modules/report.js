@@ -1,5 +1,6 @@
 import { getReportList, getReport } from '@/api/manage'
 import moment from 'moment'
+import { initSeqFlowHost } from '@/utils/util'
 
 const formatStatus = function (record) {
   const status = {}
@@ -36,7 +37,7 @@ const formatRecords = function (records) {
       description: record.description,
       script: record.script,
       reportType: record.report_type,
-      reportUrl: process.env.VUE_APP_BASE_URL + record.report_path,
+      reportUrl: initSeqFlowHost() + record.report_path,
       startedAt: formatDateTime(record.started_time),
       finishedAt: formatDateTime(record.finished_time),
       checkedAt: formatDateTime(record.checked_time),
@@ -71,7 +72,7 @@ const report = {
           console.log('GetReportList: ', parameter, response)
 
           const data = {
-            perPage: response['per-page'],
+            perPage: response['per_page'],
             page: response['page'],
             total: response['total'],
             data: formatRecords(response.data)

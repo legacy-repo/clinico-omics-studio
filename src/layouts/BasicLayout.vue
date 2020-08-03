@@ -155,8 +155,6 @@ export default {
 </script>
 
 <style lang="less">
-@import url('../components/global.less');
-
 /*
  * The following styles are auto-applied to elements with
  * transition="page-transition" when their visibility is toggled

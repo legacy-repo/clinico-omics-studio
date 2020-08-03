@@ -96,6 +96,12 @@ Vue.use(FormModel)
 
 export default {
   name: 'Step1',
+  props: {
+    appId: {
+      required: false,
+      type: String
+    }
+  },
   data () {
     return {
       labelCol: { lg: { span: 6 }, sm: { span: 5 } },
@@ -184,6 +190,9 @@ export default {
   created () {
     this.getInstalledApps()
     this.projectData = this.loadLocalData()
+    if (this.appId) {
+      this.projectData.appId = this.appId
+    }
   }
 }
 </script>

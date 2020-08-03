@@ -1,4 +1,4 @@
-import { getWorkflowList } from '@/api/manage'
+import { getWorkflowList, getWorkflow } from '@/api/manage'
 import moment from 'moment'
 
 const formatStatus = function (status) {
@@ -36,16 +36,32 @@ const formatRecords = function (records) {
     newRecords.push({
       id: record.id,
       title: record.sample_id,
+      workflowId: record.workflow_id, // Cromwell Workflow ID.
       startedAt: formatDateTime(record.started_time),
       finishedAt: formatDateTime(record.finished_time),
       jobParams: record.job_params,
       labels: record.labels,
       status: formatStatus(record.status),
-      percentage: record.percentage
+      percentage: Math.floor(record.percentage * 100) / 100
     })
   }
 
   return newRecords
+}
+
+const formatRecord = function (record) {
+  return {
+    id: record.id,
+    title: record.sample_id,
+    workflowId: record.workflow_id, // Cromwell Workflow ID.
+    startedAt: formatDateTime(record.started_time),
+    finishedAt: formatDateTime(record.finished_time),
+    jobParams: record.job_params,
+    labels: record.labels,
+    status: formatStatus(record.status),
+    percentage: Math.floor(record.percentage * 100) / 100,
+    workflowOutput: record.workflow_output
+  }
 }
 
 const workflow = {
@@ -67,7 +83,7 @@ const workflow = {
           console.log('GetWorkflowList: ', parameter, response)
 
           const data = {
-            perPage: response['per-page'],
+            perPage: response['per_page'],
             page: response['page'],
             total: response['total'],
             data: formatRecords(response.data)
@@ -75,6 +91,17 @@ const workflow = {
           commit('SET_WORKFLOW_LIST', data)
 
           resolve(data)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+    GetWorkflow ({ commit }, workflowId) {
+      return new Promise((resolve, reject) => {
+        getWorkflow(workflowId).then(response => {
+          console.log('GetWorkflow: ', workflowId, response)
+
+          resolve(formatRecord(response))
         }).catch(error => {
           reject(error)
         })

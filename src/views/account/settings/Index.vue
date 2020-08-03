@@ -10,6 +10,11 @@
             type="inner"
             @openChange="onOpenChange"
           >
+            <a-menu-item key="/account/settings/service">
+              <router-link :to="{ name: 'service-settings' }">
+                Service Setting
+              </router-link>
+            </a-menu-item>
             <a-menu-item key="/account/settings/base">
               <router-link :to="{ name: 'base-settings' }">
                 Basic Profiles

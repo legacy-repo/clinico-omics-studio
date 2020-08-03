@@ -109,7 +109,7 @@ export default {
       this.loading = true
       this.getReportList({
         page: page,
-        'per-page': pageSize,
+        per_page: pageSize,
         status: status
       }).then(result => {
         const that = this

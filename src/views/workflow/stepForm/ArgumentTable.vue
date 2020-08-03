@@ -35,29 +35,53 @@ export default {
         bindRowsWithHeaders: true,
         colHeaders: this.getHeader(),
         filters: true,
+        manualColumnFreeze: true,
+        fixedColumnsLeft: 1,
         rowHeaders: true,
-        dropdownMenu: true,
+        dropdownMenu: [
+          'undo',
+          '---------',
+          'redo',
+          '---------',
+          'make_read_only',
+          '---------',
+          'clear_column',
+          '---------',
+          'alignment',
+          '---------',
+          'filter_by_condition',
+          'filter_operators',
+          'filter_by_condition2',
+          'filter_by_value',
+          'filter_action_bar'
+        ],
         autoRowSize: true,
         autoColSize: true,
         stretchH: 'all',
         height: '400',
         width: '100%',
-        manualColumnFreeze: true,
         manualColumnResize: true,
         maxRows: 100,
         maxCols: 50,
         multiColumnSorting: true,
         undo: true,
+        redo: true,
         contextMenu: {
           items: {
-            'row_above': {},
-            'row_below': {}
+            make_read_only: {},
+            redo: {},
+            undo: {},
+            row_below: {},
+            row_above: {},
+            freeze_column: {},
+            unfreeze_column: {}
           }
         },
         afterChange: (change, changeType) => {
-          if (changeType === 'edit') {
+          if (changeType === 'edit' || changeType === 'Autofill.fill') {
             this.saveData()
           }
+          console.log('ArgumentTable: ', change, changeType)
         }
       }
     }

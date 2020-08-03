@@ -3,6 +3,8 @@
 <h1 align="center">iSEQ Analyzer</h1>
 <div align="center">
 An out-of-box Pipeline Analyzer for sequencing data, e.g. RNA-Seq, WES, WGS etc.
+
+The datains-frontend is a frontend of [datains](https://github.com/go-choppy/datains), but we set it's product name as `iSEQ Analyzer` for matching it's original purpose.
 </div>
 
 <div align="center">

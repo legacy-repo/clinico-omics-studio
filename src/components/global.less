@@ -11,6 +11,12 @@ body {
   &.userLayout {
     overflow: auto;
   }
+
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -khtml-user-select: none;
+  user-select:none;
 }
 
 body::-webkit-scrollbar {
@@ -82,7 +88,7 @@ body::-webkit-scrollbar {
       position: fixed;
       top: 0;
       right: 0;
-      z-index: 9;
+      z-index: 1000;
       width: 100%;
       transition: width 0.2s;
 
@@ -116,7 +122,7 @@ body::-webkit-scrollbar {
       position: fixed;
       top: 0;
       right: 0;
-      z-index: 9;
+      z-index: 1000;
       width: 100%;
       transition: width 0.2s;
 

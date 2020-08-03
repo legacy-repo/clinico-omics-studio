@@ -1,6 +1,6 @@
 <template>
   <!--eslint-disable-->
-  <a-row class="filter-panel" :gutter="16">
+  <a-row class="filter-panel" :gutter="16" style="margin-right: 0px;">
     <a-col class="left" :xl="6" :lg="6" :md="6" :sm="24" :xs="24">
       <a-collapse :activeKey="activeFilterList">
         <a-collapse-panel :header="toTitleCase(field.name)" :key="field.name" v-for="field in fieldsList">

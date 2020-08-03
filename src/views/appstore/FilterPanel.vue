@@ -1,7 +1,7 @@
 <template>
   <!--eslint-disable-->
-  <a-row class="filter-panel" :gutter="16">
-    <a-col class="left" :xl="6" :lg="6" :md="6" :sm="24" :xs="24">
+  <a-row class="filter-panel">
+    <a-col class="left" :xl="6" :lg="6" :md="6" :sm="24" :xs="24" v-if="fieldsList.length > 0">
       <a-collapse :activeKey="activeFilterList">
         <a-collapse-panel
           :header="toTitleCase(field.name)"
@@ -12,7 +12,7 @@
         </a-collapse-panel>
       </a-collapse>
     </a-col>
-    <a-col class="right" :xl="18" :lg="18" :md="18" :sm="24" :xs="24">
+    <a-col class="right" :xl="24" :lg="24" :md="24" :sm="24" :xs="24">
       <a-tabs defaultActiveKey="1" @change="onChangeTab">
         <a-tab-pane tab="Apps" key="1">
           <app-list :appList="appList"></app-list>
@@ -63,46 +63,7 @@ export default {
           valid: false
         }
       ],
-      fieldsList: [
-        {
-          name: 'App Type',
-          id: 'app-type',
-          data: [
-            {
-              name: 'Web App',
-              nums: '2'
-            },
-            {
-              name: 'Linux',
-              nums: '3'
-            }
-          ]
-        },
-        {
-          name: 'Source',
-          id: 'source',
-          data: [
-            {
-              name: 'Open Source',
-              nums: '3'
-            },
-            {
-              name: 'PGx',
-              nums: '3'
-            }
-          ]
-        },
-        {
-          name: 'Category',
-          id: 'category',
-          data: [
-            {
-              name: 'Precision Medicine',
-              nums: '2'
-            }
-          ]
-        }
-      ]
+      fieldsList: []
     }
   },
   props: {},
@@ -120,7 +81,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      getAppList: 'GetAppList'
+      getAppList: 'GetAppList',
+      getAppManifest: 'GetAppManifest'
     }),
     onChangeTab() {},
     toTitleCase(str) {
@@ -128,19 +90,22 @@ export default {
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
       })
     },
+    generateFields(appList) {
+
+    },
     getList() {
-      this.getAppList().then(res => {
+      this.getAppManifest().then(res => {
         console.log('res', res)
         this.appList = orderBy(
           res.data,
           [
             item => {
-              item.title.toLowerCase()
               item.popoverVisible = false
             }
           ],
           ['asc']
         )
+        this.fieldsList = 
         this.loading = false
       })
     }
@@ -151,8 +116,8 @@ export default {
 <style lang="less" scoped>
 .filter-panel {
   .right {
-    padding-left: 20px !important;
-    padding-right: 20px !important;
+    // padding-left: 20px !important;
+    // padding-right: 20px !important;
     padding-bottom: 20px;
     border-radius: 4px;
     border: 1px solid #d9d9d9;

@@ -6,7 +6,7 @@
       <a-step title="Submit" />
     </a-steps>
     <div class="content">
-      <step1 v-if="stepNum === 0" @nextStep="nextStep"/>
+      <step1 v-if="stepNum === 0" @nextStep="nextStep" :appId="appId"/>
       <step2 v-if="stepNum === 1" @nextStep="nextStep" @prevStep="prevStep"/>
       <step3 v-if="stepNum === 2" @finished="submitStepForm" @prevStep="prevStep"/>
     </div>
@@ -24,6 +24,12 @@ export default {
     Step1,
     Step2,
     Step3
+  },
+  props: {
+    appId: {
+      required: false,
+      type: String
+    }
   },
   data () {
     return {

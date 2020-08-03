@@ -5,9 +5,9 @@
         <!-- <img :alt="app.title" :src="app.cover" slot="cover"/> -->
         <template class="ant-card-actions" slot="actions">
           <a-icon type="eye" @click="onView(app)" />
-          <a-popover :title="app.title" trigger="click" v-model="app.popoverVisible">
+          <a-popover :title="app.appName" trigger="click" v-model="app.popoverVisible">
             <a slot="content">{{ app.description }}</a>
-            <a-icon type="info-circle"/>
+            <a-icon type="info-circle" />
           </a-popover>
           <a-icon type="share-alt" />
         </template>
@@ -34,11 +34,14 @@ export default {
       app.popoverVisible = !app.popoverVisible
     },
     onView(app) {
-      if (app.repoUrl.match(/^http[s]?:.*/)) {
+      if (app.repoUrl && app.repoUrl.match(/^http[s]?:.*/)) {
         window.open(app.repoUrl, '_blank')
       } else {
         this.$router.push({
-          name: app.repoUrl
+          name: 'create-project',
+          query: {
+            appId: app.id
+          }
         })
       }
     }
@@ -50,8 +53,9 @@ export default {
 .card-list {
   .card {
     width: 100%;
-    margin-right: 10px;
-    margin-bottom: 10px;
+    // margin-right: 10px;
+    // margin-bottom: 10px;
+    margin: 0px 10px 10px;
 
     img {
       height: 200px;

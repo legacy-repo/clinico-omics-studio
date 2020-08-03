@@ -18,7 +18,8 @@ const api = {
   notification: '/api/notifications',
   appStore: {
     installedApps: '/api/installed-apps',
-    apps: '/api/apps'
+    apps: '/api/apps',
+    manifest: '/api/app-manifest'
   },
   fsBuckets: '/api/buckets',
   apps: '/apps',
@@ -123,6 +124,14 @@ export function getWebapps () {
 export function getAppList () {
   return axios({
     url: api.appStore.apps,
+    method: 'get',
+    params: {}
+  })
+}
+
+export function getAppManifest () {
+  return axios({
+    url: api.appStore.manifest,
     method: 'get',
     params: {}
   })

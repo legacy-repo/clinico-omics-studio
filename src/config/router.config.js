@@ -44,7 +44,7 @@ export const asyncRouterMap = [
         name: 'visualization',
         hidden: false,
         component: () => import('@/components/FullFrame'),
-        props: route => ({ src: 'http://10.157.72.53:8081/quartet-vis/' }),
+        props: route => ({ src: 'http://10.157.72.55:8081/quartet-vis/' }),
         meta: { title: 'Visualization', icon: 'dot-chart', keepAlive: true }
       },
 
@@ -68,6 +68,7 @@ export const asyncRouterMap = [
             path: '/seq-flow/submit/:pageNo([1-9]\\d*)?',
             name: 'create-project',
             hidden: false,
+            props: route => ({ appId: route.query.appId }),
             component: () => import('@/views/workflow/stepForm/StepForm'),
             meta: { title: 'Create Project', icon: 'file-add', keepAlive: true, permission: ['table'] }
           },

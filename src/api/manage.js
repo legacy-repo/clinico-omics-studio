@@ -33,6 +33,23 @@ const api = {
 
 export default api
 
+// Materials Data
+export function getMaterialsSeqData () {
+  return axios({
+    url: 'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/materials_seqdata.json',
+    method: 'get',
+    params: {}
+  })
+}
+
+export function getMaterialsMetadata () {
+  return axios({
+    url: 'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/materials_metadata.json',
+    method: 'get',
+    params: {}
+  })
+}
+
 // Minio/OSS/S3: Bucket + Object
 export function getBuckets () {
   return axios({

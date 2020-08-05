@@ -50,6 +50,22 @@ export function getMaterialsMetadata () {
   })
 }
 
+export function getMaterialsDIN () {
+  return axios({
+    url: 'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/materials_din.json',
+    method: 'get',
+    params: {}
+  })
+}
+
+export function getMaterialsRIN () {
+  return axios({
+    url: 'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/materials_rin.json',
+    method: 'get',
+    params: {}
+  })
+}
+
 // Minio/OSS/S3: Bucket + Object
 export function getBuckets () {
   return axios({

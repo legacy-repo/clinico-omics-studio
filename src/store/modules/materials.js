@@ -1,4 +1,4 @@
-import { getMaterialsSeqData, getMaterialsMetadata } from '@/api/manage'
+import { getMaterialsSeqData, getMaterialsMetadata, getMaterialsDIN, getMaterialsRIN } from '@/api/manage'
 import groupBy from 'lodash.groupby'
 import map from 'lodash.map'
 import sumBy from 'lodash.sumby'
@@ -73,6 +73,30 @@ const materials = {
           console.log('GetMaterialsMetadata: ', parameter, response, data)
 
           resolve(data)
+        })
+        .catch(error => {
+          reject(error)
+        })
+      })
+    },
+    GetMaterialsDIN({ commit }, parameter) {
+      return new Promise((resolve, reject) => {
+        getMaterialsDIN()
+        .then(response => {
+
+          resolve(response)
+        })
+        .catch(error => {
+          reject(error)
+        })
+      })
+    },
+    GetMaterialsRIN({ commit }, parameter) {
+      return new Promise((resolve, reject) => {
+        getMaterialsRIN()
+        .then(response => {
+
+          resolve(response)
         })
         .catch(error => {
           reject(error)

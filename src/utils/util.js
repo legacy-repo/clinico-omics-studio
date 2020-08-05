@@ -8,7 +8,7 @@ export function timeFix () {
 export function initSeqFlowHost () {
   const seqFlowHost = localStorage.getItem('seqFlowHost')
   console.log(`SEQ_FLOW_HOST: ${seqFlowHost}`)
-  return seqFlowHost || 'http://localhost:3000'
+  return seqFlowHost || 'http://10.157.72.55:3000'
 }
 
 export function saveSeqFlowHost (seqFlowHost) {
@@ -26,7 +26,7 @@ export function initApiService () {
 export function initTServiceHost () {
   const tServiceHost = localStorage.getItem('tServiceHost')
   console.log(`TSERVICE_HOST: ${tServiceHost}`)
-  return tServiceHost || 'http://localhost:3000'
+  return tServiceHost || 'http://10.157.72.55:3001'
 }
 
 export function saveTServiceHost (tServiceHost) {

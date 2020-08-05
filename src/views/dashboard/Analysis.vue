@@ -1,12 +1,13 @@
 <template>
   <div class="dashboard-container">
     <a-row :gutter="24" style="margin-right: 0px;">
-      <a-col :sm="24" :md="12" :xl="12" :style="{ paddingRight: '0px' }">
+      <a-col :sm="24" :md="24" :xl="12" :style="{ paddingRight: '0px' }">
         <a-card :loading="loading" title="Materials Requests">
-          <a-popover title="Details" slot="extra">
+          <a-popover title="Requested Details" slot="extra">
             <template slot="content">
               <p v-for="item in materialsTypeCounts" :key="item.group">
-                <a-tag :color="formatColor(item.group)">{{ item.group }}</a-tag>{{ item.tubes }} tubes / {{ item.volume }} μl
+                <a-tag :color="formatColor(item.group)">{{ item.group }}</a-tag>
+                {{ item.tubes }} tubes / {{ item.volume }} μl
               </p>
             </template>
             <a-icon type="info-circle-o" />
@@ -25,7 +26,9 @@
           </template>
         </a-card>
       </a-col>
-      <a-col :sm="24" :md="12" :xl="6" :style="{ paddingRight: '0px' }">
+
+      <!-- 暂时隐藏 -->
+      <a-col :sm="24" :md="12" :xl="6" :style="{ paddingRight: '0px', display: 'none' }">
         <a-card :loading="loading" title="Temperature">
           <a-tooltip title="Details" slot="extra">
             <a-icon type="info-circle-o" />
@@ -36,15 +39,18 @@
           <template slot="actions">Stable Temperature</template>
         </a-card>
       </a-col>
-      <a-col :sm="24" :md="12" :xl="6" :style="{ paddingRight: '0px' }">
-        <a-card :loading="loading" title="Quality">
+      <a-col :sm="24" :md="12" :xl="12" :style="{ paddingRight: '0px', display: 'block' }">
+        <a-card :loading="loading" title="Stable Quality">
           <a-tooltip title="Details" slot="extra">
             <a-icon type="info-circle-o" />
           </a-tooltip>
-          <a-row class="content">
-            <mini-bar />
+          <a-row class="content" style="height: 144px;">
+            <v-chart :force-fit="true" :height="160" :data="rinDinData" :padding="[36, 5, 18, 5]">
+              <v-tooltip />
+              <v-legend position="top"/>
+              <v-bar position="id*value" color="group"/>
+            </v-chart>
           </a-row>
-          <template slot="actions">Stable Quality</template>
         </a-card>
       </a-col>
     </a-row>
@@ -56,33 +62,24 @@
           size="large"
           :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}"
         >
-          <!-- <div class="extra-wrapper" slot="tabBarExtraContent">
-            <div class="extra-item">
-              <a>Today</a>
-              <a>Week</a>
-              <a>Month</a>
-              <a>Year</a>
-            </div>
-            <a-range-picker :style="{width: '256px'}" />
-          </div>-->
-          <a-tab-pane loading="true" tab="Materials" key="materials">
+          <a-tab-pane tab="Materials" key="materials">
             <a-row>
               <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
                 <a-select
                   class="group-selector"
-                  default-value="receiver"
                   style="width: 120px"
                   @change="selectMaterialsGroup"
+                  default-value="sampleType"
                 >
-                  <a-select-option value="receiver">Receiver</a-select-option>
                   <a-select-option value="sampleType">Sample Type</a-select-option>
+                  <a-select-option value="receiver">Receiver</a-select-option>
                 </a-select>
                 <a-spin :spinning="materialsBarLoading">
                   <bar
                     :data="groupedMaterialsData"
                     :padding="padding"
                     color="group"
-                    :position="materialsDataPostion"
+                    position="date*tubes"
                     title="Materials Tubes"
                   />
                 </a-spin>
@@ -90,7 +87,7 @@
               <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
                 <rank-list
                   class="rank-list"
-                  title="Usage Ranking in Lab"
+                  title="Usage Ranking in Lab (Tubes)"
                   :list="materialsRankList"
                 />
               </a-col>
@@ -115,7 +112,7 @@
                     :data="groupedSeqData"
                     :padding="padding"
                     color="group"
-                    :position="seqDataPosition"
+                    position="date*totalSize"
                     title="Data Volume (GB)"
                   />
                 </a-spin>
@@ -140,16 +137,7 @@
           size="large"
           :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}"
         >
-          <div class="extra-wrapper" slot="tabBarExtraContent">
-            <div class="extra-item">
-              <a>Today</a>
-              <a>Week</a>
-              <a>Month</a>
-              <a>Year</a>
-            </div>
-            <a-range-picker :style="{width: '256px'}" />
-          </div>
-          <a-tab-pane loading="true" tab="Temperature" key="1">
+          <a-tab-pane tab="Temperature" key="1">
             <a-row>
               <bar :data="barData" title="Usage Ranking" />
             </a-row>
@@ -165,23 +153,44 @@
           size="large"
           :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}"
         >
-          <div class="extra-wrapper" slot="tabBarExtraContent">
-            <div class="extra-item">
-              <a>Today</a>
-              <a>Week</a>
-              <a>Month</a>
-              <a>Year</a>
-            </div>
-            <a-range-picker :style="{width: '256px'}" />
-          </div>
-          <a-tab-pane loading="true" tab="RIN" key="1">
-            <a-row>
-              <bar :data="barData" title="Usage Ranking" />
+          <a-tab-pane tab="RIN" key="1">
+            <a-row style="margin-right: 32px;">
+              <a-select
+                class="group-selector"
+                style="width: 120px"
+                :value="defaultRinGroup"
+                @select="selectRinGroup"
+              >
+                <a-select-option v-for="item in rinGroup" :key="item" :value="item">{{ item }}</a-select-option>
+              </a-select>
+              <a-spin :spinning="materialsRinLoading">
+                <bar
+                  :data="groupedRinData"
+                  :padding="padding"
+                  position="sampleReplicate*rin"
+                  title="RIN Value for RNA Materials"
+                />
+              </a-spin>
             </a-row>
           </a-tab-pane>
           <a-tab-pane tab="DIN" key="2">
-            <a-row>
-              <bar :data="barData" title="销售额趋势" />
+            <a-row style="margin-right: 32px;">
+              <a-select
+                class="group-selector"
+                style="width: 120px"
+                :value="defaultDinGroup"
+                @select="selectDinGroup"
+              >
+                <a-select-option v-for="item in dinGroup" :key="item" :value="item">{{ item }}</a-select-option>
+              </a-select>
+              <a-spin :spinning="materialsDinLoading">
+                <bar
+                  :data="groupedDinData"
+                  :padding="padding"
+                  position="sampleReplicate*din"
+                  title="DIN Value for RNA Materials"
+                />
+              </a-spin>
             </a-row>
           </a-tab-pane>
         </a-tabs>
@@ -191,12 +200,15 @@
 </template>
 
 <script>
-import { MiniArea, MiniBar, RankList, Bar } from '@/components'
+import { MiniArea, RankList, Bar } from '@/components'
 import { mixinDevice } from '@/utils/mixin'
 import { mapActions } from 'vuex'
 import groupBy from 'lodash.groupby'
 import map from 'lodash.map'
+import filter from 'lodash.filter'
+import sortedUniq from 'lodash.sorteduniq'
 import sumBy from 'lodash.sumby'
+import sortBy from 'lodash.sortby'
 
 const barData = []
 for (let i = 0; i < 12; i += 1) {
@@ -219,7 +231,6 @@ export default {
   mixins: [mixinDevice],
   components: {
     MiniArea,
-    MiniBar,
     RankList,
     Bar
   },
@@ -234,14 +245,29 @@ export default {
       groupedSeqData: [],
       seqBarLoading: false,
       totalVolume: 0,
-      seqDataPosition: 'date*totalSize',
       // Materials
       materialsRankList: [],
       materialsData: [],
       groupedMaterialsData: [],
       materialsBarLoading: false,
+      // RIN
+      rinGroup: [],
+      rinData: [],
+      groupedRinData: [],
+      rinGroupedData: [],
+      defaultRinGroup: '',
+      materialsRinLoading: false,
+      // DIN
+      dinGroup: [],
+      dinData: [],
+      groupedDinData: [],
+      dinGroupedData: [],
+      defaultDinGroup: '',
+      materialsDinLoading: false,
+      // Trend
+      rinDinData: [],
+      // General
       totalTubes: 0,
-      materialsDataPostion: 'date*tubes',
       padding: ['auto', 'auto', '50', '50'],
       materialsTypeCounts: []
     }
@@ -249,7 +275,9 @@ export default {
   methods: {
     ...mapActions({
       getMaterialsSeqData: 'GetMaterialsSeqData',
-      getMaterialsMetadata: 'GetMaterialsMetadata'
+      getMaterialsMetadata: 'GetMaterialsMetadata',
+      getMaterialsDIN: 'GetMaterialsDIN',
+      getMaterialsRIN: 'GetMaterialsRIN'
     }),
     formatColor(group) {
       if (group === 'DNA') {
@@ -278,16 +306,53 @@ export default {
         this.materialsBarLoading = false
       }, 500)
     },
+    selectRinGroup(groupName) {
+      this.materialsRinLoading = true
+      this.groupedRinData = filter(this.rinData, record => {
+        return record.date === groupName
+      })
+
+      setTimeout(() => {
+        this.materialsRinLoading = false
+      }, 500)
+    },
+    selectDinGroup(groupName) {
+      this.materialsDinLoading = true
+      this.groupedDinData = filter(this.dinData, record => {
+        return record.date === groupName
+      })
+
+      setTimeout(() => {
+        this.materialsDinLoading = false
+      }, 500)
+    },
+    groupRinDinData(rinData, dinData) {
+      const groupedData = groupBy(rinData.concat(dinData), function(record) {
+        return record.date + '_' + record.sampleReplicate
+      })
+
+      const rinDinData = map(groupedData, (record, id) => {
+        const data = record[0]
+        const newRecord = {}
+        newRecord['id'] = id
+        newRecord['value'] = data.rin ? data.rin : data.din
+        newRecord['group'] = data.rin ? 'RIN' : 'DIN'
+        return newRecord
+      })
+
+      console.log('rinDinData: ', rinDinData)
+      this.rinDinData = sortBy(rinDinData, (record) => { return record.value })
+    },
     countByGroup(data, groupName) {
       const counts = map(groupBy(data, groupName), (record, id) => ({
         group: id,
         tubes: parseFloat(sumBy(record, 'tubes').toFixed(2)),
-        volume: sumBy(record, (record) => {
+        volume: sumBy(record, record => {
           return record.tubes * record.volume
         })
       }))
 
-      console.log("countByGroup: ", counts)
+      console.log('countByGroup: ', counts)
       return counts
     },
     generateGroupedData(data, groupName, totalVal) {
@@ -333,7 +398,7 @@ export default {
           this.materialsData = response.data
           this.totalTubes = response.total
           this.materialsTypeCounts = this.countByGroup(this.materialsData, 'sampleType')
-          this.selectMaterialsGroup('receiver', 'tubes')
+          this.selectMaterialsGroup('sampleType', 'tubes')
           this.loading = false
         })
         .catch(error => {
@@ -344,11 +409,62 @@ export default {
           this.loading = false
         })
     },
+    getRINData() {
+      this.loading = true
+      this.getMaterialsRIN()
+        .then(response => {
+          this.rinGroup = sortedUniq(
+            map(response, record => {
+              return record.date
+            })
+          )
+
+          this.rinData = response
+          this.defaultRinGroup = this.rinGroup[0]
+          this.groupedRinData = filter(response, record => {
+            return record.date === this.defaultRinGroup
+          })
+          console.log('getRINData: ', this.rinGroup)
+          this.loading = false
+
+          this.getDINData()
+        })
+        .catch(error => {
+          console.log('getRINData Error: ', error)
+          this.loading = false
+        })
+    },
+    getDINData() {
+      this.loading = true
+      this.getMaterialsDIN()
+        .then(response => {
+          this.dinGroup = sortedUniq(
+            map(response, record => {
+              return record.date
+            })
+          )
+
+          this.dinData = response
+          this.defaultDinGroup = this.dinGroup[0]
+          this.groupedDinData = filter(response, record => {
+            return record.date === this.defaultDinGroup
+          })
+          console.log('getDINData: ', this.dinGroup)
+          this.loading = false
+
+          this.groupRinDinData(this.rinData, this.dinData)
+        })
+        .catch(error => {
+          console.log('getDINData Error: ', error)
+          this.loading = false
+        })
+    },
     requestMaterials() {}
   },
   created() {
     this.getMetaData()
     this.getSeqData()
+    this.getRINData()
   }
 }
 </script>

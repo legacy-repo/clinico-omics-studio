@@ -34,18 +34,8 @@ export const asyncRouterMap = [
         path: '/data',
         name: 'data',
         hidden: false,
-        component: () => import('@/views/filemanager/FileBrowser'),
+        component: () => import('@/views/datasource/FilterPanel'),
         meta: { title: 'Data', icon: 'deployment-unit', keepAlive: true }
-      },
-
-      // Visualization
-      {
-        path: '/visualization',
-        name: 'visualization',
-        hidden: false,
-        component: () => import('@/components/FullFrame'),
-        props: route => ({ src: 'http://10.157.72.55:8081/quartet-vis/' }),
-        meta: { title: 'Visualization', icon: 'dot-chart', keepAlive: true }
       },
 
       // SeqFlow
@@ -54,7 +44,7 @@ export const asyncRouterMap = [
         name: 'seq-flow',
         component: RouteView,
         redirect: '/seq-flow/submit',
-        meta: { title: 'QC Tools', icon: 'project', permission: ['table'] },
+        meta: { title: 'Analyses', icon: 'project', permission: ['table'] },
         children: [
           {
             path: '/seq-flow/workplace',
@@ -63,11 +53,25 @@ export const asyncRouterMap = [
             component: () => import('@/views/dashboard/Workplace'),
             meta: { title: 'Workplace', keepAlive: true, icon: 'dashboard', permission: ['dashboard'] }
           },
-
+          {
+            path: '/seq-flow/app-store',
+            name: 'appstore',
+            hidden: false,
+            component: () => import('@/views/appstore/FilterPanel'),
+            meta: { title: 'Apps & Tools', keepAlive: true, icon: 'appstore', permission: ['table'] }
+          },
+          {
+            path: '/seq-flow/file-manager',
+            name: 'file-manager',
+            hidden: false,
+            component: () => import('@/views/filemanager/FileBrowser'),
+            props: route => ({ path: route.query.path }),
+            meta: { title: 'File Management', icon: 'codepen-circle', keepAlive: true }
+          },
           {
             path: '/seq-flow/submit/:pageNo([1-9]\\d*)?',
             name: 'create-project',
-            hidden: false,
+            hidden: true,
             props: route => ({ appId: route.query.appId }),
             component: () => import('@/views/workflow/stepForm/StepForm'),
             meta: { title: 'Create Project', icon: 'file-add', keepAlive: true, permission: ['table'] }
@@ -87,32 +91,43 @@ export const asyncRouterMap = [
             component: () => import('@/views/workflow/ProjectManagement'),
             meta: { title: 'Project Management', icon: 'solution', keepAlive: true, permission: ['table'] }
           },
-
           {
             path: '/seq-flow/report-management',
             name: 'report-management',
             hidden: false,
             component: () => import('@/views/report/ReportManagement'),
             meta: { title: 'Report Management', keepAlive: true, icon: 'file-done', permission: ['table'] }
-          },
-
-          {
-            path: '/seq-flow/file-manager',
-            name: 'file-manager',
-            hidden: false,
-            component: () => import('@/views/filemanager/FileBrowser'),
-            props: route => ({ path: route.query.path }),
-            meta: { title: 'File Management', icon: 'codepen-circle', keepAlive: true }
-          },
-
-          {
-            path: '/seq-flow/app-store',
-            name: 'appstore',
-            hidden: false,
-            component: () => import('@/views/appstore/FilterPanel'),
-            meta: { title: 'App Store', keepAlive: true, icon: 'appstore', permission: ['table'] }
           }
         ]
+      },
+
+      // Visualization
+      {
+        path: '/visualization',
+        name: 'visualization',
+        hidden: false,
+        component: () => import('@/components/FullFrame'),
+        props: route => ({ src: 'http://10.157.72.55:8081/quartet-vis/' }),
+        meta: { title: 'Visualization', icon: 'dot-chart', keepAlive: true }
+      },
+
+      // Request Materials
+      {
+        path: '/request-materials',
+        name: 'request-materials',
+        hidden: true,
+        component: () => import('@/views/dashboard/Request'),
+        meta: { titile: 'Request Materials', icon: 'pull-request', keepAlive: true }
+      },
+
+      // Exploratory
+      {
+        path: '/exploratory',
+        name: 'exploratory',
+        hidden: false,
+        component: () => import('@/components/FullFrame'),
+        props: route => ({ src: 'http://10.157.72.55:8081/quartet-vis/' }),
+        meta: { title: 'Exploratory', icon: 'dribbble', keepAlive: true }
       },
 
       // Account
@@ -234,32 +249,6 @@ export const asyncRouterMap = [
             component: () => import('@/views/report/ReportDetails'),
             props: route => ({ readonly: route.query.readonly }),
             meta: { title: 'Report Details', drawerMode: true, keepAlive: true, permission: ['table'] }
-          }
-        ]
-      },
-
-      // Subcomponent - Data Source
-      {
-        path: '/data-source',
-        name: 'data-source',
-        hidden: true,
-        redirect: '/data-source/discovery',
-        component: PageView,
-        meta: { title: 'Data Source', icon: 'project', permission: ['form'] },
-        children: [
-          {
-            path: '/data-source/search',
-            name: 'search-datasource',
-            hidden: true,
-            component: () => import('@/views/datasource/Search'),
-            meta: { title: 'Search', hiddenHeaderContent: true, keepAlive: true, permission: ['form'] }
-          },
-          {
-            path: '/data-source/exploration',
-            name: 'exploration',
-            hidden: true,
-            component: () => import('@/views/datasource/FilterPanel'),
-            meta: { title: 'Exploration', hiddenHeaderContent: true, keepAlive: true, permission: ['form'] }
           }
         ]
       },

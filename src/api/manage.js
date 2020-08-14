@@ -16,6 +16,10 @@ const api = {
   workflow: '/api/workflows',
   log: '/api/logs',
   notification: '/api/notifications',
+  dataCommons: {
+    collections: '/api/collections',
+    groups: '/api/count-collections'
+  },
   appStore: {
     installedApps: '/api/installed-apps',
     apps: '/api/apps',
@@ -32,6 +36,64 @@ const api = {
 }
 
 export default api
+
+// Materials Data
+export function getMaterialsSeqData () {
+  return axios({
+    url: 'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/materials_seqdata.json',
+    method: 'get',
+    params: {}
+  })
+}
+
+export function getMaterialsMetadata () {
+  return axios({
+    url: 'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/materials_metadata.json',
+    method: 'get',
+    params: {}
+  })
+}
+
+export function getMaterialsDIN () {
+  return axios({
+    url: 'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/materials_din.json',
+    method: 'get',
+    params: {}
+  })
+}
+
+export function getMaterialsRIN () {
+  return axios({
+    url: 'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/materials_rin.json',
+    method: 'get',
+    params: {}
+  })
+}
+
+export function getMaterialsLicense () {
+  return axios({
+    url: 'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/materials_license.md',
+    method: 'get',
+    params: {}
+  })
+}
+
+// Metadata
+export function getCollections (params) {
+  return axios({
+    url: api.dataCommons.collections,
+    method: 'get',
+    params: params
+  })
+}
+
+export function countCollections (params) {
+  return axios({
+    url: api.dataCommons.groups,
+    method: 'get',
+    params: params
+  })
+}
 
 // Minio/OSS/S3: Bucket + Object
 export function getBuckets () {

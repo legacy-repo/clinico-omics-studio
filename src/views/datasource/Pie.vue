@@ -1,23 +1,22 @@
 <template>
   <a-row class="pie-chart">
     <h4>{{ title }}</h4>
-    <v-chart class="chart" :forceFit="true" :height="height" :width="width" :data="getData()" :scale="scale" padding="auto">
-      <v-tooltip :showTitle="false" dataKey="name*percent" />
+    <v-chart class="chart" :forceFit="true" :height="height" :width="width" :data="dataSource" :scale="scale" padding="auto">
+      <v-tooltip :showTitle="false" dataKey="name*count" />
       <v-axis />
       <v-legend dataKey="name" v-if="showLegend" />
-      <v-pie position="percent" color="name" :v-style="pieStyle" :label="getLableConfig()" />
+      <v-pie position="count" color="name" :v-style="pieStyle" :label="getLableConfig()" />
       <v-coord type="theta" />
     </v-chart>
   </a-row>
 </template>
 
 <script>
-const DataSet = require('@antv/data-set')
+import DataSet from '@antv/data-set'
 
 const scale = [{
-  dataKey: 'percent',
-  min: 0,
-  formatter: '.0%'
+  dataKey: 'count',
+  min: 0
 }]
 
 export default {
@@ -55,7 +54,7 @@ export default {
         stroke: '#fff',
         lineWidth: 1
       },
-      labelConfig: ['percent', {
+      labelConfig: ['count', {
         offset: -40,
         textStyle: {
           rotate: 0,
@@ -77,10 +76,10 @@ export default {
     getData () {
       const dv = new DataSet.View().source(this.dataSource)
       dv.transform({
-        type: 'percent',
+        type: 'count',
         field: 'count',
         dimension: 'name',
-        as: 'percent'
+        as: 'count'
       })
       const data = dv.rows
       return data

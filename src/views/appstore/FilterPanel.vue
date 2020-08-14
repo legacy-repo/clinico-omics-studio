@@ -18,14 +18,7 @@
           <app-list :appList="appList"></app-list>
         </a-tab-pane>
         <a-tab-pane tab="Tools" key="2">
-          <app-list :appList="toolList"></app-list>
-        </a-tab-pane>
-        <a-tab-pane tab="Statistics" key="3" class="graph-tab">
-          <h4>Case count per Data Category</h4>
-          <img
-            style="height: 860px;"
-            src="http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/choppy/case-count.png"
-          />
+          <tool-list :toolList="toolList"></tool-list>
         </a-tab-pane>
       </a-tabs>
     </a-col>
@@ -37,13 +30,15 @@
 import { mapActions } from 'vuex'
 import { FilterList } from '@/components'
 import AppList from '@/views/appstore/AppList'
+import ToolList from '@/views/appstore/ToolList'
 import orderBy from 'lodash.orderby'
 
 export default {
   name: 'FilterPanel',
   components: {
     FilterList,
-    AppList
+    AppList,
+    ToolList
   },
   data() {
     return {

@@ -1,115 +1,279 @@
 <template>
   <a-row>
-    <div class="table-operations">
-      <a-button @click="setAgeSort">Sort age</a-button>
-      <a-button @click="clearFilters">Clear filters</a-button>
-      <a-button @click="clearAll">Clear filters and sorters</a-button>
-    </div>
-    <a-table :columns="columns" :dataSource="data" @change="handleChange" />
+    <a-row class="table-operations">
+      <a-col :xl="12" :lg="12" :md="24" :sm="24" :xs="24">
+        <a-popover v-model="menuVisible" trigger="click" placement="bottom">
+          <a-input-search
+            style="margin-bottom: 10px;"
+            slot="content"
+            placeholder="Filter Columns"
+            allowClear
+            @change="onSearch"
+          />
+          <a-row slot="content">
+            <a-col class="column-list">
+              <a-checkbox
+                v-for="item in filteredColumns"
+                :defaultChecked="item.visible"
+                :key="item.key"
+                @change="onSelectColumn(item.title, $event)"
+              >{{ item.title }}</a-checkbox>
+            </a-col>
+          </a-row>
+          <a-button @click="showMenu">
+            <a-icon type="menu" />
+          </a-button>
+        </a-popover>
+        <a-button @click="showSortMenu">
+          <a-icon type="sort-ascending" />
+        </a-button>
+        <a-button @click="downloadAsJSON">JSON</a-button>
+        <a-button @click="downloadAsCSV">CSV</a-button>
+      </a-col>
+      <a-col :xl="12" :lg="12" :md="24" :sm="24" :xs="24">
+        <p class="header-info">Showing {{ first }} - {{ last }} of {{ total }} files</p>
+      </a-col>
+    </a-row>
+    <a-table
+      :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
+      :columns="visibleColumns"
+      :pagination="pagination"
+      :dataSource="data"
+      :loading="loading"
+      :scroll="{ x: 1000, y: 780 }"
+      @change="handleChange"
+    />
   </a-row>
 </template>
 
 <script>
-const data = [
+import filter from 'lodash.filter'
+import map from 'lodash.map'
+import { mapActions } from 'vuex'
+
+const columns = [
   {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park'
-  }, {
-    key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 1 Lake Park'
-  }, {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park'
-  }, {
-    key: '4',
-    name: 'Jim Red',
-    age: 32,
-    address: 'London No. 2 Lake Park'
+    title: 'Access',
+    dataIndex: 'access',
+    key: 'access',
+    align: 'center',
+    visible: false,
+    width: 80
+  },
+  {
+    title: 'File Name',
+    dataIndex: 'fileName',
+    key: 'fileName',
+    align: 'center',
+    visible: true,
+    width: 200
+  },
+  {
+    title: 'Library',
+    dataIndex: 'library',
+    key: 'library',
+    align: 'center',
+    visible: true,
+    width: 100
+  },
+  {
+    title: 'Project',
+    dataIndex: 'project',
+    key: 'project',
+    align: 'center',
+    visible: true,
+    width: 100
+  },
+  {
+    title: 'Data Category',
+    dataIndex: 'dataCategory',
+    key: 'dataCategory',
+    align: 'center',
+    visible: true,
+    width: 150
+  },
+  {
+    title: 'Data Format',
+    dataIndex: 'dataFormat',
+    key: 'dataFormat',
+    align: 'center',
+    visible: true,
+    width: 150
+  },
+  {
+    title: 'File Size',
+    dataIndex: 'fileSize',
+    key: 'fileSize',
+    align: 'center',
+    visible: true,
+    width: 150
+  },
+  {
+    title: 'Annotations',
+    dataIndex: 'annotations',
+    key: 'annotations',
+    align: 'center',
+    visible: false,
+    width: 150
   }
 ]
 
 export default {
-  data () {
+  props: {
+    queryMap: {
+      required: false,
+      default: () => Object(),
+      type: Object
+    },
+    queryMapString: {
+      required: false,
+      default: '',
+      type: String
+    }
+  },
+  data() {
     return {
-      data,
-      filteredInfo: null,
-      sortedInfo: null
+      data: [],
+      filterValue: '',
+      loading: false,
+      menuVisible: false,
+      selectedRowKeys: [],
+      columns,
+      pagination: {
+        size: 'small',
+        pageSizeOptions: ['30', '50', '100'],
+        showSizeChanger: true,
+        showQuickJumper: true,
+        pageSize: 30,
+        total: 0,
+        current: 1,
+        onChange: (page, pageSize) => {
+          const queryMap = Object.assign(this.queryMap, {
+            page: page,
+            per_page: pageSize
+          })
+          this.searchCollections(queryMap)
+        },
+        onShowSizeChange: (current, pageSize) => {
+          const queryMap = Object.assign(this.queryMap, {
+            page: 1,
+            per_page: pageSize
+          })
+          this.searchCollections(queryMap)
+        }
+      }
     }
   },
   computed: {
-    columns () {
-      let { sortedInfo, filteredInfo } = this
-      sortedInfo = sortedInfo || {}
-      filteredInfo = filteredInfo || {}
-      const columns = [{
-        title: 'Name',
-        dataIndex: 'name',
-        key: 'name',
-        filters: [
-          { text: 'Joe', value: 'Joe' },
-          { text: 'Jim', value: 'Jim' }
-        ],
-        filteredValue: filteredInfo.name || null,
-        onFilter: (value, record) => record.name.includes(value),
-        sorter: (a, b) => a.name.length - b.name.length,
-        sortOrder: sortedInfo.columnKey === 'name' && sortedInfo.order
-      }, {
-        title: 'Age',
-        dataIndex: 'age',
-        key: 'age',
-        sorter: (a, b) => a.age - b.age,
-        sortOrder: sortedInfo.columnKey === 'age' && sortedInfo.order
-      }, {
-        title: 'Address',
-        dataIndex: 'address',
-        key: 'address',
-        filters: [
-          { text: 'London', value: 'London' },
-          { text: 'New York', value: 'New York' }
-        ],
-        filteredValue: filteredInfo.address || null,
-        onFilter: (value, record) => record.address.includes(value),
-        sorter: (a, b) => a.address.length - b.address.length,
-        sortOrder: sortedInfo.columnKey === 'address' && sortedInfo.order
-      }]
-      return columns
+    hasSelected() {
+      return this.selectedRowKeys.length > 0
+    },
+    filteredColumns() {
+      return filter(this.columns, record => {
+        return record.title.indexOf(this.filterValue) >= 0
+      })
+    },
+    visibleColumns() {
+      return filter(this.columns, record => {
+        return record.visible === true
+      })
+    },
+    first() {
+      return (this.pagination.current - 1) * this.pagination.pageSize + 1
+    },
+    last() {
+      return this.pagination.current * this.pagination.pageSize
+    },
+    total() {
+      return this.pagination.total
+    }
+  },
+  watch: {
+    queryMapString: function(newVal, oldVal) {
+      console.log('queryMap Changed: ', newVal, oldVal)
+      this.searchCollections(this.queryMap)
     }
   },
   methods: {
-    handleChange (pagination, filters, sorter) {
-      console.log('Various parameters', pagination, filters, sorter)
-      this.filteredInfo = filters
-      this.sortedInfo = sorter
+    ...mapActions({
+      getCollections: 'GetCollections'
+    }),
+    onSearch(e) {
+      this.filterValue = e.target.value
     },
-    clearFilters () {
-      this.filteredInfo = null
+    onSelectColumn(value, event) {
+      console.log('onSelectColumn: ', value, event)
+      map(this.columns, record => {
+        if (record.title === value) {
+          record.visible = event.target.checked
+        }
+      })
     },
-    clearAll () {
-      this.filteredInfo = null
-      this.sortedInfo = null
+    showMenu() {},
+    showSortMenu() {},
+    onSelectChange(selectedRowKeys) {
+      console.log('selectedRowKeys changed: ', selectedRowKeys)
+      this.selectedRowKeys = selectedRowKeys
     },
-    setAgeSort () {
-      this.sortedInfo = {
-        order: 'descend',
-        columnKey: 'age'
-      }
+    handleChange(pagination, filters, sorter) {},
+    downloadAsJSON() {},
+    downloadAsCSV() {},
+    setAgeSort() {},
+    searchCollections(queryMap) {
+      this.loading = true
+      this.getCollections(queryMap)
+        .then(response => {
+          this.data = response.data
+          this.pagination.total = response.total
+          this.pagination.current = response.page
+          this.pagination.pageSize = response.pageSize
+          setTimeout(() => {
+            this.loading = false
+          }, 300)
+        })
+        .catch(error => {
+          this.$message.warn('Cannot fetch data, please retry later.')
+          console.log('searchCollections Error: ', error)
+          this.loading = false
+        })
     }
+  },
+  created() {
+    this.searchCollections(this.queryMap)
   }
 }
 </script>
 
 <style lang="less" scoped>
 .table-operations {
-  margin-bottom: 16px;
+  margin-bottom: 5px;
+  height: 35px;
+
+  .ant-col {
+    height: 100%;
+
+    .header-info {
+      font-weight: 500;
+      width: 100%;
+      text-align: right;
+      line-height: 2;
+      height: 100%;
+    }
+  }
 
   button {
     margin-right: 8px;
+  }
+}
+</style>
+
+<style lang="less">
+.column-list {
+  display: flex;
+  flex-direction: column;
+
+  .ant-checkbox-wrapper + .ant-checkbox-wrapper {
+    margin-left: 0px;
   }
 }
 </style>

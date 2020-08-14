@@ -46,7 +46,7 @@ export default {
       data,
       tooltip,
       scale,
-      height: 100
+      height: 120
     }
   }
 }

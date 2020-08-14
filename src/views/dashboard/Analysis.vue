@@ -1,102 +1,128 @@
 <template>
-  <div class="page-header-index-wide">
-    <!-- <a-row class="control-header">
-      <a-button @click="requestMaterials"><a-icon type="file-protect"/>Request Materials</a-button>
-    </a-row> -->
-    <a-row :gutter="24">
-      <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '10px', paddingRight: '0px' }">
-        <chart-card :loading="loading" title="Materials Requests" total="126,560">
-          <a-tooltip title="Details" slot="action">
+  <div class="dashboard-container">
+    <a-row :gutter="24" style="margin-right: 0px;">
+      <a-col :sm="24" :md="24" :xl="12" :style="{ paddingRight: '0px' }">
+        <a-card :loading="loading" title="Materials Requests">
+          <a-popover title="Requested Details" slot="extra">
+            <template slot="content">
+              <p v-for="item in materialsTypeCounts" :key="item.group">
+                <a-tag :color="formatColor(item.group)">{{ item.group }}</a-tag>
+                {{ item.tubes }} tubes / {{ item.volume }} μl
+              </p>
+            </template>
             <a-icon type="info-circle-o" />
-          </a-tooltip>
-          <div style="display: flex; justify-content: space-between;">
-            <!-- <trend flag="up" style="margin-right: 16px;">
-              <span slot="term">周同比</span>
-              12%
-            </trend>
-            <trend flag="down">
-              <span slot="term">日同比</span>
-              11%
-            </trend> -->
-            <a-button @click="requestMaterials"><a-icon type="file-protect"/>Request</a-button>
-            <a-button @click="requestMaterials"><a-icon type="message"/>Feedback</a-button>
-          </div>
-          <template slot="footer">Located in PGx Lab from Fudan University</template>
-        </chart-card>
-      </a-col>
-      <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '10px', paddingRight: '0px' }">
-        <chart-card :loading="loading" title="Request" :total="8846 | NumberFormat">
-          <a-tooltip title="Details" slot="action">
-            <a-icon type="info-circle-o" />
-          </a-tooltip>
-          <div>
-            <mini-area />
-          </div>
-          <template slot="footer">Today Requests<span> {{ '1234' | NumberFormat }}</span></template>
-        </chart-card>
-      </a-col>
-      <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '10px', paddingRight: '0px' }">
-        <chart-card :loading="loading" title="支付笔数" :total="6560 | NumberFormat">
-          <a-tooltip title="Details" slot="action">
-            <a-icon type="info-circle-o" />
-          </a-tooltip>
-          <div>
-            <mini-bar />
-          </div>
-          <template slot="footer">转化率 <span>60%</span></template>
-        </chart-card>
-      </a-col>
-      <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '10px' }">
-        <chart-card :loading="loading" title="运营活动效果" total="78%">
-          <a-tooltip title="Details" slot="action">
-            <a-icon type="info-circle-o" />
-          </a-tooltip>
-          <div>
-            <mini-progress color="rgb(19, 194, 194)" :target="80" :percentage="78" height="8px" />
-          </div>
-          <template slot="footer">
-            <trend flag="down" style="margin-right: 16px;">
-              <span slot="term">同周比</span>
-              12%
-            </trend>
-            <trend flag="up">
-              <span slot="term">日环比</span>
-              80%
-            </trend>
+          </a-popover>
+          <a-row class="content">{{ description }}</a-row>
+          <template slot="actions">
+            <a-col class="total">{{ totalTubes }} tubes / {{ totalVolume }}</a-col>
+            <a-col class="btn-group">
+              <a-button @click="requestMaterials" type="primary">
+                <a-icon type="file-protect" />Request
+              </a-button>
+              <a-button @click="switchDetails" style="margin-left: 5px;">
+                <a-icon type="check-circle" />Details
+              </a-button>
+            </a-col>
           </template>
-        </chart-card>
+        </a-card>
+      </a-col>
+
+      <!-- 暂时隐藏 -->
+      <a-col :sm="24" :md="12" :xl="6" :style="{ paddingRight: '0px', display: 'none' }">
+        <a-card :loading="loading" title="Temperature">
+          <a-tooltip title="Details" slot="extra">
+            <a-icon type="info-circle-o" />
+          </a-tooltip>
+          <a-row class="content">
+            <mini-area />
+          </a-row>
+          <template slot="actions">Stable Temperature</template>
+        </a-card>
+      </a-col>
+      <a-col :sm="24" :md="24" :xl="12" :style="{ paddingRight: '0px', display: 'block' }">
+        <a-card :loading="loading" title="Stable Quality">
+          <a-tooltip title="Details" slot="extra">
+            <a-icon type="info-circle-o" />
+          </a-tooltip>
+          <a-row class="content" style="height: 144px;">
+            <v-chart :force-fit="true" :height="160" :data="rinDinData" :padding="[36, 5, 18, 5]">
+              <v-tooltip />
+              <v-legend position="top" />
+              <v-bar position="id*value" color="group" />
+            </v-chart>
+          </a-row>
+        </a-card>
       </a-col>
     </a-row>
 
     <a-card :loading="loading" :bordered="false" :body-style="{padding: '0'}">
       <div class="salesCard">
-        <a-tabs default-active-key="1" size="large" :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}">
-          <div class="extra-wrapper" slot="tabBarExtraContent">
-            <div class="extra-item">
-              <a>Today</a>
-              <a>Week</a>
-              <a>Month</a>
-              <a>Year</a>
-            </div>
-            <a-range-picker :style="{width: '256px'}" />
-          </div>
-          <a-tab-pane loading="true" tab="Materials" key="1">
+        <a-tabs
+          default-active-key="1"
+          size="large"
+          :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}"
+        >
+          <a-tab-pane tab="Materials" key="materials">
             <a-row>
               <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                <bar :data="barData" title="Usage Ranking" />
+                <a-select
+                  class="group-selector"
+                  style="width: 120px"
+                  @change="selectMaterialsGroup"
+                  default-value="sampleType"
+                >
+                  <a-select-option value="sampleType">Sample Type</a-select-option>
+                  <a-select-option value="receiver">Receiver</a-select-option>
+                </a-select>
+                <a-spin :spinning="materialsBarLoading">
+                  <bar
+                    :data="groupedMaterialsData"
+                    :padding="padding"
+                    color="group"
+                    position="date*tubes"
+                    title="Materials Tubes"
+                  />
+                </a-spin>
               </a-col>
               <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-                <rank-list title="Usage Ranking in Lab" :list="rankList"/>
+                <rank-list
+                  class="rank-list"
+                  title="Usage Ranking in Lab (Tubes)"
+                  :list="materialsRankList"
+                />
               </a-col>
             </a-row>
           </a-tab-pane>
-          <a-tab-pane tab="Data" key="2">
+          <a-tab-pane tab="Data" key="data">
             <a-row>
               <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                <bar :data="barData2" title="销售额趋势" />
+                <a-select
+                  class="group-selector"
+                  default-value="site"
+                  style="width: 120px"
+                  @change="selectSeqGroup"
+                >
+                  <a-select-option value="site">Site</a-select-option>
+                  <a-select-option value="library">Library</a-select-option>
+                  <a-select-option value="company">Platform</a-select-option>
+                  <a-select-option value="machine">Machine</a-select-option>
+                </a-select>
+                <a-spin :spinning="seqBarLoading">
+                  <bar
+                    :data="groupedSeqData"
+                    :padding="padding"
+                    color="group"
+                    position="date*totalSize"
+                    title="Data Volume (GB)"
+                  />
+                </a-spin>
               </a-col>
               <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-                <rank-list title="Usage Ranking in Lab" :list="rankList"/>
+                <rank-list
+                  class="rank-list"
+                  title="Usage Ranking in Lab (GB)"
+                  :list="seqDataRankList"
+                />
               </a-col>
             </a-row>
           </a-tab-pane>
@@ -104,338 +130,502 @@
       </div>
     </a-card>
 
-    <div class="antd-pro-pages-dashboard-analysis-twoColLayout" :class="isDesktop() ? 'desktop' : ''">
-      <a-row :gutter="24">
-        <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24">
-          <a-card :loading="loading" :bordered="false" title="线上热门搜索" :style="{ marginTop: '10px', height: '500px' }">
-            <a-dropdown :trigger="['click']" placement="bottomLeft" slot="extra">
-              <a class="ant-dropdown-link" href="#">
-                <a-icon type="ellipsis" />
-              </a>
-              <a-menu slot="overlay">
-                <a-menu-item>
-                  <a href="javascript:;">操作一</a>
-                </a-menu-item>
-                <a-menu-item>
-                  <a href="javascript:;">操作二</a>
-                </a-menu-item>
-              </a-menu>
-            </a-dropdown>
-            <a-row :gutter="68">
-              <a-col :xs="24" :sm="12" :style="{ marginBottom: ' 24px'}">
-                <number-info :total="12321" :sub-total="17.1">
-                  <span slot="subtitle">
-                    <span>搜索用户数</span>
-                    <a-tooltip title="Details" slot="action">
-                      <a-icon type="info-circle-o" :style="{ marginLeft: '8px' }" />
-                    </a-tooltip>
-                  </span>
-                </number-info>
-                <!-- miniChart -->
-                <div>
-                  <mini-smooth-area :style="{ height: '45px' }" :dataSource="searchUserData" :scale="searchUserScale" />
-                </div>
-              </a-col>
-              <a-col :xs="24" :sm="12" :style="{ marginBottom: ' 24px'}">
-                <number-info :total="2.7" :sub-total="26.2" status="down">
-                  <span slot="subtitle">
-                    <span>人均搜索次数</span>
-                    <a-tooltip title="Details" slot="action">
-                      <a-icon type="info-circle-o" :style="{ marginLeft: '8px' }" />
-                    </a-tooltip>
-                  </span>
-                </number-info>
-                <!-- miniChart -->
-                <div>
-                  <mini-smooth-area :style="{ height: '45px' }" :dataSource="searchUserData" :scale="searchUserScale" />
-                </div>
-              </a-col>
+    <a-card :loading="loading" :bordered="false" :body-style="{padding: '0'}">
+      <div class="salesCard">
+        <a-tabs
+          default-active-key="1"
+          size="large"
+          :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}"
+        >
+          <a-tab-pane tab="Temperature" key="1">
+            <a-row>
+              <bar :data="barData" title="Usage Ranking" />
             </a-row>
-            <div class="ant-table-wrapper">
-              <a-table
-                row-key="index"
-                size="small"
-                :columns="searchTableColumns"
-                :dataSource="searchData"
-                :pagination="{ pageSize: 5 }"
+          </a-tab-pane>
+        </a-tabs>
+      </div>
+    </a-card>
+
+    <a-card :loading="loading" :bordered="false" :body-style="{padding: '0'}">
+      <div class="salesCard">
+        <a-tabs
+          default-active-key="1"
+          size="large"
+          :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}"
+        >
+          <a-tab-pane tab="RIN" key="1">
+            <a-row style="margin-right: 32px;">
+              <a-select
+                class="group-selector"
+                style="width: 120px"
+                :value="defaultRinGroup"
+                @select="selectRinGroup"
               >
-                <span slot="range" slot-scope="text, record">
-                  <trend :flag="record.status === 0 ? 'up' : 'down'">
-                    {{ text }}%
-                  </trend>
-                </span>
-              </a-table>
-            </div>
-          </a-card>
-        </a-col>
-        <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24">
-          <a-card class="antd-pro-pages-dashboard-analysis-salesCard" :loading="loading" :bordered="false" title="销售额类别占比" :style="{ marginTop: '10px', height: '500px' }">
-            <div slot="extra" style="height: inherit;">
-              <!-- style="bottom: 12px;display: inline-block;" -->
-              <span class="dashboard-analysis-iconGroup">
-                <a-dropdown :trigger="['click']" placement="bottomLeft">
-                  <a-icon type="ellipsis" class="ant-dropdown-link" />
-                  <a-menu slot="overlay">
-                    <a-menu-item>
-                      <a href="javascript:;">操作一</a>
-                    </a-menu-item>
-                    <a-menu-item>
-                      <a href="javascript:;">操作二</a>
-                    </a-menu-item>
-                  </a-menu>
-                </a-dropdown>
-              </span>
-              <div class="analysis-salesTypeRadio">
-                <a-radio-group defaultValue="a">
-                  <a-radio-button value="a">全部渠道</a-radio-button>
-                  <a-radio-button value="b">线上</a-radio-button>
-                  <a-radio-button value="c">门店</a-radio-button>
-                </a-radio-group>
-              </div>
+                <a-select-option v-for="item in rinGroup" :key="item" :value="item">{{ item }}</a-select-option>
+              </a-select>
+              <a-spin :spinning="materialsRinLoading">
+                <bar
+                  :data="groupedRinData"
+                  :padding="padding"
+                  position="sampleReplicate*rin"
+                  title="RIN Value for RNA Materials"
+                />
+              </a-spin>
+            </a-row>
+          </a-tab-pane>
+          <a-tab-pane tab="DIN" key="2">
+            <a-row style="margin-right: 32px;">
+              <a-select
+                class="group-selector"
+                style="width: 120px"
+                :value="defaultDinGroup"
+                @select="selectDinGroup"
+              >
+                <a-select-option v-for="item in dinGroup" :key="item" :value="item">{{ item }}</a-select-option>
+              </a-select>
+              <a-spin :spinning="materialsDinLoading">
+                <bar
+                  :data="groupedDinData"
+                  :padding="padding"
+                  position="sampleReplicate*din"
+                  title="DIN Value for RNA Materials"
+                />
+              </a-spin>
+            </a-row>
+          </a-tab-pane>
+        </a-tabs>
+      </div>
+    </a-card>
 
-            </div>
-            <h4>销售额</h4>
-            <div>
-              <!-- style="width: calc(100% - 240px);" -->
-              <div>
-                <v-chart :force-fit="true" :height="405" :data="pieData" :scale="pieScale">
-                  <v-tooltip :showTitle="false" dataKey="item*percent" />
-                  <v-axis />
-                  <!-- position="right" :offsetX="-140" -->
-                  <v-legend dataKey="item"/>
-                  <v-pie position="percent" color="item" :vStyle="pieStyle" />
-                  <v-coord type="theta" :radius="0.75" :innerRadius="0.6" />
-                </v-chart>
-              </div>
-
-            </div>
-          </a-card>
-        </a-col>
-      </a-row>
-    </div>
+    <div class="mask-window" v-if="pdfViewerVisible" @click="switchDetails"></div>
+    <a-row class="popup-container" v-if="pdfViewerVisible">
+      <a-tabs v-model="currentTab" animated @change="selectPDF">
+        <a-tab-pane
+          v-for="item in materialsDetails"
+          :key="item.key"
+          :tab="item.title"
+          :disabled="item.pdfUrl.length === 0"
+        >
+          <pdf-viewer :url="item.pdfUrl"></pdf-viewer>
+        </a-tab-pane>
+      </a-tabs>
+    </a-row>
   </div>
 </template>
 
 <script>
-import moment from 'moment'
-import { ChartCard, MiniArea, MiniBar, MiniProgress, RankList, Bar, Trend, NumberInfo, MiniSmoothArea } from '@/components'
+import { MiniArea, RankList, Bar, PdfViewer } from '@/components'
 import { mixinDevice } from '@/utils/mixin'
+import { mapActions } from 'vuex'
+import groupBy from 'lodash.groupby'
+import map from 'lodash.map'
+import filter from 'lodash.filter'
+import sortedUniq from 'lodash.sorteduniq'
+import sumBy from 'lodash.sumby'
+import sortBy from 'lodash.sortby'
 
 const barData = []
-const barData2 = []
 for (let i = 0; i < 12; i += 1) {
   barData.push({
     x: `${i + 1}月`,
     y: Math.floor(Math.random() * 1000) + 200
   })
-  barData2.push({
-    x: `${i + 1}月`,
-    y: Math.floor(Math.random() * 1000) + 200
-  })
 }
-
-const rankList = []
-for (let i = 0; i < 7; i++) {
-  rankList.push({
-    name: 'Fudan University ' + '-' + ' Lab' + (i + 1),
-    total: 1234.56 - i * 100
-  })
-}
-
-const searchUserData = []
-for (let i = 0; i < 7; i++) {
-  searchUserData.push({
-    x: moment().add(i, 'days').format('YYYY-MM-DD'),
-    y: Math.ceil(Math.random() * 10)
-  })
-}
-const searchUserScale = [
-  {
-    dataKey: 'x',
-    alias: '时间'
-  },
-  {
-    dataKey: 'y',
-    alias: '用户数',
-    min: 0,
-    max: 10
-  }]
-
-const searchTableColumns = [
-  {
-    dataIndex: 'index',
-    title: '排名',
-    width: 90
-  },
-  {
-    dataIndex: 'keyword',
-    title: '搜索关键词'
-  },
-  {
-    dataIndex: 'count',
-    title: '用户数'
-  },
-  {
-    dataIndex: 'range',
-    title: '周涨幅',
-    align: 'right',
-    sorter: (a, b) => a.range - b.range,
-    scopedSlots: { customRender: 'range' }
-  }
-]
-const searchData = []
-for (let i = 0; i < 50; i += 1) {
-  searchData.push({
-    index: i + 1,
-    keyword: `搜索关键词-${i}`,
-    count: Math.floor(Math.random() * 1000),
-    range: Math.floor(Math.random() * 100),
-    status: Math.floor((Math.random() * 10) % 2)
-  })
-}
-
-const DataSet = require('@antv/data-set')
-
-const sourceData = [
-  { item: '家用电器', count: 32.2 },
-  { item: '食用酒水', count: 21 },
-  { item: '个护健康', count: 17 },
-  { item: '服饰箱包', count: 13 },
-  { item: '母婴产品', count: 9 },
-  { item: '其他', count: 7.8 }
-]
-
-const pieScale = [{
-  dataKey: 'percent',
-  min: 0,
-  formatter: '.0%'
-}]
-
-const dv = new DataSet.View().source(sourceData)
-dv.transform({
-  type: 'percent',
-  field: 'count',
-  dimension: 'item',
-  as: 'percent'
-})
-const pieData = dv.rows
 
 export default {
   name: 'Analysis',
   mixins: [mixinDevice],
   components: {
-    ChartCard,
     MiniArea,
-    MiniBar,
-    MiniProgress,
     RankList,
     Bar,
-    Trend,
-    NumberInfo,
-    MiniSmoothArea
+    PdfViewer
   },
-  data () {
+  data() {
     return {
       loading: true,
-      rankList,
-
-      // 搜索用户数
-      searchUserData,
-      searchUserScale,
-      searchTableColumns,
-      searchData,
-
       barData,
-      barData2,
-
-      //
-      pieScale,
-      pieData,
-      sourceData,
-      pieStyle: {
-        stroke: '#fff',
-        lineWidth: 1
-      }
+      // SeqData
+      seqDataRankList: [],
+      seqData: [],
+      groupedSeqData: [],
+      seqBarLoading: false,
+      totalVolume: 0,
+      // Materials
+      materialsRankList: [],
+      materialsData: [],
+      groupedMaterialsData: [],
+      materialsBarLoading: false,
+      // RIN
+      rinGroup: [],
+      rinData: [],
+      groupedRinData: [],
+      rinGroupedData: [],
+      defaultRinGroup: '',
+      materialsRinLoading: false,
+      // DIN
+      dinGroup: [],
+      dinData: [],
+      groupedDinData: [],
+      dinGroupedData: [],
+      defaultDinGroup: '',
+      materialsDinLoading: false,
+      // Trend
+      rinDinData: [],
+      // General
+      totalTubes: 0,
+      padding: ['auto', 'auto', '50', '50'],
+      materialsTypeCounts: [],
+      description:
+        'Chinese Quartet DNA, RNA, protein, and metabolite reference materials were generated simultaneously from the same set of EBV immortalized lymphoblast cell lines (LCLs) including father (Quartet_F7), mother (Quartet_M8), and two monozygotic twin daughters (Quartet_D5 and Quartet_D6). These reference materials will benefit the quality control and standardization of large-scale, longitudinal, cross-lab, and cross-platform cohort studies.',
+      pdfViewerVisible: false,
+      materialsDetails: [
+        {
+          key: 'dna',
+          pdfUrl:
+            'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/20181212_ZhengYuanting_Quartet_DNA_Processing_and_Sequence_Data_Reporting_Overview_Sop.pdf',
+          title: 'DNA Materials'
+        },
+        {
+          key: 'rna',
+          pdfUrl:
+            'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/Quartet_RNA_Processing_and_Sequence_Data_Reporting_Overview_Sop_v20200518.pdf',
+          title: 'RNA Materials'
+        },
+        {
+          key: 'cell',
+          pdfUrl: '',
+          title: 'Cell Materials'
+        }
+      ],
+      currentTab: 'dna',
+      pdfUrl: ''
     }
   },
   methods: {
-    requestMaterials () {
+    ...mapActions({
+      getMaterialsSeqData: 'GetMaterialsSeqData',
+      getMaterialsMetadata: 'GetMaterialsMetadata',
+      getMaterialsDIN: 'GetMaterialsDIN',
+      getMaterialsRIN: 'GetMaterialsRIN'
+    }),
+    formatColor(group) {
+      if (group === 'DNA') {
+        return '#f50'
+      } else if (group === 'RNA') {
+        return '#2db7f5'
+      } else if (group === 'Plasma') {
+        return '#87d068'
+      } else if (group === 'Cell') {
+        return '#108ee9'
+      } else {
+        return 'blue'
+      }
+    },
+    selectSeqGroup(groupName) {
+      this.seqBarLoading = true
+      this.groupedSeqData = this.generateGroupedData(this.seqData, groupName, 'totalSize')
+      setTimeout(() => {
+        this.seqBarLoading = false
+      }, 500)
+    },
+    selectMaterialsGroup(groupName) {
+      this.materialsBarLoading = true
+      this.groupedMaterialsData = this.generateGroupedData(this.materialsData, groupName, 'tubes')
+      setTimeout(() => {
+        this.materialsBarLoading = false
+      }, 500)
+    },
+    selectRinGroup(groupName) {
+      this.materialsRinLoading = true
+      this.groupedRinData = filter(this.rinData, record => {
+        return record.date === groupName
+      })
 
+      setTimeout(() => {
+        this.materialsRinLoading = false
+      }, 500)
+    },
+    selectDinGroup(groupName) {
+      this.materialsDinLoading = true
+      this.groupedDinData = filter(this.dinData, record => {
+        return record.date === groupName
+      })
+
+      setTimeout(() => {
+        this.materialsDinLoading = false
+      }, 500)
+    },
+    groupRinDinData(rinData, dinData) {
+      const groupedData = groupBy(rinData.concat(dinData), function(record) {
+        return record.date + '_' + record.sampleReplicate
+      })
+
+      const rinDinData = map(groupedData, (record, id) => {
+        const data = record[0]
+        const newRecord = {}
+        newRecord['id'] = id
+        newRecord['value'] = data.rin ? data.rin : data.din
+        newRecord['group'] = data.rin ? 'RIN' : 'DIN'
+        return newRecord
+      })
+
+      console.log('rinDinData: ', rinDinData)
+      this.rinDinData = sortBy(rinDinData, record => {
+        return record.value
+      })
+    },
+    countByGroup(data, groupName) {
+      const counts = map(groupBy(data, groupName), (record, id) => ({
+        group: id,
+        tubes: parseFloat(sumBy(record, 'tubes').toFixed(2)),
+        volume: sumBy(record, record => {
+          return record.tubes * record.volume
+        })
+      }))
+
+      console.log('countByGroup: ', counts)
+      return counts
+    },
+    generateGroupedData(data, groupName, totalVal) {
+      const groupedData = groupBy(data, function(record) {
+        return record.date + '_' + record[groupName]
+      })
+
+      const seqData = map(groupedData, (record, id) => {
+        const newRecord = {}
+        newRecord['date'] = id.split('_')[0]
+        newRecord[totalVal] = parseFloat(sumBy(record, totalVal).toFixed(2))
+        newRecord['group'] = id.split('_')[1]
+        return newRecord
+      })
+
+      console.log('generateGroupedData: ', seqData)
+
+      return seqData
+    },
+    getSeqData() {
+      this.loading = true
+      this.getMaterialsSeqData()
+        .then(response => {
+          this.seqDataRankList = response.rankList
+          this.seqData = response.data
+          this.totalVolume = response.total
+          this.selectSeqGroup('site', 'totalSize')
+          this.loading = false
+        })
+        .catch(error => {
+          console.log('getSeqData Error: ', error)
+          this.seqDataRankList = []
+          this.seqData = []
+          this.totalVolume = 0
+          this.loading = false
+        })
+    },
+    getMetaData() {
+      this.loading = true
+      this.getMaterialsMetadata()
+        .then(response => {
+          this.materialsRankList = response.rankList
+          this.materialsData = response.data
+          this.totalTubes = response.total
+          this.materialsTypeCounts = this.countByGroup(this.materialsData, 'sampleType')
+          this.selectMaterialsGroup('sampleType', 'tubes')
+          this.loading = false
+        })
+        .catch(error => {
+          console.log('getMetaData Error: ', error)
+          this.materialsRankList = []
+          this.materialsData = []
+          this.totalTubes = 0
+          this.loading = false
+        })
+    },
+    getRINData() {
+      this.loading = true
+      this.getMaterialsRIN()
+        .then(response => {
+          this.rinGroup = sortedUniq(
+            map(response, record => {
+              return record.date
+            })
+          )
+
+          this.rinData = response
+          this.defaultRinGroup = this.rinGroup[0]
+          this.groupedRinData = filter(response, record => {
+            return record.date === this.defaultRinGroup
+          })
+          console.log('getRINData: ', this.rinGroup)
+          this.loading = false
+
+          this.getDINData()
+        })
+        .catch(error => {
+          console.log('getRINData Error: ', error)
+          this.loading = false
+        })
+    },
+    getDINData() {
+      this.loading = true
+      this.getMaterialsDIN()
+        .then(response => {
+          this.dinGroup = sortedUniq(
+            map(response, record => {
+              return record.date
+            })
+          )
+
+          this.dinData = response
+          this.defaultDinGroup = this.dinGroup[0]
+          this.groupedDinData = filter(response, record => {
+            return record.date === this.defaultDinGroup
+          })
+          console.log('getDINData: ', this.dinGroup)
+          this.loading = false
+
+          this.groupRinDinData(this.rinData, this.dinData)
+        })
+        .catch(error => {
+          console.log('getDINData Error: ', error)
+          this.loading = false
+        })
+    },
+    requestMaterials() {
+      this.$router.push({
+        name: 'request-materials'
+      })
+    },
+    switchDetails() {
+      this.pdfViewerVisible = !this.pdfViewerVisible
+    },
+    selectPDF(pdfKey) {
+      this.currentTab = pdfKey
+      console.log('selectPDF: ', pdfKey)
+      this.pdfUrl = pdfKey
     }
   },
-  created () {
-    setTimeout(() => {
-      this.loading = !this.loading
-    }, 1000)
+  created() {
+    this.getMetaData()
+    this.getSeqData()
+    this.getRINData()
   }
 }
 </script>
 
 <style lang="less" scoped>
-.page-header-index-wide {
-  .control-header {
-    width: 100%;
-    // height: 48px;
-    // border: 1px solid #fff;
-    // background-color: #fff;
-    border-radius: 3px;
+.dashboard-container {
+  .ant-card {
     margin-bottom: 10px;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
 
-    > * {
-      margin-right: 5px;
+    .total {
+      height: 32px;
+      display: flex;
+      align-items: center;
+      font-size: 25px;
+      color: #000;
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .content {
+      height: 100px;
+      text-align: justify;
     }
   }
-}
 
-.extra-wrapper {
-  line-height: 55px;
-  padding-right: 24px;
+  .extra-wrapper {
+    line-height: 55px;
+    padding-right: 24px;
 
-  .extra-item {
-    display: inline-block;
-    margin-right: 24px;
+    .extra-item {
+      display: inline-block;
+      margin-right: 24px;
 
-    a {
-      margin-left: 24px;
+      a {
+        margin-left: 24px;
+      }
     }
   }
-}
 
-.antd-pro-pages-dashboard-analysis-twoColLayout {
-  position: relative;
-  display: flex;
-  display: block;
-  flex-flow: row wrap;
+  .salesCard {
+    .rank-list {
+      height: 300px;
+    }
 
-  &.desktop div[class^=ant-col]:last-child {
+    .group-selector {
+      position: absolute;
+      right: 0px;
+      z-index: 100;
+      width: 150px !important;
+    }
+  }
+
+  .popup-container {
     position: absolute;
-    right: 0;
+    width: 600px;
+    height: 600px;
+    top: 50%;
+    left: 50%;
+    margin-top: -280px;
+    margin-left: -300px;
+    z-index: 1000;
+    padding: 0px 10px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    background-color: #fff;
+  }
+
+  .mask-window {
+    z-index: 999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     height: 100%;
+    background: #000;
+    opacity: 0.2;
   }
 }
+</style>
 
-.antd-pro-pages-dashboard-analysis-salesCard {
-  height: calc(100% - 24px);
-  /deep/ .ant-card-head {
-    position: relative;
-  }
-}
+<style lang="less">
+.dashboard-container {
+  .ant-card {
+    .ant-card-head {
+      padding: 0 16px;
+    }
 
-.dashboard-analysis-iconGroup {
-  i {
-    margin-left: 16px;
-    color: rgba(0,0,0,.45);
-    cursor: pointer;
-    transition: color .32s;
-    color: black;
+    .ant-card-body {
+      padding: 10px 16px;
+    }
+
+    .ant-card-actions {
+      background: unset;
+      border-top: unset;
+    }
+
+    .ant-card-actions > li:not(:last-child) {
+      border-right: unset;
+    }
+
+    .ant-card-actions > li > span {
+      height: 32px;
+      line-height: 32px;
+    }
+
+    .ant-card-actions > li {
+      margin: 0px 0px 12px 0px;
+    }
   }
-}
-.analysis-salesTypeRadio {
-  position: absolute;
-  right: 54px;
-  bottom: 12px;
+
+  .popup-container {
+    .ant-tabs-content {
+      height: 530px;
+    }
+  }
 }
 </style>

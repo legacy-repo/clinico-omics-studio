@@ -44,7 +44,7 @@ export const asyncRouterMap = [
         name: 'seq-flow',
         component: RouteView,
         redirect: '/seq-flow/submit',
-        meta: { title: 'Analysis', icon: 'project', permission: ['table'] },
+        meta: { title: 'Analyses', icon: 'project', permission: ['table'] },
         children: [
           {
             path: '/seq-flow/workplace',
@@ -111,7 +111,16 @@ export const asyncRouterMap = [
         meta: { title: 'Visualization', icon: 'dot-chart', keepAlive: true }
       },
 
-      // Visualization
+      // Request Materials
+      {
+        path: '/request-materials',
+        name: 'request-materials',
+        hidden: true,
+        component: () => import('@/views/dashboard/Request'),
+        meta: { titile: 'Request Materials', icon: 'pull-request', keepAlive: true }
+      },
+
+      // Exploratory
       {
         path: '/exploratory',
         name: 'exploratory',

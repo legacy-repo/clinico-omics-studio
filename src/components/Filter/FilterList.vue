@@ -8,7 +8,7 @@
     </div>
     <a-list-item slot="renderItem" slot-scope="item, index" class="filter-list-item">
       <a-checkbox @change="onChange(item, index)">{{ item.name }}</a-checkbox>
-      <a-tag>{{ item.nums }}</a-tag>
+      <a-tag>{{ item.count }}</a-tag>
     </a-list-item>
   </a-list>
 </template>
@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     onChange (item, index) {
-
+      this.$emit('select-filter', item.key)
     },
     getData (expectedLength) {
       if (this.dataSource.length >= expectedLength) {

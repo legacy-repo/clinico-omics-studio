@@ -33,6 +33,7 @@ import FilterList from '@/components/Filter'
 import Card from '@/components/Card'
 import SimpleCard from '@/components/SimpleCard'
 import FullFrame from '@/components/FullFrame'
+import PdfViewer from '@/components/PDF'
 
 export {
   AvatarList,
@@ -69,5 +70,6 @@ export {
   FilterList,
   Card,
   SimpleCard,
-  FullFrame
+  FullFrame,
+  PdfViewer
 }

@@ -16,6 +16,10 @@ const api = {
   workflow: '/api/workflows',
   log: '/api/logs',
   notification: '/api/notifications',
+  dataCommons: {
+    collections: '/api/collections',
+    groups: '/api/count-collections'
+  },
   appStore: {
     installedApps: '/api/installed-apps',
     apps: '/api/apps',
@@ -63,6 +67,31 @@ export function getMaterialsRIN () {
     url: 'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/materials_rin.json',
     method: 'get',
     params: {}
+  })
+}
+
+export function getMaterialsLicense () {
+  return axios({
+    url: 'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/materials_license.md',
+    method: 'get',
+    params: {}
+  })
+}
+
+// Metadata
+export function getCollections (params) {
+  return axios({
+    url: api.dataCommons.collections,
+    method: 'get',
+    params: params
+  })
+}
+
+export function countCollections (params) {
+  return axios({
+    url: api.dataCommons.groups,
+    method: 'get',
+    params: params
   })
 }
 

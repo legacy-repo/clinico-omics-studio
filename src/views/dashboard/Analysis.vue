@@ -12,15 +12,15 @@
             </template>
             <a-icon type="info-circle-o" />
           </a-popover>
-          <a-row class="content">This is a description.</a-row>
+          <a-row class="content">{{ description }}</a-row>
           <template slot="actions">
             <a-col class="total">{{ totalTubes }} tubes / {{ totalVolume }}</a-col>
             <a-col class="btn-group">
-              <a-button @click="requestMaterials">
+              <a-button @click="requestMaterials" type="primary">
                 <a-icon type="file-protect" />Request
               </a-button>
-              <a-button @click="requestMaterials" style="margin-left: 5px;">
-                <a-icon type="message" />Feedback
+              <a-button @click="switchDetails" style="margin-left: 5px;">
+                <a-icon type="check-circle" />Details
               </a-button>
             </a-col>
           </template>
@@ -39,7 +39,7 @@
           <template slot="actions">Stable Temperature</template>
         </a-card>
       </a-col>
-      <a-col :sm="24" :md="12" :xl="12" :style="{ paddingRight: '0px', display: 'block' }">
+      <a-col :sm="24" :md="24" :xl="12" :style="{ paddingRight: '0px', display: 'block' }">
         <a-card :loading="loading" title="Stable Quality">
           <a-tooltip title="Details" slot="extra">
             <a-icon type="info-circle-o" />
@@ -47,8 +47,8 @@
           <a-row class="content" style="height: 144px;">
             <v-chart :force-fit="true" :height="160" :data="rinDinData" :padding="[36, 5, 18, 5]">
               <v-tooltip />
-              <v-legend position="top"/>
-              <v-bar position="id*value" color="group"/>
+              <v-legend position="top" />
+              <v-bar position="id*value" color="group" />
             </v-chart>
           </a-row>
         </a-card>
@@ -196,11 +196,25 @@
         </a-tabs>
       </div>
     </a-card>
+
+    <div class="mask-window" v-if="pdfViewerVisible" @click="switchDetails"></div>
+    <a-row class="popup-container" v-if="pdfViewerVisible">
+      <a-tabs v-model="currentTab" animated @change="selectPDF">
+        <a-tab-pane
+          v-for="item in materialsDetails"
+          :key="item.key"
+          :tab="item.title"
+          :disabled="item.pdfUrl.length === 0"
+        >
+          <pdf-viewer :url="item.pdfUrl"></pdf-viewer>
+        </a-tab-pane>
+      </a-tabs>
+    </a-row>
   </div>
 </template>
 
 <script>
-import { MiniArea, RankList, Bar } from '@/components'
+import { MiniArea, RankList, Bar, PdfViewer } from '@/components'
 import { mixinDevice } from '@/utils/mixin'
 import { mapActions } from 'vuex'
 import groupBy from 'lodash.groupby'
@@ -218,26 +232,18 @@ for (let i = 0; i < 12; i += 1) {
   })
 }
 
-const rankList = []
-for (let i = 0; i < 7; i++) {
-  rankList.push({
-    name: 'Fudan University ' + '-' + ' Lab' + (i + 1),
-    total: 1234.56 - i * 100
-  })
-}
-
 export default {
   name: 'Analysis',
   mixins: [mixinDevice],
   components: {
     MiniArea,
     RankList,
-    Bar
+    Bar,
+    PdfViewer
   },
   data() {
     return {
       loading: true,
-      rankList,
       barData,
       // SeqData
       seqDataRankList: [],
@@ -269,7 +275,31 @@ export default {
       // General
       totalTubes: 0,
       padding: ['auto', 'auto', '50', '50'],
-      materialsTypeCounts: []
+      materialsTypeCounts: [],
+      description:
+        'Chinese Quartet DNA, RNA, protein, and metabolite reference materials were generated simultaneously from the same set of EBV immortalized lymphoblast cell lines (LCLs) including father (Quartet_F7), mother (Quartet_M8), and two monozygotic twin daughters (Quartet_D5 and Quartet_D6). These reference materials will benefit the quality control and standardization of large-scale, longitudinal, cross-lab, and cross-platform cohort studies.',
+      pdfViewerVisible: false,
+      materialsDetails: [
+        {
+          key: 'dna',
+          pdfUrl:
+            'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/20181212_ZhengYuanting_Quartet_DNA_Processing_and_Sequence_Data_Reporting_Overview_Sop.pdf',
+          title: 'DNA Materials'
+        },
+        {
+          key: 'rna',
+          pdfUrl:
+            'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/Quartet_RNA_Processing_and_Sequence_Data_Reporting_Overview_Sop_v20200518.pdf',
+          title: 'RNA Materials'
+        },
+        {
+          key: 'cell',
+          pdfUrl: '',
+          title: 'Cell Materials'
+        }
+      ],
+      currentTab: 'dna',
+      pdfUrl: ''
     }
   },
   methods: {
@@ -341,7 +371,9 @@ export default {
       })
 
       console.log('rinDinData: ', rinDinData)
-      this.rinDinData = sortBy(rinDinData, (record) => { return record.value })
+      this.rinDinData = sortBy(rinDinData, record => {
+        return record.value
+      })
     },
     countByGroup(data, groupName) {
       const counts = map(groupBy(data, groupName), (record, id) => ({
@@ -459,7 +491,19 @@ export default {
           this.loading = false
         })
     },
-    requestMaterials() {}
+    requestMaterials() {
+      this.$router.push({
+        name: 'request-materials'
+      })
+    },
+    switchDetails() {
+      this.pdfViewerVisible = !this.pdfViewerVisible
+    },
+    selectPDF(pdfKey) {
+      this.currentTab = pdfKey
+      console.log('selectPDF: ', pdfKey)
+      this.pdfUrl = pdfKey
+    }
   },
   created() {
     this.getMetaData()
@@ -489,6 +533,7 @@ export default {
 
     .content {
       height: 100px;
+      text-align: justify;
     }
   }
 
@@ -517,6 +562,32 @@ export default {
       z-index: 100;
       width: 150px !important;
     }
+  }
+
+  .popup-container {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    top: 50%;
+    left: 50%;
+    margin-top: -280px;
+    margin-left: -300px;
+    z-index: 1000;
+    padding: 0px 10px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    background-color: #fff;
+  }
+
+  .mask-window {
+    z-index: 999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    opacity: 0.2;
   }
 }
 </style>
@@ -548,6 +619,12 @@ export default {
 
     .ant-card-actions > li {
       margin: 0px 0px 12px 0px;
+    }
+  }
+
+  .popup-container {
+    .ant-tabs-content {
+      height: 530px;
     }
   }
 }

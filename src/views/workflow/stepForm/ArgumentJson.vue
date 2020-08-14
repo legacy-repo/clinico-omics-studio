@@ -23,7 +23,7 @@ export default {
     body: {
       required: false,
       type: Object,
-      default: () => {}
+      default: () => Object()
     }
   },
   data () {

@@ -1,13 +1,21 @@
 <template>
   <a-list class="loadmore-list" itemLayout="horizontal" :dataSource="getData(length)">
-    <div v-if="showLoadingMore && dataSource.length > expectedLength" slot="loadMore" :style="{ textAlign: 'center', marginTop: '12px', height: '32px', lineHeight: '32px' }">
+    <div
+      v-if="showLoadingMore && dataSource.length > expectedLength"
+      slot="loadMore"
+      :style="{ textAlign: 'center', marginTop: '12px', height: '32px', lineHeight: '32px' }"
+    >
       <a-button @click="onLoadMore">{{ dataSource.length }} More...</a-button>
     </div>
-    <div v-if="!showLoadingMore" slot="loadMore" :style="{ textAlign: 'center', marginTop: '12px', height: '32px', lineHeight: '32px' }">
-      <a-button @click="onShowLess"> Less...</a-button>
+    <div
+      v-if="!showLoadingMore"
+      slot="loadMore"
+      :style="{ textAlign: 'center', marginTop: '12px', height: '32px', lineHeight: '32px' }"
+    >
+      <a-button @click="onShowLess">Less...</a-button>
     </div>
     <a-list-item slot="renderItem" slot-scope="item, index" class="filter-list-item">
-      <a-checkbox @change="onChange(item, index)">{{ item.name }}</a-checkbox>
+      <a-checkbox @change="onChange(item, index, $event)">{{ item.name }}</a-checkbox>
       <a-tag>{{ item.count }}</a-tag>
     </a-list-item>
   </a-list>
@@ -16,7 +24,7 @@
 <script>
 export default {
   name: 'FilterList',
-  data () {
+  data() {
     return {
       showLoadingMore: true,
       length: 5
@@ -33,31 +41,33 @@ export default {
     }
   },
   methods: {
-    onChange (item, index) {
-      this.$emit('select-filter', item.key)
+    onChange(item, index, event) {
+      console.log('onChange: ', item, index, event)
+      this.$emit('select-filter', {
+        key: item.key,
+        checked: event.target.checked
+      })
     },
-    getData (expectedLength) {
+    getData(expectedLength) {
       if (this.dataSource.length >= expectedLength) {
         return this.dataSource.slice(0, expectedLength)
       } else {
         return this.dataSource
       }
     },
-    onLoadMore () {
+    onLoadMore() {
       this.length = this.dataSource.length
       this.showLoadingMore = false
     },
-    onShowLess () {
+    onShowLess() {
       this.length = this.expectedLength
       this.showLoadingMore = true
     }
   },
-  mounted () {
+  mounted() {
     this.length = this.expectedLength
   },
-  components: {
-
-  }
+  components: {}
 }
 </script>
 
@@ -70,5 +80,4 @@ export default {
 </style>
 
 <style lang="less" scoped>
-
 </style>

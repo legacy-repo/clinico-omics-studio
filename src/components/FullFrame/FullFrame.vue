@@ -61,7 +61,7 @@ export default {
 .full-frame {
   width: 100%;
   height: 100%;
-  min-height: 680px;
+  min-height: 630px;
   // overflow: hidden;
   border-radius: 5px;
 }

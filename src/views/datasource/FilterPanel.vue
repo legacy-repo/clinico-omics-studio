@@ -6,20 +6,21 @@
         <a-tab-pane key="1" tab="Files">
           <a-row style="display: flex; justify-content: center; margin: 10px 10px;">
             <a-input-search
+              allowClear
               placeholder="Enter search text"
-              enter-button
+              @change="filterFieldsList"
               style="margin-right: 5px;"
             />
             <a-tooltip>
               <template slot="title">Add a File Filter</template>
-              <a-button icon="setting" style="width: 50px;"></a-button>
+              <a-button icon="setting" style="width: 50px;" @click="showFilterPanel"></a-button>
             </a-tooltip>
           </a-row>
           <a-collapse :activeKey="activeFilterList">
             <a-collapse-panel
               :header="toTitleCase(field.name)"
               :key="field.name"
-              v-for="field in fieldsList"
+              v-for="field in filteredFieldsList"
             >
               <filter-list
                 :dataSource="field.data"
@@ -49,6 +50,30 @@
         </a-tab-pane>
       </a-tabs>
     </a-col>
+    <a-modal
+      class="filter-field-panel"
+      title="Add a File Filter"
+      :visible="visible"
+      @cancel="hideFieldPanel"
+      :footer="null"
+      :width="800"
+    >
+      <a-row class="control-panel">
+        <a-col :span="12">
+          <a-tag color="#87d068">{{ allFields.length }} file fields</a-tag>
+        </a-col>
+        <a-col :span="12">
+          <a-button style="float: right;" @click="sortFields">
+            <a-icon type="sort-descending" v-if="reverseOrder" />
+            <a-icon type="sort-ascending" v-else />
+          </a-button>
+        </a-col>
+      </a-row>
+      <a-input-search allowClear placeholder="Enter search text" size="large" @change="filterFields" />
+      <a-card class="field-list">
+        <a-row v-for="field in filteredFields" :key="field" class="field">{{ field }}</a-row>
+      </a-card>
+    </a-modal>
   </a-row>
 </template>
 
@@ -115,7 +140,61 @@ export default {
         'data_file_data_format'
       ],
       queryMap: {},
-      queryMapString: ''
+      queryMapString: '',
+      visible: false,
+      allFields: [
+        'biospecimen_biospecimen_id',
+        'biospecimen_biospecimen_type',
+        'biospecimen_collection_date',
+        'collected_from_type',
+        'data_file_data_category',
+        'data_file_data_format',
+        'data_file_data_type',
+        'data_file_file_name',
+        'data_file_object_id',
+        'data_file_referemce_dataset',
+        'data_file_submitter_id',
+        'dna_library_dna_libray_id',
+        'dna_library_fragment_range',
+        'dna_library_fragment_selection',
+        'dna_library_input_ng',
+        'dna_library_library_preparation',
+        'dna_library_library_prep_date',
+        'dna_library_library_prep_kit',
+        'dna_library_pcr_cycle',
+        'dna_library_phix_spike_in',
+        'donor_donor_birth_date',
+        'donor_donor_registry_id',
+        'donor_family_id',
+        'donor_gender',
+        'donor_pedigree',
+        'dst_vid',
+        'extracted_from_type',
+        'label',
+        'reference_materials_cat_no',
+        'reference_materials_cell_collection_date',
+        'reference_materials_cell_line_passage_number',
+        'reference_materials_extraction',
+        'reference_materials_extraction_date',
+        'reference_materials_extraction_site',
+        'reference_materials_id',
+        'reference_materials_lot_no',
+        'reference_materials_source',
+        'reference_materials_type',
+        'sequencing_flowcell_id',
+        'sequencing_index_sequence',
+        'sequencing_lane_no',
+        'sequencing_sequence_id',
+        'sequencing_sequence_method',
+        'sequencing_sequence_platform',
+        'sequencing_sequence_run_date',
+        'sequencing_sequence_site',
+        'src_vid',
+        'vid'
+      ],
+      searchValue: '',
+      filterValue: '',
+      reverseOrder: true
     }
   },
   props: {},
@@ -126,12 +205,60 @@ export default {
         active.push(field.name)
       }
       return active
+    },
+    filteredFields() {
+      if (this.searchValue.length > 0) {
+        return filter(this.allFields, record => {
+          return record.match(this.searchValue)
+        })
+      } else {
+        return this.allFields
+      }
+    },
+    filteredFieldsList() {
+      if (this.filterValue.length > 0) {
+        return map(this.fieldsList, fieldRecord => {
+          console.log('filteredFieldsList: ', fieldRecord, this.filterValue)
+          const newFieldRecord = {}
+          newFieldRecord['name'] = fieldRecord.name
+          newFieldRecord['shortName'] = fieldRecord.shortName
+          newFieldRecord['key'] = fieldRecord.key
+          newFieldRecord['data'] = filter(fieldRecord.data, record => {
+            return record.name.match(this.filterValue)
+          })
+
+          return newFieldRecord
+        })
+      } else {
+        return this.fieldsList
+      }
     }
   },
   methods: {
     ...mapActions({
       countCollections: 'CountCollections'
     }),
+    showFilterPanel() {
+      this.visible = !this.visible
+    },
+    hideFieldPanel() {
+      this.visible = !this.visible
+    },
+    filterFields(e) {
+      this.searchValue = e.target.value
+    },
+    filterFieldsList(e) {
+      this.filterValue = e.target.value
+    },
+    sortFields() {
+      this.filteredFields.sort()
+
+      if (this.reverseOrder) {
+        this.filteredFields.reverse()
+      }
+
+      this.reverseOrder = !this.reverseOrder
+    },
     onChangeChartTab() {},
     onChangeTab() {},
     toTitleCase(str) {
@@ -139,8 +266,17 @@ export default {
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
       })
     },
-    filterCollections(fieldKey, item) {
-      this.queryMap[fieldKey] = item
+    filterCollections(fieldKey, event) {
+      const key = event.key
+      const checked = event.checked
+
+      if (checked) {
+        this.queryMap[fieldKey] = key
+      } else {
+        delete this.queryMap[fieldKey]
+      }
+
+      console.log('filterCollections: ', this.queryMap)
       this.queryMapString = JSON.stringify(this.queryMap)
       this.fetchCounts(this.queryMap)
     },
@@ -203,6 +339,8 @@ export default {
 </script>
 
 <style lang="less">
+@import (reference) '~@/components/index.less';
+
 .filter-panel {
   .left {
     .ant-tabs {
@@ -213,6 +351,70 @@ export default {
       .ant-tabs-content {
         height: calc(100% - 60px);
         overflow: scroll;
+      }
+    }
+  }
+}
+
+.filter-field-panel {
+  .ant-modal {
+    height: 600px;
+    top: 60px;
+
+    .ant-modal-content {
+      height: 100%;
+
+      .ant-modal-header {
+        padding: 10px;
+      }
+
+      .ant-modal-close-x {
+        height: 45px;
+        line-height: 45px;
+      }
+
+      .ant-modal-body {
+        height: 100%;
+        padding: 10px;
+
+        .control-panel {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          margin: 0px 0px 10px;
+          align-items: center;
+          font-weight: 500;
+          color: #bb0e3d;
+
+          .ant-tag {
+            line-height: 2.5;
+          }
+        }
+
+        .ant-input-search {
+          margin: 0px 0px 10px;
+        }
+
+        .field-list {
+          height: calc(100% - 140px);
+          overflow: scroll;
+
+          .ant-card-body {
+            padding: 0px;
+            height: 100%;
+
+            .field {
+              padding: 5px 20px;
+              font-size: 16px;
+            }
+
+            .field:hover {
+              cursor: pointer;
+              background-color: @primary-color;
+              color: #fff;
+            }
+          }
+        }
       }
     }
   }

@@ -32,7 +32,7 @@
 
 <script>
 import { ReportListContent } from '@/components'
-import IconText from '@/views/list/search/components/IconText'
+import IconText from '@/components/IconText'
 
 export default {
   name: 'Report',

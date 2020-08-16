@@ -16,7 +16,6 @@
   "dependencies": {
     "@antv/data-set": "^0.10.2",
     "@codekraft-studio/vue-animated": "^0.1.5",
-    "@editorjs/editorjs": "^2.15.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.25",
     "@handsontable/vue": "^4.1.1",
     "@syncfusion/ej2-vue-filemanager": "^17.4.55",
@@ -66,13 +65,11 @@
     "vue-ls": "^3.2.1",
     "vue-markdown": "^2.2.4",
     "vue-pdf": "^4.1.0",
-    "vue-quill-editor": "^3.0.6",
     "vue-router": "^3.1.2",
     "vue-shortkey": "^3.1.7",
     "vue-svg-component-runtime": "^1.0.1",
     "vuex": "^3.1.1",
-    "vuex-oidc": "^3.3.1",
-    "wangeditor": "^3.1.1"
+    "vuex-oidc": "^3.3.1"
   },
   "devDependencies": {
     "@ant-design/colors": "^3.1.0",
@@ -98,6 +95,7 @@
     "opencollective-postinstall": "^2.0.2",
     "vue-svg-icon-loader": "^2.1.1",
     "vue-template-compiler": "^2.6.10",
+    "webpack-bundle-analyzer": "^3.8.0",
     "webpack-theme-color-replacer": "^1.2.17"
   },
   "eslintConfig": {

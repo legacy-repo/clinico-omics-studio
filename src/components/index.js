@@ -9,7 +9,6 @@ import MiniProgress from '@/components/Charts/MiniProgress'
 import Radar from '@/components/Charts/Radar'
 import RankList from '@/components/Charts/RankList'
 import TransferBar from '@/components/Charts/TransferBar'
-import TagCloud from '@/components/Charts/TagCloud'
 import Pie from '@/components/Charts/Pie'
 
 // pro components
@@ -45,7 +44,6 @@ export {
   MiniBar,
   MiniProgress,
   Radar,
-  TagCloud,
   Pie,
 
   RankList,

@@ -12,8 +12,6 @@
 </template>
 
 <script>
-import DataSet from '@antv/data-set'
-
 const scale = [{
   dataKey: 'count',
   min: 0
@@ -72,17 +70,6 @@ export default {
       } else {
         return []
       }
-    },
-    getData () {
-      const dv = new DataSet.View().source(this.dataSource)
-      dv.transform({
-        type: 'count',
-        field: 'count',
-        dimension: 'name',
-        as: 'count'
-      })
-      const data = dv.rows
-      return data
     }
   }
 }

@@ -15,7 +15,7 @@
         <a-card-meta :title="app.title" :description="app.description" class="card-meta">
           <!-- <a-avatar slot="avatar" :src="app.icon" /> -->
           <a-avatar slot="avatar" style="backgroundColor: #87d068">
-            {{ app.title[0] }}
+            {{ app.title[0].toUpperCase() }}
           </a-avatar>
         </a-card-meta>
       </a-card>

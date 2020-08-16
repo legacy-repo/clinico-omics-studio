@@ -46,7 +46,6 @@
 
 <script>
 import { PageView } from '@/layouts'
-import BlockStyleEditor from '@/components/BlockStyleEditor'
 import { getReport } from '@/api/manage'
 import DetailList from '@/components/tools/DetailList'
 
@@ -57,8 +56,7 @@ export default {
   components: {
     PageView,
     DetailList,
-    DetailListItem,
-    BlockStyleEditor
+    DetailListItem
   },
   props: {
     readonly: {

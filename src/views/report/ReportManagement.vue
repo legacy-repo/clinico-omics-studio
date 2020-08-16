@@ -1,5 +1,9 @@
 <template>
   <page-view title="Report Management" logo="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png">
+    <template slot="action">
+      <a-button type="primary" @click="onCreateReport">Create Report</a-button>
+    </template>
+
     <report-list></report-list>
   </page-view>
 </template>
@@ -23,9 +27,9 @@ export default {
     getTitle () {
       return this.$route.meta.title
     },
-    onCreateProject () {
+    onCreateReport () {
       this.$router.push({
-        name: 'create-project'
+        name: 'create-report'
       })
     }
   }

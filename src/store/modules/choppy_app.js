@@ -1,4 +1,5 @@
 import { getAppList, getAppManifest, getInstalledAppList, getAppSchema, getHelpMsg } from '@/api/manage'
+import orderBy from 'lodash.orderby'
 
 const formatRecords = function (records) {
   const newRecords = []
@@ -29,7 +30,7 @@ const formatInstalledApps = function (installedApps) {
     })
   }
 
-  return newRecords
+  return orderBy(newRecords, 'name', 'desc')
 }
 
 const formatManifest = function (manifest) {
@@ -41,6 +42,8 @@ const formatManifest = function (manifest) {
       title: record.name,
       shortTitle: record.short_name,
       appName: record.app_name,
+      home: record.home,
+      hidden: record.hidden,
       author: record.author,
       description: record.description,
       icons: record.icons,
@@ -49,7 +52,7 @@ const formatManifest = function (manifest) {
     })
   }
 
-  return newRecords
+  return orderBy(newRecords, 'title', 'desc')
 }
 
 const app = {

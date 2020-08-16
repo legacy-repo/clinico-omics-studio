@@ -1,7 +1,7 @@
 <template>
   <div class="setting-drawer" ref="settingDrawer">
     <a-drawer
-      width="300"
+      width="350"
       placement="right"
       @close="onClose"
       :closable="false"
@@ -41,7 +41,7 @@
         </div>
 
         <div :style="{ marginBottom: '24px' }">
-          <h3 class="setting-drawer-index-title">Theme Color</h3>
+          <h3 class="setting-drawer-index-title">Theme Color [Only Development]</h3>
 
           <div style="height: 20px">
             <a-tooltip class="setting-drawer-theme-color-colorBlock" v-for="(item, index) in colorList" :key="index">
@@ -342,7 +342,7 @@ export default {
   background: #1890ff;
   width: 48px;
   height: 48px;
-  right: 300px;
+  right: 350px;
   display: flex;
   justify-content: center;
   align-items: center;

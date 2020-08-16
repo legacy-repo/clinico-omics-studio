@@ -15,7 +15,8 @@
       <a-button @click="onShowLess">Less...</a-button>
     </div>
     <a-list-item slot="renderItem" slot-scope="item, index" class="filter-list-item">
-      <a-checkbox @change="onChange(item, index, $event)">{{ item.name }}</a-checkbox>
+      <a-checkbox @change="onChange(item, index, $event)" v-if="checkboxMode">{{ item.name }}</a-checkbox>
+      <a @click="onChange(item, index, $event)" v-else>{{ item.name }}</a>
       <a-tag>{{ item.count }}</a-tag>
     </a-list-item>
   </a-list>
@@ -38,6 +39,11 @@ export default {
     expectedLength: {
       type: Number,
       default: 5
+    },
+    checkboxMode: {
+      type: Boolean,
+      default: true,
+      required: false
     }
   },
   methods: {

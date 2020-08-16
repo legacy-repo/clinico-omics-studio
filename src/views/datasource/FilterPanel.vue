@@ -24,7 +24,6 @@
             >
               <filter-list
                 :dataSource="field.data"
-                :filterKey="field.key"
                 @select-filter="filterCollections(field.key, $event)"
               ></filter-list>
             </a-collapse-panel>

@@ -30,24 +30,24 @@ export default {
     return {
       factData: [
         {
-          title: 'PROJECTS',
-          name: 'PROJECTS',
-          num: '25'
+          title: 'MATERIALS',
+          name: 'MATERIALS',
+          num: '4'
         },
         {
-          title: 'CASES',
-          name: 'CASES',
-          num: '34,893'
+          title: 'PLATFORMS',
+          name: 'PLATFORMS',
+          num: '14'
         },
         {
           title: 'FILES',
           name: 'FILES',
-          num: '397,502'
+          num: '648'
         },
         {
           title: 'PRIMARY SITES',
           name: 'PRIMARYSITES',
-          num: '68'
+          num: '19'
         }
       ]
     }

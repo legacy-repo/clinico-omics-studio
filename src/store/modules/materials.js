@@ -3,7 +3,8 @@ import {
   getMaterialsMetadata,
   getMaterialsDIN,
   getMaterialsRIN,
-  getMaterialsLicense
+  getMaterialsLicense,
+  getMaterialsTemperature
 } from '@/api/manage'
 import groupBy from 'lodash.groupby'
 import map from 'lodash.map'
@@ -98,6 +99,17 @@ const materials = {
     GetMaterialsRIN({ commit }, parameter) {
       return new Promise((resolve, reject) => {
         getMaterialsRIN()
+          .then(response => {
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error)
+          })
+      })
+    },
+    GetMaterialsTemperature({ commit }, parameter) {
+      return new Promise((resolve, reject) => {
+        getMaterialsTemperature()
           .then(response => {
             resolve(response)
           })

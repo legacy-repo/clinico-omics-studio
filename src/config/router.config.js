@@ -125,8 +125,7 @@ export const asyncRouterMap = [
         path: '/exploratory',
         name: 'exploratory',
         hidden: false,
-        component: () => import('@/components/FullFrame'),
-        props: route => ({ src: 'http://10.157.72.55:8081/quartet-vis/' }),
+        component: () => import('@/views/exploratory/ChartStudio'),
         meta: { title: 'Exploratory', icon: 'dribbble', keepAlive: true }
       },
 

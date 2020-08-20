@@ -10,6 +10,7 @@ import notification from './modules/notification'
 import choppyApp from './modules/choppy_app'
 import fs from './modules/fs'
 import data from './modules/data_commons'
+import chartStudio from './modules/chart_studio'
 import materials from './modules/materials'
 import i18n from './modules/i18n'
 import permission from './modules/permission'
@@ -30,6 +31,7 @@ export default new Vuex.Store({
     fs,
     materials,
     data,
+    chartStudio,
     i18n,
     permission,
     oidcStore

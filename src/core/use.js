@@ -12,6 +12,8 @@ import 'ant-design-vue/dist/antd.less'
 import PermissionHelper from '@/utils/helper/permission'
 import VueAnimated from '@codekraft-studio/vue-animated'
 import VueClipboard from 'vue-clipboard2'
+import VueDragResize from 'vue-drag-resize'
+import fullscreen from 'vue-fullscreen'
 
 // import '@/components/use'
 import './directives/action'
@@ -26,3 +28,5 @@ Vue.use(VueAnimated)
 Vue.use(VueClipboard)
 Vue.use(VueCropper)
 Vue.use(VueStorage, config.storageOptions)
+Vue.use(fullscreen)
+Vue.component('vue-drag-resize', VueDragResize)

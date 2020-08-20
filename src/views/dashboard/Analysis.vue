@@ -56,7 +56,7 @@
     </a-row>
 
     <a-card :loading="loading" :bordered="false" :body-style="{padding: '0'}">
-      <div class="salesCard">
+      <div class="chart-card">
         <a-tabs
           default-active-key="1"
           size="large"
@@ -79,6 +79,7 @@
                     :data="groupedMaterialsData"
                     :padding="padding"
                     color="group"
+                    :height="height"
                     position="date*tubes"
                     title="Materials Tubes"
                   />
@@ -112,6 +113,7 @@
                     :data="groupedSeqData"
                     :padding="padding"
                     color="group"
+                    :height="height"
                     position="date*totalSize"
                     title="Data Volume (GB)"
                   />
@@ -131,15 +133,25 @@
     </a-card>
 
     <a-card :loading="loading" :bordered="false" :body-style="{padding: '0'}">
-      <div class="salesCard">
+      <div class="chart-card">
         <a-tabs
           default-active-key="1"
           size="large"
           :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}"
         >
           <a-tab-pane tab="Temperature" key="1">
-            <a-row>
-              <bar :data="barData" title="Usage Ranking" />
+            <a-row style="margin-right: 32px;">
+              <a-select
+                class="group-selector"
+                style="width: 80px"
+                :value="defaultTemperatureGroup"
+                @select="selectTemperatureGroup"
+              >
+                <a-select-option v-for="item in temperatureGroup" :key="item" :value="item">{{ item }}</a-select-option>
+              </a-select>
+              <a-spin :spinning="temperatureLoading">
+                <line-chart :height="height" :data="groupedTemperatureData" :padding="padding" title="Temperature Over the Months (℃)" />
+              </a-spin>
             </a-row>
           </a-tab-pane>
         </a-tabs>
@@ -147,7 +159,7 @@
     </a-card>
 
     <a-card :loading="loading" :bordered="false" :body-style="{padding: '0'}">
-      <div class="salesCard">
+      <div class="chart-card">
         <a-tabs
           default-active-key="1"
           size="large"
@@ -167,6 +179,7 @@
                 <bar
                   :data="groupedRinData"
                   :padding="padding"
+                  :height="height"
                   position="sampleReplicate*rin"
                   title="RIN Value for RNA Materials"
                 />
@@ -187,6 +200,7 @@
                 <bar
                   :data="groupedDinData"
                   :padding="padding"
+                  :height="height"
                   position="sampleReplicate*din"
                   title="DIN Value for RNA Materials"
                 />
@@ -198,7 +212,7 @@
     </a-card>
 
     <div class="mask-window" v-if="pdfViewerVisible" @click="switchDetails"></div>
-    <a-row class="popup-container" v-if="pdfViewerVisible">
+    <a-row class="popup-form-container" v-if="pdfViewerVisible">
       <a-tabs v-model="currentTab" animated @change="selectPDF">
         <a-tab-pane
           v-for="item in materialsDetails"
@@ -214,7 +228,7 @@
 </template>
 
 <script>
-import { MiniArea, RankList, Bar, PdfViewer } from '@/components'
+import { MiniArea, RankList, Bar, PdfViewer, LineChart } from '@/components'
 import { mixinDevice } from '@/utils/mixin'
 import { mapActions } from 'vuex'
 import groupBy from 'lodash.groupby'
@@ -239,10 +253,12 @@ export default {
     MiniArea,
     RankList,
     Bar,
-    PdfViewer
+    PdfViewer,
+    LineChart,
   },
   data() {
     return {
+      height: 300,
       loading: true,
       barData,
       // SeqData
@@ -251,6 +267,12 @@ export default {
       groupedSeqData: [],
       seqBarLoading: false,
       totalVolume: 0,
+      // Temperature
+      temperatureLoading: false,
+      temperatureData: [],
+      groupedTemperatureData: [],
+      temperatureGroup: [],
+      defaultTemperatureGroup: '',
       // Materials
       materialsRankList: [],
       materialsData: [],
@@ -260,14 +282,12 @@ export default {
       rinGroup: [],
       rinData: [],
       groupedRinData: [],
-      rinGroupedData: [],
       defaultRinGroup: '',
       materialsRinLoading: false,
       // DIN
       dinGroup: [],
       dinData: [],
       groupedDinData: [],
-      dinGroupedData: [],
       defaultDinGroup: '',
       materialsDinLoading: false,
       // Trend
@@ -307,7 +327,8 @@ export default {
       getMaterialsSeqData: 'GetMaterialsSeqData',
       getMaterialsMetadata: 'GetMaterialsMetadata',
       getMaterialsDIN: 'GetMaterialsDIN',
-      getMaterialsRIN: 'GetMaterialsRIN'
+      getMaterialsRIN: 'GetMaterialsRIN',
+      getMaterialsTemperature: 'GetMaterialsTemperature'
     }),
     formatColor(group) {
       if (group === 'DNA') {
@@ -327,6 +348,13 @@ export default {
       this.groupedSeqData = this.generateGroupedData(this.seqData, groupName, 'totalSize')
       setTimeout(() => {
         this.seqBarLoading = false
+      }, 500)
+    },
+    selectTemperatureGroup(groupName) {
+      this.temperatureLoading = true
+      this.groupedTemperatureData = this.generateTemperatureData(this.temperatureData, groupName)
+      setTimeout(() => {
+        this.temperatureLoading = false
       }, 500)
     },
     selectMaterialsGroup(groupName) {
@@ -386,6 +414,11 @@ export default {
 
       console.log('countByGroup: ', counts)
       return counts
+    },
+    generateTemperatureData(data, groupName) {
+      return filter(data, (record) => {
+        return record.date.match(groupName)
+      })
     },
     generateGroupedData(data, groupName, totalVal) {
       const groupedData = groupBy(data, function(record) {
@@ -491,6 +524,23 @@ export default {
           this.loading = false
         })
     },
+    getTemperatureData() {
+      this.loading = true
+      this.getMaterialsTemperature()
+        .then(response => {
+          this.temperatureGroup = sortedUniq(
+            map(response, record => {
+              return record.date.slice(0, 6)
+            })
+          )
+
+          this.temperatureData = response
+          this.defaultTemperatureGroup = this.temperatureGroup[0]
+          this.groupedTemperatureData = this.generateTemperatureData(this.temperatureData, this.defaultTemperatureGroup)
+          console.log('getTemperatureData: ', this.groupedTemperatureData)
+          this.loading = false
+        })
+    },
     requestMaterials() {
       this.$router.push({
         name: 'request-materials'
@@ -509,6 +559,7 @@ export default {
     this.getMetaData()
     this.getSeqData()
     this.getRINData()
+    this.getTemperatureData()
   }
 }
 </script>
@@ -551,7 +602,7 @@ export default {
     }
   }
 
-  .salesCard {
+  .chart-card {
     .rank-list {
       height: 300px;
     }
@@ -562,32 +613,6 @@ export default {
       z-index: 100;
       width: 150px !important;
     }
-  }
-
-  .popup-container {
-    position: absolute;
-    width: 600px;
-    height: 600px;
-    top: 50%;
-    left: 50%;
-    margin-top: -280px;
-    margin-left: -300px;
-    z-index: 1000;
-    padding: 0px 10px;
-    border: 1px solid #eee;
-    border-radius: 5px;
-    background-color: #fff;
-  }
-
-  .mask-window {
-    z-index: 999;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #000;
-    opacity: 0.2;
   }
 }
 </style>

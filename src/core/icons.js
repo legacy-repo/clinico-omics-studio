@@ -21,6 +21,7 @@ import folderLockLogo from '@/assets/icons/folder-lock.svg?inline'
 import fileLockLogo from '@/assets/icons/file-lock.svg?inline'
 import caseIcon from '@/assets/icons/case-o.svg?inline'
 import sitemapIcon from '@/assets/icons/sitemap.svg?inline'
+import studioIcon from '@/assets/icons/obsstudio.svg?inline'
 
 export {
   bxAnaalyse,
@@ -37,5 +38,6 @@ export {
   fileStarLogo,
   folderLockLogo,
   fileLockLogo,
-  sitemapIcon
+  sitemapIcon,
+  studioIcon
 }

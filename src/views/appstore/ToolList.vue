@@ -13,7 +13,7 @@
         </template>
         <a-card-meta :title="tool.title" :description="tool.description" class="card-meta">
           <a-avatar slot="avatar" style="backgroundColor: #87d068">
-            {{ tool.title[0] }}
+            {{ tool.title[0].toUpperCase() }}
           </a-avatar>
         </a-card-meta>
       </a-card>

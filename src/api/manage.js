@@ -78,6 +78,14 @@ export function getMaterialsLicense () {
   })
 }
 
+export function getMaterialsTemperature () {
+  return axios({
+    url: 'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/materials_temperature.json',
+    method: 'get',
+    params: {}
+  })
+}
+
 // Metadata
 export function getCollections (params) {
   return axios({

@@ -1,8 +1,14 @@
 <template>
-  <page-view title="Report Management" logo="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png">
+  <page-view
+    title="Report Management"
+    logo="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png"
+  >
     <template slot="action">
       <a-button type="primary" @click="onCreateReport">Create Report</a-button>
     </template>
+
+    <div class="mask-window" v-if="reportFormVisible" @click="hideReportForm"></div>
+    <report-form class="popup-form-container" v-if="reportFormVisible"></report-form>
 
     <report-list></report-list>
   </page-view>
@@ -11,31 +17,34 @@
 <script>
 import { PageView } from '@/layouts'
 import ReportList from '@/views/report/ReportList'
+import ReportForm from '@/views/report/ReportForm'
 
 export default {
   name: 'ReportManagement',
   components: {
     PageView,
-    ReportList
+    ReportList,
+    ReportForm
   },
-  data () {
+  data() {
     return {
-
+      reportFormVisible: false
     }
   },
   methods: {
-    getTitle () {
+    getTitle() {
       return this.$route.meta.title
     },
-    onCreateReport () {
-      this.$router.push({
-        name: 'create-report'
-      })
+    onCreateReport() {
+      this.reportFormVisible = true
+    },
+    hideReportForm() {
+      this.reportFormVisible = false
     }
   }
 }
 </script>
 
-<style scoped>
-
+<style lang="less" scoped>
+// .mask-window and .popup-form-container are refered from external css file.
 </style>

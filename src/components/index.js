@@ -1,5 +1,6 @@
 // chart
 import Bar from '@/components/Charts/Bar'
+import LineChart from '@/components/Charts/LineChart'
 import ChartCard from '@/components/Charts/ChartCard'
 import Liquid from '@/components/Charts/Liquid'
 import MiniArea from '@/components/Charts/MiniArea'
@@ -37,6 +38,7 @@ import PdfViewer from '@/components/PDF'
 export {
   AvatarList,
   Bar,
+  LineChart,
   ChartCard,
   Liquid,
   MiniArea,

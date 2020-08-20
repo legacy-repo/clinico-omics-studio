@@ -274,7 +274,12 @@ export default {
           const selectedItems = this.filterByType(selectedRows, this.filterType)
 
           if (selectedItems.length !== selectedRows.length) {
-            this.$message.warn('Only support ' + this.filterType + ' files')
+            if (this.filterType === '/') {
+              this.$message.warn('Only support directory.')
+            } else {
+              this.$message.warn('Only support ' + this.filterType + ' files')
+            }
+
             this.selectedRowKeys = this.getFilePath(selectedItems)
           }
 
@@ -364,9 +369,15 @@ export default {
       return flatMap(files, (o) => o.path)
     },
     filterByType (files, fileType) {
-      console.log(files, fileType)
-      const pattern = new RegExp(fileType)
-      return filter(files, function (o) { return o.name.length > 0 && pattern.test(o.name) })
+      console.log(files, fileType)      
+      return filter(files, function (o) {
+        if (fileType === '/') {
+          return o.name.length > 0 && o.name.match(/.*\//)
+        } else {
+          const pattern = new RegExp(fileType)
+          return o.name.length > 0 && pattern.test(o.name) 
+        }
+      })
     },
     loadBookmarks () {
       const addressList = JSON.parse(localStorage.getItem('datains_BOOKMARKS'))
@@ -730,17 +741,6 @@ export default {
     .ant-form-item {
       margin-bottom: 5px;
     }
-  }
-
-  .mask-window {
-    z-index: 999;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #000;
-    opacity: 0.2;
   }
 
   .ant-card {

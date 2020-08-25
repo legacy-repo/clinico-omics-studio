@@ -59,21 +59,7 @@ export default {
     return {
       loading: true,
       appList: [],
-      toolList: [
-        {
-          author: 'yangjingcheng',
-          cover: '',
-          description: 'Convert xps to pdf file',
-          icon: '',
-          id: '02256595c5470695ad46bbed3f1277da',
-          rate: '0',
-          repoUrl: 'xps2pdf',
-          title: 'yangjingcheng/xps2pdf',
-          valid: false,
-          author: 'yangjingcheng',
-          category: 'convertor'
-        }
-      ],
+      toolList: [],
       fieldsList: [
         {
           name: 'Category',
@@ -131,16 +117,16 @@ export default {
     },
     filteredApps() {
       if (this.localAppMode) {
-        return this.localApps
+        return orderBy(this.localApps, 'title', 'aes')
       } else {
-        return this.appList
+        return orderBy(this.appList, 'title', 'aes')
       }
     },
     filteredTools() {
       if (this.localToolMode) {
-        return this.localTools
+        return orderBy(this.localTools, 'title', 'aes')
       } else {
-        return this.toolList
+        return orderBy(this.toolList, 'title', 'aes')
       }      
     }
   },
@@ -150,7 +136,8 @@ export default {
   methods: {
     ...mapActions({
       getAppList: 'GetAppList',
-      getAppManifest: 'GetAppManifest'
+      getAppManifest: 'GetAppManifest',
+      getToolManifest: 'GetToolManifest'
     }),
     onChangeTab(activeKey) {
       this.currentTab = activeKey
@@ -226,6 +213,11 @@ export default {
         console.log('res', res)
         this.appList = res.data
         this.generateFieldsList(this.appList)
+        this.loading = false
+      })
+      this.getToolManifest().then(res => {
+        console.log('res', res)
+        this.toolList = res.data
         this.loading = false
       })
     }

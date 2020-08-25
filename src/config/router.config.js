@@ -95,6 +95,7 @@ export const asyncRouterMap = [
             path: '/seq-flow/report-management',
             name: 'report-management',
             hidden: false,
+            props: route => ({ creationMode: route.query.creationMode, reportTool: route.query.reportTool }),
             component: () => import('@/views/report/ReportManagement'),
             meta: { title: 'Report Management', keepAlive: true, icon: 'file-done', permission: ['table'] }
           }

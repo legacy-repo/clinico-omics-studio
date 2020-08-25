@@ -8,7 +8,7 @@
     </template>
 
     <div class="mask-window" v-if="reportFormVisible" @click="hideReportForm"></div>
-    <report-form class="popup-form-container" v-if="reportFormVisible"></report-form>
+    <report-form class="popup-form-container" :reportTool="reportTool" v-if="reportFormVisible"></report-form>
 
     <report-list></report-list>
   </page-view>
@@ -26,6 +26,19 @@ export default {
     ReportList,
     ReportForm
   },
+  props: {
+    // Sometimes we need to redirect from tool list and router's query parameters can make this happen.
+    creationMode: {
+      default: false,
+      type: [Boolean, String],
+      required: false
+    },
+    reportTool: {
+      default: '',
+      type: String,
+      required: false
+    }
+  },
   data() {
     return {
       reportFormVisible: false
@@ -40,6 +53,11 @@ export default {
     },
     hideReportForm() {
       this.reportFormVisible = false
+    }
+  },
+  created() {
+    if(this.creationMode) {
+      this.reportFormVisible = true
     }
   }
 }

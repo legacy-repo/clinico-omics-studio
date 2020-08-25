@@ -1,5 +1,6 @@
-import { getAppList, getAppManifest, getInstalledAppList, getAppSchema, getHelpMsg } from '@/api/manage'
+import { getAppList, getAppManifest, getInstalledAppList, getAppSchema, getHelpMsg, getToolManifest } from '@/api/manage'
 import orderBy from 'lodash.orderby'
+import { reject } from 'core-js/fn/promise'
 
 const formatRecords = function (records) {
   const newRecords = []
@@ -40,7 +41,7 @@ const formatManifest = function (manifest) {
     newRecords.push({
       id: record.id,
       title: record.name,
-      shortTitle: record.short_name,
+      shortName: record.short_name,
       appName: record.app_name,
       home: record.home,
       hidden: record.hidden,
@@ -98,6 +99,22 @@ const app = {
           const data = {
             total: response['total'],
             data: formatManifest(response.data)
+          }
+
+          resolve(data)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+    GetToolManifest ({ commit }, parameter) {
+      return new Promise((resolve, reject) => {
+        getToolManifest(parameter).then(response => {
+          console.log('GetToolManifest: ', parameter, response)
+
+          const data = {
+            total: response.length,
+            data: formatManifest(response)
           }
 
           resolve(data)

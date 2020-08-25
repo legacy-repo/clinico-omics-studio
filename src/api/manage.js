@@ -1,7 +1,8 @@
 import { axios } from '@/utils/request'
-import { initFileManagerHost } from '@/utils/util'
+import { initFileManagerHost, initTServiceHost } from '@/utils/util'
 
 const fileManagerHost = initFileManagerHost()
+const tserviceHost = initTServiceHost()
 
 const api = {
   user: '/user',
@@ -24,6 +25,9 @@ const api = {
     installedApps: '/api/installed-apps',
     apps: '/api/apps',
     manifest: '/api/app-manifest'
+  },
+  tservice: {
+    manifest: tserviceHost + '/api/manifest'
   },
   fsBuckets: '/api/buckets',
   apps: '/apps',
@@ -202,6 +206,14 @@ export function getAppList () {
 export function getAppManifest () {
   return axios({
     url: api.appStore.manifest,
+    method: 'get',
+    params: {}
+  })
+}
+
+export function getToolManifest () {
+  return axios({
+    url: api.tservice.manifest,
     method: 'get',
     params: {}
   })

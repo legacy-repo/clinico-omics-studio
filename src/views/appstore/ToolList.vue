@@ -5,8 +5,9 @@
         <!-- <img :alt="tool.title" :src="tool.cover" slot="cover"/> -->
         <template class="ant-card-actions" slot="actions">
           <a-icon type="eye" @click="onView(tool)" />
-          <a-popover :title="tool.title" trigger="click">
-            <a slot="content">{{ tool.description }}</a>
+          <a-popover trigger="click">
+            <a slot="title" :href="tool.home" target="_blank">{{ tool.appName }}</a>
+            <p slot="content">{{ tool.description }}</p>
             <a-icon type="info-circle" />
           </a-popover>
           <a-icon type="share-alt" />
@@ -33,11 +34,16 @@ export default {
   },
   methods: {
     onView(tool) {
-      if (tool.repoUrl.match(/^http[s]?:.*/)) {
+      if (tool.repoUrl && tool.repoUrl.match(/^http[s]?:.*/)) {
         window.open(tool.repoUrl, '_blank')
-      } else {
+      } else if (tool.category.toUpperCase() === 'CONVERTOR') {
         this.$router.push({
-          name: tool.repoUrl
+          name: tool.shortName
+        })
+      } else if (tool.category.toUpperCase() === 'REPORT') {
+        this.$router.push({
+          name: 'report-management',
+          query: { creationMode: true, reportTool: tool.title }
         })
       }
     }

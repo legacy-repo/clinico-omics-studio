@@ -73,8 +73,8 @@ const layout = {
   autosize: true,
   height: '420',
   margin: {
-    l: 80,
-    r: 80,
+    l: 60,
+    r: 50,
     b: 80,
     t: 50,
     pad: 4

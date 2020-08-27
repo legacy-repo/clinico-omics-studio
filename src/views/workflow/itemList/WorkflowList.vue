@@ -211,7 +211,7 @@ export default {
         })
     },
     onClickNode (path, data) {
-      if (data.startsWith('s3://') || data.startsWith('oss://')) {
+      if (data.startsWith('s3://') || data.startsWith('oss://') || data.startsWith('minio://')) {
         this.$router.push({
           name: 'file-manager',
           query: { path: data }

@@ -35,10 +35,10 @@ const formatBuckets = function (records) {
 const formatMeta = function (record) {
   const meta = record.meta
   return {
-    etag: meta.ETag,
+    etag: meta.etag,
     name: meta.name,
     key: meta.key,
-    createdTime: formatDateTime(meta.createdTime),
+    createdTime: formatDateTime(meta['created-time']),
     contentType: meta['content-type'],
     size: meta.length,
     bucket: meta.bucket
@@ -49,12 +49,12 @@ const formatObjects = function (records) {
   const newRecords = []
   for (const record of records) {
     newRecords.push({
-      name: record.Key,
-      etag: record.ETag,
-      modified: formatDateTime(record.LastModified),
-      size: record.Size,
-      storageClass: record.StorageClass,
-      path: record.Path
+      name: record.key,
+      etag: record.etag,
+      modified: formatDateTime(record['last-modified']),
+      size: record.size,
+      storageClass: record['storage-class'],
+      path: record.path
     })
   }
 

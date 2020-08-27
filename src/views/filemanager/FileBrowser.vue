@@ -690,7 +690,7 @@ export default {
       .then(response => {
         this.buckets = response.data
         if (this.buckets.length > 0) {
-          if (this.path.startsWith('s3://') || this.path.startsWith('oss://')) {
+          if (this.path.startsWith('s3://') || this.path.startsWith('oss://') || this.path.startsWith('minio://')) {
             const bucketName = this.parseBucketName(this.path)
             if (bucketName) {
               this.onSearch(this.path)

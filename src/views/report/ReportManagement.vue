@@ -8,7 +8,7 @@
     </template>
 
     <div class="mask-window" v-if="reportFormVisible" @click="hideReportForm"></div>
-    <report-form class="popup-form-container" :reportTool="reportTool" v-if="reportFormVisible"></report-form>
+    <report-form class="popup-form-container" :reportTool="reportTool" v-if="reportFormVisible" @finished="forceUpdate"></report-form>
 
     <report-list></report-list>
   </page-view>
@@ -41,10 +41,16 @@ export default {
   },
   data() {
     return {
-      reportFormVisible: false
+      reportFormVisible: false,
     }
   },
   methods: {
+    forceUpdate() {
+      // Remove query parameters for avoiding to show report-form.
+      this.$router.push({
+        name: 'report-management'
+      })
+    },
     getTitle() {
       return this.$route.meta.title
     },

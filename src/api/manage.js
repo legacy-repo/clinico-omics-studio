@@ -27,7 +27,8 @@ const api = {
     manifest: '/api/app-manifest'
   },
   tservice: {
-    manifest: tserviceHost + '/api/manifest'
+    manifest: tserviceHost + '/api/manifest',
+    root: tserviceHost
   },
   fsBuckets: '/api/buckets',
   apps: '/apps',
@@ -219,6 +220,14 @@ export function getToolManifest () {
   })
 }
 
+export function getToolSchema (tool) {
+  return axios({
+    url: api.tservice.root + '/api/' + tool,
+    method: 'get',
+    params: {}
+  })
+}
+
 export function getInstalledAppList () {
   return axios({
     url: api.appStore.installedApps,
@@ -267,6 +276,14 @@ export function getReport (reportId) {
   return axios({
     url: api.report + '/' + reportId,
     method: 'get'
+  })
+}
+
+export function submitReport (data) {
+  return axios({
+    url: api.report,
+    method: 'post',
+    data: data
   })
 }
 

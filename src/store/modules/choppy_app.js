@@ -1,8 +1,16 @@
-import { getAppList, getAppManifest, getInstalledAppList, getAppSchema, getHelpMsg, getToolManifest } from '@/api/manage'
+import {
+  getAppList,
+  getAppManifest,
+  getInstalledAppList,
+  getAppSchema,
+  getHelpMsg,
+  getToolManifest,
+  getToolSchema
+} from '@/api/manage'
 import orderBy from 'lodash.orderby'
 import { reject } from 'core-js/fn/promise'
 
-const formatRecords = function (records) {
+const formatRecords = function(records) {
   const newRecords = []
   for (const record of records) {
     newRecords.push({
@@ -21,7 +29,7 @@ const formatRecords = function (records) {
   return newRecords
 }
 
-const formatInstalledApps = function (installedApps) {
+const formatInstalledApps = function(installedApps) {
   const newRecords = []
 
   for (const record of installedApps) {
@@ -34,7 +42,7 @@ const formatInstalledApps = function (installedApps) {
   return orderBy(newRecords, 'name', 'desc')
 }
 
-const formatManifest = function (manifest) {
+const formatManifest = function(manifest) {
   const newRecords = []
 
   for (const record of manifest) {
@@ -72,96 +80,121 @@ const app = {
   },
 
   actions: {
-    GetAppList ({ commit }, parameter) {
+    GetAppList({ commit }, parameter) {
       return new Promise((resolve, reject) => {
-        getAppList(parameter).then(response => {
-          console.log('GetAppList: ', parameter, response)
+        getAppList(parameter)
+          .then(response => {
+            console.log('GetAppList: ', parameter, response)
 
-          const data = {
-            perPage: response['per_page'],
-            page: response['page'],
-            total: response['total'],
-            data: formatRecords(response.data)
-          }
-          commit('SET_APP_LIST', data)
+            const data = {
+              perPage: response['per_page'],
+              page: response['page'],
+              total: response['total'],
+              data: formatRecords(response.data)
+            }
+            commit('SET_APP_LIST', data)
 
-          resolve(data)
-        }).catch(error => {
-          reject(error)
-        })
+            resolve(data)
+          })
+          .catch(error => {
+            reject(error)
+          })
       })
     },
-    GetAppManifest ({ commit }, parameter) {
+    GetAppManifest({ commit }, parameter) {
       return new Promise((resolve, reject) => {
-        getAppManifest(parameter).then(response => {
-          console.log('GetAppManifest: ', parameter, response)
+        getAppManifest(parameter)
+          .then(response => {
+            console.log('GetAppManifest: ', parameter, response)
 
-          const data = {
-            total: response['total'],
-            data: formatManifest(response.data)
-          }
+            const data = {
+              total: response['total'],
+              data: formatManifest(response.data)
+            }
 
-          resolve(data)
-        }).catch(error => {
-          reject(error)
-        })
+            resolve(data)
+          })
+          .catch(error => {
+            reject(error)
+          })
       })
     },
-    GetToolManifest ({ commit }, parameter) {
+    GetToolManifest({ commit }, parameter) {
       return new Promise((resolve, reject) => {
-        getToolManifest(parameter).then(response => {
-          console.log('GetToolManifest: ', parameter, response)
+        getToolManifest(parameter)
+          .then(response => {
+            console.log('GetToolManifest: ', parameter, response)
 
-          const data = {
-            total: response.length,
-            data: formatManifest(response)
-          }
+            const data = {
+              total: response.length,
+              data: formatManifest(response)
+            }
 
-          resolve(data)
-        }).catch(error => {
-          reject(error)
-        })
+            resolve(data)
+          })
+          .catch(error => {
+            reject(error)
+          })
       })
     },
-    GetInstalledAppList ({ commit }, parameter) {
+    GetToolSchema({ commit }, parameter) {
       return new Promise((resolve, reject) => {
-        getInstalledAppList(parameter).then(response => {
-          console.log('GetInstalledAppList: ', parameter, response)
+        getToolSchema(parameter)
+          .then(response => {
+            console.log('GetToolSchema: ', parameter, response)
 
-          const data = {
-            perPage: response['per_page'],
-            page: response['page'],
-            total: response['total'],
-            data: formatInstalledApps(response.data)
-          }
-          commit('SET_INSTALLED_APP_LIST', data)
-
-          resolve(data)
-        }).catch(error => {
-          reject(error)
-        })
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error)
+          })
       })
     },
-    GetAppSchema ({ commit }, appName) {
+    GetInstalledAppList({ commit }, parameter) {
       return new Promise((resolve, reject) => {
-        getAppSchema(appName).then(response => {
-          console.log('GetAppSchema: ', appName, response)
+        getInstalledAppList(parameter)
+          .then(response => {
+            console.log('GetInstalledAppList: ', parameter, response)
 
-          resolve(response)
-        }).catch(error => {
-          reject(error)
-        })
+            const data = {
+              perPage: response['per_page'],
+              page: response['page'],
+              total: response['total'],
+              data: formatInstalledApps(response.data)
+            }
+            commit('SET_INSTALLED_APP_LIST', data)
+
+            resolve(data)
+          })
+          .catch(error => {
+            reject(error)
+          })
       })
     },
-    GetHelpMsg ({ commit }, appName) {
+    GetAppSchema({ commit }, appName) {
       return new Promise((resolve, reject) => {
-        getHelpMsg(appName).then(response => {
-          console.log('GetHelpMsg: ', appName, response)
+        getAppSchema(appName)
+          .then(response => {
+            console.log('GetAppSchema: ', appName, response)
 
-          resolve(response)
-        }).catch(error => {
-          reject(error)
-        })
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error)
+          })
+      })
+    },
+    GetHelpMsg({ commit }, appName) {
+      return new Promise((resolve, reject) => {
+        getHelpMsg(appName)
+          .then(response => {
+            console.log('GetHelpMsg: ', appName, response)
+
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error)
+          })
       })
     }
   }

@@ -50,7 +50,7 @@
             </div>
           </a-col>
           <div slot="actions">
-            <a @click="onShowReport(item.title, item.id)" :disabled="!item.id">View</a>
+            <a @click="onShowReport(item.title, item.id)" :disabled="!item.id || !item.status.finished">View</a>
             &nbsp;
             <a-dropdown>
               <a-menu slot="overlay">

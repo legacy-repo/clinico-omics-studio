@@ -1,8 +1,8 @@
 <template>
   <a-row class="form-table-container" :style="{ height: clientHeight + 'px' }">
     <a-button-group>
-      <a-button @click="cancel()">Cancel</a-button>
-      <a-button @click="confirm()" type="primary">Confirm</a-button>
+      <a-button @click="hide">Cancel</a-button>
+      <a-button @click="saveData" type="primary">Confirm</a-button>
     </a-button-group>
     <hot-table ref="hotTable" :settings="hotSettings" licenseKey="non-commercial-and-evaluation"></hot-table>
   </a-row>
@@ -11,6 +11,8 @@
 <script>
 import { HotTable } from '@handsontable/vue'
 import map from 'lodash.map'
+import filter from 'lodash.filter'
+import compact from 'lodash.compact'
 
 export default {
   name: 'FormTable',
@@ -20,9 +22,19 @@ export default {
       default: 650,
       type: Number
     },
-    data: {
+    header: {
       required: true,
       type: Array
+    },
+    body: {
+      required: false,
+      type: Array,
+      default: () => []
+    },
+    forceUpdate: {
+      required: false,
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -55,7 +67,7 @@ export default {
         ],
         autoRowSize: true,
         autoColSize: true,
-        className: "htCenter",  // Align Center
+        className: 'htCenter', // Align Center
         stretchH: 'all',
         height: '100%',
         width: '100%',
@@ -79,28 +91,53 @@ export default {
   },
   methods: {
     getHeader() {
-      if (this.data.length > 0) {
-        return Object.keys(this.data[0])
+      if (this.header.length > 0) {
+        return this.header
       } else {
         return []
       }
     },
     getBody() {
       const headers = this.getHeader()
-      return map(this.data, item => {
-        const record = []
-        headers.forEach((field) => {
-          record.push(item[field])
-        })
+      if (this.body.length > 0) {
+        return map(this.body, item => {
+          const record = []
+          headers.forEach(field => {
+            record.push(item[field])
+          })
 
-        return record
-      })
+          return record
+        })
+      } else {
+        return []
+      }
     },
-    cancel() {},
-    confirm() {},
+    hide() {
+      this.$emit('cancel', true)
+    },
     loadData() {
+      const body = this.getBody()
+      if (body.length > 0) {
+        const container = this.$refs.hotTable.hotInstance
+        container.loadData(body)
+      }
+    },
+    isNull(arr) {
+      if (compact(arr).length == 0) {
+        return true
+      } else {
+        return false
+      }
+    },
+    saveData() {
       const container = this.$refs.hotTable.hotInstance
-      container.loadData(this.getBody())
+      const data = container.getData()
+      const filterdData = filter(data, arr => {
+        return !this.isNull(arr)
+      })
+      this.$emit('save', filterdData)
+      this.hide()
+      this.$message.success('Successfully.')
     }
   },
   computed: {

@@ -519,7 +519,9 @@ export default {
         'prefix': prefix
       }).then(response => {
         this.currentPath = response.location
-        this.data = response.data
+        this.data = filter(response.data, item => {
+          return item.path !== this.currentPath
+        })
         this.pagination.total = response.total
         this.pagination.current = response.page
         this.pagination.pageSize = response.pageSize

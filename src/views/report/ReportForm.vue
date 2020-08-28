@@ -11,14 +11,15 @@
       <a-form-item label="Name">
         <a-input
           placeholder="Please input report name"
-          v-decorator="['name', { rules: [{ required: true, message: 'Please input report name!' }] }]"
+          v-decorator="['reportName', { rules: [{ required: true, message: 'Please input report name!' }] }]"
         />
       </a-form-item>
       <a-form-item label="Report">
         <a-select
           allowClear
+          @select="selectReportTool"
           placeholder="Select the report"
-          v-decorator="['reportTool', {initialValue: reportTool, rules: [{required: true, message: 'Please select report tool!'}]}]"
+          v-decorator="['reportTool', {rules: [{required: true, message: 'Please select a report tool!'}]}]"
         >
           <a-select-option v-for="tool in reportTools" :key="tool.value">{{ tool.text }}</a-select-option>
         </a-select>
@@ -29,10 +30,10 @@
         :validateStatus="metadataStatus"
         :help="metadataHelpText"
       >
-        <a-button @click="enterMetadata">
+        <a-button @click="enterMetadata" :disabled="!metadataValid">
           <a-icon type="plus" />Enter Metadata
         </a-button>
-        <vue-json-pretty class="json-viewer" :data="metadata"></vue-json-pretty>
+        <vue-json-pretty class="json-viewer" :data="metadataBody"></vue-json-pretty>
       </a-form-item>
       <a-form-item label="Data" v-if="directoryMode">
         <a-button @click="selectDirectory" style="margin-bottom: 5px;">
@@ -96,7 +97,13 @@
       :visible="formTableActive"
       @close="onCloseFormTable"
     >
-      <form-table :data="metadata"></form-table>
+      <form-table
+        :header="metadataHeader"
+        :body="metadataBody"
+        v-if="forceUpdate == true"
+        @save="saveMetadata"
+        @cancel="onCloseFormTable"
+      ></form-table>
     </a-drawer>
   </div>
 </template>
@@ -107,6 +114,7 @@ import moment from 'moment'
 import flatMap from 'lodash.flatmap'
 import map from 'lodash.map'
 import filter from 'lodash.filter'
+import zipObject from 'lodash.zipobject'
 import PopupFileBrowser from '@/views/filemanager/PopupFileBrowser'
 import FormTable from './FormTable'
 import VueJsonPretty from 'vue-json-pretty'
@@ -136,18 +144,21 @@ export default {
       form: this.$form.createForm(this, { name: 'coordinated' }),
       options: {},
       reportTools: [],
-      metadata: [{
-        library: 'Test',
-        group: 'group1',
-        sample: 'D5'
-      }],
+      defaultReportTool: {},
+      metadataValid: false,
+      metadataHeader: [],
+      metadataBody: [],
+      metadataSchema: {},
       metadataStatus: null,
-      metadataHelpText: ''
+      metadataHelpText: '',
+      forceUpdate: true
     }
   },
   methods: {
     ...mapActions({
-      getToolManifest: 'GetToolManifest'
+      getToolManifest: 'GetToolManifest',
+      getToolSchema: 'GetToolSchema',
+      submitReport: 'SubmitReport'
     }),
     hideConfigPanel() {
       this.visible = !this.visible
@@ -157,10 +168,36 @@ export default {
     },
     enterMetadata() {
       this.formTableActive = true
+      this.$nextTick(() => {
+        this.forceUpdate = true
+      })
     },
     selectProjects() {},
     cancelSelectFiles() {
       this.fileBrowserActive = false
+    },
+    selectReportTool(reportTool) {
+      console.log('selectReportTool: ', reportTool)
+      this.getToolSchema(reportTool).then(res => {
+        const type = res.type
+        if (type === 'array') {
+          this.metadataHeader = Object.keys(res.items.properties)
+          this.metadataValid = true
+        } else if (type === 'object') {
+          this.metadataHeader = Object.keys(res.properties)
+          this.metadataValid = true
+        }
+        this.metadataBody = []
+
+        this.forceUpdate = false
+        this.metadataSchema = res
+      })
+    },
+    saveMetadata(data) {
+      console.log('saveMetadata: ', data)
+      this.metadataBody = map(data, item => {
+        return zipObject(this.metadataHeader, item)
+      })
     },
     confirmSelectFiles(filePathList) {
       this.fileBrowserActive = false
@@ -177,16 +214,28 @@ export default {
     handleSubmit(e) {
       e.preventDefault()
       this.form.validateFields((err, values) => {
-        if (this.metadata.length === 0) {
+        if (this.metadataBody.length === 0) {
           (this.metadataStatus = 'error'), (this.metadataHelpText = 'Please enter metadata!')
         }
 
         if (!err) {
+          values['metadata'] = this.metadataBody
           console.log('Received values of form: ', values)
+          this.submitReport(values)
+            .then(result => {
+              console.log('postReport: ', result)
+              this.$message.success('Create Report Successfully.')
+              this.$emit('finished', result)
+            })
+            .catch(error => {
+              console.log('postReport: ', error)
+              this.$message.error('Unkonwn Error, Please Check Your Input.')
+            })
         }
       })
     }
   },
+  mounted() {},
   created() {
     this.getToolManifest().then(res => {
       const filteredReportTools = filter(res.data, item => {
@@ -196,6 +245,18 @@ export default {
         text: tool.title,
         value: tool.shortName
       }))
+
+      this.defaultReportTool = filter(this.reportTools, item => {
+        return item.text === this.reportTool
+      })[0]
+
+      if (this.reportTool) {
+        this.form.setFieldsValue({
+          reportTool: this.reportTool
+        })
+
+        this.selectReportTool(this.defaultReportTool.value)
+      }
     })
   }
 }

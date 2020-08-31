@@ -1,7 +1,13 @@
 <template>
   <div class="hot-table" ref="chartTable" :style="{ height: clientHeight + 'px' }">
-    <a-tabs v-model="activeKey" type="editable-card" @edit="onEdit" @change="changeTab">
-      <a-tab-pane v-for="pane in panes" :key="pane.key" :tab="pane.title" :closable="pane.closable">
+    <a-tabs type="editable-card" @edit="onEdit" @change="changeTab">
+      <a-tab-pane
+        v-for="pane in panes"
+        :key="pane.key"
+        :tab="pane.name"
+        :closable="pane.closable"
+        forceRender
+      >
         <hot-table
           :id="'hotTable' + pane.key"
           :ref="'hotTable' + pane.key"
@@ -18,6 +24,9 @@
 
 <script>
 import { HotTable } from '@handsontable/vue'
+import { mapState, mapActions } from 'vuex'
+import filter from 'lodash.filter'
+import map from 'lodash.map'
 
 export default {
   name: 'ChartTable',
@@ -29,8 +38,6 @@ export default {
     }
   },
   data() {
-    const panes = [{ title: 'Unamed Grid', key: '1' }]
-
     return {
       hotSettings: {
         bindRowsWithHeaders: true,
@@ -79,8 +86,6 @@ export default {
           }
         }
       },
-      activeKey: panes[0].key,
-      panes,
       newTabIndex: 0,
       isMouseDown: false,
       originX: 0,
@@ -88,6 +93,11 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      reset_files: 'ResetFiles',
+      init_files: 'InitFiles',
+      add_new_file: 'AddNewFile'
+    }),
     onEdit(targetKey, action) {
       console.log('onEdit: ', targetKey, action)
       this[action](targetKey)
@@ -138,47 +148,65 @@ export default {
         }, 100)
       }
     },
+    getHeader(data) {
+      return Object.keys(data[0])
+    },
+    getBody(data) {
+      const headers = this.getHeader(data)
+      if (data.length > 0) {
+        return map(data, item => {
+          const record = []
+          headers.forEach(field => {
+            record.push(item[field])
+          })
+
+          return record
+        })
+      } else {
+        return []
+      }
+    },
+    loadData(activeKey, pane) {
+      if (pane.data.length > 0) {
+        const instance = this.$refs['hotTable' + activeKey]
+        const header = this.getHeader(pane.data)
+        const body = this.getBody(pane.data)
+        
+        console.log('loadData: ', pane, instance[0], activeKey)
+        if (instance && instance.length > 0) {
+          setTimeout(() => {
+            instance[0].hotInstance.updateSettings({
+              colHeaders: header
+            })
+            instance[0].hotInstance.loadData(body)
+          }, 100)
+        }
+      }
+    },
     changeTab(activeKey) {
+      const pane = filter(this.panes, pane => {
+        return pane.key === activeKey
+      })
+      this.loadData(activeKey, pane[0]) // TODO: any exception?
       this.refreshTable(activeKey)
     },
     add() {
-      const panes = this.panes
-      const activeKey = `newTab${this.newTabIndex++}`
-      panes.push({ title: 'New Tab', key: activeKey })
-      this.panes = panes
-      this.activeKey = activeKey
+      this.add_new_file('Unamed Grid 1')
     },
     remove(targetKey) {
-      let activeKey = this.activeKey
-      let lastIndex
-      this.panes.forEach((pane, i) => {
-        if (pane.key === targetKey) {
-          lastIndex = i - 1
-        }
-      })
       const panes = this.panes.filter(pane => pane.key !== targetKey)
-      if (panes.length && activeKey === targetKey) {
-        if (lastIndex >= 0) {
-          activeKey = panes[lastIndex].key
-        } else {
-          activeKey = panes[0].key
-        }
-      }
-      this.panes = panes
-      this.activeKey = activeKey
+      this.reset_files(panes)
     }
   },
-  computed: {
-    keymap() {
-      return {
-        'meta+s': this.saveData,
-        'ctrl+s': this.saveData
-      }
-    }
-  },
+  computed: mapState({
+    panes: state => state.chartStudio.files
+  }),
   mounted() {},
   components: {
     HotTable
+  },
+  created() {
+    this.init_files()
   }
 }
 </script>

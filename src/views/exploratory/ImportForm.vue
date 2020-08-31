@@ -2,11 +2,20 @@
   <div class="import-form-container">
     <div class="title">Load Data</div>
     <a-row class="control-panel">
+      <a-row>
       <span>Use first row as column headers &nbsp;</span>
       <a-switch default-checked>
         <a-icon slot="checkedChildren" type="check" />
         <a-icon slot="unCheckedChildren" type="close" />
       </a-switch>
+      </a-row>
+      <a-row>
+        <span>Use imported grid to replace references to grid</span>
+        <a-select style="width: 200px; margin-left: 10px;" defaultValue="None">
+          <a-select-option value="None">None</a-select-option>
+          <a-select-option v-for="grid in grids" :key="grid.name" :value="grid.name">{{ grid.name }}</a-select-option>
+        </a-select>
+      </a-row>
     </a-row>
     <a-tabs type="card">
       <a-tab-pane key="1" tab="Browser">
@@ -18,6 +27,7 @@
       <a-tab-pane key="2" tab="By URL">
         <a-row class="import-box">
           <a-input-search
+            :disabled="!externalURL || loadActive"
             placeholder="Input your data with URL"
             :value="externalURL"
             style="width: 80%;"
@@ -50,6 +60,7 @@
 
 <script>
 import flatMap from 'lodash.flatmap'
+import { mapActions, mapState } from 'vuex'
 import PopupFileBrowser from '@/views/filemanager/PopupFileBrowser'
 
 export default {
@@ -66,10 +77,19 @@ export default {
     return {
       fileBrowserActive: false,
       externalURL: '',
-      exampleLink: 'https://raw.githubusercontent.com/plotly/datasets/master/iris.csv'
+      loadActive: false,
+      exampleLink: 'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/iris.csv'
     }
   },
+  computed: mapState({
+    grids: state => {
+      return state.chartStudio.files
+    },
+  }),
   methods: {
+    ...mapActions({
+      getFile: 'GetFile',
+    }),
     hideConfigPanel() {
       this.visible = !this.visible
     },
@@ -100,8 +120,19 @@ export default {
           this.$message.error('Copy Failed')
         })
     },
-    onSearch(text) {
-      console.log('onSearch: ', text)
+    onSearch(externalURL) {
+      this.loadActive = true
+      console.log('onSearch: ', externalURL)
+      this.getFile(externalURL).then(response => {
+        console.log("getFile: ", response)
+        this.loadActive = false
+        this.$emit('finished', response)
+        this.$message.success('Loaded Suessfully.')
+      }).catch(error => {
+        console.log("getFile Error: ", error)
+        this.loadActive = false
+        this.$message.error("Can't load the data, please try agian later.")
+      })
     }
   },
   created() {}
@@ -121,7 +152,9 @@ export default {
   }
 
   .control-panel {
-    margin: 20px 0px;
+    .ant-row {
+      margin: 10px 0px;
+    }
   }
 
   .import-box {
@@ -145,6 +178,10 @@ export default {
     .ant-tag {
       font-size: 13px;
       padding: 5px;
+    }
+
+    .ant-input-group-addon {
+      background-color: unset;
     }
   }
 }

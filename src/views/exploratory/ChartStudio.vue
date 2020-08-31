@@ -4,7 +4,12 @@
       class="chart-studio"
       :class="{ fullscreen: fullscreenActive, 'non-fullscreen': !fullscreenActive }"
     >
-      <a-layout-sider v-model="collapsed" class="menu" :trigger="null" collapsible>
+      <a-layout-sider
+        v-model="collapsed"
+        :trigger="null"
+        collapsible
+        :class="{ 'menu': !collapsed, 'mini-menu': collapsed }"
+      >
         <a-row class="menu-header">
           <!-- <a-avatar style="backgroundColor:#87d068" icon="bar-chart" @click="toggleCollapsed" /> -->
           <file-logo
@@ -18,18 +23,15 @@
               <a-icon :type="item.icon" />
               <span>{{ item.title }}</span>
             </span>
-            <a-menu-item v-for="subitem in item.children" :key="subitem.key">{{ subitem.title }}</a-menu-item>
+            <a-menu-item v-for="subitem in item.children" :key="subitem.key" @click="redirectKey(subitem.key)">{{ subitem.title }}</a-menu-item>
           </a-sub-menu>
         </a-menu>
       </a-layout-sider>
       <a-layout>
         <a-layout-content class="panel-container">
           <a-col class="left-panel">
-            <a-row class="panel-header">
-              <a-icon type="arrows-alt" />
-              <span>&nbsp;Expand All</span>
-            </a-row>
-            <a-row class="panel-body"></a-row>
+            <trace-panel :fields="fields" v-if="defaultKey == 'structure-traces'"></trace-panel>
+            <json-viewer :data="jsonData" showLength :deep="2" v-if="defaultKey == 'json-tree'"></json-viewer>
           </a-col>
           <a-col class="right-panel">
             <a-row class="panel-header">
@@ -40,7 +42,6 @@
             <a-row class="panel-body">
               <a-col class="table-container">
                 <chart-table
-                  :header="header"
                   :clientHeight="tableHeight"
                   @resize-height="resizeHeight"
                 ></chart-table>
@@ -53,7 +54,11 @@
         </a-layout-content>
       </a-layout>
       <div class="mask-window" v-if="importFormActive" @click="switchImportForm"></div>
-      <import-form class="popup-form-container" v-if="importFormActive"></import-form>
+      <import-form
+        class="popup-form-container"
+        v-if="importFormActive"
+        @finished="switchImportForm"
+      ></import-form>
     </a-layout>
   </fullscreen>
 </template>
@@ -61,42 +66,79 @@
 <script>
 import ImportForm from './ImportForm'
 import ChartTable from './ChartTable'
+import TracePanel from './TracePanel'
 import Plotly from '@/views/plotly'
 import { fileLogo } from '@/core/icons'
-
-const trace1 = {}
-
-const trace2 = {}
-
-const layout = {
-  hovermode: 'closest',
-  autosize: true,
-  height: '420',
-  margin: {
-    l: 60,
-    r: 50,
-    b: 80,
-    t: 50,
-    pad: 4
-  }
-}
-
-const config = { responsive: true }
-
-const data = [trace1, trace2]
+import { mapState } from 'vuex'
+import map from 'lodash.map'
+import flatten from 'lodash.flatten'
+import JsonViewer from './JsonViewer'
 
 export default {
   components: {
     ImportForm,
     ChartTable,
-    fileLogo
+    fileLogo,
+    TracePanel,
+    JsonViewer
+  },
+  computed: mapState({
+    fields: state => {
+      const fields = map(state.chartStudio.files, file => {
+        if (file.data.length > 0) {
+          return map(Object.keys(file.data[0]), item => {
+            return file.name + '.' + item
+          })
+        } else {
+          return []
+        }
+      })
+
+      return flatten(fields)
+    },
+    data: state => state.chartStudio.figure.data,
+    config: state => state.chartStudio.figure.config,
+    layout: state => state.chartStudio.figure.layout,
+    jsonData: state => state.chartStudio.figure
+  }),
+  watch: {
+    data: {
+      handler(newData, oldData) {
+        if (oldData && newData) {
+          console.log('Update Plotly\'s Chart: ', newData, oldData)
+          Plotly.newPlot('graph', newData, this.layout, this.config)
+        }
+      },
+      immediate: true,
+      deep: true
+    },
+    layout: {
+      handler(newData, oldData) {
+        if (oldData && newData) {
+          console.log('Update Plotly\'s Layout: ', newData, oldData)
+          Plotly.newPlot('graph', this.data, newData, this.config)
+        }
+      },
+      immediate: true,
+      deep: true
+    },
+    config: {
+      handler(newData, oldData) {
+        if (oldData && newData) {
+          console.log('Update Plotly\'s Config: ', newData, oldData)
+          Plotly.newPlot('graph', this.data, this.layout, newData)
+        }
+      },
+      immediate: true,
+      deep: true
+    }
   },
   data() {
     return {
       collapsed: false,
       fileBrowserActive: false,
       importFormActive: false,
-      header: ['test', 'test2'],
+      defaultKey: 'structure-traces',
       menu: [
         {
           key: 'structure',
@@ -104,12 +146,12 @@ export default {
           title: 'Structure',
           children: [
             {
-              key: 'traces',
+              key: 'structure-traces',
               icon: '',
               title: 'Traces'
             },
             {
-              key: 'subplots',
+              key: 'structure-subplots',
               icon: '',
               title: 'Subplots'
             }
@@ -121,12 +163,12 @@ export default {
           title: 'Theme',
           children: [
             {
-              key: 'choose',
+              key: 'theme-choose',
               icon: '',
               title: 'Choose'
             },
             {
-              key: 'create',
+              key: 'theme-create',
               icon: '',
               title: 'Create'
             }
@@ -138,17 +180,17 @@ export default {
           title: 'Style',
           children: [
             {
-              key: 'general',
+              key: 'style-general',
               icon: '',
               title: 'General'
             },
             {
-              key: 'traces',
+              key: 'style-traces',
               icon: '',
               title: 'Traces'
             },
             {
-              key: 'axes',
+              key: 'style-axes',
               icon: '',
               title: 'Axes'
             }
@@ -160,19 +202,48 @@ export default {
           title: 'Annotate',
           children: [
             {
-              key: 'text',
+              key: 'annotate-text',
               icon: '',
               title: 'Text'
             },
             {
-              key: 'shape',
+              key: 'annotate-shape',
               icon: '',
               title: 'Shape'
             },
             {
-              key: 'images',
+              key: 'annotate-images',
               icon: '',
               title: 'Images'
+            }
+          ]
+        },
+        {
+          key: 'export',
+          icon: 'export',
+          title: 'Export',
+          children: [
+            {
+              key: 'export-image',
+              icon: '',
+              title: 'Image'
+            },
+            {
+              key: 'export-html',
+              icon: '',
+              title: 'Html'
+            }
+          ]
+        },
+        {
+          key: 'json',
+          icon: 'file-text',
+          title: 'JSON',
+          children: [
+            {
+              key: 'json-tree',
+              icon: '',
+              title: 'Tree'
             }
           ]
         }
@@ -182,6 +253,9 @@ export default {
     }
   },
   methods: {
+    redirectKey(key) {
+      this.defaultKey = key
+    },
     fullscreenChange() {
       const instance = this.$refs['fullscreen']
       if (instance.getState()) {
@@ -212,7 +286,7 @@ export default {
     }
   },
   mounted() {
-    Plotly.newPlot('graph', data, layout, config)
+    Plotly.newPlot('graph', this.data, this.layout, this.config)
     window.onresize = this.resizeGraph()
   },
   created() {}
@@ -220,7 +294,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@height: 628px;
+@height: 650px;
 @border-radius: 5px;
 
 .fullscreen {
@@ -236,12 +310,20 @@ export default {
   border-radius: @border-radius;
 
   .menu,
+  .mini-menu,
   .panel-container {
     border-radius: @border-radius;
     height: 100%;
   }
 
   .menu {
+    width: 150px !important;
+    max-width: 150px !important;
+    min-width: 150px !important;
+  }
+
+  .menu,
+  .mini-menu {
     background-color: #fff;
     border: 1px solid #d6d6d6;
     border-top-right-radius: 0px;
@@ -310,13 +392,13 @@ export default {
     }
 
     .left-panel {
-      width: 295px;
-      padding: 0px 10px;
+      width: 395px;
       margin-right: 5px;
       border: 1px solid #d6d6d6;
       border-left: unset;
       border-top-left-radius: 0px;
       border-bottom-left-radius: 0px;
+      background-color: #ebf0f8;
 
       .panel-header {
         height: 32px;
@@ -324,7 +406,7 @@ export default {
     }
 
     .right-panel {
-      width: calc(100% - 200px);
+      width: calc(100% - 300px);
       border: 1px solid #d6d6d6;
 
       .panel-header {

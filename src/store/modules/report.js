@@ -64,10 +64,7 @@ const timeToInt = function(datetime) {
 const formatPostData = function(data) {
   const script = {
     'plugin-name': data.reportTool,
-    metadata: {
-      filepath: data.filepath,
-      metadata: data.metadata
-    }
+    metadata: data.metadata,
   }
 
   const newData = {

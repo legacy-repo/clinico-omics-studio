@@ -8,7 +8,6 @@ import {
   getToolSchema
 } from '@/api/manage'
 import orderBy from 'lodash.orderby'
-import { reject } from 'core-js/fn/promise'
 
 const formatRecords = function(records) {
   const newRecords = []

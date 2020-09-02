@@ -45,6 +45,7 @@ export default {
         rowHeaders: true,
         filters: true,
         minRows: 200,
+        startCols: this.getHeader().length,
         maxCols: this.getHeader().length,
         data: null,
         manualColumnFreeze: true,
@@ -150,6 +151,9 @@ export default {
   },
   mounted() {
     this.loadData()
+  },
+  created() {
+    console.log('FormTable: ', this.hotSettings, this.maxCols)
   },
   components: {
     HotTable

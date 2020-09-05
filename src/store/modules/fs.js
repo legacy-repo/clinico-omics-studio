@@ -11,7 +11,7 @@ import {
 } from '@/api/manage'
 import moment from 'moment'
 
-const formatDateTime = function (datetime) {
+const formatDateTime = function(datetime) {
   if (datetime) {
     return moment(datetime).format('YYYY-MM-DD HH:mm')
   } else {
@@ -19,7 +19,7 @@ const formatDateTime = function (datetime) {
   }
 }
 
-const formatBuckets = function (records) {
+const formatBuckets = function(records) {
   const newRecords = []
   for (const record of records) {
     // newRecords.push({
@@ -32,7 +32,7 @@ const formatBuckets = function (records) {
   return newRecords
 }
 
-const formatMeta = function (record) {
+const formatMeta = function(record) {
   const meta = record.meta
   return {
     etag: meta.etag,
@@ -45,7 +45,7 @@ const formatMeta = function (record) {
   }
 }
 
-const formatObjects = function (records) {
+const formatObjects = function(records) {
   const newRecords = []
   for (const record of records) {
     newRecords.push({
@@ -68,9 +68,9 @@ const fs = {
 
   actions: {
     // 获取Buckets
-    GetBuckets ({ commit }, parameter) {
+    GetBuckets({ commit }, parameter) {
       return new Promise((resolve, reject) => {
-        getBuckets()
+        getBuckets(parameter.service)
           .then(response => {
             console.log('Get Buckets: ', parameter, response)
 
@@ -85,9 +85,9 @@ const fs = {
           })
       })
     },
-    GetObjects ({ commit }, parameter) {
+    GetObjects({ commit }, parameter) {
       return new Promise((resolve, reject) => {
-        getObjects(parameter.name, {
+        getObjects(parameter.service, parameter.name, {
           page: parameter.page,
           per_page: parameter.pageSize,
           prefix: parameter.prefix
@@ -111,9 +111,9 @@ const fs = {
           })
       })
     },
-    MakeDirectory ({ commit }, parameter) {
+    MakeDirectory({ commit }, parameter) {
       return new Promise((resolve, reject) => {
-        makeDirectory(parameter.name, {
+        makeDirectory(parameter.service, parameter.name, {
           key: parameter.key
         })
           .then(response => {
@@ -126,9 +126,9 @@ const fs = {
           })
       })
     },
-    MakeUploadUrl ({ commit }, parameter) {
+    MakeUploadUrl({ commit }, parameter) {
       return new Promise((resolve, reject) => {
-        makeUploadUrl(parameter.name, {
+        makeUploadUrl(parameter.service, parameter.name, {
           key: parameter.key
         })
           .then(response => {
@@ -141,9 +141,9 @@ const fs = {
           })
       })
     },
-    MakeDownloadUrl ({ commit }, parameter) {
+    MakeDownloadUrl({ commit }, parameter) {
       return new Promise((resolve, reject) => {
-        makeDownloadUrl(parameter.name, {
+        makeDownloadUrl(parameter.service, parameter.name, {
           key: parameter.key
         })
           .then(response => {
@@ -156,9 +156,9 @@ const fs = {
           })
       })
     },
-    GetObjectMeta ({ commit }, parameter) {
+    GetObjectMeta({ commit }, parameter) {
       return new Promise((resolve, reject) => {
-        getObjectMeta(parameter.name, {
+        getObjectMeta(parameter.service, parameter.name, {
           key: parameter.key
         })
           .then(response => {

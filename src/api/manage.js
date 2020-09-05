@@ -30,7 +30,6 @@ const api = {
     manifest: tserviceHost + '/api/manifest',
     root: tserviceHost
   },
-  fsBuckets: '/api/buckets',
   apps: '/apps',
   filemanager: {
     url: fileManagerHost,
@@ -108,80 +107,85 @@ export function countCollections (params) {
   })
 }
 
+function getServiceApi (service) {
+  // return '/api/' + service + '/buckets'
+  return '/api/buckets'
+}
+
 // Minio/OSS/S3: Bucket + Object
-export function getBuckets () {
+export function getBuckets (service) {
   return axios({
-    url: api.fsBuckets,
+    url: getServiceApi(service),
     method: 'get',
     params: {}
   })
 }
 
-export function addBucket (data) {
+export function addBucket (service, data) {
   // data - {"name": "bucket_name"}
   return axios({
-    url: api.fsBuckets,
+    url: getServiceApi(service),
     method: 'post',
     data: data
   })
 }
 
-export function getObjects (bucketName, parameter) {
+export function getObjects (service, bucketName, parameter) {
   // parameter - {"page": 1, "per_page": 10}
   return axios({
-    url: api.fsBuckets + '/' + bucketName,
+    url: getServiceApi(service) + '/' + bucketName,
     method: 'get',
     params: parameter
   })
 }
 
-export function makeDirectory (bucketName, parameter) {
+export function makeDirectory (service, bucketName, parameter) {
   // parameter - {"key": "test"}
   return axios({
-    url: api.fsBuckets + '/' + bucketName,
+    url: getServiceApi(service) + '/' + bucketName,
     method: 'post',
     params: parameter
   })
 }
 
-export function deleteBucket (bucketName) {
+export function deleteBucket (service, bucketName) {
   return axios({
-    url: api.fsBuckets + '/' + bucketName,
+    url: getServiceApi(service) + '/' + bucketName,
     method: 'delete'
   })
 }
 
-export function makeDownloadUrl (bucketName, parameter) {
+export function makeDownloadUrl (service, bucketName, parameter) {
   // parameter - {"key": "test"}
   return axios({
-    url: api.fsBuckets + '/' + bucketName + '/object',
+    url: getServiceApi(service) + '/' + bucketName + '/object',
     method: 'get',
     params: parameter
   })
 }
 
-export function makeUploadUrl (bucketName, parameter) {
+export function makeUploadUrl (service, bucketName, parameter) {
   // parameter - {"key": "test"}
   return axios({
-    url: api.fsBuckets + '/' + bucketName + '/object',
+    url: getServiceApi(service) + '/' + bucketName + '/object',
     method: 'post',
     params: parameter
   })
 }
 
-export function deleteObject (bucketName, parameter) {
+export function deleteObject (service, bucketName, parameter) {
   // parameter - {"key": "test"}
   return axios({
-    url: api.fsBuckets + '/' + bucketName + '/object',
+    url: getServiceApi(service) + '/' + bucketName + '/object',
     method: 'delete',
     params: parameter
   })
 }
 
-export function getObjectMeta (bucketName, parameter) {
+export function getObjectMeta (service, bucketName, parameter) {
   // parameter - {"key": "test"}
   return axios({
-    url: api.fsBuckets + '/' + bucketName + '/object-meta',
+    url: getServiceApi(service) + '/' + bucketName + '/object-meta',
     method: 'get',
     params: parameter
   })

@@ -12,8 +12,12 @@
     </div>
     <a-list class="loading" v-else-if="logs.length == 0"></a-list>
     <a-row v-else :gutter="16">
-      <a-select @change="selectLog" allowClear autoFocus showSearch placeholder="Select Log File">
-        <a-select-option :value="item" :key="item" v-for="item in logKeys()">{{ cleanedLogKey(item) }}</a-select-option>
+      <a-select @change="selectLog" allowClear autofocus showSearch placeholder="Select Log File">
+        <a-select-option
+          :value="item"
+          :key="item"
+          v-for="item in logKeys()"
+        >{{ cleanedLogKey(item) }}</a-select-option>
       </a-select>
       <a-tabs size="small" :activeKey="defaultTab" animated type="card" @change="switchTab">
         <a-tab-pane tab="Standard Output" key="stdout">
@@ -44,7 +48,7 @@ export default {
       type: String
     }
   },
-  data () {
+  data() {
     return {
       loading: false,
       logs: {},
@@ -56,10 +60,10 @@ export default {
     }
   },
   methods: {
-    close () {
+    close() {
       this.$emit('close')
     },
-    selectLog (logKey) {
+    selectLog(logKey) {
       if (logKey) {
         this.currentLogKey = logKey
         const stdoutLink = this.logs[logKey].stdout
@@ -76,7 +80,7 @@ export default {
         this.defaultTab = 'stdout'
       }
     },
-    switchTab (tabKey) {
+    switchTab(tabKey) {
       this.defaultTab = tabKey
 
       if (this.currentLogKey) {
@@ -93,29 +97,42 @@ export default {
         }
       }
     },
-    logKeys () {
+    logKeys() {
       return sortBy(Object.keys(this.logs))
     },
-    cleanedLogKey (o) {
+    cleanedLogKey(o) {
       return o.replace(/^[a-zA-Z0-9_]+\./gi, '')
     },
-    loadSystemLog (logKey) {
+    loadSystemLog(logKey) {
       this.stdoutContent = this.logs[logKey].stdout
       this.stderrContent = this.logs[logKey].stderr
     },
-    loadLog (fileLink, objKey) {
-      const link = this.seqFlowHost + '/cromwell' + fileLink
-      this.$http
-        .get(link + `?timestamp=${new Date().getTime()}`)
-        .then(response => {
-          this[objKey] = response
-        })
-        .catch(error => {
-          this[objKey] = 'Not Found Log.'
-          console.log('Fetch Error: ', error)
-        })
+    loadLog(fileLink, objKey) {
+      if (fileLink.search(/:\/\//i)) {
+        const link = this.seqFlowHost + '/workflows/' + this.workflowId + '/filecontent'
+        this.$http
+          .get(link + `?path=${fileLink}&timestamp=${new Date().getTime()}`)
+          .then(response => {
+            this[objKey] = response.message
+          })
+          .catch(error => {
+            this[objKey] = 'Not Found Log.'
+            console.log('Fetch Error: ', error)
+          })
+      } else {
+        const link = this.seqFlowHost + '/cromwell' + fileLink
+        this.$http
+          .get(link + `?timestamp=${new Date().getTime()}`)
+          .then(response => {
+            this[objKey] = response
+          })
+          .catch(error => {
+            this[objKey] = 'Not Found Log.'
+            console.log('Fetch Error: ', error)
+          })
+      }
     },
-    loadLogs (workflowId) {
+    loadLogs(workflowId) {
       getLogList(workflowId)
         .then(response => {
           if (response.message) {
@@ -129,9 +146,9 @@ export default {
           this.logs = {}
         })
     },
-    changeItem () {}
+    changeItem() {}
   },
-  created () {
+  created() {
     this.loadLogs(this.workflowId)
   }
 }

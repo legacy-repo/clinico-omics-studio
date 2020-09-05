@@ -1,42 +1,64 @@
 <template>
   <div class="file-list" ref="fileBrowser">
-    <a-card :bordered="false" :class="{ standalone: standalone }" :style="{height: (height + 100) + 'px'}">
+    <a-card
+      :bordered="false"
+      :class="{ standalone: standalone }"
+      :style="{height: (height + 100) + 'px'}"
+    >
       <a-col slot="title" :lg="11" :md="11" :sm="24" :xs="24">
         <a-select :value="bucketName" style="width: 200px" @change="selectBucket">
-          <a-select-option v-for="bucket in buckets" :key="bucket">
-            {{ bucket }}
-          </a-select-option>
+          <a-select-option v-for="bucket in buckets" :key="bucket">{{ bucket }}</a-select-option>
         </a-select>
-        <a-button @click="switchUploadPanel" v-if="standalone"><a-icon type="upload"/>Upload</a-button>
-        <a-button @click="switchFolderDialog" v-if="standalone"><a-icon type="folder-add"/>Add Folder</a-button>
-        <a-button @click="refresh"><a-icon type="cloud-sync"/>Refresh</a-button>
+        <a-button @click="switchUploadPanel" v-if="standalone">
+          <a-icon type="upload" />Upload
+        </a-button>
+        <a-button @click="switchFolderDialog" v-if="standalone">
+          <a-icon type="folder-add" />Add Folder
+        </a-button>
+        <a-button @click="refresh">
+          <a-icon type="cloud-sync" />Refresh
+        </a-button>
       </a-col>
       <a-col slot="title" :lg="13" :md="13" :sm="24" :xs="24">
-        <a-select show-search :value="currentPath" @change="onSearch" style="width: calc(100% - 276px);">
-          <a-select-option v-for="address in addressList" :key="address">
-            {{ address }}
-          </a-select-option>
+        <a-select
+          show-search
+          :value="currentPath"
+          @change="onSearch"
+          style="width: calc(100% - 276px);"
+        >
+          <a-select-option v-for="address in addressList" :key="address">{{ address }}</a-select-option>
         </a-select>
-        <a-button style="line-height: unset; margin-top: 0px; padding: 0px 10px;" @click="handleBookmark">
+        <a-button
+          style="line-height: unset; margin-top: 0px; padding: 0px 10px;"
+          @click="handleBookmark"
+        >
           <a-icon type="star" :theme="theme" />
         </a-button>
-        <a-input-search placeholder="Enter a file name prefix" allowClear style="width: 230px;" @search="onSearch" />
+        <a-input-search
+          placeholder="Enter a file name prefix"
+          allowClear
+          style="width: 230px;"
+          @search="onSearch"
+        />
       </a-col>
       <a-row class="control-header">
         <a-breadcrumb>
           <a-breadcrumb-item>
             <a @click="redirectHome()">
-              <a-icon type="user" style="margin-right: 3px;"/>
+              <a-icon type="user" style="margin-right: 3px;" />
               <span>Home</span>
             </a>
           </a-breadcrumb-item>
           <a-breadcrumb-item v-for="(item, index) in pathList" :key="index">
-            <a @click="redirectPath(item, index, pathList)"><span>{{ item }}</span></a>
+            <a @click="redirectPath(item, index, pathList)">
+              <span>{{ item }}</span>
+            </a>
           </a-breadcrumb-item>
         </a-breadcrumb>
-        <span style="font-size: 14px; font-weight: 400; position: absolute; top: 0; right: 0;" v-if="hasSelected">
-          {{ `Selected ${selectedRowKeys.length} items` }}
-        </span>
+        <span
+          style="font-size: 14px; font-weight: 400; position: absolute; top: 0; right: 0;"
+          v-if="hasSelected"
+        >{{ `Selected ${selectedRowKeys.length} items` }}</span>
       </a-row>
       <a-table
         :loading="loading"
@@ -45,19 +67,31 @@
         rowKey="path"
         :scroll="{y: height - 100}"
         :data-source="data"
-        :row-selection="{ ...rowSelection, selectedRowKeys: selectedRowKeys }">
+        :row-selection="{ ...rowSelection, selectedRowKeys: selectedRowKeys }"
+      >
         <span slot="name" slot-scope="text, record">
-          <a @click="switchDetailsPanel(record)" v-if="record.storageClass">{{ formatFileName(text) }}</a>
+          <a
+            @click="switchDetailsPanel(record)"
+            v-if="record.storageClass"
+          >{{ formatFileName(text) }}</a>
           <a @click="enterDirecotry(record)" v-else>{{ formatFileName(text) }}</a>
         </span>
         <span slot="icon" slot-scope="text, record">
           <a-icon type="file" :style="{fontSize: '20px'}" v-if="record.storageClass" />
-          <a-icon type="folder-open" theme="filled" :style="{fontSize: '20px', color: '#ffcb01'}" v-else />
+          <a-icon
+            type="folder-open"
+            theme="filled"
+            :style="{fontSize: '20px', color: '#ffcb01'}"
+            v-else
+          />
         </span>
         <span slot="size" slot-scope="text, record">{{ formatBytes(text) }}</span>
         <span slot="action" slot-scope="text, record" v-if="record.storageClass">
           <a style="margin-right: 10px;" @click="switchDetailsPanel(record)">Details</a>
-          <a class="ant-dropdown-link" disabled> More <a-icon type="down" /> </a>
+          <a class="ant-dropdown-link" disabled>
+            More
+            <a-icon type="down" />
+          </a>
         </span>
       </a-table>
     </a-card>
@@ -78,32 +112,25 @@
           <template slot="title">
             <a @click="doCopy(currentPath)">Copy Link</a>
           </template>
-          <a-input :value="currentPath" allow-clear disabled/>
+          <a-input :value="currentPath" allow-clear disabled />
         </a-tooltip>
       </a-row>
       <a-row>
         <span class="label">Upload:</span>
-        <a-upload-dragger
-          :remove="handleRemove"
-          :multiple="true"
-          :customRequest="uploadFile"
-        >
+        <a-upload-dragger :remove="handleRemove" :multiple="true" :customRequest="uploadFile">
           <p class="ant-upload-drag-icon">
             <a-icon type="inbox" />
           </p>
-          <p class="ant-upload-text">
-            Click or drag file to this area to upload
-          </p>
-          <p class="ant-upload-hint">
-            A maximum of 100 files can be uploaded at a time.
-          </p>
+          <p class="ant-upload-text">Click or drag file to this area to upload</p>
+          <p class="ant-upload-hint">A maximum of 100 files can be uploaded at a time.</p>
         </a-upload-dragger>
         <p class="help-text">
-          File naming conventions:<br>
-          1. A file name can contain only UTF-8 characters.<br>
-          2. A file name is case-sensitive.<br>
-          3. A file name must be 1 to 1023 bytes in length.<br>
-          4. A file name cannot start with a forward slash (/) or consecutive backslashes (\).<br>
+          File naming conventions:
+          <br />1. A file name can contain only UTF-8 characters.
+          <br />2. A file name is case-sensitive.
+          <br />3. A file name must be 1 to 1023 bytes in length.
+          <br />4. A file name cannot start with a forward slash (/) or consecutive backslashes (\).
+          <br />
         </p>
       </a-row>
     </a-drawer>
@@ -149,15 +176,11 @@
     <a-row v-if="folderDialogVisible" class="folder-dialog">
       <a-form :form="folderDialog" @submit="handleSubmit">
         <a-form-item label="Folder Name">
-          <a-input allowClear autoFocus v-decorator="['folderName', { rules: folderNameRule }]"/>
+          <a-input allowClear autofocus v-decorator="['folderName', { rules: folderNameRule }]" />
         </a-form-item>
         <a-form-item style="float: right;">
-          <a-button type="danger" style="margin-right: 10px;" @click="switchFolderDialog">
-            Cancel
-          </a-button>
-          <a-button type="primary" html-type="submit">
-            Submit
-          </a-button>
+          <a-button type="danger" style="margin-right: 10px;" @click="switchFolderDialog">Cancel</a-button>
+          <a-button type="primary" html-type="submit">Submit</a-button>
         </a-form-item>
       </a-form>
     </a-row>
@@ -166,7 +189,6 @@
 
 <script>
 import { mapActions } from 'vuex'
-import VueMarkdown from 'vue-markdown'
 import axios from 'axios'
 import filter from 'lodash.filter'
 import flatMap from 'lodash.flatmap'
@@ -174,7 +196,7 @@ import flatMap from 'lodash.flatmap'
 const folderNameRule = [
   { required: true, message: 'Please input your folder name!' },
   { min: 1, max: 63, message: 'Length should be 1 to 63', trigger: 'blur' },
-  { pattern: /^[^/]+$/, message: 'Folder name is not valid', trigger: 'blur' },
+  { pattern: /^[^/]+$/, message: 'Folder name is not valid', trigger: 'blur' }
   // { validator: this.existFolder, trigger: 'blur' }
 ]
 
@@ -226,9 +248,7 @@ const columns = [
 
 export default {
   name: 'FileList',
-  components: {
-    VueMarkdown
-  },
+  components: {},
   props: {
     path: {
       required: false,
@@ -259,9 +279,14 @@ export default {
       required: false,
       default: '.*',
       type: String
+    },
+    service: {
+      required: false,
+      default: 'minio',
+      type: String
     }
   },
-  data () {
+  data() {
     return {
       columns,
       selectedRowKeys: [],
@@ -365,22 +390,24 @@ export default {
       getObjectMeta: 'GetObjectMeta',
       uploadObject: 'UploadObject'
     }),
-    getFilePath (files) {
-      return flatMap(files, (o) => o.path)
+    getFilePath(files) {
+      return flatMap(files, o => o.path)
     },
-    filterByType (files, fileType) {
-      console.log(files, fileType)      
-      return filter(files, function (o) {
+    filterByType(files, fileType) {
+      console.log(files, fileType)
+      return filter(files, function(o) {
         if (fileType === '/') {
           return o.name.length > 0 && o.name.match(/.*\//)
         } else {
           const pattern = new RegExp(fileType)
-          return o.name.length > 0 && pattern.test(o.name) 
+          return o.name.length > 0 && pattern.test(o.name)
         }
       })
     },
-    loadBookmarks () {
-      const addressList = JSON.parse(localStorage.getItem('datains_BOOKMARKS'))
+    loadBookmarks() {
+      const addressList = filter(JSON.parse(localStorage.getItem('datains_BOOKMARKS')), address => {
+        return address.indexOf(this.service) >= 0
+      })
       if (addressList) {
         this.addressList = addressList
       } else {
@@ -395,7 +422,7 @@ export default {
 
       console.log('loadBookmarks: ', this.savedBookmark, this.addressList, this.currentPath)
     },
-    handleBookmark () {
+    handleBookmark() {
       let allBookmarks = JSON.parse(localStorage.getItem('datains_BOOKMARKS'))
       if (!allBookmarks) {
         allBookmarks = []
@@ -413,7 +440,7 @@ export default {
       localStorage.setItem('datains_BOOKMARKS', JSON.stringify(allBookmarks))
       this.loadBookmarks()
     },
-    parseBucketName (link) {
+    parseBucketName(link) {
       const parsedList = link.match(/.*:\/\/([a-zA-Z0-9\-._:]+)\/(.*)/)
       if (parsedList) {
         // bucketName
@@ -422,7 +449,7 @@ export default {
         return null
       }
     },
-    onSearch (searchStr) {
+    onSearch(searchStr) {
       console.log('onSearch: ', searchStr)
       if (searchStr) {
         const parsedList = searchStr.match(/.*:\/\/([a-zA-Z0-9\-._:]+)\/(.*)/)
@@ -437,23 +464,25 @@ export default {
 
       // Search in current directory
       this.prefix = this.getPrefix(this.pathList, searchStr)
-      this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, this.prefix)        
+      this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, this.prefix)
     },
-    selectBucket (value) {
+    selectBucket(value) {
       // Reset File Browser
       this.bucketName = value
       this.redirectHome()
     },
-    doCopy (text) {
-      this.$copyText(text).then(message => {
-        console.log('copy', message)
-        this.$message.success('Copied')
-      }).catch(err => {
-        console.log('copy.err', err)
-        this.$message.error('Failed')
-      })
+    doCopy(text) {
+      this.$copyText(text)
+        .then(message => {
+          console.log('copy', message)
+          this.$message.success('Copied')
+        })
+        .catch(err => {
+          console.log('copy.err', err)
+          this.$message.error('Failed')
+        })
     },
-    downloadFile (link) {
+    downloadFile(link) {
       const downloadAnchorNode = document.createElement('a')
       downloadAnchorNode.setAttribute('href', link)
       downloadAnchorNode.setAttribute('target', '_blank')
@@ -461,99 +490,109 @@ export default {
       downloadAnchorNode.click()
       downloadAnchorNode.remove()
     },
-    getDownloadUrl () {
+    getDownloadUrl() {
       this.makeDownloadUrl({
+        service: this.service,
         name: this.bucketName,
         key: this.recordDetail.name
-      }).then(response => {
-        this.downloadUrl = response.download_url
-      }).catch(error => {
-        this.$message.error('Unknown Error!')
-        console.log('getDownloadUrl: ', error)
       })
+        .then(response => {
+          this.downloadUrl = response.download_url
+        })
+        .catch(error => {
+          this.$message.error('Unknown Error!')
+          console.log('getDownloadUrl: ', error)
+        })
     },
-    switchFolderDialog () {
+    switchFolderDialog() {
       this.folderDialogVisible = !this.folderDialogVisible
     },
-    handleSubmit (e) {
+    handleSubmit(e) {
       e.preventDefault()
       this.folderDialog.validateFields((err, values) => {
         if (!err) {
           const key = this.pathList.join('/') + values.folderName
           this.makeDirectory({
-            'name': this.bucketName,
-            'key': key
-          }).then(response => {
-            this.switchFolderDialog()
-            this.refresh()
-          }).catch(error => {
-            console.log('Cannot create folder.', error)
+            service: this.service,
+            name: this.bucketName,
+            key: key
           })
+            .then(response => {
+              this.switchFolderDialog()
+              this.refresh()
+            })
+            .catch(error => {
+              console.log('Cannot create folder.', error)
+            })
         }
       })
     },
-    existFolder (rule, value, callback) {
-
-    },
-    refresh () {
+    existFolder(rule, value, callback) {},
+    refresh() {
       const prefix = this.getPrefix(this.pathList, '')
       this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, prefix)
     },
-    redirectHome () {
+    redirectHome() {
       this.redirect([])
     },
-    redirectPath (item, index, pathList) {
+    redirectPath(item, index, pathList) {
       this.redirect(pathList.slice(0, index + 1))
     },
-    redirect (pathList) {
+    redirect(pathList) {
       this.pathList = pathList
       const prefix = this.getPrefix(pathList, '')
       this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, prefix)
     },
-    searchObjects (bucketName, page, pageSize, prefix) {
+    searchObjects(bucketName, page, pageSize, prefix) {
       this.loading = true
       this.getObjects({
-        'name': bucketName,
-        'page': page,
-        'pageSize': pageSize,
-        'prefix': prefix
-      }).then(response => {
-        this.currentPath = response.location
-        this.data = filter(response.data, item => {
-          return item.path !== this.currentPath
-        })
-        this.pagination.total = response.total
-        this.pagination.current = response.page
-        this.pagination.pageSize = response.pageSize
-        this.loading = false
-      }).catch(error => {
-        console.log('searchObjects: ', error)
-        this.loading = false
+        service: this.service,
+        name: bucketName,
+        page: page,
+        pageSize: pageSize,
+        prefix: prefix
       })
+        .then(response => {
+          this.currentPath = response.location
+          this.data = filter(response.data, item => {
+            return item.path !== this.currentPath
+          })
+          this.pagination.total = response.total
+          this.pagination.current = response.page
+          this.pagination.pageSize = response.pageSize
+          this.loading = false
+        })
+        .catch(error => {
+          console.log('searchObjects: ', error)
+          this.loading = false
+        })
     },
-    switchUploadPanel () {
+    switchUploadPanel() {
       this.uploadPanelVisible = !this.uploadPanelVisible
     },
-    closeUploadPanel () {
+    closeUploadPanel() {
       this.refresh()
       this.switchUploadPanel()
       this.fileList = {}
     },
-    switchDetailsPanel (record) {
+    switchDetailsPanel(record) {
       this.detailsPanelVisible = !this.detailsPanelVisible
       this.recordDetail = record
     },
-    closeDetailsPanel () {
+    closeDetailsPanel() {
       this.detailsPanelVisible = false
     },
-    trimSlash (str) {
+    trimSlash(str) {
       if (str.match(/.*\/$/)) {
-        return str.split('/').slice(0, -1).join('/')
+        return str
+          .split('/')
+          .slice(0, -1)
+          .join('/')
       } else {
         return str
       }
     },
-    enterDirecotry (record) {
+    enterDirecotry(record) {
       if (record.name.match(/.*\/.+/)) {
         console.log(this.trimSlash(record.name).split('/'))
         this.pathList = this.trimSlash(record.name).split('/')
@@ -562,12 +601,17 @@ export default {
       }
 
       console.log('enterDirectory: ', this.pathList, record)
-      this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, this.getPrefix(this.pathList, ''))
+      this.searchObjects(
+        this.bucketName,
+        this.pagination.current,
+        this.pagination.pageSize,
+        this.getPrefix(this.pathList, '')
+      )
     },
-    formatFileName (name) {
+    formatFileName(name) {
       return name.replace(this.pathList.join('/') + '/', '')
     },
-    formatBytes (bytes, decimals = 2) {
+    formatBytes(bytes, decimals = 2) {
       if (bytes === 0) return ''
 
       const k = 1024
@@ -578,7 +622,7 @@ export default {
 
       return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
     },
-    getPrefix (pathList, searchStr) {
+    getPrefix(pathList, searchStr) {
       // this.pathList.join('/') + '/': Prefix need a slash when you are a directory
       // When need to list directory, searchStr must be an empty string
       const prefix = pathList.join('/') + '/' + searchStr
@@ -588,76 +632,70 @@ export default {
         return prefix
       }
     },
-    handleRemove (file) {
+    handleRemove(file) {
       const request = this.fileList[this.getPrefix(this.pathList, file.name)]
       request.cancel('Canceling Upload.')
       this.refresh()
     },
-    uploadFile ({
-      action,
-      data,
-      file,
-      filename,
-      headers,
-      onError,
-      onProgress,
-      onSuccess,
-      withCredentials
-    }) {
+    uploadFile({ action, data, file, filename, headers, onError, onProgress, onSuccess, withCredentials }) {
       console.log('uploadFiles: ', file)
       this.makeUploadUrl({
+        service: this.service,
         name: this.bucketName,
         key: this.getPrefix(this.pathList, file.name)
-      }).then(response => {
-        const request = axios.CancelToken.source()
-        this.fileList[this.getPrefix(this.pathList, file.name)] = request
-        const action = response.upload_url
-        const formData = new FormData()
-        if (data) {
-          Object.keys(data).forEach(key => {
-            formData.append(key, data[key])
-          })
-        }
-        formData.append(filename, file)
-
-        axios({
-          url: action,
-          method: 'put',
-          data: file,
-          processData: false,
-          contentType: false,
-          onUploadProgress: ({ total, loaded }) => {
-            console.log('onUploadProgress: ', total, loaded, Math.round(loaded / total * 100).toFixed(2))
-            onProgress({ percent: Math.round(loaded / total * 100) }, file)
-          },
-          cancelToken: request.token
-        })
-          .then(({ data: response }) => {
-            console.log('Upload Files: ', response, file)
-            onSuccess(response, file)
-          })
-          .catch(error => {
-            console.log('Upload Files (Error): ', error)
-            onError(error)
-          })
-
-        return {
-          abort () {
-            console.log('upload progress is aborted.')
-          }
-        }
-      }).catch(error => {
-        console.log('getUploadUrl: ', error)
       })
+        .then(response => {
+          const request = axios.CancelToken.source()
+          this.fileList[this.getPrefix(this.pathList, file.name)] = request
+          const action = response.upload_url
+          const formData = new FormData()
+          if (data) {
+            Object.keys(data).forEach(key => {
+              formData.append(key, data[key])
+            })
+          }
+          formData.append(filename, file)
+
+          axios({
+            url: action,
+            method: 'put',
+            data: file,
+            processData: false,
+            contentType: false,
+            onUploadProgress: ({ total, loaded }) => {
+              console.log('onUploadProgress: ', total, loaded, Math.round((loaded / total) * 100).toFixed(2))
+              onProgress({ percent: Math.round((loaded / total) * 100) }, file)
+            },
+            cancelToken: request.token
+          })
+            .then(({ data: response }) => {
+              console.log('Upload Files: ', response, file)
+              onSuccess(response, file)
+            })
+            .catch(error => {
+              console.log('Upload Files (Error): ', error)
+              onError(error)
+            })
+
+          return {
+            abort() {
+              console.log('upload progress is aborted.')
+            }
+          }
+        })
+        .catch(error => {
+          console.log('getUploadUrl: ', error)
+        })
     }
   },
   watch: {
-    recordDetail: function () {
+    recordDetail: function() {
       // Reset
       this.previewContent = ''
 
       this.getDownloadUrl()
       this.getObjectMeta({
+        service: this.service,
         name: this.bucketName,
         key: this.recordDetail.name
       }).then(response => {
@@ -673,14 +711,14 @@ export default {
     }
   },
   computed: {
-    hasSelected () {
+    hasSelected() {
       return this.selectedRowKeys.length > 0
     },
-    theme () {
+    theme() {
       return this.savedBookmark ? 'filled' : 'outlined'
     }
   },
-  created () {
+  created() {
     // Restore Selected
     if (!this.standalone) {
       this.selectedRowKeys = this.selected
@@ -688,7 +726,7 @@ export default {
 
     this.loadBookmarks()
 
-    this.getBuckets()
+    this.getBuckets({ service: this.service })
       .then(response => {
         this.buckets = response.data
         if (this.buckets.length > 0) {
@@ -720,7 +758,7 @@ export default {
 </script>
 
 <style lang="less">
-@import (reference) "~@/components/index.less";
+@import (reference) '~@/components/index.less';
 
 @header-top: 5px;
 @header-left: @header-top;
@@ -746,7 +784,8 @@ export default {
   }
 
   .ant-card {
-    .ant-card-head, .ant-card-body {
+    .ant-card-head,
+    .ant-card-body {
       padding: 0px 16px 0px;
     }
 
@@ -764,7 +803,9 @@ export default {
           margin-left: 0px;
         }
 
-        .ant-btn, .ant-input-search, .ant-select {
+        .ant-btn,
+        .ant-input-search,
+        .ant-select {
           margin-top: @header-top;
         }
       }
@@ -780,7 +821,8 @@ export default {
         }
       }
 
-      .ant-table-thead > tr > th, .ant-table-tbody > tr > td {
+      .ant-table-thead > tr > th,
+      .ant-table-tbody > tr > td {
         padding: 12px 16px;
       }
     }
@@ -793,7 +835,8 @@ export default {
   }
 }
 
-.upload-panel, details-panel {
+.upload-panel,
+details-panel {
   .ant-drawer-body {
     padding: 12px 24px;
 

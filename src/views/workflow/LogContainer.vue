@@ -108,8 +108,8 @@ export default {
       this.stderrContent = this.logs[logKey].stderr
     },
     loadLog(fileLink, objKey) {
-      if (fileLink.search(/:\/\//i)) {
-        const link = this.seqFlowHost + '/workflows/' + this.workflowId + '/filecontent'
+      if (fileLink.search(/:\/\//i) >= 0) {
+        const link = this.seqFlowHost + '/api/workflows/' + this.workflowId + '/filecontent'
         this.$http
           .get(link + `?path=${fileLink}&timestamp=${new Date().getTime()}`)
           .then(response => {

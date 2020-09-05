@@ -108,8 +108,8 @@ export function countCollections (params) {
 }
 
 function getServiceApi (service) {
-  // return '/api/' + service + '/buckets'
-  return '/api/buckets'
+  return '/api/services/' + service + '/buckets'
+  // return '/api/buckets'
 }
 
 // Minio/OSS/S3: Bucket + Object

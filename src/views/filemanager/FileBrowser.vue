@@ -452,7 +452,7 @@ export default {
     onSearch(searchStr) {
       console.log('onSearch: ', searchStr)
       if (searchStr) {
-        const parsedList = searchStr.match(/.*:\/\/([a-zA-Z0-9\-._:]+)\/(.*)/)
+        const parsedList = searchStr.match(/.*:\/\/([a-zA-Z0-9\-._:]+)\/(.*)\/[^/]*$/)
         if (parsedList) {
           // Search with oss://|s3:// link
           this.bucketName = parsedList[1]

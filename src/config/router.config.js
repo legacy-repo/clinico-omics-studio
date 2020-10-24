@@ -82,7 +82,13 @@ export const asyncRouterMap = [
             hidden: true,
             hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
             component: () => import('@/views/workflow/WorkflowManagement'),
-            meta: { title: 'Job Management', icon: 'file-sync', drawerMode: false, keepAlive: true, permission: ['table'] }
+            meta: {
+              title: 'Job Management',
+              icon: 'file-sync',
+              drawerMode: false,
+              keepAlive: true,
+              permission: ['table']
+            }
           },
           {
             path: '/seq-flow/project-management',
@@ -110,6 +116,16 @@ export const asyncRouterMap = [
         component: () => import('@/components/FullFrame'),
         props: route => ({ src: 'http://10.157.72.55:8081/quartet-vis/' }),
         meta: { title: 'Visualization', icon: 'dot-chart', keepAlive: true }
+      },
+
+      // Embeded Frame
+      {
+        path: '/embeded-frame',
+        name: 'embeded-frame',
+        hidden: true,
+        component: () => import('@/components/FullFrame'),
+        props: route => ({ src:  route.query.src }),
+        meta: { title: 'Embeded Frame', icon: 'dot-chart', keepAlive: true }
       },
 
       // Request Materials

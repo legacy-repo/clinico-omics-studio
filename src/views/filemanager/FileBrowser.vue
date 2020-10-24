@@ -65,6 +65,7 @@
         :pagination="pagination"
         :columns="columns"
         rowKey="path"
+        :customRow="customRow"
         :scroll="{y: height - 100}"
         :data-source="data"
         :row-selection="{ ...rowSelection, selectedRowKeys: selectedRowKeys }"
@@ -96,6 +97,17 @@
       </a-table>
     </a-card>
     <!-- Popup Windows -->
+    <a-modal
+      :title="chartStudioTitle"
+      style="top: 20px;"
+      :visible="chartStudioVisible"
+      @ok="() => makeChart()"
+      @cancel="() => hideChartStudio()"
+    >
+      <p>some contents...</p>
+      <p>some contents...</p>
+      <p>some contents...</p>
+    </a-modal>
     <a-drawer
       class="upload-panel"
       title="Upload"
@@ -192,6 +204,10 @@ import { mapActions } from 'vuex'
 import axios from 'axios'
 import filter from 'lodash.filter'
 import flatMap from 'lodash.flatmap'
+
+import Vue from 'vue'
+import Contextmenu from 'vue-contextmenujs'
+Vue.use(Contextmenu)
 
 const folderNameRule = [
   { required: true, message: 'Please input your folder name!' },
@@ -339,6 +355,9 @@ export default {
           }
         ]
       },
+      // Chart Studio
+      chartStudioVisible: false,
+      chartStudioTitle: 'Chart Studio',
       // Folder
       folderDialog: this.$form.createForm(this, { name: 'folder-dialog' }),
       folderNameRule,
@@ -390,6 +409,57 @@ export default {
       getObjectMeta: 'GetObjectMeta',
       uploadObject: 'UploadObject'
     }),
+    customRow(record) {
+      return {
+        on: {
+          contextmenu: e => {
+            e.preventDefault()
+            this.onContextmenu(record, e)
+          }
+        }
+      }
+    },
+    onContextmenu(record, event) {
+      console.log('onContextMenu: ', record, event)
+      this.$contextmenu({
+        items: [
+          {
+            label: 'File Management',
+            divided: true,
+            icon: "iconfont icon-wenjianguanli",
+            minWidth: 0,
+            children: [
+              {
+                label: 'Details',
+                icon: "iconfont icon-Details",
+                onClick: () => {
+                  this.switchDetailsPanel(record)
+                }
+              }
+            ]
+          },
+          {
+            label: 'Trace your data',
+            icon: "iconfont icon-DataUsage-1",
+            minWidth: 0,
+            children: [
+              {
+                label: 'Box Plot',
+                icon: "iconfont icon-barplot",
+                onClick: () => {
+                  this.showChartStudio('Boxplot')
+                }
+              },
+            ]
+          }
+        ],
+        event,
+        customClass: 'class-a',
+        zIndex: 3,
+        minWidth: 200
+      })
+      return false
+    },
     getFilePath(files) {
       return flatMap(files, o => o.path)
     },
@@ -574,6 +644,19 @@ export default {
       this.refresh()
       this.switchUploadPanel()
       this.fileList = {}
+    },
+    makeChart() {
+      this.$router.push({
+        name: 'embeded-frame',
+        query: { src: 'http://localhost:8081/boxplot-r-5xve8vhx6e/' }
+      })
+    },
+    showChartStudio(title) {
+      this.chartStudioTitle = 'Chart Studio for ' + title
+      this.chartStudioVisible = !this.chartStudioVisible
+    },
+    hideChartStudio() {
+      this.chartStudioVisible = !this.chartStudioVisible
     },
     switchDetailsPanel(record) {
       this.detailsPanelVisible = !this.detailsPanelVisible

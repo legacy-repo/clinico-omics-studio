@@ -45,7 +45,7 @@
       </a-tabs>
       <a-tabs defaultActiveKey="1" @change="onChangeTab">
         <a-tab-pane tab="Table" key="1">
-          <data-table :queryMap="queryMap" :key="queryMapString"></data-table>
+          <data-table></data-table>
         </a-tab-pane>
       </a-tabs>
     </a-col>
@@ -77,12 +77,13 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 import { FilterList } from '@/components'
 import Pie from './Pie'
 import DataTable from './DataTable'
 import filter from 'lodash.filter'
 import map from 'lodash.map'
+import merge from 'lodash.merge'
 
 export default {
   name: 'FilterPanel',
@@ -113,33 +114,12 @@ export default {
           data: []
         },
         {
-          name: 'Multi Characters Raw Datasets',
-          shortName: 'Character',
-          data: [
-            { name: 'Small Variants', count: 10 },
-            { name: 'Structural Variants', count: 10 },
-            { name: 'Methylations', count: 10 },
-            { name: 'mRNAs', count: 10 },
-            { name: 'miRNAs', count: 10 },
-            { name: 'Proteins', count: 10 },
-            { name: 'Metabolites', count: 10 }
-          ]
-        },
-        {
           name: 'Data Category',
           shortName: 'Data Category',
           key: 'data_file_data_format',
           data: []
         }
       ],
-      filterKeys: [
-        'reference_materials_type',
-        'sequencing_sequence_platform',
-        'sequencing_sequence_site',
-        'data_file_data_format'
-      ],
-      queryMap: {},
-      queryMapString: '',
       visible: false,
       allFields: [
         'biospecimen_biospecimen_id',
@@ -205,6 +185,11 @@ export default {
       }
       return active
     },
+    filterKeys() {
+      return map(this.fieldsList, o => {
+        return o.key
+      })
+    },
     filteredFields() {
       if (this.searchValue.length > 0) {
         return filter(this.allFields, record => {
@@ -223,7 +208,9 @@ export default {
           newFieldRecord['shortName'] = fieldRecord.shortName
           newFieldRecord['key'] = fieldRecord.key
           newFieldRecord['data'] = filter(fieldRecord.data, record => {
-            return record.name.match(this.filterValue)
+            // Remove Special Character
+            const pattern = /[`~!@#$^&*()=|{}':;',\\[\].<>/?~！@#￥……&*（）——|{}【】'；：""'。，、？\s]/g
+            return record.name.match(this.filterValue.replace(pattern, ""))
           })
 
           return newFieldRecord
@@ -234,6 +221,11 @@ export default {
     }
   },
   methods: {
+    ...mapMutations({
+      set_page: 'SET_PAGE',
+      set_payload: 'SET_PAYLOAD',
+      delete_payload: 'DELETE_PAYLOAD'
+    }),
     ...mapActions({
       countCollections: 'CountCollections'
     }),
@@ -265,19 +257,42 @@ export default {
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
       })
     },
+    changeCheckedStatus(fieldKey, key, checked) {
+      for (let idx in this.fieldsList) {
+        if (this.fieldsList[idx].key == fieldKey) {
+          for (let i in this.fieldsList[idx].data) {
+            if (this.fieldsList[idx].data[i].key == key) {
+              this.fieldsList[idx].data[i].checked = checked
+            }
+          }
+        }
+      }
+
+      console.log('changeCheckedStatus: ', this.fieldsList, fieldKey, key, checked)
+    },
     filterCollections(fieldKey, event) {
       const key = event.key
       const checked = event.checked
 
       if (checked) {
-        this.queryMap[fieldKey] = key
+        this.set_payload({
+          field: fieldKey,
+          value: key, 
+          type: 'category'
+        })
       } else {
-        delete this.queryMap[fieldKey]
+        this.delete_payload({
+          field: fieldKey,
+          value: key,
+          type: 'category'
+        })
       }
 
-      console.log('filterCollections: ', this.queryMap)
-      this.queryMapString = JSON.stringify(this.queryMap)
-      this.fetchCounts(this.queryMap)
+      this.fetchCounts({
+        fieldKey: fieldKey,
+        key: key,
+        checked: checked
+      })
     },
     cloneMap(queryMap) {
       return JSON.parse(JSON.stringify(queryMap))
@@ -293,7 +308,7 @@ export default {
           })
 
           if (matched.length > 0) {
-            return matched[0]
+            return merge(record, matched[0])
           } else {
             return {
               name: record.name,
@@ -306,13 +321,12 @@ export default {
         return clonedNewData
       }
     },
-    fetchCounts(queryMap) {
-      Promise.all([
-        this.countCollections(Object.assign(this.cloneMap(queryMap), { group: 'reference_materials_type' })),
-        this.countCollections(Object.assign(this.cloneMap(queryMap), { group: 'sequencing_sequence_platform' })),
-        this.countCollections(Object.assign(this.cloneMap(queryMap), { group: 'sequencing_sequence_site' })),
-        this.countCollections(Object.assign(this.cloneMap(queryMap), { group: 'data_file_data_format' }))
-      ])
+    fetchCounts(checkedObj) {
+      const collections = map(this.filterKeys, o => {
+        return this.countCollections({ group: o })
+      })
+
+      Promise.all(collections)
         .then(results => {
           for (let idx in this.filterKeys) {
             const key = this.filterKeys[idx]
@@ -320,9 +334,15 @@ export default {
               return record.key === key
             })
 
-            const data = this.updateData(field[0].data, results[idx])
+            if (field.length > 0) {
+              const data = this.updateData(field[0].data, results[idx])
 
-            field[0].data = data
+              field[0].data = data
+            }
+          }
+
+          if (checkedObj != undefined) {
+            this.changeCheckedStatus(checkedObj.fieldKey, checkedObj.key, checkedObj.checked)
           }
         })
         .catch(error => {
@@ -332,7 +352,7 @@ export default {
     }
   },
   created() {
-    this.fetchCounts({})
+    this.fetchCounts()
   }
 }
 </script>

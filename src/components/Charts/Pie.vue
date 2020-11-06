@@ -1,7 +1,7 @@
 <template>
   <a-row class="pie-chart">
     <h4>{{ title }}</h4>
-    <v-chart class="chart" :forceFit="true" :height="height" :width="width" :data="dataSource" :scale="scale" padding="auto">
+    <v-chart class="chart" style="text-align: center;" :forceFit="true" :height="height" :width="width" :data="dataSource" :scale="scale" padding="auto">
       <v-tooltip :showTitle="false" dataKey="name*count" />
       <v-axis />
       <v-legend dataKey="name" v-if="showLegend" />

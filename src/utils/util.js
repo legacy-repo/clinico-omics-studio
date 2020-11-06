@@ -33,6 +33,17 @@ export function saveTServiceHost (tServiceHost) {
   localStorage.setItem('tServiceHost', tServiceHost)
 }
 
+// SeqFlow
+export function initDataSeqHost () {
+  const dataSeqHost = localStorage.getItem('dataSeqHost')
+  console.log(`DATA_SEQ_HOST: ${dataSeqHost}`)
+  return dataSeqHost || 'http://10.157.72.55:3000'
+}
+
+export function saveDataSeqHost (dataSeqHost) {
+  localStorage.setItem('dataSeqHost', dataSeqHost)
+}
+
 // File Manager
 export function initFileManagerHost () {
   const fileManagerHost = localStorage.getItem('fileManagerHost')

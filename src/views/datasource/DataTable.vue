@@ -49,7 +49,7 @@
 <script>
 import filter from 'lodash.filter'
 import map from 'lodash.map'
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations, mapGetters } from 'vuex'
 
 const columns = [
   {
@@ -119,18 +119,7 @@ const columns = [
 ]
 
 export default {
-  props: {
-    queryMap: {
-      required: false,
-      default: () => Object(),
-      type: Object
-    },
-    queryMapString: {
-      required: false,
-      default: '',
-      type: String
-    }
-  },
+  props: {},
   data() {
     return {
       data: [],
@@ -148,23 +137,26 @@ export default {
         total: 0,
         current: 1,
         onChange: (page, pageSize) => {
-          const queryMap = Object.assign(this.queryMap, {
-            page: page,
-            per_page: pageSize
-          })
-          this.searchCollections(queryMap)
+          this.set_page(page, pageSize)
+          this.searchCollections()
         },
         onShowSizeChange: (current, pageSize) => {
-          const queryMap = Object.assign(this.queryMap, {
-            page: 1,
-            per_page: pageSize
-          })
-          this.searchCollections(queryMap)
+          this.set_page(1, pageSize)
+          this.searchCollections()
         }
       }
     }
   },
+  watch: {
+    queryString (newValue, oldValue) {
+      console.log('Query Map - Payload: ', newValue, oldValue)
+      this.searchCollections()
+    }
+  },
   computed: {
+    ...mapGetters({
+      queryString: 'queryString'
+    }),
     hasSelected() {
       return this.selectedRowKeys.length > 0
     },
@@ -188,13 +180,11 @@ export default {
       return this.pagination.total
     }
   },
-  watch: {
-    queryMapString: function(newVal, oldVal) {
-      console.log('queryMap Changed: ', newVal, oldVal)
-      this.searchCollections(this.queryMap)
-    }
-  },
   methods: {
+    ...mapMutations({
+      set_page: 'SET_PAGE',
+      set_payload: 'SET_PAYLOAD'
+    }),
     ...mapActions({
       getCollections: 'GetCollections'
     }),
@@ -219,9 +209,9 @@ export default {
     downloadAsJSON() {},
     downloadAsCSV() {},
     setAgeSort() {},
-    searchCollections(queryMap) {
+    searchCollections() {
       this.loading = true
-      this.getCollections(queryMap)
+      this.getCollections()
         .then(response => {
           this.data = response.data
           this.pagination.total = response.total
@@ -239,7 +229,7 @@ export default {
     }
   },
   created() {
-    this.searchCollections(this.queryMap)
+    this.searchCollections()
   }
 }
 </script>

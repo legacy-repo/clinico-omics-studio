@@ -1,8 +1,9 @@
 import { axios } from '@/utils/request'
-import { initFileManagerHost, initTServiceHost } from '@/utils/util'
+import { initFileManagerHost, initTServiceHost, initDataSeqHost } from '@/utils/util'
 
 const fileManagerHost = initFileManagerHost()
 const tserviceHost = initTServiceHost()
+const dataSeqHost = initDataSeqHost()
 
 const api = {
   user: '/user',
@@ -11,26 +12,28 @@ const api = {
   permission: '/permission',
   permissionNoPager: '/permission/no-pager',
   orgTree: '/org/tree',
-  // Custom
+  // Datains
   report: '/api/reports',
   project: '/api/projects',
   workflow: '/api/workflows',
   log: '/api/logs',
   notification: '/api/notifications',
-  dataCommons: {
-    collections: '/api/collections',
-    groups: '/api/count-collections'
-  },
+  apps: '/apps',
   appStore: {
     installedApps: '/api/installed-apps',
     apps: '/api/apps',
     manifest: '/api/app-manifest'
   },
+  // Tservice
   tservice: {
     manifest: tserviceHost + '/api/manifest',
     root: tserviceHost
   },
-  apps: '/apps',
+  // Data Commons
+  dataCommons: {
+    collections: dataSeqHost + '/api/collections',
+    groups: dataSeqHost + '/api/count-collections'
+  },
   filemanager: {
     url: fileManagerHost,
     getImageUrl: fileManagerHost + '/GetImage',
@@ -90,20 +93,22 @@ export function getMaterialsTemperature () {
   })
 }
 
-// Metadata
-export function getCollections (params) {
+// Omics Data Commons - Metadata
+export function getCollections (parameter, payload) {
   return axios({
     url: api.dataCommons.collections,
-    method: 'get',
-    params: params
+    method: 'post',
+    params: parameter,
+    data: payload
   })
 }
 
-export function countCollections (params) {
+export function countCollections (parameter, payload) {
   return axios({
     url: api.dataCommons.groups,
-    method: 'get',
-    params: params
+    method: 'post',
+    params: parameter,
+    data: payload
   })
 }
 

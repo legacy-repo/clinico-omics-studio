@@ -26,6 +26,17 @@
                 </a-form-item>
               </a-col>
             </a-row>
+            <!-- DataSeq -->
+            <a-row :gutter="24">
+              <a-col :span="12">
+                <a-form-item label="Service Host / Domain for Omics Data Commons">
+                  <a-input
+                    :placeholder="placeholder"
+                    v-decorator="['dataSeqHost', {initialValue: dataSeqHost, rules:[{required: true, message: 'Please enter a service host or domain, e.g. http://10.157.72.53'}]}]"
+                  />
+                </a-form-item>
+              </a-col>
+            </a-row>
             <!-- FileManager -->
             <!-- <a-row :gutter="24">
               <a-col :span="12">
@@ -53,6 +64,8 @@ import {
   saveSeqFlowHost,
   initTServiceHost,
   saveTServiceHost,
+  initDataSeqHost,
+  saveDataSeqHost,
   initFileManagerHost,
   saveFileManagerHost
 } from '@/utils/util'
@@ -66,6 +79,7 @@ export default {
       confirmLoading: false,
       seqFlowHost: initSeqFlowHost(),
       tServiceHost: initTServiceHost(),
+      dataSeqHost: initDataSeqHost(),
       fileManagerHost: initFileManagerHost()
     }
   },
@@ -84,6 +98,9 @@ export default {
 
           // TService
           saveTServiceHost(values.tServiceHost)
+
+          // DataSeq
+          saveDataSeqHost(values.dataSeqHost)
 
           // FileManager
           saveFileManagerHost(values.fileManagerHost)

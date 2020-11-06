@@ -15,7 +15,7 @@
       <a-button @click="onShowLess">Less...</a-button>
     </div>
     <a-list-item slot="renderItem" slot-scope="item, index" class="filter-list-item">
-      <a-checkbox @change="onChange(item, index, $event)" v-if="checkboxMode">{{ item.name }}</a-checkbox>
+      <a-checkbox @change="onChange(item, index, $event)" :defaultChecked="isChecked(item.checked)" v-if="checkboxMode">{{ item.name }}</a-checkbox>
       <a @click="onChange(item, index, $event)" v-else>{{ item.name }}</a>
       <a-tag>{{ item.count }}</a-tag>
     </a-list-item>
@@ -47,6 +47,13 @@ export default {
     }
   },
   methods: {
+    isChecked(status) {
+      if (status == true) {
+        return status
+      } else {
+        return false
+      }
+    },
     onChange(item, index, event) {
       console.log('onChange: ', item, index, event)
       this.$emit('select-filter', {

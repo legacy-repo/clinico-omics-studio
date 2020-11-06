@@ -439,15 +439,64 @@ export default {
             ]
           },
           {
-            label: 'Trace your data',
+            label: 'Trace Your Data',
             icon: "iconfont icon-DataUsage-1",
-            minWidth: 0,
+            minWidth: 100,
             children: [
               {
-                label: 'Box Plot',
+                label: 'Box',
                 icon: "iconfont icon-barplot",
                 onClick: () => {
                   this.showChartStudio('Boxplot')
+                }
+              },
+              {
+                label: 'Density',
+                // icon: "iconfont icon-barplot",
+                onClick: () => {
+                  this.showChartStudio('Density')
+                }
+              },
+              {
+                label: 'Grouped Box',
+                // icon: "iconfont icon-barplot",
+                onClick: () => {
+                  this.showChartStudio('Grouped Boxplot')
+                }
+              },
+              {
+                label: 'Heatmap',
+                // icon: "iconfont icon-barplot",
+                onClick: () => {
+                  this.showChartStudio('Heatmap')
+                }
+              },
+              {
+                label: 'Rocket',
+                // icon: "iconfont icon-barplot",
+                onClick: () => {
+                  this.showChartStudio('Rocket')
+                }
+              },
+              {
+                label: 'Scatter',
+                icon: "iconfont icon-chart-scatter-plot",
+                onClick: () => {
+                  this.showChartStudio('Scatter')
+                }
+              },
+              {
+                label: 'Upset',
+                // icon: "iconfont icon-barplot",
+                onClick: () => {
+                  this.showChartStudio('Upset')
+                }
+              },
+              {
+                label: 'Violin',
+                // icon: "iconfont icon-barplot",
+                onClick: () => {
+                  this.showChartStudio('Violin')
                 }
               },
             ]

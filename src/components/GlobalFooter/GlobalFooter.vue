@@ -30,17 +30,22 @@ export default {
         {
           name: 'tservice',
           version: 'v0.1.5-a6da32bc',
-          repo: 'http://github.com/clinico-omics/tservice'
+          repo: 'https://github.com/clinico-omics/tservice'
+        },
+        {
+          name: 'tservice-plugins',
+          version: 'v0.1.3-fa831e22',
+          repo: 'https://github.com/clinico-omics/tservice-plugins'
         },
         {
           name: 'datains',
           version: 'v0.3.0-62a53fb2',
-          repo: 'http://github.com/clinico-omics/datains'
+          repo: 'https://github.com/clinico-omics/datains'
         },
         {
           name: 'dataseq-core',
           version: 'v0.1.1-26ec5e35',
-          repo: 'http://github.com/clinico-omics/dataseq-core'
+          repo: 'https://github.com/clinico-omics/dataseq-core'
         }
       ]
     }

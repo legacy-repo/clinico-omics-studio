@@ -8,7 +8,7 @@ export function timeFix () {
 export function initSeqFlowHost () {
   const seqFlowHost = localStorage.getItem('seqFlowHost')
   console.log(`SEQ_FLOW_HOST: ${seqFlowHost}`)
-  return seqFlowHost || 'http://10.157.72.55:3000'
+  return seqFlowHost || 'http://10.157.72.56:3000'
 }
 
 export function saveSeqFlowHost (seqFlowHost) {
@@ -26,18 +26,18 @@ export function initApiService () {
 export function initTServiceHost () {
   const tServiceHost = localStorage.getItem('tServiceHost')
   console.log(`TSERVICE_HOST: ${tServiceHost}`)
-  return tServiceHost || 'http://10.157.72.55:3001'
+  return tServiceHost || 'http://10.157.72.56:3001'
 }
 
 export function saveTServiceHost (tServiceHost) {
   localStorage.setItem('tServiceHost', tServiceHost)
 }
 
-// SeqFlow
+// DataSeq
 export function initDataSeqHost () {
   const dataSeqHost = localStorage.getItem('dataSeqHost')
   console.log(`DATA_SEQ_HOST: ${dataSeqHost}`)
-  return dataSeqHost || 'http://10.157.72.55:3000'
+  return dataSeqHost || 'http://10.157.72.56:3002'
 }
 
 export function saveDataSeqHost (dataSeqHost) {

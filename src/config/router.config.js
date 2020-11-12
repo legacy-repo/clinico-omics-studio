@@ -111,11 +111,28 @@ export const asyncRouterMap = [
       // Visualization
       {
         path: '/visualization',
-        name: 'visualization',
-        hidden: false,
-        component: () => import('@/components/FullFrame'),
-        props: route => ({ src: 'http://10.157.72.55:8081/quartet-vis/' }),
-        meta: { title: 'Visualization', icon: 'dot-chart', keepAlive: true }
+        name: 'visuzalization',
+        component: RouteView,
+        redirect: '/visualization/quartet-rna-vis',
+        meta: { title: 'Visualization', icon: 'dot-chart' },
+        children: [
+          {
+            path: '/visualization/quartet-dna-vis',
+            name: 'Genomics',
+            hidden: false,
+            component: () => import('@/components/FullFrame'),
+            props: route => ({ src: 'http://10.157.72.56:8081/quartet-dna-vis/' }),
+            meta: { title: 'Genomics', icon: 'double-right' }
+          },
+          {
+            path: '/visualization/quartet-rna-vis',
+            name: 'Transcriptomics',
+            hidden: false,
+            component: () => import('@/components/FullFrame'),
+            props: route => ({ src: 'http://10.157.72.56:8081/quartet-rna-vis/' }),
+            meta: { title: 'Transcriptomics', icon: 'double-right' }
+          }
+        ]
       },
 
       // Embeded Frame

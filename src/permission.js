@@ -8,7 +8,7 @@ import { setDocumentTitle, domTitle } from '@/utils/domUtil'
 import { tokenIsExpired, tokenExp } from '@/utils/util'
 import { OIDC_AUTH } from '@/store/mutation-types'
 
-NProgress.configure({ showSpinner: false }) // NProgress Configuration
+NProgress.configure({ showSpinner: true }) // NProgress Configuration
 
 const whiteList = ['/', '/webapps', '/welcome', '/oidc-popup-callback'] // no redirect whitelist
 

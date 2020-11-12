@@ -131,7 +131,6 @@ export default {
     return {
       searchStr: null,
       data: [],
-      statusDetails: {},
       pagination: {
         pageSizeOptions: ['30', '50', '100'],
         showSizeChanger: true,
@@ -186,9 +185,8 @@ export default {
         const that = this
         that.data = result.data
 
-        const statusDetails = []
-        for (const idx in that.data) {
-          const item = that.data[idx]
+        const statusDetails = new Array()
+        for (let item of result.data) {
           const projectId = item.id
           statusDetails.push(this.getProjectStat(projectId))
         }
@@ -284,14 +282,6 @@ export default {
         console.log('getReportList: ', error)
         this.$message.warn('No related report.')
       })
-    }
-  },
-  watch: {
-    statusDetails: {
-      handler (newName, oldName) {
-        this.$forceUpdate()
-      },
-      deep: true
     }
   },
   created () {

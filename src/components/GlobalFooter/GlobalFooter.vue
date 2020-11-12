@@ -14,7 +14,7 @@
     </div>
     <div class="links">
       |&nbsp;
-      <span v-for="item in metadata" :key="item">
+      <span v-for="item in metadata" :key="item.name">
         <a :href="item.repo">{{ item.name + ' ' + item.version }}</a>&nbsp;|&nbsp;
       </span>
     </div>

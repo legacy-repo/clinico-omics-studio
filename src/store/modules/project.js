@@ -51,11 +51,11 @@ const formatRecords = function (records) {
       labels: record.labels,
       status: formatStatus(record.status),
       statusDetails: {
-        success: 10,
+        success: 0,
         running: 0,
         submitted: 0,
         total: record.samples.length,
-        error: 40
+        error: 0
       },
       percentage: Math.floor(record.percentage * 100) / 100
     })

@@ -115,10 +115,10 @@ const makePayload = function (payload, field, value, type) {
   }
 }
 
-Array.prototype.remove = function(val) {
-  var index = this.indexOf(val);
+const remove = function(array, val) {
+  var index = array.indexOf(val);
   if (index > -1) {
-    this.splice(index, 1);
+    array.splice(index, 1);
   }
 }
 
@@ -127,7 +127,7 @@ const deletePayload = function (payload, field, value, type) {
   if (cloned_payload.type == 'rule') {
     if (cloned_payload.query.variable == field) {
       if (cloned_payload.query.operator == 'in') {
-        cloned_payload.query.value.remove(value)
+        remove(cloned_payload.query.value, value)
         if (cloned_payload.query.value.length > 0) {
           return cloned_payload
         } else {

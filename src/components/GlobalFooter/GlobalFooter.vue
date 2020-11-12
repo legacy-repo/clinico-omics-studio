@@ -1,21 +1,22 @@
 <template>
   <div class="footer">
     <div class="links">
-      <a
-        href="https://www.3steps.cn"
-        target="_blank"
-      >智汇医圈联盟</a>
-      <a
-        href="https://github.com/go-choppy"
-        target="_blank"
-      >
+      <a href="https://www.3steps.cn" target="_blank">智汇医圈联盟</a>
+      <a href="https://github.com/clinico-omics" target="_blank">
         <a-icon type="github" />
       </a>
       <a href="http://choppy.3steps.cn/">Choppy Platform</a>
     </div>
     <div class="copyright">
       Copyright
-      <a-icon type="copyright" /> 2019 <span>The Genius Medicine Consortium</span>
+      <a-icon type="copyright" />2019
+      <span>The Genius Medicine Consortium</span>
+    </div>
+    <div class="links">
+      |&nbsp;
+      <span v-for="item in metadata" :key="item">
+        <a :href="item.repo">{{ item.name + ' ' + item.version }}</a>&nbsp;|&nbsp;
+      </span>
     </div>
   </div>
 </template>
@@ -23,9 +24,28 @@
 <script>
 export default {
   name: 'GlobalFooter',
-  data () {
-    return {}
-  }
+  data() {
+    return {
+      metadata: [
+        {
+          name: 'tservice',
+          version: 'v0.1.5-a6da32bc',
+          repo: 'http://github.com/clinico-omics/tservice'
+        },
+        {
+          name: 'datains',
+          version: 'v0.3.0-62a53fb2',
+          repo: 'http://github.com/clinico-omics/datains'
+        },
+        {
+          name: 'dataseq-core',
+          version: 'v0.1.1-26ec5e35',
+          repo: 'http://github.com/clinico-omics/dataseq-core'
+        }
+      ]
+    }
+  },
+  methods: {}
 }
 </script>
 
@@ -36,8 +56,6 @@ export default {
   text-align: center;
 
   .links {
-    margin-bottom: 8px;
-
     a {
       color: rgba(0, 0, 0, 0.45);
 
@@ -50,7 +68,9 @@ export default {
       }
     }
   }
+
   .copyright {
+    margin: 5px 0px;
     color: rgba(0, 0, 0, 0.45);
     font-size: 14px;
   }

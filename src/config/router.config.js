@@ -17,7 +17,7 @@ export const asyncRouterMap = [
         name: 'dashboard',
         hidden: false,
         component: () => import('@/views/datasource/Search'),
-        meta: { title: 'Dashboard', keepAlive: true, icon: 'dashboard', permission: ['dashboard'] }
+        meta: { title: 'Dashboard', icon: 'dashboard', permission: ['dashboard'] }
       },
 
       // Materials
@@ -51,14 +51,14 @@ export const asyncRouterMap = [
             name: 'workplace',
             hidden: true,
             component: () => import('@/views/dashboard/Workplace'),
-            meta: { title: 'Workplace', keepAlive: true, icon: 'dashboard', permission: ['dashboard'] }
+            meta: { title: 'Workplace', icon: 'dashboard', permission: ['dashboard'] }
           },
           {
             path: '/seq-flow/app-store',
             name: 'appstore',
             hidden: false,
             component: () => import('@/views/appstore/FilterPanel'),
-            meta: { title: 'Apps & Tools', keepAlive: true, icon: 'appstore', permission: ['table'] }
+            meta: { title: 'Apps & Tools', icon: 'appstore', permission: ['table'] }
           },
           {
             path: '/seq-flow/file-manager',
@@ -74,7 +74,7 @@ export const asyncRouterMap = [
             hidden: true,
             props: route => ({ appId: route.query.appId }),
             component: () => import('@/views/workflow/stepForm/StepForm'),
-            meta: { title: 'Create Project', icon: 'file-add', keepAlive: true, permission: ['table'] }
+            meta: { title: 'Create Project', icon: 'file-add', permission: ['table'] }
           },
           {
             path: '/seq-flow/job-management/:projectId',
@@ -95,7 +95,7 @@ export const asyncRouterMap = [
             name: 'project-management',
             hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
             component: () => import('@/views/workflow/ProjectManagement'),
-            meta: { title: 'Project Management', icon: 'solution', keepAlive: true, permission: ['table'] }
+            meta: { title: 'Project Management', icon: 'solution', permission: ['table'] }
           },
           {
             path: '/seq-flow/report-management',
@@ -103,7 +103,7 @@ export const asyncRouterMap = [
             hidden: false,
             props: route => ({ creationMode: route.query.creationMode, reportTool: route.query.reportTool }),
             component: () => import('@/views/report/ReportManagement'),
-            meta: { title: 'Report Management', keepAlive: true, icon: 'file-done', permission: ['table'] }
+            meta: { title: 'Report Management', icon: 'file-done', permission: ['table'] }
           }
         ]
       },
@@ -114,7 +114,7 @@ export const asyncRouterMap = [
         name: 'visuzalization',
         component: RouteView,
         redirect: '/visualization/quartet-rna-vis',
-        meta: { title: 'Visualization', icon: 'dot-chart' },
+        meta: { title: 'Visualization', icon: 'dot-chart', keepAlive: false },
         children: [
           {
             path: '/visualization/quartet-dna-vis',
@@ -122,7 +122,7 @@ export const asyncRouterMap = [
             hidden: false,
             component: () => import('@/components/FullFrame'),
             props: route => ({ src: 'http://10.157.72.56:8081/quartet-dna-vis/' }),
-            meta: { title: 'Genomics', icon: 'double-right' }
+            meta: { title: 'Genomics', icon: 'double-right', keepAlive: false }
           },
           {
             path: '/visualization/quartet-rna-vis',
@@ -130,7 +130,7 @@ export const asyncRouterMap = [
             hidden: false,
             component: () => import('@/components/FullFrame'),
             props: route => ({ src: 'http://10.157.72.56:8081/quartet-rna-vis/' }),
-            meta: { title: 'Transcriptomics', icon: 'double-right' }
+            meta: { title: 'Transcriptomics', icon: 'double-right', keepAlive: false }
           }
         ]
       },
@@ -281,7 +281,7 @@ export const asyncRouterMap = [
             hidden: true,
             component: () => import('@/views/report/ReportDetails'),
             props: route => ({ readonly: route.query.readonly }),
-            meta: { title: 'Report Details', drawerMode: true, keepAlive: true, permission: ['table'] }
+            meta: { title: 'Report Details', drawerMode: true, permission: ['table'] }
           }
         ]
       },
@@ -293,7 +293,7 @@ export const asyncRouterMap = [
         hidden: true,
         redirect: '/data-portal/import',
         component: RouteView,
-        meta: { title: 'Data Portal', keepAlive: true, icon: 'file-search', permission: ['dashboard'] },
+        meta: { title: 'Data Portal', icon: 'file-search', permission: ['dashboard'] },
         children: [
           {
             path: 'http://data.3steps.cn',
@@ -309,7 +309,7 @@ export const asyncRouterMap = [
         name: 'notifications',
         hidden: true,
         component: () => import('@/views/notification/NotificationTable'),
-        meta: { title: 'Notifications', keepAlive: true, icon: 'notification', permission: ['table'] }
+        meta: { title: 'Notifications', icon: 'notification', permission: ['table'] }
       },
 
       // Subcomponent - Git
@@ -318,7 +318,7 @@ export const asyncRouterMap = [
         name: 'git-management',
         hidden: true,
         component: () => import('@/views/git/GitList'),
-        meta: { title: 'Git', keepAlive: true, icon: 'history', permission: ['table'] }
+        meta: { title: 'Git', icon: 'history', permission: ['table'] }
       },
 
       // Subcomponent - FileBrowser
@@ -327,7 +327,7 @@ export const asyncRouterMap = [
         name: 'file-management',
         hidden: true,
         component: () => import('@/views/filemanager/FileBrowser'),
-        meta: { title: 'File Browser', keepAlive: true, icon: 'history', permission: ['table'] }
+        meta: { title: 'File Browser', icon: 'history', permission: ['table'] }
       },
 
       // Subcomponent - Statistics
@@ -336,7 +336,7 @@ export const asyncRouterMap = [
         name: 'statistics',
         hidden: true,
         component: () => import('@/views/dashboard/Analysis'),
-        meta: { title: 'Statistics', keepAlive: true, icon: 'dot-chart', permission: ['dashboard'] }
+        meta: { title: 'Statistics', icon: 'dot-chart', permission: ['dashboard'] }
       },
 
       // Exception

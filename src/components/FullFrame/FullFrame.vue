@@ -29,7 +29,14 @@ export default {
       spinning: true
     }
   },
-  methods: {},
+  methods: {
+    reset() {
+      this.spinning = true
+    }
+  },
+  watch: {
+    '$route': 'reset'
+  },
   mounted() {
     const self = this
     this.$nextTick(() => {
@@ -59,7 +66,7 @@ export default {
 }
 
 .full-frame {
-  padding: 10px;
+  // padding: 10px;
   width: 100%;
   height: 100%;
   min-height: 630px;

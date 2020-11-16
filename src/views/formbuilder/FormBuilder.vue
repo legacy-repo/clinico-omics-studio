@@ -110,7 +110,7 @@
     </a-form>
     <a-row class="box" v-if="fileManagerActive">
       <a-row class="file-manager-container">
-        <file-browser @file-select="onFileSelect" :selected="selected" :standalone="false" :height="400" :allowMultiSelection="multiple" :filterType="filterType"></file-browser>
+        <file-browser @file-select="onFileSelect" :selected="selected" :standalone="false" :height="350" :allowMultiSelection="multiple" :filterType="filterType"></file-browser>
         <a-button-group>
           <a-button @click="cancelSelectFiles()">Cancel</a-button>
           <a-button @click="confirmSelectFiles()">Confirm</a-button>

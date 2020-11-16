@@ -204,6 +204,7 @@ import { mapActions } from 'vuex'
 import axios from 'axios'
 import filter from 'lodash.filter'
 import flatMap from 'lodash.flatmap'
+import uniqBy from 'lodash.uniqby'
 
 import Vue from 'vue'
 import Contextmenu from 'vue-contextmenujs'
@@ -306,6 +307,7 @@ export default {
     return {
       columns,
       selectedRowKeys: [],
+      selectedRows: [],
       rowSelection: {
         onChange: (selectedRowKeys, selectedRows) => {
           console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
@@ -324,8 +326,11 @@ export default {
             this.selectedRowKeys = this.getFilePath(selectedItems)
           }
 
-          this.$emit('file-select', selectedItems)
-          console.log('File selection: ', selectedRows, selectedItems, this.selectedRowKeys)
+          this.selectedRows = this.selectedRows.concat(selectedItems)
+          this.selectedRows = uniqBy(this.filterByArray(this.selectedRows, this.selectedRowKeys), 'path')
+
+          this.$emit('file-select', this.selectedRows)
+          console.log('File selection: ', selectedRows, selectedItems, this.selectedRows, this.selectedRowKeys)
         },
         onSelectAll: (selected, selectedRows, changeRows) => {
           console.log(selected, selectedRows, changeRows)
@@ -409,6 +414,11 @@ export default {
       getObjectMeta: 'GetObjectMeta',
       uploadObject: 'UploadObject'
     }),
+    filterByArray(items, keys) {
+      return filter(items, o => {
+        return keys.includes(o.path)
+      })
+    },
     customRow(record) {
       return {
         on: {

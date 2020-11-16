@@ -13,7 +13,6 @@ const api = {
   permissionNoPager: '/permission/no-pager',
   orgTree: '/org/tree',
   // Datains
-  report: '/api/reports',
   project: '/api/projects',
   workflow: '/api/workflows',
   log: '/api/logs',
@@ -27,7 +26,8 @@ const api = {
   // Tservice
   tservice: {
     manifest: tserviceHost + '/api/manifest',
-    root: tserviceHost
+    root: tserviceHost,
+    report: tserviceHost + '/api/reports'
   },
   // Data Commons
   dataCommons: {
@@ -283,14 +283,14 @@ export function getWorkflow (workflowId) {
 
 export function getReport (reportId) {
   return axios({
-    url: api.report + '/' + reportId,
+    url: api.tservice.report + '/' + reportId,
     method: 'get'
   })
 }
 
 export function submitReport (data) {
   return axios({
-    url: api.report,
+    url: api.tservice.report,
     method: 'post',
     data: data
   })
@@ -298,7 +298,7 @@ export function submitReport (data) {
 
 export function getReportList (parameter) {
   return axios({
-    url: api.report,
+    url: api.tservice.report,
     method: 'get',
     params: parameter
   })
@@ -354,7 +354,7 @@ export function getNotificationList (parameter) {
 // id != 0 update  put
 export function saveReport (parameter) {
   return axios({
-    url: api.report,
+    url: api.tservice.report,
     method: parameter.id === 0 ? 'post' : 'put',
     data: parameter
   })

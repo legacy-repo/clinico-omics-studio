@@ -69,7 +69,7 @@ export default {
       localStorage.removeItem('datains_APP_DATA')
       localStorage.removeItem('datains_SAMPLE_IDS')
       localStorage.removeItem('datains_FINAL_APP_DATA')
-      this.$router.push({ name: 'project-management' })
+      this.$router.push({ name: 'project-management', props: { refresh: true } })
     }
   },
   created () {

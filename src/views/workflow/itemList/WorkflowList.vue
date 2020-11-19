@@ -1,25 +1,6 @@
 <template>
   <div>
-    <a-card :bordered="false" v-if="false">
-      <a-row>
-        <a-col :sm="6" :xs="24">
-          <head-info title="Running" content="8" :bordered="true"/>
-        </a-col>
-        <a-col :sm="6" :xs="24">
-          <head-info title="Failed" content="32" :bordered="true"/>
-        </a-col>
-        <a-col :sm="6" :xs="24">
-          <head-info title="Finished" content="24" :bordered="true"/>
-        </a-col>
-        <a-col :sm="6" :xs="24">
-          <head-info title="Total" content="64"/>
-        </a-col>
-      </a-row>
-    </a-card>
-
-    <a-card
-      style="margin-top: 10px"
-      :bordered="false">
+    <a-card style="margin-top: 10px" :bordered="false">
       <div slot="title"><a-tag color="#87d068">Number of Jobs: {{ data.length }}</a-tag></div>
       <div slot="extra">
         <a-radio-group @change="onClickRadioBtn" defaultValue="total" :value="radioGroupValue">
@@ -84,7 +65,9 @@
             &nbsp;
             <a-dropdown>
               <a-menu slot="overlay">
-                <a-menu-item><a @click=redirectToFS(item.workflowId)>Results</a></a-menu-item>
+                <a-menu-item><a @click="redirectToFS(item.title, item.workflowId, 'metadata')">Metadata</a></a-menu-item>
+                <a-menu-item><a @click="redirectToFS(item.title, item.workflowId, 'results')">Results</a></a-menu-item>
+                <a-menu-item v-if="item.status == 'exception'"><a @click="resubmitJob(item.id)">Resubmit</a></a-menu-item>
               </a-menu>
               <a>More Actions<a-icon type="down"/></a>
             </a-dropdown>
@@ -142,13 +125,30 @@ export default {
   computed: {
     projectId () {
       return this.$route.params.projectId
+    },
+    projectName () {
+      return this.$route.query.projectName
     }
   },
   methods: {
     ...mapActions({
       getWorkflowList: 'GetWorkflowList',
-      getWorkflow: 'GetWorkflow'
+      getWorkflow: 'GetWorkflow',
+      updateWorkflow: 'UpdateWorkflow'
     }),
+    resubmitJob (id) {
+      const payload = {
+        workflowId: id,
+        workflow_id: null,
+        status: 'Submitted'
+      }
+      this.updateWorkflow(payload).then(response => {
+        console.log('Update Workflow: ', id, response)
+      }).catch(error => {
+        console.log('Error: ', id, error)
+        this.$message.warning('Unknown error, please retry later.')
+      })
+    },
     hideLogContainer () {
       this.logContainerActive = !this.logContainerActive
     },
@@ -192,17 +192,32 @@ export default {
         this.$message.error('Failed')
       })
     },
-    redirectToFS (workflowId) {
+    redirectToFS (id, workflowId, category="results") {
       this.getWorkflow(workflowId)
         .then(response => {
-          const workflowOutput = response.workflowOutput
-          if (workflowOutput) {
-            this.$router.push({
-              name: 'file-manager',
-              query: { path: workflowOutput }
-            }) 
-          } else {
-            this.$message.warning('No such result.')
+          if (category == "results") {
+            const workflowOutput = response.workflowOutput
+            if (workflowOutput) {
+              this.$router.push({
+                name: 'file-manager',
+                query: { path: workflowOutput + '/null' }  // Need an any string as a suffix
+              }) 
+            } else {
+              this.$message.warning('No such result.')
+            }
+          } else if (category == "metadata") {
+            // TODO: Backend service need to return metadataOutput path directly
+            const metadataOutput = response.workflowOutput
+            const parsedList = metadataOutput.match(/(.*:\/\/).*$/)
+            const protocol = parsedList[1]
+            if (this.projectName == undefined) {
+              this.$message.warning('Please refresh the page and retry.')
+            } else {
+              this.$router.push({
+                name: 'file-manager',
+                query: { path: protocol + 'projects/' + this.projectName + '/' + id + '/null' }
+              })
+            }
           }
         })
         .catch(error => {

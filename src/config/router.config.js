@@ -2,6 +2,7 @@
 import { BasicLayout, RouteView, BlankLayout, PageView } from '@/layouts'
 import OidcCallback from '@/views/OidcCallback.vue'
 import OidcPopupCallback from '@/views/OidcPopupCallback.vue'
+import { getDnaHost, getRnaHost } from '@/utils/util'
 
 export const asyncRouterMap = [
   {
@@ -121,7 +122,7 @@ export const asyncRouterMap = [
             name: 'Genomics',
             hidden: false,
             component: () => import('@/components/FullFrame'),
-            props: route => ({ src: 'http://10.157.72.56:8081/quartet-dna-vis/' }),
+            props: route => ({ src: getDnaHost() }),
             meta: { title: 'Genomics', icon: 'double-right', keepAlive: false }
           },
           {
@@ -129,7 +130,7 @@ export const asyncRouterMap = [
             name: 'Transcriptomics',
             hidden: false,
             component: () => import('@/components/FullFrame'),
-            props: route => ({ src: 'http://10.157.72.56:8081/quartet-rna-vis/' }),
+            props: route => ({ src: getRnaHost() }),
             meta: { title: 'Transcriptomics', icon: 'double-right', keepAlive: false }
           }
         ]
@@ -158,7 +159,7 @@ export const asyncRouterMap = [
       {
         path: '/exploratory',
         name: 'exploratory',
-        hidden: false,
+        hidden: true,
         component: () => import('@/views/exploratory/ChartStudio'),
         meta: { title: 'Exploratory', icon: 'dribbble', keepAlive: true }
       },

@@ -9,12 +9,18 @@
           <a-radio-button value="Failed">Failed</a-radio-button>
           <a-radio-button value="Succeeded">Finished</a-radio-button>
         </a-radio-group>
+
+        <a-select style="margin-left: 10px; width: 272px;" placeholder="Search By App" @change="onSelectApp" allowClear>
+          <a-select-option :value="item.id" :key="item.name" v-for="item in installedApps">
+            {{ item.name }}
+          </a-select-option>
+        </a-select>
+
         <a-input-search
           style="margin-left: 16px; width: 272px;"
           placeholder="Please Enter Project Name"
           :loading="loading"
           allowClear
-          disabled
           @search="onSearchProject"
         />
       </div>
@@ -49,7 +55,7 @@
                 </template>
                 <project-logo class="project-logo" />
               </a-popover>
-              <a slot="title" @click="onShowWorkflowList(item.id)">{{ item.title }}</a>
+              <a slot="title" @click="onShowWorkflowList(item.id, item.title)">{{ item.title }}</a>
             </a-list-item-meta>
           </a-col>
           <a-col class="list-content" :lg="12" :md="12" :sm="24" :xs="24" :gutter="16">
@@ -103,7 +109,7 @@
             </a-col>
           </a-col>
           <div slot="actions">
-            <a @click="onShowWorkflowList(item.id)">View</a>
+            <a @click="onShowWorkflowList(item.id, item.title)">View</a>
             &nbsp;
             <a @click="onShowReport(item.id)" :disabled="!item.id">Report</a>
           </div>
@@ -117,6 +123,7 @@
 import { mapActions } from 'vuex'
 import v from 'voca'
 import sortBy from 'lodash.sortby'
+import orderBy from 'lodash.orderby'
 import { VueGoodTable } from 'vue-good-table'
 import 'vue-good-table/dist/vue-good-table.css'
 import { projectLogo } from '@/core/icons'
@@ -129,20 +136,26 @@ export default {
   },
   data () {
     return {
-      searchStr: null,
+      selectedApp: '',
+      searchStr: '',
       data: [],
       pagination: {
         pageSizeOptions: ['30', '50', '100'],
         showSizeChanger: true,
         showQuickJumper: true,
         pageSize: 30,
+        page: 1,
         total: 0,
         current: 1,
         onChange: (page, pageSize) => {
-          this.searchProject(page, pageSize, this.searchStr)
+          this.pagination.page = page
+          this.pagination.pageSize = pageSize
+          this.refresh()
         },
         onShowSizeChange: (current, pageSize) => {
-          this.searchProject(1, pageSize, this.searchStr)
+          this.pagination.page = 1
+          this.pagination.pageSize = pageSize
+          this.refresh()
         }
       },
       paginationOptions: {
@@ -160,6 +173,7 @@ export default {
         pageLabel: 'page', // for 'pages' mode
         allLabel: 'All'
       },
+      installedApps: [],
       loading: false,
       radioGroupValue: 'total',
       strokeColor: { '0%': '#108ee9', '100%': '#87d068' }
@@ -170,18 +184,53 @@ export default {
     ...mapActions({
       getProjectList: 'GetProjectList',
       getProjectStat: 'GetProjectStat',
+      getInstalledAppList: 'GetInstalledAppList',
       getReportList: 'GetReportList'
     }),
-    onSearchProject (value) {
-      this.searchProject(this.pagination.page, this.pagination.pageSize, value)
+    onSelectApp (selectedApp) {
+      this.selectedApp = selectedApp
+      this.refresh()
     },
-    searchProject (page, pageSize, status) {
+    getInstalledApps () {
+      this.getInstalledAppList().then(res => {
+        console.log('res', res)
+        this.installedApps = orderBy(res.data, [item => {
+          item.name.toLowerCase()
+        }], ['asc'])
+      })
+    },
+    makePayload() {
+      const payload = {}
+      if (this.searchStr && this.searchStr.length > 0) {
+        payload['project_name'] = this.searchStr
+      }
+
+      if (this.selectedApp && this.selectedApp.length > 0) {
+        payload['app_id'] = this.selectedApp
+      }
+
+      if (this.radioGroupValue !== 'total') {
+        payload['status'] = this.radioGroupValue
+      }
+
+      return payload
+    },
+    onSearchProject (value) {
+      this.searchStr = value
+      this.refresh()
+    },
+    refresh () {
+      const payload = this.makePayload()
+      this.searchProject(this.pagination.page, this.pagination.pageSize, payload)
+    },
+    searchProject (page, pageSize, searchMap) {
       this.loading = true
-      this.getProjectList({
+      const payload = {
         page: page,
-        per_page: pageSize,
-        status: status
-      }).then(result => {
+        page_size: pageSize,
+        ...searchMap
+      }
+      this.getProjectList(payload).then(result => {
         const that = this
         that.data = result.data
 
@@ -245,17 +294,16 @@ export default {
     onClickRadioBtn (event) {
       this.radioGroupValue = event.target.value
       console.log('Current Radio Button Value: ', this.radioGroupValue)
-      if (this.radioGroupValue === 'total') {
-        this.searchProject(this.pagination.current, this.pagination.pageSize)
-      } else {
-        this.searchProject(this.pagination.current, this.pagination.pageSize, this.radioGroupValue)
-      }
+      this.refresh()
     },
-    onShowWorkflowList (projectId) {
+    onShowWorkflowList (projectId, projectName) {
       this.$router.push({
         name: 'job-management',
         params: {
           projectId: projectId
+        },
+        query: {
+          projectName: projectName
         }
       })
     },
@@ -285,11 +333,12 @@ export default {
     }
   },
   created () {
-    this.searchProject(this.pagination.current, this.pagination.pageSize, this.searchStr)
+    this.searchProject(this.pagination.current, this.pagination.pageSize, {})
+    this.getInstalledApps()
   },
   mounted () {
     this.timer = setInterval(() => {
-      this.searchProject(this.pagination.current, this.pagination.pageSize, this.searchStr)
+      this.refresh()
     }, 60000)
   },
   beforeDestroy () {

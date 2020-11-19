@@ -4,7 +4,7 @@
       <a-button type="primary" @click="onCreateProject">Create Project</a-button>
     </template>
 
-    <project-list></project-list>
+    <project-list :id="refreshToken"></project-list>
   </page-view>
 </template>
 
@@ -18,9 +18,25 @@ export default {
     PageView,
     ProjectList
   },
+  props: {
+    refresh: {
+      default: true,
+      type: Boolean,
+      required: false
+    }
+  },
   data () {
     return {
 
+    }
+  },
+  computed: {
+    refreshToken () {
+      if (this.refresh) {
+        return Math.random().toString(36).slice(-8)
+      } else {
+        return 'static'
+      }
     }
   },
   methods: {

@@ -1,4 +1,5 @@
-import { getWorkflowList, getWorkflow } from '@/api/manage'
+import { getWorkflowList, getWorkflow, updateWorkflow } from '@/api/manage'
+import { reject } from 'core-js/fn/promise'
 import moment from 'moment'
 
 const formatStatus = function (status) {
@@ -102,6 +103,19 @@ const workflow = {
           console.log('GetWorkflow: ', workflowId, response)
 
           resolve(formatRecord(response))
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+    UpdateWorkflow ({ commit }, data) {
+      const workflowId = data.workflowId
+      delete data['workflowId']
+      return new Promise((resolve, reject) => {
+        updateWorkflow(workflowId, data).then(response => {
+          console.log('Update Workflow: ', workflowId, response)
+
+          resolve(response)
         }).catch(error => {
           reject(error)
         })

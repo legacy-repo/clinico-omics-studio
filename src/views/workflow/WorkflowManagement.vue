@@ -1,6 +1,6 @@
 <template>
   <page-view :title="getTitle()" logo="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png">
-    <detail-list slot="headerContent" size="small" :col="2" class="detail-layout">
+    <detail-list slot="headerContent" size="small" :col="3" class="detail-layout">
       <detail-list-item term="Name">{{ project.title }}</detail-list-item>
       <detail-list-item term="Author">{{ project.author }}</detail-list-item>
       <detail-list-item term="Started Time">{{ project.startedAt }}</detail-list-item>

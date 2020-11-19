@@ -4,10 +4,34 @@ export function timeFix () {
   return hour < 9 ? 'Good Morning' : hour <= 11 ? 'Good Morning' : hour <= 13 ? 'Good Afternoon' : hour < 20 ? 'Good Afternoon' : 'Good Evening'
 }
 
+export function getDnaHost () {
+  const hostname = window.location.hostname
+  if (hostname == 'pgx.fudan.edu.cn') {
+    return 'http://pgx.fudan.edu.cn/dnaseq/'
+  } else {
+    return 'http://10.157.72.56:8081/quartet-dna-vis/'
+  }
+}
+
+export function getRnaHost () {
+  const hostname = window.location.hostname
+  if (hostname == 'pgx.fudan.edu.cn') {
+    return 'http://pgx.fudan.edu.cn/rnaseq/'
+  } else {
+    return 'http://10.157.72.56:8081/quartet-rna-vis/'
+  }
+}
+
 // SeqFlow
 export function initSeqFlowHost () {
   const seqFlowHost = localStorage.getItem('seqFlowHost')
   console.log(`SEQ_FLOW_HOST: ${seqFlowHost}`)
+
+  const hostname = window.location.hostname
+  if (hostname == 'pgx.fudan.edu.cn') {
+    return 'http://pgx.fudan.edu.cn/seqflow'
+  }
+
   return seqFlowHost || 'http://10.157.72.56:3000'
 }
 
@@ -26,6 +50,12 @@ export function initApiService () {
 export function initTServiceHost () {
   const tServiceHost = localStorage.getItem('tServiceHost')
   console.log(`TSERVICE_HOST: ${tServiceHost}`)
+
+  const hostname = window.location.hostname
+  if (hostname == 'pgx.fudan.edu.cn') {
+    return 'http://pgx.fudan.edu.cn/tservice'
+  }
+
   return tServiceHost || 'http://10.157.72.56:3001'
 }
 
@@ -37,6 +67,12 @@ export function saveTServiceHost (tServiceHost) {
 export function initDataSeqHost () {
   const dataSeqHost = localStorage.getItem('dataSeqHost')
   console.log(`DATA_SEQ_HOST: ${dataSeqHost}`)
+
+  const hostname = window.location.hostname
+  if (hostname == 'pgx.fudan.edu.cn') {
+    return 'http://pgx.fudan.edu.cn/dataseq'
+  }
+
   return dataSeqHost || 'http://10.157.72.56:3002'
 }
 

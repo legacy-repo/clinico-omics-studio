@@ -273,9 +273,9 @@ export function getWorkflowList (parameter) {
   })
 }
 
-export function updateWorkflow (payload) {
+export function updateWorkflow (workflowId, payload) {
   return axios({
-    url: api.workflow,
+    url: api.workflow + '/' + workflowId,
     method: 'put',
     data: payload
   })

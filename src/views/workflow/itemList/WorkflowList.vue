@@ -5,6 +5,7 @@
       <div slot="extra">
         <a-radio-group @change="onClickRadioBtn" defaultValue="total" :value="radioGroupValue">
           <a-radio-button value="total">Total</a-radio-button>
+          <a-radio-button value="Submitted">Submitted</a-radio-button>
           <a-radio-button value="Running">Running</a-radio-button>
           <a-radio-button value="Failed">Failed</a-radio-button>
           <a-radio-button value="Succeeded">Finished</a-radio-button>
@@ -106,13 +107,18 @@ export default {
         showSizeChanger: true,
         showQuickJumper: true,
         pageSize: 5,
+        page: 1,
         total: 0,
         current: 1,
         onChange: (page, pageSize) => {
-          this.searchWorkflow(page, pageSize, this.projectId)
+          this.pagination.page = page
+          this.pagination.pageSize = pageSize
+          this.refresh()
         },
         onShowSizeChange: (current, pageSize) => {
-          this.searchWorkflow(1, pageSize, this.projectId)
+          this.pagination.page = 1
+          this.pagination.pageSize = pageSize
+          this.refresh()
         }
       },
       radioGroupValue: 'total',
@@ -139,14 +145,18 @@ export default {
     resubmitJob (id) {
       const payload = {
         workflowId: id,
+        percentage: 0,
         workflow_id: null,
         status: 'Submitted'
       }
       this.updateWorkflow(payload).then(response => {
         console.log('Update Workflow: ', id, response)
+        this.$message.success('Resubmit Job Successfully!')
+        this.refresh()
       }).catch(error => {
         console.log('Error: ', id, error)
         this.$message.warning('Unknown error, please retry later.')
+        this.refresh()
       })
     },
     hideLogContainer () {
@@ -172,11 +182,16 @@ export default {
     onClickRadioBtn (event) {
       this.radioGroupValue = event.target.value
       console.log('Current Radio Button Value: ', this.radioGroupValue)
+      this.refresh()
+    },
+    refresh () {
       if (this.radioGroupValue === 'total') {
-        this.searchWorkflow(this.pagination.current, this.pagination.pageSize, this.projectId)
+        this.searchWorkflow(this.pagination.page, this.pagination.pageSize, this.projectId)
       } else {
-        this.searchWorkflow(this.pagination.current, this.pagination.pageSize, this.projectId, this.radioGroupValue)
+        this.searchWorkflow(this.pagination.page, this.pagination.pageSize, this.projectId, this.radioGroupValue)
       }
+
+      this.$emit('refresh')
     },
     onShowLog (workflowId, workflowName) {
       this.workflowId = workflowId
@@ -237,11 +252,11 @@ export default {
     }
   },
   created () {
-    this.searchWorkflow(this.pagination.current, this.pagination.pageSize, this.projectId)
+    this.refresh()
   },
   mounted () {
     this.timer = setInterval(() => {
-      this.searchWorkflow(this.pagination.current, this.pagination.pageSize, this.projectId)
+      this.refresh()
     }, 60000)
   },
   beforeDestroy () {

@@ -1,5 +1,8 @@
 <template>
-  <page-view :title="getTitle()" logo="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png">
+  <page-view
+    :title="getTitle()"
+    logo="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png"
+  >
     <detail-list slot="headerContent" size="small" :col="3" class="detail-layout">
       <detail-list-item term="Name">{{ project.title }}</detail-list-item>
       <detail-list-item term="Author">{{ project.author }}</detail-list-item>
@@ -12,28 +15,50 @@
           <template slot="title">
             <span>Total Jobs</span>
           </template>
-          <a-col class="badge" :style="{ backgroundColor: '#d9d9d9', color: '#fff' }">{{ project.statusDetails.total }}</a-col>
+          <a-col
+            class="badge"
+            :style="{ backgroundColor: '#d9d9d9', color: '#fff' }"
+          >{{ project.statusDetails.total }}</a-col>
+        </a-tooltip>
+        <!-- Submitted -->
+        <a-tooltip placement="top">
+          <template slot="title">
+            <span>Submitted Jobs</span>
+          </template>
+          <a-col
+            class="badge"
+            :style="{ backgroundColor: '#838383', color: '#fff' }"
+          >{{ countSubmitted(project) }}</a-col>
         </a-tooltip>
         <!-- Running -->
         <a-tooltip placement="top">
           <template slot="title">
             <span>Running Jobs</span>
           </template>
-          <a-col class="badge" :style="{ backgroundColor: '#108ee9', color: '#fff' }">{{ project.statusDetails.running }}</a-col>
+          <a-col
+            class="badge"
+            :style="{ backgroundColor: '#108ee9', color: '#fff' }"
+          >{{ project.statusDetails.running }}</a-col>
         </a-tooltip>
         <!-- Red -->
         <a-tooltip placement="top">
           <template slot="title">
             <span>Failed Jobs</span>
           </template>
-          <a-col class="badge" :style="{ backgroundColor: '#f5222d', color: '#fff' }">{{ project.statusDetails.error }}</a-col>
+          <a-col
+            class="badge"
+            :style="{ backgroundColor: '#f5222d', color: '#fff' }"
+          >{{ project.statusDetails.error }}</a-col>
         </a-tooltip>
         <!-- Green -->
         <a-tooltip placement="top">
           <template slot="title">
             <span>Succeeded Jobs</span>
           </template>
-          <a-col class="badge" :style="{ backgroundColor: '#52c41a', color: '#fff' }">{{ project.statusDetails.success }}</a-col>
+          <a-col
+            class="badge"
+            :style="{ backgroundColor: '#52c41a', color: '#fff' }"
+          >{{ project.statusDetails.success }}</a-col>
         </a-tooltip>
         <!-- Yellow -->
         <a-tooltip placement="top">
@@ -48,10 +73,15 @@
       <!-- </detail-list-item> -->
     </detail-list>
     <a-row slot="extra" class="status-list">
-      <a-col :xs="8" :sm="8" >
+      <a-col :xs="8" :sm="8">
         <div class="text">Related Report</div>
         <div class="heading">
-          <a-button type="primary" size="small" icon="logout" @click.native="onShowReport(project.id)"/>
+          <a-button
+            type="primary"
+            size="small"
+            icon="logout"
+            @click.native="onShowReport(project.id)"
+          />
         </div>
       </a-col>
       <a-col :xs="16" :sm="16">
@@ -70,7 +100,7 @@
       </a-button-group>
     </template>
 
-    <workflow-list></workflow-list>
+    <workflow-list @refresh="searchProject(projectId)"></workflow-list>
   </page-view>
 </template>
 
@@ -90,7 +120,7 @@ export default {
     DetailList,
     DetailListItem
   },
-  data () {
+  data() {
     return {
       project: {
         statusDetails: {}
@@ -98,7 +128,7 @@ export default {
     }
   },
   computed: {
-    projectId () {
+    projectId() {
       return this.$route.params.projectId
     }
   },
@@ -108,59 +138,66 @@ export default {
       getProjectStat: 'GetProjectStat',
       getReportList: 'GetReportList'
     }),
-    onShowReport (projectId) {
+    countSubmitted (item) {
+      return item.statusDetails.total - (item.statusDetails.success + item.statusDetails.running + item.statusDetails.error)
+    },
+    onShowReport(projectId) {
       this.getReportList({
-        'project_id': projectId
-      }).then(result => {
-        console.log('onShowReport: ', result)
-        if (result.length > 0) {
-          this.$router.push({
-            name: 'report-details',
-            params: {
-              reportId: result[0].id
-            },
-            query: {
-              readonly: true
-            }
-          })
-        } else {
-          this.$message.warn('No related report.')
-        }
-      }).catch(error => {
-        console.log('getReportList: ', error)
-        this.$message.warn('No related report.')
+        project_id: projectId
       })
-    },
-    searchProject (projectId) {
-      this.getProject(projectId).then(result => {
-        console.log('searchProject: ', result)
-        this.project = result
-        this.getProjectStat(result.id).then(response => {
-          Object.assign(this.project.statusDetails, response)
+        .then(result => {
+          console.log('onShowReport: ', result)
+          if (result.length > 0) {
+            this.$router.push({
+              name: 'report-details',
+              params: {
+                reportId: result[0].id
+              },
+              query: {
+                readonly: true
+              }
+            })
+          } else {
+            this.$message.warn('No related report.')
+          }
         })
-      }).catch(error => {
-        console.log('searchProject: ', error)
-        this.project = {}
-      })
+        .catch(error => {
+          console.log('getReportList: ', error)
+          this.$message.warn('No related report.')
+        })
     },
-    getTitle () {
+    searchProject(projectId) {
+      this.getProject(projectId)
+        .then(result => {
+          console.log('searchProject: ', result)
+          this.project = result
+          this.getProjectStat(result.id).then(response => {
+            Object.assign(this.project.statusDetails, response)
+          })
+        })
+        .catch(error => {
+          console.log('searchProject: ', error)
+          this.project = {}
+        })
+    },
+    getTitle() {
       return 'Project Metadata'
     },
-    onCreateProject () {
+    onCreateProject() {
       this.$router.push({
         name: 'create-project'
       })
     }
   },
-  created () {
+  created() {
     this.searchProject(this.projectId)
   },
-  mounted () {
+  mounted() {
     this.timer = setInterval(() => {
       this.searchProject(this.projectId)
     }, 60000)
   },
-  beforeDestroy () {
+  beforeDestroy() {
     clearInterval(this.timer)
   }
 }

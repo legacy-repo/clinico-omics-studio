@@ -77,6 +77,13 @@
                   </template>
                   <a-col class="badge" :style="{ backgroundColor: '#a2a2a2', color: '#fff' }">{{ item.statusDetails.total }}</a-col>
                 </a-tooltip>
+                <!-- Submitted -->
+                <a-tooltip placement="top">
+                  <template slot="title">
+                    <span>Submitted Jobs</span>
+                  </template>
+                  <a-col class="badge" :style="{ backgroundColor: '#838383', color: '#fff' }">{{ countSubmitted(item) }}</a-col>
+                </a-tooltip>
                 <!-- Running -->
                 <a-tooltip placement="top">
                   <template slot="title">
@@ -179,7 +186,8 @@ export default {
       strokeColor: { '0%': '#108ee9', '100%': '#87d068' }
     }
   },
-  computed: {},
+  computed: {
+  },
   methods: {
     ...mapActions({
       getProjectList: 'GetProjectList',
@@ -187,6 +195,9 @@ export default {
       getInstalledAppList: 'GetInstalledAppList',
       getReportList: 'GetReportList'
     }),
+    countSubmitted (item) {
+      return item.statusDetails.total - (item.statusDetails.success + item.statusDetails.running + item.statusDetails.error)
+    },
     onSelectApp (selectedApp) {
       this.selectedApp = selectedApp
       this.refresh()

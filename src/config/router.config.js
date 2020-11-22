@@ -27,7 +27,7 @@ export const asyncRouterMap = [
         name: 'materials',
         hidden: false,
         component: () => import('@/views/dashboard/Analysis'),
-        meta: { title: 'Materials', icon: 'experiment', keepAlive: true }
+        meta: { title: 'Materials', icon: 'experiment', keepAlive: false }
       },
 
       // Data (Level 0 - 4)
@@ -36,7 +36,7 @@ export const asyncRouterMap = [
         name: 'data',
         hidden: false,
         component: () => import('@/views/datasource/FilterPanel'),
-        meta: { title: 'Data', icon: 'deployment-unit', keepAlive: true }
+        meta: { title: 'Data', icon: 'deployment-unit', keepAlive: false }
       },
 
       // SeqFlow
@@ -67,7 +67,7 @@ export const asyncRouterMap = [
             hidden: false,
             component: () => import('@/views/filemanager/FileBrowser'),
             props: route => ({ path: route.query.path }),
-            meta: { title: 'File Management', icon: 'codepen-circle', keepAlive: true }
+            meta: { title: 'File Management', icon: 'codepen-circle', keepAlive: false }
           },
           {
             path: '/seq-flow/submit/:pageNo([1-9]\\d*)?',
@@ -87,7 +87,7 @@ export const asyncRouterMap = [
               title: 'Job Management',
               icon: 'file-sync',
               drawerMode: false,
-              keepAlive: true,
+              keepAlive: false,
               permission: ['table']
             }
           },
@@ -143,7 +143,7 @@ export const asyncRouterMap = [
         hidden: true,
         component: () => import('@/components/FullFrame'),
         props: route => ({ src:  route.query.src }),
-        meta: { title: 'Embeded Frame', icon: 'dot-chart', keepAlive: true }
+        meta: { title: 'Embeded Frame', icon: 'dot-chart', keepAlive: false }
       },
 
       // Request Materials
@@ -152,16 +152,16 @@ export const asyncRouterMap = [
         name: 'request-materials',
         hidden: true,
         component: () => import('@/views/dashboard/Request'),
-        meta: { titile: 'Request Materials', icon: 'pull-request', keepAlive: true }
+        meta: { titile: 'Request Materials', icon: 'pull-request', keepAlive: false }
       },
 
       // Exploratory
       {
         path: '/exploratory',
         name: 'exploratory',
-        hidden: true,
+        hidden: false,
         component: () => import('@/views/exploratory/ChartStudio'),
-        meta: { title: 'Exploratory', icon: 'dribbble', keepAlive: true }
+        meta: { title: 'Exploratory', icon: 'dribbble', keepAlive: false }
       },
 
       // Account
@@ -171,13 +171,13 @@ export const asyncRouterMap = [
         component: RouteView,
         redirect: '/account/center',
         name: 'account',
-        meta: { title: 'User', icon: 'user', keepAlive: true, permission: ['user'] },
+        meta: { title: 'User', icon: 'user', keepAlive: false, permission: ['user'] },
         children: [
           {
             path: '/account/center',
             name: 'center',
             component: () => import('@/views/account/center/Index'),
-            meta: { title: 'User Center', keepAlive: true, permission: ['user'] }
+            meta: { title: 'User Center', keepAlive: false, permission: ['user'] }
           },
           {
             path: '/account/settings',
@@ -203,25 +203,25 @@ export const asyncRouterMap = [
                 path: '/account/settings/security',
                 name: 'security-settings',
                 component: () => import('@/views/account/settings/Security'),
-                meta: { title: 'Secure Profiles', hidden: true, keepAlive: true, permission: ['user'] }
+                meta: { title: 'Secure Profiles', hidden: true, keepAlive: false, permission: ['user'] }
               },
               {
                 path: '/account/settings/custom',
                 name: 'custom-settings',
                 component: () => import('@/views/account/settings/Custom'),
-                meta: { title: 'Customization', hidden: true, keepAlive: true, permission: ['user'] }
+                meta: { title: 'Customization', hidden: true, keepAlive: false, permission: ['user'] }
               },
               {
                 path: '/account/settings/binding',
                 name: 'binding-settings',
                 component: () => import('@/views/account/settings/Binding'),
-                meta: { title: 'Binding Settings', hidden: true, keepAlive: true, permission: ['user'] }
+                meta: { title: 'Binding Settings', hidden: true, keepAlive: false, permission: ['user'] }
               },
               {
                 path: '/account/settings/notification',
                 name: 'notification-settings',
                 component: () => import('@/views/account/settings/Notification'),
-                meta: { title: 'Notifications', hidden: true, keepAlive: true, permission: ['user'] }
+                meta: { title: 'Notifications', hidden: true, keepAlive: false, permission: ['user'] }
               }
             ]
           }
@@ -255,14 +255,14 @@ export const asyncRouterMap = [
         name: 'tool',
         hidden: true,
         component: RouteView,
-        meta: { title: 'Tool', keepAlive: true, icon: 'folder', permission: ['table'] },
+        meta: { title: 'Tool', keepAlive: false, icon: 'folder', permission: ['table'] },
         children: [
           {
             path: '/tool/xps2pdf',
             name: 'xps2pdf',
             hidden: true,
             component: () => import('@/views/tools/XPS2PDF'),
-            meta: { title: 'XPS2PDF', keepAlive: true }
+            meta: { title: 'XPS2PDF', keepAlive: false }
           }
         ]
       },
@@ -392,7 +392,7 @@ export const constantRouterMap = [
     path: '/welcome',
     name: 'welcome',
     component: () => import('@/views/home/Home'),
-    meta: { isPublic: true, keepAlive: true }
+    meta: { isPublic: true, keepAlive: false }
   },
 
   {

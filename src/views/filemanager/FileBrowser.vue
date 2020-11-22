@@ -98,15 +98,20 @@
     </a-card>
     <!-- Popup Windows -->
     <a-modal
-      :title="chartStudioTitle"
+      class="chart-modal"
+      :title="'Chart Studio for' + chartName"
       style="top: 20px;"
       :visible="chartStudioVisible"
-      @ok="() => makeChart()"
+      :footer="null"
       @cancel="() => hideChartStudio()"
     >
-      <p>some contents...</p>
-      <p>some contents...</p>
-      <p>some contents...</p>
+      <chart-modal
+        @ok="() => hideChartStudio()"
+        @cancel="() => hideChartStudio()"
+        :chart="chartName"
+        :inFileBrowser="true"
+        :filepath="filePath"
+      ></chart-modal>
     </a-modal>
     <a-drawer
       class="upload-panel"
@@ -210,6 +215,8 @@ import Vue from 'vue'
 import Contextmenu from 'vue-contextmenujs'
 Vue.use(Contextmenu)
 
+import ChartModal from './ChartModal'
+
 const folderNameRule = [
   { required: true, message: 'Please input your folder name!' },
   { min: 1, max: 63, message: 'Length should be 1 to 63', trigger: 'blur' },
@@ -265,7 +272,9 @@ const columns = [
 
 export default {
   name: 'FileList',
-  components: {},
+  components: {
+    ChartModal
+  },
   props: {
     path: {
       required: false,
@@ -361,8 +370,10 @@ export default {
         ]
       },
       // Chart Studio
+      filePath: '',
+      currentRecord: null,
       chartStudioVisible: false,
-      chartStudioTitle: 'Chart Studio',
+      chartName: '',
       // Folder
       folderDialog: this.$form.createForm(this, { name: 'folder-dialog' }),
       folderNameRule,
@@ -429,19 +440,34 @@ export default {
         }
       }
     },
+    isColumnarFile(path) {
+      if (path.match(/.*\.csv$/g)) {
+        return true
+      } else {
+        return false
+      }
+    },
+    isValidSize(size) {
+      if (size <= 1024 * 1024) {
+        return true
+      } else {
+        return false
+      }
+    },
     onContextmenu(record, event) {
       console.log('onContextMenu: ', record, event)
+      const disableTraceMenu = !this.isColumnarFile(record.path) || !this.isValidSize(record.size)
       this.$contextmenu({
         items: [
           {
             label: 'File Management',
             divided: true,
-            icon: "iconfont icon-wenjianguanli",
+            icon: 'iconfont icon-wenjianguanli',
             minWidth: 0,
             children: [
               {
                 label: 'Details',
-                icon: "iconfont icon-Details",
+                icon: 'iconfont icon-Details',
                 onClick: () => {
                   this.switchDetailsPanel(record)
                 }
@@ -450,65 +476,73 @@ export default {
           },
           {
             label: 'Trace Your Data',
-            icon: "iconfont icon-DataUsage-1",
+            icon: 'iconfont icon-DataUsage-1',
+            disabled: disableTraceMenu,
             minWidth: 100,
             children: [
               {
-                label: 'Box',
-                icon: "iconfont icon-barplot",
+                label: 'Box Plot',
+                icon: 'iconfont icon-youjiantou_huaban',
                 onClick: () => {
-                  this.showChartStudio('Boxplot')
+                  this.showChartStudio('boxplot-r', record)
                 }
               },
               {
-                label: 'Density',
-                // icon: "iconfont icon-barplot",
+                label: 'Stack Barplot',
+                icon: 'iconfont icon-youjiantou_huaban',
                 onClick: () => {
-                  this.showChartStudio('Density')
+                  this.showChartStudio('stack-barplot-r', record)
                 }
               },
               {
-                label: 'Grouped Box',
-                // icon: "iconfont icon-barplot",
+                label: 'Density Plot',
+                icon: 'iconfont icon-youjiantou_huaban',
                 onClick: () => {
-                  this.showChartStudio('Grouped Boxplot')
+                  this.showChartStudio('density-r', record)
+                }
+              },
+              {
+                label: 'Grouped Box Plot',
+                icon: 'iconfont icon-youjiantou_huaban',
+                onClick: () => {
+                  this.showChartStudio('group-boxplot', record)
                 }
               },
               {
                 label: 'Heatmap',
-                // icon: "iconfont icon-barplot",
+                icon: 'iconfont icon-youjiantou_huaban',
                 onClick: () => {
-                  this.showChartStudio('Heatmap')
+                  this.showChartStudio('heatmap-r', record)
                 }
               },
               {
-                label: 'Rocket',
-                // icon: "iconfont icon-barplot",
+                label: 'Rocket Plot',
+                icon: 'iconfont icon-youjiantou_huaban',
                 onClick: () => {
-                  this.showChartStudio('Rocket')
+                  this.showChartStudio('rocket-plot-r', record)
                 }
               },
               {
-                label: 'Scatter',
-                icon: "iconfont icon-chart-scatter-plot",
+                label: 'Scatter Plot',
+                icon: 'iconfont icon-youjiantou_huaban',
                 onClick: () => {
-                  this.showChartStudio('Scatter')
+                  this.showChartStudio('scatter-plot', record)
                 }
               },
               {
                 label: 'Upset',
-                // icon: "iconfont icon-barplot",
+                icon: 'iconfont icon-youjiantou_huaban',
                 onClick: () => {
-                  this.showChartStudio('Upset')
+                  this.showChartStudio('upset-r', record)
                 }
               },
               {
-                label: 'Violin',
-                // icon: "iconfont icon-barplot",
+                label: 'Violin Plot',
+                icon: 'iconfont icon-youjiantou_huaban',
                 onClick: () => {
-                  this.showChartStudio('Violin')
+                  this.showChartStudio('violin-plot-r', record)
                 }
-              },
+              }
             ]
           }
         ],
@@ -704,18 +738,15 @@ export default {
       this.switchUploadPanel()
       this.fileList = {}
     },
-    makeChart() {
-      this.$router.push({
-        name: 'embeded-frame',
-        query: { src: 'http://localhost:8081/boxplot-r-5xve8vhx6e/' }
-      })
-    },
-    showChartStudio(title) {
-      this.chartStudioTitle = 'Chart Studio for ' + title
+    showChartStudio(chartName, record) {
+      console.log('Show Chart Studio: ', chartName, record)
+      this.chartName = chartName
       this.chartStudioVisible = !this.chartStudioVisible
+      this.currentRecord = record
     },
     hideChartStudio() {
       this.chartStudioVisible = !this.chartStudioVisible
+      this.currentRecord = null
     },
     switchDetailsPanel(record) {
       this.detailsPanelVisible = !this.detailsPanelVisible
@@ -831,6 +862,11 @@ export default {
     }
   },
   watch: {
+    currentRecord: function() {
+      if (this.currentRecord && this.currentRecord.path) {
+        this.filePath = this.currentRecord.path
+      }
+    },
     recordDetail: function() {
       // Reset
       this.previewContent = ''
@@ -1030,6 +1066,12 @@ details-panel {
     align-items: left;
     margin: 20px;
     overflow: scroll;
+  }
+}
+
+.chart-modal {
+  .ant-modal-body {
+    padding: 10px 24px;
   }
 }
 </style>

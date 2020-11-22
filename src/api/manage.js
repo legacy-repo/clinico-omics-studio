@@ -27,7 +27,8 @@ const api = {
   tservice: {
     manifest: tserviceHost + '/api/manifest',
     root: tserviceHost,
-    report: tserviceHost + '/api/reports'
+    report: tserviceHost + '/api/reports',
+    chart: tserviceHost + '/api/chart'
   },
   // Data Commons
   dataCommons: {
@@ -289,6 +290,7 @@ export function getWorkflow (workflowId) {
   })
 }
 
+// TService
 export function getReport (reportId) {
   return axios({
     url: api.tservice.report + '/' + reportId,
@@ -307,6 +309,24 @@ export function submitReport (data) {
 export function getReportList (parameter) {
   return axios({
     url: api.tservice.report,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function postChart (chartName, data) {
+  // data: {} | { data: { dataType: '', dataFile: '' }, attributes: { xAxis: '' ... } }
+  return axios({
+    url: api.tservice.chart + '/' + chartName,
+    method: 'post',
+    data: data
+  })
+}
+
+export function getChartSchema (chartName, parameter) {
+  // parameter: filepath
+  return axios({
+    url: api.tservice.chart + '/' + chartName + '/schema',
     method: 'get',
     params: parameter
   })

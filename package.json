@@ -19,7 +19,6 @@
     "@codekraft-studio/vue-animated": "^0.1.5",
     "@fortawesome/fontawesome-svg-core": "^1.2.25",
     "@handsontable/vue": "^4.1.1",
-    "@syncfusion/ej2-vue-filemanager": "^17.4.55",
     "ant-design-vue": "^1.6.2",
     "antd": "^4.3.4",
     "axios": "^0.19.0",

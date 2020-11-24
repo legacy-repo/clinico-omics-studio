@@ -56,7 +56,7 @@ const chartStudio = {
         }
       },
       frames: [],
-      config: { responsive: true }
+      config: { responsive: true, editable: true, displaylogo: false }
     },
     trace: {
       mode: 'markers',

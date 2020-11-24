@@ -1,7 +1,14 @@
-export function timeFix () {
-  const time = new Date()
-  const hour = time.getHours()
-  return hour < 9 ? 'Good Morning' : hour <= 11 ? 'Good Morning' : hour <= 13 ? 'Good Afternoon' : hour < 20 ? 'Good Afternoon' : 'Good Evening'
+const defaultSettings = {
+  initialComponentSettings: {
+    disabledContextMenu: 'true',
+    disabledExploratory: 'true',
+    dashboardName: 'QuartetDashboard'
+  },
+  domTitle: 'The QUALITY Platform',
+  // eslint-disable-next-line no-undef
+  websiteLogo: require('@/assets/logo.png'),
+  websiteName: 'QUALITY',
+  websiteDesc: 'The QUALITY Platform for Clinico OMICS & BioMedGPS'
 }
 
 export function getDnaHost () {
@@ -35,10 +42,6 @@ export function initSeqFlowHost () {
   return seqFlowHost || 'http://10.157.72.56:3000'
 }
 
-export function saveSeqFlowHost (seqFlowHost) {
-  localStorage.setItem('seqFlowHost', seqFlowHost)
-}
-
 // BASE_API
 export function initApiService () {
   const apiService = initSeqFlowHost()
@@ -59,10 +62,6 @@ export function initTServiceHost () {
   return tServiceHost || 'http://10.157.72.56:3001'
 }
 
-export function saveTServiceHost (tServiceHost) {
-  localStorage.setItem('tServiceHost', tServiceHost)
-}
-
 // DataSeq
 export function initDataSeqHost () {
   const dataSeqHost = localStorage.getItem('dataSeqHost')
@@ -76,19 +75,48 @@ export function initDataSeqHost () {
   return dataSeqHost || 'http://10.157.72.56:3002'
 }
 
+// Component Settings
+export function initComponentSettings () {
+  let componentSettings = JSON.parse(localStorage.getItem('componentSettings'))
+  console.log(`Component Settings(initComponentSettings): ${componentSettings}`)
+
+  if (componentSettings == undefined) {
+    componentSettings = {}
+  }
+
+  return Object.assign(defaultSettings.initialComponentSettings, componentSettings)
+}
+
+// -------------------------------------------------
+
+export const domTitle = defaultSettings.domTitle
+
+export const websiteName = defaultSettings.websiteName
+
+export const websiteLogo = defaultSettings.websiteLogo
+
+export const websiteDesc = defaultSettings.websiteDesc
+
+export function timeFix () {
+  const time = new Date()
+  const hour = time.getHours()
+  return hour < 9 ? 'Good Morning' : hour <= 11 ? 'Good Morning' : hour <= 13 ? 'Good Afternoon' : hour < 20 ? 'Good Afternoon' : 'Good Evening'
+}
+
+export function saveSeqFlowHost (seqFlowHost) {
+  localStorage.setItem('seqFlowHost', seqFlowHost)
+}
+
+export function saveTServiceHost (tServiceHost) {
+  localStorage.setItem('tServiceHost', tServiceHost)
+}
+
 export function saveDataSeqHost (dataSeqHost) {
   localStorage.setItem('dataSeqHost', dataSeqHost)
 }
 
-// File Manager
-export function initFileManagerHost () {
-  const fileManagerHost = localStorage.getItem('fileManagerHost')
-  console.log(`FILE_MANAGER_HOST: ${fileManagerHost}`)
-  return fileManagerHost || 'http://localhost:3000'
-}
-
-export function saveFileManagerHost (fileManagerHost) {
-  localStorage.setItem('fileManagerHost', fileManagerHost)
+export function saveComponentSettings (componentSettings) {
+  localStorage.setItem('componentSettings', JSON.stringify(componentSettings))
 }
 
 export function welcome () {

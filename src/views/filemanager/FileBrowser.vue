@@ -99,7 +99,7 @@
     <!-- Popup Windows -->
     <a-modal
       class="chart-modal"
-      :title="'Chart Studio for' + chartName"
+      :title="'Chart Studio for ' + chartName"
       style="top: 20px;"
       :visible="chartStudioVisible"
       :footer="null"
@@ -310,6 +310,11 @@ export default {
       required: false,
       default: 'minio',
       type: String
+    },
+    enabledContextMenu: {
+      required: false,
+      default: false,
+      type: Boolean
     }
   },
   data() {
@@ -431,13 +436,17 @@ export default {
       })
     },
     customRow(record) {
-      return {
-        on: {
-          contextmenu: e => {
-            e.preventDefault()
-            this.onContextmenu(record, e)
+      if (this.enabledContextMenu) {
+        return {
+          on: {
+            contextmenu: e => {
+              e.preventDefault()
+              this.onContextmenu(record, e)
+            }
           }
         }
+      } else {
+        return {}
       }
     },
     isColumnarFile(path) {

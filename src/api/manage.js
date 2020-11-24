@@ -1,7 +1,6 @@
 import { axios } from '@/utils/request'
-import { initFileManagerHost, initTServiceHost, initDataSeqHost } from '@/utils/util'
+import { initTServiceHost, initDataSeqHost } from '@/utils/util'
 
-const fileManagerHost = initFileManagerHost()
 const tserviceHost = initTServiceHost()
 const dataSeqHost = initDataSeqHost()
 
@@ -34,16 +33,15 @@ const api = {
   dataCommons: {
     collections: dataSeqHost + '/api/collections',
     groups: dataSeqHost + '/api/count-collections'
-  },
-  filemanager: {
-    url: fileManagerHost,
-    getImageUrl: fileManagerHost + '/GetImage',
-    uploadUrl: fileManagerHost + '/Upload',
-    downloadUrl: fileManagerHost + '/Download'
   }
 }
 
 export default api
+
+function getServiceApi (service) {
+  return '/api/services/' + service + '/buckets'
+  // return '/api/buckets'
+}
 
 // Materials Data
 export function getMaterialsSeqData () {
@@ -111,11 +109,6 @@ export function countCollections (parameter, payload) {
     params: parameter,
     data: payload
   })
-}
-
-function getServiceApi (service) {
-  return '/api/services/' + service + '/buckets'
-  // return '/api/buckets'
 }
 
 // Minio/OSS/S3: Bucket + Object

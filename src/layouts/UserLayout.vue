@@ -4,12 +4,12 @@
       <div class="top">
         <div class="header">
           <router-link :to="{ name: 'welcome' }">
-            <img src="@/assets/logo.png" class="logo" alt="logo">
-            <span class="title">QUALITY</span>
+            <img :src="websiteLogo" class="logo" alt="logo">
+            <span class="title">{{ websiteName }}</span>
           </router-link>
         </div>
         <div class="desc">
-          The QUALITY Platform for Clinico OMICS & BioMedGPS
+          {{ websiteDesc }}
         </div>
       </div>
 
@@ -32,13 +32,18 @@
 <script>
 import RouteView from './RouteView'
 import { mixinDevice } from '@/utils/mixin'
+import { websiteDesc, websiteLogo, websiteName } from '@/utils/util'
 
 export default {
   name: 'UserLayout',
   components: { RouteView },
   mixins: [mixinDevice],
   data () {
-    return {}
+    return {
+      websiteDesc,
+      websiteLogo,
+      websiteName
+    }
   },
   mounted () {
     document.body.classList.add('userLayout')

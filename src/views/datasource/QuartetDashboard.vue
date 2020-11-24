@@ -62,7 +62,7 @@
 import Fact from './Fact.vue'
 
 export default {
-  name: 'Search',
+  name: 'Quartet',
   data () {
     return {
       title: 'The QUALITY Platform',

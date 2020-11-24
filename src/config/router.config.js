@@ -2,7 +2,9 @@
 import { BasicLayout, RouteView, BlankLayout, PageView } from '@/layouts'
 import OidcCallback from '@/views/OidcCallback.vue'
 import OidcPopupCallback from '@/views/OidcPopupCallback.vue'
-import { getDnaHost, getRnaHost } from '@/utils/util'
+import { getDnaHost, getRnaHost, initComponentSettings } from '@/utils/util'
+
+const componentSettings = initComponentSettings()
 
 export const asyncRouterMap = [
   {
@@ -17,7 +19,7 @@ export const asyncRouterMap = [
         path: '/dashboard',
         name: 'dashboard',
         hidden: false,
-        component: () => import('@/views/datasource/Search'),
+        component: () => import('@/views/datasource/' + componentSettings.dashboardName),
         meta: { title: 'Dashboard', icon: 'dashboard', permission: ['dashboard'] }
       },
 
@@ -25,7 +27,7 @@ export const asyncRouterMap = [
       {
         path: '/materials',
         name: 'materials',
-        hidden: false,
+        hidden: componentSettings.dashboardName !== 'QuartetDashboard',
         component: () => import('@/views/dashboard/Analysis'),
         meta: { title: 'Materials', icon: 'experiment', keepAlive: false }
       },
@@ -66,7 +68,7 @@ export const asyncRouterMap = [
             name: 'file-manager',
             hidden: false,
             component: () => import('@/views/filemanager/FileBrowser'),
-            props: route => ({ path: route.query.path }),
+            props: route => ({ path: route.query.path, enabledContextMenu: componentSettings.disabledContextMenu !== 'true' }),
             meta: { title: 'File Management', icon: 'codepen-circle', keepAlive: false }
           },
           {
@@ -112,7 +114,7 @@ export const asyncRouterMap = [
       // Visualization
       {
         path: '/visualization',
-        name: 'visuzalization',
+        name: 'visualization',
         component: RouteView,
         redirect: '/visualization/quartet-rna-vis',
         meta: { title: 'Visualization', icon: 'dot-chart', keepAlive: false },
@@ -159,7 +161,7 @@ export const asyncRouterMap = [
       {
         path: '/exploratory',
         name: 'exploratory',
-        hidden: false,
+        hidden: componentSettings.disabledExploratory == 'true',
         component: () => import('@/views/exploratory/ChartStudio'),
         meta: { title: 'Exploratory', icon: 'dribbble', keepAlive: false }
       },
@@ -319,16 +321,8 @@ export const asyncRouterMap = [
         name: 'git-management',
         hidden: true,
         component: () => import('@/views/git/GitList'),
-        meta: { title: 'Git', icon: 'history', permission: ['table'] }
-      },
 
-      // Subcomponent - FileBrowser
-      {
-        path: '/file-management',
-        name: 'file-management',
-        hidden: true,
-        component: () => import('@/views/filemanager/FileBrowser'),
-        meta: { title: 'File Browser', icon: 'history', permission: ['table'] }
+        meta: { title: 'Git', icon: 'history', permission: ['table'] }
       },
 
       // Subcomponent - Statistics

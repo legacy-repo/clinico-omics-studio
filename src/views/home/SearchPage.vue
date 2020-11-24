@@ -66,6 +66,7 @@ import sortBy from 'lodash.sortby'
 import uniq from 'lodash.uniq'
 import flatten from 'lodash.flatten'
 import map from 'lodash.map'
+import { websiteName } from '@/utils/util'
 
 export default {
   name: 'SearchPage',
@@ -73,7 +74,7 @@ export default {
   data() {
     return {
       total: 10,
-      slogan: 'PGx Webapps in the QUALITY Platform',
+      slogan: `PGx Webapps in the ${ websiteName } Platform`,
       placeholder: 'Search apps...',
       news: '<a href="http://datains.3steps.cn">Webapps for Precision Medicine</a>',
       webapps: [],

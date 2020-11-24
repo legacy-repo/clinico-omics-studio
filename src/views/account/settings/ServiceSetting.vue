@@ -1,59 +1,74 @@
 <template>
   <div class="service-settings-info-view">
-    <a-row :gutter="16">
-      <a-col :md="24" :lg="16">
-        <a-spin :spinning="confirmLoading">
-          <a-form layout="vertical" :form="form" @submit="handleSubmit">
-            <!-- SeqFlow -->
-            <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item label="Service Host / Domain for SeqFlow(Pipeline)">
-                  <a-input
-                    :placeholder="placeholder"
-                    v-decorator="['seqFlowHost', {initialValue: seqFlowHost, rules:[{required: true, message: 'Please enter a service host or domain, e.g. http://10.157.72.53'}]}]"
-                  />
-                </a-form-item>
-              </a-col>
-            </a-row>
+    <a-row :gutter="16" style="margin: 0px 0px;">
+      <a-spin :spinning="confirmLoading">
+        <a-form layout="vertical" :form="form" @submit="handleSubmit">
+          <!-- SeqFlow -->
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item label="Service Host / Domain for SeqFlow(Pipeline)">
+                <a-input
+                  :placeholder="placeholder"
+                  v-decorator="['seqFlowHost', {initialValue: seqFlowHost, rules:[{required: true, message: 'Please enter a service host or domain, e.g. http://10.157.72.53'}]}]"
+                />
+              </a-form-item>
+            </a-col>
             <!-- TService -->
-            <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item label="Service Host / Domain for TService(tools)">
-                  <a-input
-                    :placeholder="placeholder"
-                    v-decorator="['tServiceHost', {initialValue: tServiceHost, rules:[{required: true, message: 'Please enter a service host or domain, e.g. http://10.157.72.53'}]}]"
-                  />
-                </a-form-item>
-              </a-col>
-            </a-row>
+            <a-col :span="12">
+              <a-form-item label="Service Host / Domain for TService(tools)">
+                <a-input
+                  :placeholder="placeholder"
+                  v-decorator="['tServiceHost', {initialValue: tServiceHost, rules:[{required: true, message: 'Please enter a service host or domain, e.g. http://10.157.72.53'}]}]"
+                />
+              </a-form-item>
+            </a-col>
             <!-- DataSeq -->
-            <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item label="Service Host / Domain for Omics Data Commons">
-                  <a-input
-                    :placeholder="placeholder"
-                    v-decorator="['dataSeqHost', {initialValue: dataSeqHost, rules:[{required: true, message: 'Please enter a service host or domain, e.g. http://10.157.72.53'}]}]"
-                  />
-                </a-form-item>
-              </a-col>
-            </a-row>
-            <!-- FileManager -->
-            <!-- <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item label="Service Host / Domain for FileManager">
-                  <a-input
-                    :placeholder="placeholder"
-                    v-decorator="['fileManagerHost', {initialValue: fileManagerHost, rules:[{required: true, message: 'Please enter a service host or domain, e.g. http://10.157.72.53'}]}]"
-                  />
-                </a-form-item>
-              </a-col>
-            </a-row> -->
-            <a-form-item>
-              <a-button style="margin-left: 8px" html-type="submit">Save</a-button>
-            </a-form-item>
-          </a-form>
-        </a-spin>
-      </a-col>
+            <a-col :span="12">
+              <a-form-item label="Service Host / Domain for Omics Data Commons">
+                <a-input
+                  :placeholder="placeholder"
+                  v-decorator="['dataSeqHost', {initialValue: dataSeqHost, rules:[{required: true, message: 'Please enter a service host or domain, e.g. http://10.157.72.53'}]}]"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+          <a-row :gutter="24">
+            <!-- Component Settings -->
+            <a-col :span="12">
+              <a-form-item label="Disable ContextMenu for FileBrowser?">
+                <a-select
+                  v-decorator="['disabledContextMenu', {initialValue: componentSettings.disabledContextMenu}]"
+                >
+                  <a-select-option value="true">Yes</a-select-option>
+                  <a-select-option value="false">No</a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="Disable Exploratory Component?">
+                <a-select
+                  v-decorator="['disabledExploratory', {initialValue: componentSettings.disabledExploratory}]"
+                >
+                  <a-select-option value="true">Yes</a-select-option>
+                  <a-select-option value="false">No</a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="Which dashboard?">
+                <a-select
+                  v-decorator="['dashboardName', {initialValue: componentSettings.dashboardName}]"
+                >
+                  <a-select-option value="QuartetDashboard">Quartet Dashboard</a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+          </a-row>
+          <a-form-item>
+            <a-button html-type="submit">Save</a-button>
+          </a-form-item>
+        </a-form>
+      </a-spin>
     </a-row>
   </div>
 </template>
@@ -66,13 +81,13 @@ import {
   saveTServiceHost,
   initDataSeqHost,
   saveDataSeqHost,
-  initFileManagerHost,
-  saveFileManagerHost
+  initComponentSettings,
+  saveComponentSettings
 } from '@/utils/util'
 
 export default {
   components: {},
-  data () {
+  data() {
     return {
       form: this.$form.createForm(this),
       placeholder: 'Which service do you want to connect to?',
@@ -80,11 +95,11 @@ export default {
       seqFlowHost: initSeqFlowHost(),
       tServiceHost: initTServiceHost(),
       dataSeqHost: initDataSeqHost(),
-      fileManagerHost: initFileManagerHost()
+      componentSettings: initComponentSettings()
     }
   },
   methods: {
-    handleSubmit () {
+    handleSubmit() {
       const {
         form: { validateFields }
       } = this
@@ -102,8 +117,11 @@ export default {
           // DataSeq
           saveDataSeqHost(values.dataSeqHost)
 
-          // FileManager
-          saveFileManagerHost(values.fileManagerHost)
+          // Component Settings
+          saveComponentSettings({
+            disabledContextMenu: values.disabledContextMenu,
+            disabledExploratory: values.disabledExploratory
+          })
 
           setTimeout(() => {
             this.visible = false
@@ -121,4 +139,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
 </style>

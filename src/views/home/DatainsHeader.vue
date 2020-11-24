@@ -3,8 +3,8 @@
     <nav class="navbar">
       <a-col :xs="12" :sm="10" :md="8" :lg="6">
         <router-link :to="{ name: 'welcome' }" class="logo">
-          <img src="@/assets/logo.png" />
-          <span>QUALITY</span>
+          <img :src="websiteLogo" />
+          <span>{{ websiteName }}</span>
         </router-link>
       </a-col>
       <a-col :xs="12" :sm="14" :md="16" :lg="18" class="menu">
@@ -30,15 +30,18 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import AppStoreIcon from '@/components/AppStoreIcon'
+import { websiteLogo, websiteName } from '@/utils/util'
 
 export default {
   name: 'DatainsHeader',
   props: {},
   data() {
     return {
+      websiteLogo,
+      websiteName,
       menu: [
         {
-          title: 'QUALITY',
+          title: 'Dashboard',
           link: 'dashboard'
         }
       ]

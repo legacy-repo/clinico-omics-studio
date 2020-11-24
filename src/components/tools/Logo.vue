@@ -1,7 +1,7 @@
 <template>
   <div class="logo">
     <router-link :to="{ name: 'welcome' }">
-      <img src="@/assets/logo.png" width="50px" height="50px" alt="logo" />
+      <img :src="logo" width="50px" height="50px" alt="logo" />
       <h1 v-if="showTitle">{{ title }}</h1>
     </router-link>
   </div>
@@ -13,8 +13,13 @@ export default {
   props: {
     title: {
       type: String,
-      default: 'QUALITY',
-      required: false
+      default: 'ClinicoOmics',
+      required: true
+    },
+    logo: {
+      type: String,
+      required: false,
+      default: '@/assets/logo.png'
     },
     showTitle: {
       type: Boolean,

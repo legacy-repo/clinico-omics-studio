@@ -4,8 +4,8 @@ import store from './store'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import notification from 'ant-design-vue/es/notification'
-import { setDocumentTitle, domTitle } from '@/utils/domUtil'
-import { tokenIsExpired, tokenExp } from '@/utils/util'
+import { setDocumentTitle } from '@/utils/domUtil'
+import { tokenIsExpired, tokenExp, domTitle } from '@/utils/util'
 import { OIDC_AUTH } from '@/store/mutation-types'
 
 NProgress.configure({ showSpinner: true }) // NProgress Configuration

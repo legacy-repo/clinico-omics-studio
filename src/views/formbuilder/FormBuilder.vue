@@ -108,7 +108,7 @@
         </template>
       </a-form-item>
     </a-form>
-    <a-row class="box" v-if="fileManagerActive">
+    <a-row class="box" v-show="fileManagerActive">
       <a-row class="file-manager-container">
         <file-browser @file-select="onFileSelect" :selected="selected" :standalone="false" :height="350" :allowMultiSelection="multiple" :filterType="filterType"></file-browser>
         <a-button-group>

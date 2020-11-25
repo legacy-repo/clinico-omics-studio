@@ -111,6 +111,13 @@ export function countCollections (parameter, payload) {
   })
 }
 
+export function getServices () {
+  return axios({
+    url: '/api/fs-services',
+    method: 'get'
+  })
+}
+
 // Minio/OSS/S3: Bucket + Object
 export function getBuckets (service) {
   return axios({

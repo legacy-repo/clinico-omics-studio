@@ -1,4 +1,5 @@
 import {
+  getServices,
   getBuckets,
   getObjects,
   makeDownloadUrl,
@@ -67,6 +68,17 @@ const fs = {
   mutations: {},
 
   actions: {
+    GetServices({ commit }) {
+      return new Promise((resolve, reject) => {
+        getServices()
+          .then(response => {
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error)
+          })
+      })
+    },
     // 获取Buckets
     GetBuckets({ commit }, parameter) {
       return new Promise((resolve, reject) => {

@@ -5,7 +5,10 @@
       :class="{ standalone: standalone }"
       :style="{height: (height + 100) + 'px'}"
     >
-      <a-col slot="title" :lg="11" :md="11" :sm="24" :xs="24">
+      <a-col slot="title" :lg="12" :md="12" :sm="24" :xs="24">
+        <a-select :value="service" style="width: 80px" @change="selectService">
+          <a-select-option v-for="item in services" :key="item" :value="item">{{ item }}</a-select-option>
+        </a-select>
         <a-select :value="bucketName" style="width: 200px" @change="selectBucket">
           <a-select-option v-for="bucket in buckets" :key="bucket">{{ bucket }}</a-select-option>
         </a-select>
@@ -19,7 +22,7 @@
           <a-icon type="cloud-sync" />Refresh
         </a-button>
       </a-col>
-      <a-col slot="title" :lg="13" :md="13" :sm="24" :xs="24">
+      <a-col slot="title" :lg="12" :md="12" :sm="24" :xs="24">
         <a-select
           show-search
           :value="currentPath"
@@ -70,13 +73,6 @@
         :data-source="data"
         :row-selection="{ ...rowSelection, selectedRowKeys: selectedRowKeys }"
       >
-        <span slot="name" slot-scope="text, record">
-          <a
-            @click="switchDetailsPanel(record)"
-            v-if="record.storageClass"
-          >{{ formatFileName(text) }}</a>
-          <a @click="enterDirecotry(record)" v-else>{{ formatFileName(text) }}</a>
-        </span>
         <span slot="icon" slot-scope="text, record">
           <a-icon type="file" :style="{fontSize: '20px'}" v-if="record.storageClass" />
           <a-icon
@@ -94,6 +90,62 @@
             <a-icon type="down" />
           </a>
         </span>
+        <div
+          slot="filterDropdown"
+          slot-scope="{ setSelectedKeys, selectedKeys, confirm, clearFilters, column }"
+          style="padding: 8px"
+        >
+          <a-input
+            :placeholder="`Search ${column.dataIndex}`"
+            :value="selectedKeys[0]"
+            style="width: 188px; margin-bottom: 8px; display: block;"
+            @change="e => setSelectedKeys(e.target.value ? [e.target.value] : [])"
+            @pressEnter="() => handleSearch(selectedKeys, confirm, column.dataIndex)"
+          />
+          <a-button
+            type="primary"
+            icon="search"
+            size="small"
+            style="width: 90px; margin-right: 8px"
+            @click="() => handleSearch(selectedKeys, confirm, column.dataIndex)"
+          >Search</a-button>
+          <a-button
+            ref="resetBtn"
+            size="small"
+            style="width: 90px"
+            @click="() => handleReset(clearFilters)"
+          >Reset</a-button>
+        </div>
+        <a-icon
+          slot="filterIcon"
+          slot-scope="filtered"
+          type="search"
+          :style="{ color: filtered ? '#108ee9' : undefined }"
+        />
+        <template slot="customRender" slot-scope="text, record, index, column">
+          <a-tooltip
+            placement="top"
+            :mouseEnterDelay="0.3"
+            :mouseLeaveDelay="0"
+            destroyTooltipOnHide
+          >
+            <template slot="title">
+              <span>{{ formatFileName(text) }}</span>
+            </template>
+            <a @click="onClickName(record)">
+              <template
+                v-for="(fragment, i) in text.toString().split(new RegExp(`(?<=${searchText})|(?=${searchText})`, 'i'))"
+              >
+                <mark
+                  v-if="fragment.toLowerCase() === searchText.toLowerCase()"
+                  :key="i"
+                  class="highlight"
+                >{{ fragment }}</mark>
+                <template v-else>{{ fragment }}</template>
+              </template>
+            </a>
+          </a-tooltip>
+        </template>
       </a-table>
     </a-card>
     <!-- Popup Windows -->
@@ -236,7 +288,17 @@ const columns = [
     title: 'File Name',
     dataIndex: 'name',
     key: 'name',
-    scopedSlots: { customRender: 'name' },
+    scopedSlots: {
+      filterDropdown: 'filterDropdown',
+      filterIcon: 'filterIcon',
+      customRender: 'customRender'
+    },
+    onFilter: (value, record) => {
+      return record.name
+        .toString()
+        .toLowerCase()
+        .includes(value.toLowerCase())
+    },
     ellipsis: true
   },
   {
@@ -271,7 +333,7 @@ const columns = [
 ]
 
 export default {
-  name: 'FileList',
+  name: 'FileBrowser',
   components: {
     ChartModal
   },
@@ -306,7 +368,7 @@ export default {
       default: '.*',
       type: String
     },
-    service: {
+    defaultService: {
       required: false,
       default: 'minio',
       type: String
@@ -320,6 +382,9 @@ export default {
   data() {
     return {
       columns,
+      service: null,
+      services: [],
+      searchText: '',
       selectedRowKeys: [],
       selectedRows: [],
       rowSelection: {
@@ -422,6 +487,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      getServices: 'GetServices',
       getBuckets: 'GetBuckets',
       getObjects: 'GetObjects',
       makeDirectory: 'MakeDirectory',
@@ -430,6 +496,25 @@ export default {
       getObjectMeta: 'GetObjectMeta',
       uploadObject: 'UploadObject'
     }),
+    selectService(serviceName) {
+      this.service = serviceName
+      this.loadService()
+    },
+    handleSearch(selectedKeys, confirm, dataIndex) {
+      confirm()
+      this.searchText = selectedKeys[0]
+    },
+    handleReset(clearFilters) {
+      clearFilters()
+      this.searchText = ''
+    },
+    onClickName(record) {
+      if (record.storageClass) {
+        this.switchDetailsPanel(record)
+      } else {
+        this.enterDirecotry(record)
+      }
+    },
     filterByArray(items, keys) {
       return filter(items, o => {
         return keys.includes(o.path)
@@ -576,10 +661,59 @@ export default {
         }
       })
     },
+    loadServices(func) {
+      this.getServices()
+        .then(response => {
+          console.log('Load Services: ', response)
+          this.services = response.services
+          console.log(this.defaultService, this.services)
+          if (this.services.indexOf(this.defaultService) > -1) {
+            this.service = this.defaultService
+          } else {
+            this.service = this.services[0]
+          }
+
+          func()
+        })
+        .catch(error => {
+          console.log('Load Services: ', error)
+          this.$message.error('Can not load any services.')
+        })
+    },
+    loadService() {
+      this.getBuckets({ service: this.service })
+        .then(response => {
+          this.buckets = response.data
+          if (this.buckets.length > 0) {
+            if (this.path.startsWith('s3://') || this.path.startsWith('oss://') || this.path.startsWith('minio://')) {
+              const bucketName = this.parseBucketName(this.path)
+              if (bucketName) {
+                this.onSearch(this.path)
+              } else {
+                this.$message.error('No such link.')
+                // Back
+                this.$router.go(-1)
+              }
+            } else {
+              this.bucketName = this.buckets[0]
+              this.redirectHome()
+            }
+          } else {
+            this.$message.error('No such link.')
+          }
+        })
+        .catch(error => {
+          this.buckets = []
+          this.bucketName = 'Not Found'
+          this.$message.error('Unknown Error!')
+          console.log('getBuckets: ', error)
+        })
+    },
     loadBookmarks() {
       const addressList = filter(JSON.parse(localStorage.getItem('datains_BOOKMARKS')), address => {
         return address.indexOf(this.service) >= 0
       })
+
       if (addressList) {
         this.addressList = addressList
       } else {
@@ -715,7 +849,14 @@ export default {
       const prefix = this.getPrefix(pathList, '')
       this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, prefix)
     },
+    resetFilters() {
+      console.log('resetFilters: ', this.$refs.resetBtn)
+      if (this.$refs.resetBtn) {
+        this.$refs.resetBtn.handleClick()
+      }
+    },
     searchObjects(bucketName, page, pageSize, prefix) {
+      this.resetFilters()
       this.loading = true
       this.getObjects({
         service: this.service,
@@ -735,6 +876,12 @@ export default {
           this.loading = false
         })
         .catch(error => {
+          this.$message.warning('Not Found / No Permission')
+          this.currentPath = this.service + '://' + this.bucketName
+          this.data = []
+          this.pagination.total = 0
+          this.pagination.current = 1
+          this.pagination.pageSize = 10
           console.log('searchObjects: ', error)
           this.loading = false
         })
@@ -912,34 +1059,7 @@ export default {
     }
 
     this.loadBookmarks()
-
-    this.getBuckets({ service: this.service })
-      .then(response => {
-        this.buckets = response.data
-        if (this.buckets.length > 0) {
-          if (this.path.startsWith('s3://') || this.path.startsWith('oss://') || this.path.startsWith('minio://')) {
-            const bucketName = this.parseBucketName(this.path)
-            if (bucketName) {
-              this.onSearch(this.path)
-            } else {
-              this.$message.error('No such link.')
-              // Back
-              this.$router.go(-1)
-            }
-          } else {
-            this.bucketName = this.buckets[0]
-            this.redirectHome()
-          }
-        } else {
-          this.$message.error('No such link.')
-        }
-      })
-      .catch(error => {
-        this.buckets = []
-        this.bucketName = 'Not Found'
-        this.$message.error('Unknown Error!')
-        console.log('getBuckets: ', error)
-      })
+    this.loadServices(this.loadService)
   }
 }
 </script>
@@ -1082,5 +1202,17 @@ details-panel {
   .ant-modal-body {
     padding: 10px 24px;
   }
+}
+
+.highlight {
+  background-color: rgb(255, 192, 105);
+  padding: 0px;
+}
+</style>
+
+<style lang="less">
+.ant-table-thead > tr > th .anticon-filter,
+.ant-table-thead > tr > th .ant-table-filter-icon {
+  right: unset;
 }
 </style>

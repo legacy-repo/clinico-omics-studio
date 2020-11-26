@@ -20,7 +20,7 @@ export const asyncRouterMap = [
         name: 'dashboard',
         hidden: false,
         component: () => import('@/views/datasource/' + componentSettings.dashboardName),
-        meta: { title: 'Dashboard', icon: 'dashboard', permission: ['dashboard'] }
+        meta: { title: 'Dashboard', icon: 'dashboard', permission: ['dashboard'], keepAlive: false }
       },
 
       // Materials
@@ -47,21 +47,21 @@ export const asyncRouterMap = [
         name: 'seq-flow',
         component: RouteView,
         redirect: '/seq-flow/submit',
-        meta: { title: 'Analyses', icon: 'project', permission: ['table'] },
+        meta: { title: 'Analyses', icon: 'project', permission: ['table'], keepAlive: false },
         children: [
           {
             path: '/seq-flow/workplace',
             name: 'workplace',
             hidden: true,
             component: () => import('@/views/dashboard/Workplace'),
-            meta: { title: 'Workplace', icon: 'dashboard', permission: ['dashboard'] }
+            meta: { title: 'Workplace', icon: 'dashboard', permission: ['dashboard'], keepAlive: false }
           },
           {
             path: '/seq-flow/app-store',
             name: 'appstore',
             hidden: false,
             component: () => import('@/views/appstore/FilterPanel'),
-            meta: { title: 'Apps & Tools', icon: 'appstore', permission: ['table'] }
+            meta: { title: 'Apps & Tools', icon: 'appstore', permission: ['table'], keepAlive: false }
           },
           {
             path: '/seq-flow/file-manager',
@@ -77,7 +77,7 @@ export const asyncRouterMap = [
             hidden: true,
             props: route => ({ appId: route.query.appId }),
             component: () => import('@/views/workflow/stepForm/StepForm'),
-            meta: { title: 'Create Project', icon: 'file-add', permission: ['table'] }
+            meta: { title: 'Create Project', icon: 'file-add', permission: ['table'], keepAlive: false }
           },
           {
             path: '/seq-flow/job-management/:projectId',
@@ -98,7 +98,7 @@ export const asyncRouterMap = [
             name: 'project-management',
             hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
             component: () => import('@/views/workflow/ProjectManagement'),
-            meta: { title: 'Project Management', icon: 'solution', permission: ['table'] }
+            meta: { title: 'Project Management', icon: 'solution', permission: ['table'], keepAlive: false }
           },
           {
             path: '/seq-flow/report-management',
@@ -106,7 +106,7 @@ export const asyncRouterMap = [
             hidden: false,
             props: route => ({ creationMode: route.query.creationMode, reportTool: route.query.reportTool }),
             component: () => import('@/views/report/ReportManagement'),
-            meta: { title: 'Report Management', icon: 'file-done', permission: ['table'] }
+            meta: { title: 'Report Management', icon: 'file-done', permission: ['table'], keepAlive: false }
           }
         ]
       },

@@ -187,7 +187,7 @@ const app = {
       return new Promise((resolve, reject) => {
         getHelpMsg(appName)
           .then(response => {
-            console.log('GetHelpMsg: ', appName, response)
+            console.log('GetHelpMsg: ', appName)
 
             resolve(response)
           })

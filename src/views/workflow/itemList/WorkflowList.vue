@@ -44,7 +44,7 @@
                 <template slot="title">
                   <a @click="doCopy(item.workflowId)">Copy WorkflowId</a>
                 </template>
-                <a @click="onShowLog(item.workflowId, item.title)">{{ item.workflowId }}</a>
+                <a @click="onShowLog(item.workflowId, item.title)">{{ formatWorkflowId(item.workflowId) }}</a>
               </a-tooltip>
             </a-list-item-meta>
           </a-col>
@@ -142,6 +142,13 @@ export default {
       getWorkflow: 'GetWorkflow',
       updateWorkflow: 'UpdateWorkflow'
     }),
+    formatWorkflowId (id) {
+      if (id && id.length > 0) {
+        return id
+      } else {
+        'Waiting for running...'
+      }
+    },
     resubmitJob (id) {
       const payload = {
         workflowId: id,

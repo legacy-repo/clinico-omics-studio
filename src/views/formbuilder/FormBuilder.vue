@@ -1,9 +1,7 @@
 <template>
   <div class="a-form-builder">
     <a-form ref="form" :form="clonedModel" @submit="onAction" layout="vertical">
-      <a-form-item
-        v-for="(field, index) in fields"
-        :key="field.label + index">
+      <a-form-item v-for="(field, index) in fields" :key="field.label + index">
         <span slot="label" v-if="field.label">
           {{ field.label }}&nbsp;
           <a-tooltip :title="field.question" v-if="field.question">
@@ -12,14 +10,15 @@
         </span>
         <template v-if="field.tmplType === 'file'">
           <a-button @click="selectFiles(field.model, field.multiple, field.filterType)">
-            <a-icon type="plus" /> Select Files
+            <a-icon type="plus" />Select Files
           </a-button>
           <a-select
             :mode="field.multiple ? 'multiple' : 'default'"
             :placeholder="field.placeholder"
             :maxTagCount="3"
             :disabled="field.readOnly || !options[field.model]"
-            v-decorator="[field.model, field.config]">
+            v-decorator="[field.model, field.config]"
+          >
             <a-select-option v-for="d in options[field.model]" :key="d.value">{{ d.text }}</a-select-option>
           </a-select>
         </template>
@@ -33,8 +32,8 @@
             :disabled="field.disabled || false"
             :ref="field.name"
             v-decorator="[field.model, field.config]"
-            @change="onUpdate(field)">
-          </a-input-number>
+            @change="onUpdate(field)"
+          ></a-input-number>
         </template>
         <!-- Input -->
         <template v-if="field.tmplType === 'input'">
@@ -53,7 +52,8 @@
             :key="field.name + index"
             :ref="field.name"
             v-decorator="[field.model, field.config]"
-            @change="onUpdate(field)"/>
+            @change="onUpdate(field)"
+          />
         </template>
         <!-- Select -->
         <template v-if="field.tmplType === 'select'">
@@ -66,10 +66,9 @@
             :allowClear="true"
             :data="field.options"
             :placeholder="field.placeholder"
-            @change="onUpdate(field)">
-            <a-select-option v-for="i in field.options" :key="i.label">
-              {{ i.value }}
-            </a-select-option>
+            @change="onUpdate(field)"
+          >
+            <a-select-option v-for="i in field.options" :key="i.label">{{ i.value }}</a-select-option>
           </a-select>
         </template>
         <!-- Checkbox -->
@@ -79,19 +78,17 @@
             v-decorator="[field.model, field.config]"
             :name="field.name"
             :options="field.options"
-            @change="onUpdate(field)">
-          </a-checkbox-group>
-          <a-checkbox
-            v-else
-            v-decorator="[field.model, field.config]"
-            @change="onUpdate(field)"/>
+            @change="onUpdate(field)"
+          ></a-checkbox-group>
+          <a-checkbox v-else v-decorator="[field.model, field.config]" @change="onUpdate(field)" />
         </template>
         <!-- Radio -->
         <template v-if="field.tmplType === 'radio'">
           <a-radio-group
             v-decorator="[field.model, field.config]"
             :options="field.options"
-            @change="onUpdate(field)"/>
+            @change="onUpdate(field)"
+          />
         </template>
         <!-- Actions -->
         <template v-if="field.tmplType === 'actions'">
@@ -101,16 +98,22 @@
               :key="idx"
               :type="i.buttonType"
               @click="onAction(i)"
-              class="form-btn">
-              {{ i.buttonLabel }}
-            </a-button>
+              class="form-btn"
+            >{{ i.buttonLabel }}</a-button>
           </div>
         </template>
       </a-form-item>
     </a-form>
     <a-row class="box" v-show="fileManagerActive">
       <a-row class="file-manager-container">
-        <file-browser @file-select="onFileSelect" :selected="selected" :standalone="false" :height="350" :allowMultiSelection="multiple" :filterType="filterType"></file-browser>
+        <file-browser
+          @file-select="onFileSelect"
+          :selected="selected"
+          :standalone="false"
+          :height="350"
+          :allowMultiSelection="multiple"
+          :filterType="filterType"
+        ></file-browser>
         <a-button-group>
           <a-button @click="cancelSelectFiles()">Cancel</a-button>
           <a-button @click="confirmSelectFiles()">Confirm</a-button>
@@ -137,7 +140,7 @@ export default {
       default: () => []
     }
   },
-  data () {
+  data() {
     return {
       fileManagerActive: false,
       whichFileManager: '',
@@ -148,41 +151,48 @@ export default {
       options: {}
     }
   },
-  created () {
+  created() {
     this.clonedModel = this.$form.createForm(this)
     this.$voca = v
   },
-  mounted () {
+  mounted() {
     // Hack to update validation
     this.$forceUpdate()
   },
   methods: {
-    onFileSelect (files) {
+    onFileSelect(files) {
       console.log('onFileSelect: ', files)
       this.files = files
     },
-    selectFiles (model, multiple, filterType) {
+    selectFiles(model, multiple, filterType) {
       // Reset all related values
       this.fileManagerActive = true
       this.whichFileManager = model
       this.filterType = filterType
       this.multiple = multiple
       this.options[model] = []
-      this.selected = this.clonedModel.getFieldValue(model)
+      const value = this.clonedModel.getFieldValue(model)
+      console.log('selected: ', value, typeof value)
+      if (typeof value == 'string') {
+        this.selected = [value]
+      } else {
+        this.selected = value
+      }
+
       console.log('Registry File Manager: ', model, multiple, filterType, this.selected)
     },
-    cancelSelectFiles () {
+    cancelSelectFiles() {
       this.fileManagerActive = false
     },
-    getPath (file) {
+    getPath(file) {
       return file.path
     },
-    getFilePathLst (files) {
+    getFilePathLst(files) {
       const filePaths = flatMap(files, this.getPath)
       // return filePaths.join('\n')
       return filePaths
     },
-    confirmSelectFiles () {
+    confirmSelectFiles() {
       this.fileManagerActive = false
       const fields = {}
       const filePathList = this.getFilePathLst(this.files)
@@ -192,17 +202,19 @@ export default {
         fields[this.whichFileManager] = filePathList[0]
       }
 
-      this.options[this.whichFileManager] = flatMap(filePathList, (o) => ({ value: o, text: o }))
+      this.options[this.whichFileManager] = flatMap(filePathList, o => ({ value: o, text: o }))
       this.clonedModel.setFieldsValue(fields)
       console.log('Selected Files: ', fields, this.whichFileManager, this.files)
     },
-    genSampleIds (numStr) {
+    genSampleIds(numStr) {
       // Init
       const num = parseInt(this.clonedModel.getFieldValue(numStr))
       var sampleIds = []
 
       if (num > 0 && num < 100) {
-        for (const idx in Array(num).fill().map((_, i) => i * i)) {
+        for (const idx in Array(num)
+          .fill()
+          .map((_, i) => i * i)) {
           sampleIds.push(uuidv4())
         }
       }
@@ -210,10 +222,10 @@ export default {
       console.log('genSampleIds: ', num, sampleIds)
       return sampleIds
     },
-    onUpdate (field) {
+    onUpdate(field) {
       this.$emit('update', this.clonedModel)
     },
-    onAction (e) {
+    onAction(e) {
       if (e.validate) {
         this.clonedModel.validateFields((err, values) => {
           console.log('Received values of form: ', values)
@@ -278,7 +290,7 @@ export default {
     position: fixed;
     top: 0;
     left: 0;
-    background: rgba(0,0,0,0.3);
+    background: rgba(0, 0, 0, 0.3);
     z-index: 10;
 
     .file-manager-container {

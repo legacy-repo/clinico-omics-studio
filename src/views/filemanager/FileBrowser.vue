@@ -3,7 +3,7 @@
     <a-card
       :bordered="false"
       :class="{ standalone: standalone }"
-      :style="{height: (height + 100) + 'px'}"
+      :style="[standalone ? { 'height': (height + 100) + 'px' } : { 'height': 'unset' }]"
     >
       <a-col slot="title" :lg="12" :md="12" :sm="24" :xs="24">
         <a-select :value="service" style="width: 80px" @change="selectService">
@@ -58,10 +58,6 @@
             </a>
           </a-breadcrumb-item>
         </a-breadcrumb>
-        <span
-          style="font-size: 14px; font-weight: 400; position: absolute; top: 0; right: 0;"
-          v-if="hasSelected"
-        >{{ `Selected ${selectedRowKeys.length} items` }}</span>
       </a-row>
       <a-table
         :loading="loading"
@@ -134,7 +130,7 @@
             </template>
             <a @click="onClickName(record)">
               <template
-                v-for="(fragment, i) in text.toString().split(new RegExp(`(?<=${searchText})|(?=${searchText})`, 'i'))"
+                v-for="(fragment, i) in formatFileName(text).toString().split(new RegExp(`(?<=${searchText})|(?=${searchText})`, 'i'))"
               >
                 <mark
                   v-if="fragment.toLowerCase() === searchText.toLowerCase()"
@@ -474,6 +470,13 @@ export default {
         showSizeChanger: true,
         showQuickJumper: true,
         pageSize: 30,
+        showTotal: total => {
+          if (this.hasSelected) {
+            return `Selected ${this.selectedRowKeys.length} / ${total} items`
+          } else {
+            return `Total ${total} items`
+          }
+        },
         total: 0,
         current: 1,
         onChange: (page, pageSize) => {
@@ -496,6 +499,9 @@ export default {
       getObjectMeta: 'GetObjectMeta',
       uploadObject: 'UploadObject'
     }),
+    onChangeCheckBtn() {
+      this.checkBtnActive = !this.checkBtnActive
+    },
     selectService(serviceName) {
       this.service = serviceName
       this.loadService()

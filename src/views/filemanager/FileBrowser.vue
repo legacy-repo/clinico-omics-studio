@@ -1,5 +1,5 @@
 <template>
-  <div class="file-list" ref="fileBrowser">
+  <div class="file-list">
     <a-card
       :bordered="false"
       :class="{ standalone: standalone }"

@@ -1,7 +1,7 @@
 <template>
   <div>
     <a-button class="help-btn" type="primary" shape="circle" icon="question" @click="toggleHelp" />
-    <form-builder ref="form" :fields="fields" @action="onAction" @update="onUpdate"></form-builder>
+    <form-builder :fields="fields" @action="onAction" @update="onUpdate"></form-builder>
     <a-drawer
       :title="helpTitle"
       class="help-viewer"
@@ -64,7 +64,7 @@ export default {
     loadHelpMsg (appName) {
       this.getHelpMsg(appName).then(response => {
         this.helpMsg = response
-        console.log('loadHelpMsg: ', response)
+        // console.log('loadHelpMsg: ', response)
       }).catch(error => {
         this.helpMsg = 'No help document.'
         console.log('loadHelpMsg Error: ', error)

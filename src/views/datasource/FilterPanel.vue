@@ -68,7 +68,12 @@
           </a-button>
         </a-col>
       </a-row>
-      <a-input-search allowClear placeholder="Enter search text" size="large" @change="filterFields" />
+      <a-input-search
+        allowClear
+        placeholder="Enter search text"
+        size="large"
+        @change="filterFields"
+      />
       <a-card class="field-list">
         <a-row v-for="field in filteredFields" :key="field" class="field">{{ field }}</a-row>
       </a-card>
@@ -176,7 +181,13 @@ export default {
       reverseOrder: true
     }
   },
-  props: {},
+  props: {
+    projectName: {
+      default: 'quartet',
+      required: false,
+      type: String
+    }
+  },
   computed: {
     activeFilterList() {
       const active = []
@@ -210,7 +221,7 @@ export default {
           newFieldRecord['data'] = filter(fieldRecord.data, record => {
             // Remove Special Character
             const pattern = /[`~!@#$^&*()=|{}':;',\\[\].<>/?~！@#￥……&*（）——|{}【】'；：""'。，、？\s]/g
-            return record.name.match(this.filterValue.replace(pattern, ""))
+            return record.name.match(this.filterValue.replace(pattern, ''))
           })
 
           return newFieldRecord
@@ -277,7 +288,7 @@ export default {
       if (checked) {
         this.set_payload({
           field: fieldKey,
-          value: key, 
+          value: key,
           type: 'category'
         })
       } else {

@@ -1,6 +1,6 @@
 <template>
   <div class="a-form-builder">
-    <a-form ref="form" :form="clonedModel" @submit="onAction" layout="vertical">
+    <a-form :form="clonedModel" @submit="onAction" layout="vertical">
       <a-form-item v-for="(field, index) in fields" :key="field.label + index">
         <span slot="label" v-if="field.label">
           {{ field.label }}&nbsp;
@@ -104,7 +104,7 @@
         </template>
       </a-form-item>
     </a-form>
-    <a-row class="box" v-show="fileManagerActive">
+    <a-row class="box" v-if="fileManagerActive">
       <a-row class="file-manager-container">
         <file-browser
           @file-select="onFileSelect"
@@ -127,12 +127,14 @@
 import v from 'voca'
 import flatMap from 'lodash.flatmap'
 import { v4 as uuidv4 } from 'uuid'
-import FileBrowser from '@/views/filemanager/FileBrowser'
 
 export default {
   name: 'FormBuilder',
   components: {
-    FileBrowser
+    // [Vue warn]: Unknown custom element: <file-browser> - did you register the component correctly? For recursive components, make sure to provide the "name" option.
+    // 解决方案1 组件间循环依赖：https://cn.vuejs.org/v2/guide/components-edge-cases.html#%E7%BB%84%E4%BB%B6%E4%B9%8B%E9%97%B4%E7%9A%84%E5%BE%AA%E7%8E%AF%E5%BC%95%E7%94%A8
+    // 解决方案2 异步组件：https://cn.vuejs.org/v2/guide/components-dynamic-async.html#%E5%BC%82%E6%AD%A5%E7%BB%84%E4%BB%B6
+    FileBrowser: () => import('@/views/filemanager/FileBrowser'),
   },
   props: {
     fields: {

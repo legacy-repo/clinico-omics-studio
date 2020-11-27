@@ -29,7 +29,7 @@ export default {
       metadata: [
         {
           name: 'tservice',
-          version: 'v0.1.5-a6da32bc',
+          version: 'v0.1.5-7c499b4c',
           repo: 'https://github.com/clinico-omics/tservice'
         },
         {
@@ -39,12 +39,12 @@ export default {
         },
         {
           name: 'datains',
-          version: 'v0.3.0-62a53fb2',
+          version: 'v0.3.0-e530fc42',
           repo: 'https://github.com/clinico-omics/datains'
         },
         {
           name: 'dataseq-core',
-          version: 'v0.1.1-26ec5e35',
+          version: 'v0.2.1-302a6dc8',
           repo: 'https://github.com/clinico-omics/dataseq-core'
         }
       ]

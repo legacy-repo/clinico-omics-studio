@@ -1,4 +1,4 @@
-import { getCollections, countCollections } from '@/api/manage'
+import { getCollections, countCollections, getDataSchema, listCollections } from '@/api/manage'
 import orderBy from 'lodash.orderby'
 import findIndex from 'lodash.findindex'
 import map from 'lodash.map'
@@ -155,6 +155,7 @@ const deletePayload = function (payload, field, value, type) {
 
 const data = {
   state: {
+    defaultCollection: 'quartet',
     queryMap: {
       parameter: {
         page: 1,
@@ -186,11 +187,29 @@ const data = {
     }
   },
   actions: {
+    GetDataSchema ({ state }) {
+      return new Promise((resolve, reject) => {
+        getDataSchema(state.defaultCollection).then(response => {
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+    ListCollections ({ state }) {
+      return new Promise((resolve, reject) => {
+        listCollections().then(response => {
+          resolve(response.collections)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
     GetCollections ({ state }) {
       const parameter = state.queryMap.parameter
       const payload = state.queryMap.payload
       return new Promise((resolve, reject) => {
-        getCollections(parameter, payload).then(response => {
+        getCollections(state.defaultCollection, parameter, payload).then(response => {
           const data = {
             pageSize: response['per_page'],
             page: response['page'],
@@ -210,7 +229,7 @@ const data = {
       const payload = state.queryMap.payload
 
       return new Promise((resolve, reject) => {
-        countCollections(parameters, payload).then(response => {
+        countCollections(state.defaultCollection, parameters, payload).then(response => {
           const data = formatCounts(response)
 
           resolve(data)

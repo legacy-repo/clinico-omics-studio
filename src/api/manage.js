@@ -31,6 +31,8 @@ const api = {
   },
   // Data Commons
   dataCommons: {
+    listCollections: dataSeqHost + '/api/list-collections',
+    schema: dataSeqHost + '/api/schema',
     collections: dataSeqHost + '/api/collections',
     groups: dataSeqHost + '/api/count-collections'
   }
@@ -93,18 +95,32 @@ export function getMaterialsTemperature () {
 }
 
 // Omics Data Commons - Metadata
-export function getCollections (parameter, payload) {
+export function listCollections () {
   return axios({
-    url: api.dataCommons.collections,
+    url: api.dataCommons.listCollections,
+    method: 'get'
+  })
+}
+
+export function getDataSchema (collection) {
+  return axios({
+    url: api.dataCommons.schema + '/' + collection,
+    method: 'get'
+  })
+}
+
+export function getCollections (collection, parameter, payload) {
+  return axios({
+    url: api.dataCommons.collections + '/' + collection,
     method: 'post',
     params: parameter,
     data: payload
   })
 }
 
-export function countCollections (parameter, payload) {
+export function countCollections (collection, parameter, payload) {
   return axios({
-    url: api.dataCommons.groups,
+    url: api.dataCommons.groups + '/' + collection,
     method: 'post',
     params: parameter,
     data: payload

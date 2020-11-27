@@ -21,11 +21,13 @@
               :header="toTitleCase(field.name)"
               :key="field.name"
               v-for="field in filteredFieldsList"
+              v-if="field.data.length <= maxLimit"
             >
               <filter-list
                 :dataSource="field.data"
                 @select-filter="filterCollections(field.key, $event)"
               ></filter-list>
+              <a-icon slot="extra" type="delete" @click="removeField(field.key)" />
             </a-collapse-panel>
           </a-collapse>
         </a-tab-pane>
@@ -36,8 +38,8 @@
       <a-tabs class="chart-container" defaultActiveKey="1" @change="onChangeChartTab">
         <a-tab-pane tab="Files" key="1">
           <a-row class="pie-container">
-            <a-col v-for="item in fieldsList" :key="item.name" :xl="5" :lg="5" :md="8" :sm="12">
-              <pie :dataSource="item.data" :height="120" :width="120" :title="item.shortName" />
+            <a-col v-for="item in fieldsList" v-if="item.data.length <= maxLimit" :key="item.name" :xl="5" :lg="5" :md="8" :sm="12">
+              <pie :dataSource="item.data" :height="120" :width="120" :title="item.short" />
             </a-col>
           </a-row>
         </a-tab-pane>
@@ -74,8 +76,24 @@
         size="large"
         @change="filterFields"
       />
+      <a-row style="width: 100%;">
+        <a-checkbox style="float: right;" :checked="hideActive" @change="hideSelectedFields">Hide selected fields?</a-checkbox>
+      </a-row>
       <a-card class="field-list">
-        <a-row v-for="field in filteredFields" :key="field" class="field">{{ field }}</a-row>
+        <a-row @click.native="addField(field.key)" v-for="(field, index) in filteredFields" v-if="hideActive ? !field.selected : true" :key="field.key" class="field-row">
+          <a-row class="field-index">FL {{ index }}</a-row>
+          <a-row class="field-content">
+            <a-col>
+              <span>{{ field.name }}</span>
+              <a-tag color="#f50" style="margin-left: 5px">{{ field.type }}</a-tag>
+              <a-tag color="#87d068">{{ field.key }}</a-tag>
+              <span style="float: right">{{ getSelectStatus(field) }}</span>
+            </a-col>
+            <a-col>
+              <span>{{ field.description }}</span>
+            </a-col>
+          </a-row>
+        </a-row>
       </a-card>
     </a-modal>
   </a-row>
@@ -99,83 +117,10 @@ export default {
   },
   data() {
     return {
-      fieldsList: [
-        {
-          name: 'Reference Materials',
-          shortName: 'Reference Materials',
-          key: 'reference_materials_type',
-          data: []
-        },
-        {
-          name: 'Multi Omics Platforms',
-          shortName: 'Platform',
-          key: 'sequencing_sequence_platform',
-          data: []
-        },
-        {
-          name: 'Multi Profiling Sites',
-          shortName: 'Profiling Site',
-          key: 'sequencing_sequence_site',
-          data: []
-        },
-        {
-          name: 'Data Category',
-          shortName: 'Data Category',
-          key: 'data_file_data_format',
-          data: []
-        }
-      ],
+      hideActive: false,
+      allFields: [],
+      maxLimit: 20,
       visible: false,
-      allFields: [
-        'biospecimen_biospecimen_id',
-        'biospecimen_biospecimen_type',
-        'biospecimen_collection_date',
-        'collected_from_type',
-        'data_file_data_category',
-        'data_file_data_format',
-        'data_file_data_type',
-        'data_file_file_name',
-        'data_file_object_id',
-        'data_file_referemce_dataset',
-        'data_file_submitter_id',
-        'dna_library_dna_libray_id',
-        'dna_library_fragment_range',
-        'dna_library_fragment_selection',
-        'dna_library_input_ng',
-        'dna_library_library_preparation',
-        'dna_library_library_prep_date',
-        'dna_library_library_prep_kit',
-        'dna_library_pcr_cycle',
-        'dna_library_phix_spike_in',
-        'donor_donor_birth_date',
-        'donor_donor_registry_id',
-        'donor_family_id',
-        'donor_gender',
-        'donor_pedigree',
-        'dst_vid',
-        'extracted_from_type',
-        'label',
-        'reference_materials_cat_no',
-        'reference_materials_cell_collection_date',
-        'reference_materials_cell_line_passage_number',
-        'reference_materials_extraction',
-        'reference_materials_extraction_date',
-        'reference_materials_extraction_site',
-        'reference_materials_id',
-        'reference_materials_lot_no',
-        'reference_materials_source',
-        'reference_materials_type',
-        'sequencing_flowcell_id',
-        'sequencing_index_sequence',
-        'sequencing_lane_no',
-        'sequencing_sequence_id',
-        'sequencing_sequence_method',
-        'sequencing_sequence_platform',
-        'sequencing_sequence_run_date',
-        'sequencing_sequence_site',
-        'src_vid',
-        'vid'
-      ],
       searchValue: '',
       filterValue: '',
       reverseOrder: true
@@ -189,6 +134,11 @@ export default {
     }
   },
   computed: {
+    fieldsList() {
+      return filter(this.allFields, o => {
+        return o.selected
+      })
+    },
     activeFilterList() {
       const active = []
       for (const field of this.fieldsList) {
@@ -204,7 +154,7 @@ export default {
     filteredFields() {
       if (this.searchValue.length > 0) {
         return filter(this.allFields, record => {
-          return record.match(this.searchValue)
+          return record.key.match(new RegExp(this.searchValue, 'i')) || record.name.match(new RegExp(this.searchValue, 'i'))
         })
       } else {
         return this.allFields
@@ -216,12 +166,12 @@ export default {
           console.log('filteredFieldsList: ', fieldRecord, this.filterValue)
           const newFieldRecord = {}
           newFieldRecord['name'] = fieldRecord.name
-          newFieldRecord['shortName'] = fieldRecord.shortName
+          newFieldRecord['short'] = fieldRecord.short
           newFieldRecord['key'] = fieldRecord.key
           newFieldRecord['data'] = filter(fieldRecord.data, record => {
             // Remove Special Character
             const pattern = /[`~!@#$^&*()=|{}':;',\\[\].<>/?~！@#￥……&*（）——|{}【】'；：""'。，、？\s]/g
-            return record.name.match(this.filterValue.replace(pattern, ''))
+            return record.name.match(new RegExp(this.filterValue.replace(pattern, ''), 'i'))
           })
 
           return newFieldRecord
@@ -238,13 +188,52 @@ export default {
       delete_payload: 'DELETE_PAYLOAD'
     }),
     ...mapActions({
+      listCollections: 'ListCollections',
+      getDataSchema: 'GetDataSchema',
       countCollections: 'CountCollections'
     }),
+    hideSelectedFields() {
+      this.hideActive = !this.hideActive
+    },
+    getSelectStatus(field) {
+      if (field.selected) {
+        if (field.data.length <= this.maxLimit) {
+          return 'Selected'
+        } else {
+          return 'Not Shown'
+        }
+      } else {
+        return 'Unselected'
+      }
+    },
+    addField(key) {
+      const field = filter(this.allFields, o => {
+        return o.key == key
+      })
+
+      if (field.length > 0) {
+        field[0].selected = true
+      }
+
+      this.visible = !this.visible
+      this.fetchCounts()
+      console.log('addField: ', key)
+    },
     showFilterPanel() {
       this.visible = !this.visible
     },
     hideFieldPanel() {
       this.visible = !this.visible
+    },
+    removeField(fieldKey) {
+      const field = filter(this.allFields, o => {
+        return o.key === fieldKey
+      })
+
+      if (field.length > 0) {
+        field[0].selected = false
+      }
+      this.fetchCounts()
     },
     filterFields(e) {
       this.searchValue = e.target.value
@@ -282,6 +271,7 @@ export default {
       console.log('changeCheckedStatus: ', this.fieldsList, fieldKey, key, checked)
     },
     filterCollections(fieldKey, event) {
+      console.log('filterCollections: ', fieldKey, event)
       const key = event.key
       const checked = event.checked
 
@@ -357,13 +347,42 @@ export default {
           }
         })
         .catch(error => {
-          console.log('fetchCouns Error: ', error)
+          console.log('fetchCounts Error: ', error)
           this.$message.warn('Cannot fetch data, please retry later.')
+        })
+    },
+    remarkAllFields(allFields, predict) {
+      return map(allFields, o => {
+        if (predict(o)) {
+          o['selected'] = true
+        } else {
+          o['selected'] = false
+        }
+
+        // Initialize all fields
+        o['data'] = []
+
+        return o
+      })
+    },
+    getFieldsList(callback) {
+      this.getDataSchema()
+        .then(response => {
+          this.allFields = this.remarkAllFields(response, o => {
+            return o.priority <= 5
+          })
+
+          callback()
+        })
+        .catch(error => {
+          this.filterFieldsList = []
+          this.$message.error('Unknown Error')
+          console.log('getFieldsList: ', error)
         })
     }
   },
   created() {
-    this.fetchCounts()
+    this.getFieldsList(this.fetchCounts)
   }
 }
 </script>
@@ -388,12 +407,9 @@ export default {
 
 .filter-field-panel {
   .ant-modal {
-    height: 600px;
     top: 60px;
 
     .ant-modal-content {
-      height: 100%;
-
       .ant-modal-header {
         padding: 10px;
       }
@@ -404,7 +420,6 @@ export default {
       }
 
       .ant-modal-body {
-        height: 100%;
         padding: 10px;
 
         .control-panel {
@@ -425,20 +440,47 @@ export default {
           margin: 0px 0px 10px;
         }
 
+        .ant-checkbox {
+          margin-bottom: 5px;
+        }
+
         .field-list {
-          height: calc(100% - 140px);
+          max-height: 500px;
           overflow: scroll;
 
           .ant-card-body {
             padding: 0px;
             height: 100%;
 
-            .field {
-              padding: 5px 20px;
-              font-size: 16px;
+            .field-row {
+              display: flex;
+              flex-direction: row;
+
+              .field-index {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 45px;
+                margin-right: 5px;
+                color: #fff;
+                background-color: @primary-color;
+              }
+
+              .field-content {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                padding: 10px 20px 10px 0px;
+                font-size: 14px;
+
+                .ant-tag {
+                  font-style: italic;
+                  font-weight: 500;
+                }
+              }
             }
 
-            .field:hover {
+            .field-row:hover {
               cursor: pointer;
               background-color: @primary-color;
               color: #fff;

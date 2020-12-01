@@ -6,24 +6,6 @@ const componentSettings = initComponentSettings()
 
 export const asyncRouterMap = [
   {
-    path: '/user',
-    component: UserLayout,
-    redirect: '/user/login',
-    hidden: true,
-    children: [
-      {
-        path: 'login',
-        name: 'login',
-        component: () => import('@/views/home/Login')
-      },
-      {
-        path: 'register',
-        name: 'register',
-        component: () => import('@/views/home/Register')
-      }
-    ]
-  },
-  {
     path: '/',
     name: 'index',
     component: BasicLayout,
@@ -411,21 +393,21 @@ export const constantRouterMap = [
   {
     path: '/metabase',
     name: 'Metabase Iframe',
-    props: route => ({ src: 'http://metabase.3steps.cn', toPath: 'dashboard' }),
+    props: route => ({ src: 'http://metabase.3steps.cn', toPath: 'welcome' }),
     component: () => import('@/views/iframe/EmbededFrame')
   },
 
   {
     path: '/api-mgmt',
     name: 'API Management Iframe',
-    props: route => ({ src: 'http://yapi.3steps.cn', toPath: 'dashboard' }),
+    props: route => ({ src: 'http://yapi.3steps.cn', toPath: 'welcome' }),
     component: () => import('@/views/iframe/EmbededFrame')
   },
 
   {
     path: '/jupyter',
     name: 'Jupyter Iframe',
-    props: route => ({ src: 'http://jupyterhub.3steps.cn', toPath: 'dashboard' }),
+    props: route => ({ src: 'http://jupyterhub.3steps.cn', toPath: 'welcome' }),
     component: () => import('@/views/iframe/EmbededFrame')
   },
 
@@ -434,5 +416,30 @@ export const constantRouterMap = [
     name: 'Webapps',
     props: route => ({ src: route.query.src, toPath: 'welcome' }),
     component: () => import('@/views/iframe/EmbededFrame')
+  },
+
+  // User
+  {
+    path: '/user',
+    component: UserLayout,
+    redirect: '/user/login',
+    hidden: true,
+    children: [
+      {
+        path: '/user/login',
+        name: 'login',
+        component: () => import('@/views/home/Login')
+      },
+      {
+        path: '/user/register',
+        name: 'register',
+        component: () => import('@/views/home/Register')
+      },
+      {
+        path: 'recover',
+        name: 'recover',
+        component: undefined
+      }
+    ]
   }
 ]

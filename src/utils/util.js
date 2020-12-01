@@ -210,12 +210,13 @@ export const tokenIsExpired = token => {
 
 export const checkToken = () => {
   // Token可能过期
-  const user = JSON.parse(localStorage.getItem('CLINICO_OMICS_AUTH'))
-  var tokenIsValid = false
-  if (user) {
-    tokenIsValid = !tokenIsExpired(user.access_token)
-    console.log('user', user, tokenIsValid, tokenExp(user.access_token))
+  const authJSON = JSON.parse(localStorage.getItem('CLINICO_OMICS_AUTH'))
+  if (authJSON) {
+    const tokenIsValid = !tokenIsExpired(authJSON.access_token)
+    if (tokenIsValid) {
+      return authJSON
+    }
   }
 
-  return tokenIsValid
+  return null
 }

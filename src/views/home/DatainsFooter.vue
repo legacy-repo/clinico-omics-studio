@@ -55,22 +55,6 @@ export default {
         address: ''
       },
       footerContent: [
-        // {
-        //   title: 'Wechat/Website',
-        //   span: 3,
-        //   contentList: [
-        //     {
-        //       title: '智汇医圈Plus',
-        //       src: require('@/assets/images/genius-community-plus.png'),
-        //       type: 'image'
-        //     },
-        //     {
-        //       title: '智汇医圈训练营',
-        //       src: require('@/assets/images/duanshu.png'),
-        //       type: 'image'
-        //     }
-        //   ]
-        // },
         {
           title: 'About',
           span: 4,

@@ -1,5 +1,7 @@
-import { getInfo, logout } from '@/api/login'
+import { getInfo, login, logout } from '@/api/login'
 import { checkToken, welcome } from '@/utils/util'
+import { userInfo } from '@/utils/permissions'
+import v from 'voca'
 
 const user = {
   state: {
@@ -32,16 +34,15 @@ const user = {
 
   actions: {
     CheckToken({ commit }) {
-      return new Promise((resolve, reject) => {
-        checkToken()
-          .then(response => {
-            commit('SET_STATE', response)
-            resolve(response)
-          })
-          .catch(error => {
-            console.log('CheckToken: ', error)
-            reject(false)
-          })
+      return new Promise(resolve => {
+        const authJSON = checkToken()
+        if (authJSON) {
+          commit('SET_STATE', true)
+        } else {
+          commit('SET_STATE', false)
+        }
+
+        resolve(authJSON)
       })
     },
     // 获取用户信息
@@ -49,11 +50,13 @@ const user = {
       return new Promise((resolve, reject) => {
         getInfo()
           .then(response => {
-            const result = response.result
-            console.log('GetInfo: ', result)
-            if (result.role && result.role.permissions.length > 0) {
-              const role = result.role
-              role.permissions = result.role.permissions
+            console.log('GetInfo: ', response, userInfo)
+            userInfo.name = response.preferred_username
+            userInfo.username = v.titleCase(response.preferred_username)
+
+            if (userInfo.role && userInfo.role.permissions.length > 0) {
+              const role = userInfo.role
+
               role.permissions.map(per => {
                 if (per.actionEntitySet != null && per.actionEntitySet.length > 0) {
                   const action = per.actionEntitySet.map(action => {
@@ -62,36 +65,68 @@ const user = {
                   per.actionList = action
                 }
               })
+
               role.permissionList = role.permissions.map(permission => {
                 return permission.permissionId
               })
-              commit('SET_ROLES', result.role)
-              commit('SET_INFO', result)
+              commit('SET_ROLES', userInfo.role)
+              commit('SET_INFO', userInfo)
             } else {
               reject(new Error('getInfo: roles must be a non-null array !'))
             }
 
-            commit('SET_NAME', { name: result.name, welcome: welcome() })
-            commit('SET_AVATAR', result.avatar)
+            commit('SET_NAME', { name: userInfo.name, welcome: welcome() })
+            commit('SET_AVATAR', userInfo.avatar)
 
-            resolve(response)
+            resolve(userInfo)
           })
           .catch(error => {
             reject(error)
           })
       })
     },
+    Login({ commit }, payload) {
+      return new Promise((resolve, reject) => {
+        const authJSON = checkToken()
+        if (authJSON) {
+          commit('SET_STATE', true)
+          resolve(authJSON)
+        } else {
+          login(payload)
+            .then(response => {
+              console.log('login ', response)
+              localStorage.setItem('CLINICO_OMICS_AUTH', JSON.stringify(response))
+              commit('SET_STATE', true)
+              resolve(response)
+            })
+            .catch(error => {
+              reject(error)
+            })
+        }
+      })
+    },
     Logout({ dispatch }) {
       return new Promise((resolve, reject) => {
-        logout()
-          .then(response => {
-            console.log('Logout ', response)
-            localStorage.removeItem('CLINICO_OMICS_AUTH')
-            resolve(response)
-          })
-          .catch(error => {
-            reject(error)
-          })
+        for (var i in localStorage) {
+          if (i == new RegExp('kc-callback', 'gi')) {
+            console.log('Remove kc-callback: ', i, localStorage.getItem(i))
+            localStorage.removeItem(i)
+            break
+          }
+        }
+        if (localStorage.getItem('CLINICO_OMICS_AUTH')) {
+          logout()
+            .then(response => {
+              console.log('Logout ', response)
+              localStorage.removeItem('CLINICO_OMICS_AUTH')
+              resolve(response)
+            })
+            .catch(error => {
+              reject(error)
+            })
+        } else {
+          resolve()
+        }
       })
     }
   }

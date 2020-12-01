@@ -9,22 +9,23 @@ import { domTitle } from '@/utils/util'
 
 NProgress.configure({ showSpinner: true }) // NProgress Configuration
 
-const whiteList = ['/', '/webapps', '/welcome', '/login', '/logout', '/register'] // no redirect whitelist
+const whiteList = ['/', '/404', '/jupyter', '/metabase', '/api-mgmt', '/webapps', '/welcome', '/user/login', '/user/register', '/user/recover'] // no redirect whitelist
 
 router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
   to.meta && (typeof to.meta.title !== 'undefined' && setDocumentTitle(`${to.meta.title} - ${domTitle}`))
 
-  const tokenIsValid = store.dispatch('CheckToken')
-  console.log('Token', store.commit, store.getters)
+  store.dispatch('CheckToken')
+  const tokenIsValid = store.getters.isAuthenticated
+  console.log('Token', tokenIsValid)
   console.log('Debug', to, from)
 
   if (tokenIsValid) {
     if (store.getters.roles.length === 0) {
       store
         .dispatch('GetInfo')
-        .then(res => {
-          const roles = res.result && res.result.role
+        .then(userInfo => {
+          const roles = userInfo.role
           store.dispatch('GenerateRoutes', { roles }).then(() => {
             // 根据roles权限生成可访问的路由表
             // 动态添加可访问路由表
@@ -39,7 +40,8 @@ router.beforeEach((to, from, next) => {
             }
           })
         })
-        .catch(() => {
+        .catch(error => {
+          console.log('Login Error: ', error)
           // 待解决，部分api无法正常工作
           // notification.error({
           //   message: '错误',

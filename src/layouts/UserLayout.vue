@@ -17,8 +17,8 @@
 
       <div class="footer">
         <div class="links">
-          <a href="_self">Help</a>
-          <a href="_self">Privacy</a>
+          <a href="https://yuque.com/clinico-omics/help">Help</a>
+          <a href="https://yuque.com/clinico-omics/topics">Feedback</a>
           <a href="_self">Terms</a>
         </div>
         <div class="copyright">

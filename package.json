@@ -55,6 +55,7 @@
     "papaparse": "^5.3.0",
     "plotly.js-dist": "^1.54.6",
     "prismjs": "^1.20.0",
+    "querystring": "^0.2.0",
     "uuid": "^7.0.2",
     "viser-vue": "^2.4.6",
     "voca": "^1.4.0",

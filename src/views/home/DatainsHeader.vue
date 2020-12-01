@@ -42,7 +42,7 @@ export default {
       menu: [
         {
           title: 'Dashboard',
-          link: 'dashboard'
+          link: 'index'
         }
       ],
       loginWindowActive: false
@@ -76,7 +76,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('user', ['isAuthenticated']),
+    ...mapGetters(['isAuthenticated']),
     hasAccess: function() {
       return this.isAuthenticated || this.$route.meta.isPublic
     }

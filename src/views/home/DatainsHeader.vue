@@ -15,8 +15,8 @@
             </router-link>
           </a-col>
           <a-col>
-            <a v-if="oidcIsAuthenticated" href @click.prevent="signOut">Sign out</a>
-            <a v-else href @click.prevent="authenticateOidcPopup">Sign in</a>
+            <a v-if="isAuthenticated" href @click.prevent="signOut">Sign out</a>
+            <a v-else href @click.prevent="redirectLogin">Sign in</a>
           </a-col>
           <a-col>
             <app-store-icon class="action" theme="light"/>
@@ -44,20 +44,16 @@ export default {
           title: 'Dashboard',
           link: 'dashboard'
         }
-      ]
+      ],
+      loginWindowActive: false
     }
   },
   methods: {
     ...mapActions(['Logout']),
-    handleSelect: function() {},
-    ...mapActions('oidcStore', ['authenticateOidcPopup', 'removeOidcUser']),
-    userLoaded: function(e) {
-      console.log('I am listening to the user loaded event in vuex-oidc', e.detail)
+    redirectLogin() {
+      this.$router.push({ name: 'login' })
     },
-    oidcError: function(e) {
-      console.log('I am listening to the oidc error event in vuex-oidc', e.detail)
-    },
-    signOut: function() {
+    signOut() {
       this.$confirm({
         title: 'Notice',
         content: 'Really want to log out ?',
@@ -80,19 +76,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('oidcStore', ['oidcIsAuthenticated']),
+    ...mapGetters('user', ['isAuthenticated']),
     hasAccess: function() {
-      return this.oidcIsAuthenticated || this.$route.meta.isPublic
+      return this.isAuthenticated || this.$route.meta.isPublic
     }
   },
-  mounted() {
-    window.addEventListener('vuexoidc:userLoaded', this.userLoaded)
-    window.addEventListener('vuexoidc:oidcError', this.oidcError)
-  },
-  destroyed() {
-    window.removeEventListener('vuexoidc:userLoaded', this.userLoaded)
-    window.removeEventListener('vuexoidc:oidcError', this.oidcError)
-  },
+  mounted() {},
+  destroyed() {},
   components: {
     AppStoreIcon
   },

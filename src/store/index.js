@@ -15,7 +15,6 @@ import chart from './modules/chart'
 import materials from './modules/materials'
 import i18n from './modules/i18n'
 import permission from './modules/permission'
-import oidcStore from './modules/oidc'
 import getters from './getters'
 
 Vue.use(Vuex)
@@ -35,8 +34,7 @@ export default new Vuex.Store({
     chart,
     chartStudio,
     i18n,
-    permission,
-    oidcStore
+    permission
   },
   state: {
 

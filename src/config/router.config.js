@@ -1,12 +1,28 @@
 // eslint-disable-next-line
-import { BasicLayout, RouteView, BlankLayout, PageView } from '@/layouts'
-import OidcCallback from '@/views/OidcCallback.vue'
-import OidcPopupCallback from '@/views/OidcPopupCallback.vue'
+import { BasicLayout, RouteView, UserLayout } from '@/layouts'
 import { getDnaHost, getRnaHost, initComponentSettings } from '@/utils/util'
 
 const componentSettings = initComponentSettings()
 
 export const asyncRouterMap = [
+  {
+    path: '/user',
+    component: UserLayout,
+    redirect: '/user/login',
+    hidden: true,
+    children: [
+      {
+        path: 'login',
+        name: 'login',
+        component: () => import('@/views/home/Login')
+      },
+      {
+        path: 'register',
+        name: 'register',
+        component: () => import('@/views/home/Register')
+      }
+    ]
+  },
   {
     path: '/',
     name: 'index',
@@ -68,7 +84,10 @@ export const asyncRouterMap = [
             name: 'file-manager',
             hidden: false,
             component: () => import('@/views/filemanager/FileBrowser'),
-            props: route => ({ path: route.query.path, enabledContextMenu: componentSettings.disabledContextMenu !== 'true' }),
+            props: route => ({
+              path: route.query.path,
+              enabledContextMenu: componentSettings.disabledContextMenu !== 'true'
+            }),
             meta: { title: 'File Management', icon: 'codepen-circle', keepAlive: false }
           },
           {
@@ -144,7 +163,7 @@ export const asyncRouterMap = [
         name: 'embeded-frame',
         hidden: true,
         component: () => import('@/components/FullFrame'),
-        props: route => ({ src:  route.query.src }),
+        props: route => ({ src: route.query.src }),
         meta: { title: 'Embeded Frame', icon: 'dot-chart', keepAlive: false }
       },
 
@@ -387,18 +406,6 @@ export const constantRouterMap = [
     name: 'welcome',
     component: () => import('@/views/home/Home'),
     meta: { isPublic: true, keepAlive: false }
-  },
-
-  {
-    path: '/oidc-callback', // Needs to match redirectUri in you oidcSettings
-    name: 'oidcCallback',
-    component: OidcCallback
-  },
-
-  {
-    path: '/oidc-popup-callback', // Needs to match popupRedirectUri in you oidcSettings
-    name: 'oidcPopupCallback',
-    component: OidcPopupCallback
   },
 
   {

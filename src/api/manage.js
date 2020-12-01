@@ -1,26 +1,22 @@
 import { axios } from '@/utils/request'
-import { initTServiceHost, initDataSeqHost } from '@/utils/util'
+import { initTServiceHost, initDataSeqHost, initSeqFlowHost } from '@/utils/util'
 
+const seqFlowHost = initSeqFlowHost()
 const tserviceHost = initTServiceHost()
 const dataSeqHost = initDataSeqHost()
 
 const api = {
-  user: '/user',
-  role: '/role',
-  service: '/service',
-  permission: '/permission',
-  permissionNoPager: '/permission/no-pager',
-  orgTree: '/org/tree',
   // Datains
-  project: '/api/projects',
-  workflow: '/api/workflows',
-  log: '/api/logs',
-  notification: '/api/notifications',
-  apps: '/apps',
-  appStore: {
-    installedApps: '/api/installed-apps',
-    apps: '/api/apps',
-    manifest: '/api/app-manifest'
+  seqFlow: {
+    project: seqFlowHost + '/api/projects',
+    workflow: seqFlowHost + '/api/workflows',
+    log: seqFlowHost + '/api/logs',
+    notification: seqFlowHost + '/api/notifications',
+    appStore: {
+      installedApps: seqFlowHost + '/api/installed-apps',
+      apps: seqFlowHost + '/api/apps',
+      manifest: seqFlowHost + '/api/app-manifest'
+    }
   },
   // Tservice
   tservice: {
@@ -40,13 +36,13 @@ const api = {
 
 export default api
 
-function getServiceApi (service) {
+function getServiceApi(service) {
   return '/api/services/' + service + '/buckets'
   // return '/api/buckets'
 }
 
 // Materials Data
-export function getMaterialsSeqData () {
+export function getMaterialsSeqData() {
   return axios({
     url: 'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/materials_seqdata.json',
     method: 'get',
@@ -54,7 +50,7 @@ export function getMaterialsSeqData () {
   })
 }
 
-export function getMaterialsMetadata () {
+export function getMaterialsMetadata() {
   return axios({
     url: 'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/materials_metadata.json',
     method: 'get',
@@ -62,7 +58,7 @@ export function getMaterialsMetadata () {
   })
 }
 
-export function getMaterialsDIN () {
+export function getMaterialsDIN() {
   return axios({
     url: 'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/materials_din.json',
     method: 'get',
@@ -70,7 +66,7 @@ export function getMaterialsDIN () {
   })
 }
 
-export function getMaterialsRIN () {
+export function getMaterialsRIN() {
   return axios({
     url: 'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/materials_rin.json',
     method: 'get',
@@ -78,7 +74,7 @@ export function getMaterialsRIN () {
   })
 }
 
-export function getMaterialsLicense () {
+export function getMaterialsLicense() {
   return axios({
     url: 'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/materials_license.md',
     method: 'get',
@@ -86,7 +82,7 @@ export function getMaterialsLicense () {
   })
 }
 
-export function getMaterialsTemperature () {
+export function getMaterialsTemperature() {
   return axios({
     url: 'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/materials_temperature.json',
     method: 'get',
@@ -95,21 +91,21 @@ export function getMaterialsTemperature () {
 }
 
 // Omics Data Commons - Metadata
-export function listCollections () {
+export function listCollections() {
   return axios({
     url: api.dataCommons.listCollections,
     method: 'get'
   })
 }
 
-export function getDataSchema (collection) {
+export function getDataSchema(collection) {
   return axios({
     url: api.dataCommons.schema + '/' + collection,
     method: 'get'
   })
 }
 
-export function getCollections (collection, parameter, payload) {
+export function getCollections(collection, parameter, payload) {
   return axios({
     url: api.dataCommons.collections + '/' + collection,
     method: 'post',
@@ -118,7 +114,7 @@ export function getCollections (collection, parameter, payload) {
   })
 }
 
-export function countCollections (collection, parameter, payload) {
+export function countCollections(collection, parameter, payload) {
   return axios({
     url: api.dataCommons.groups + '/' + collection,
     method: 'post',
@@ -127,7 +123,7 @@ export function countCollections (collection, parameter, payload) {
   })
 }
 
-export function getServices () {
+export function getServices() {
   return axios({
     url: '/api/fs-services',
     method: 'get'
@@ -135,7 +131,7 @@ export function getServices () {
 }
 
 // Minio/OSS/S3: Bucket + Object
-export function getBuckets (service) {
+export function getBuckets(service) {
   return axios({
     url: getServiceApi(service),
     method: 'get',
@@ -143,7 +139,7 @@ export function getBuckets (service) {
   })
 }
 
-export function addBucket (service, data) {
+export function addBucket(service, data) {
   // data - {"name": "bucket_name"}
   return axios({
     url: getServiceApi(service),
@@ -152,7 +148,7 @@ export function addBucket (service, data) {
   })
 }
 
-export function getObjects (service, bucketName, parameter) {
+export function getObjects(service, bucketName, parameter) {
   // parameter - {"page": 1, "per_page": 10}
   return axios({
     url: getServiceApi(service) + '/' + bucketName,
@@ -161,7 +157,7 @@ export function getObjects (service, bucketName, parameter) {
   })
 }
 
-export function makeDirectory (service, bucketName, parameter) {
+export function makeDirectory(service, bucketName, parameter) {
   // parameter - {"key": "test"}
   return axios({
     url: getServiceApi(service) + '/' + bucketName,
@@ -170,14 +166,14 @@ export function makeDirectory (service, bucketName, parameter) {
   })
 }
 
-export function deleteBucket (service, bucketName) {
+export function deleteBucket(service, bucketName) {
   return axios({
     url: getServiceApi(service) + '/' + bucketName,
     method: 'delete'
   })
 }
 
-export function makeDownloadUrl (service, bucketName, parameter) {
+export function makeDownloadUrl(service, bucketName, parameter) {
   // parameter - {"key": "test"}
   return axios({
     url: getServiceApi(service) + '/' + bucketName + '/object',
@@ -186,7 +182,7 @@ export function makeDownloadUrl (service, bucketName, parameter) {
   })
 }
 
-export function makeUploadUrl (service, bucketName, parameter) {
+export function makeUploadUrl(service, bucketName, parameter) {
   // parameter - {"key": "test"}
   return axios({
     url: getServiceApi(service) + '/' + bucketName + '/object',
@@ -195,7 +191,7 @@ export function makeUploadUrl (service, bucketName, parameter) {
   })
 }
 
-export function deleteObject (service, bucketName, parameter) {
+export function deleteObject(service, bucketName, parameter) {
   // parameter - {"key": "test"}
   return axios({
     url: getServiceApi(service) + '/' + bucketName + '/object',
@@ -204,7 +200,7 @@ export function deleteObject (service, bucketName, parameter) {
   })
 }
 
-export function getObjectMeta (service, bucketName, parameter) {
+export function getObjectMeta(service, bucketName, parameter) {
   // parameter - {"key": "test"}
   return axios({
     url: getServiceApi(service) + '/' + bucketName + '/object-meta',
@@ -214,7 +210,7 @@ export function getObjectMeta (service, bucketName, parameter) {
 }
 
 // App Store
-export function getWebapps () {
+export function getWebapps() {
   return axios({
     url: 'http://nordata-cdn.oss-cn-shanghai.aliyuncs.com/choppy/webapps.json',
     method: 'get',
@@ -222,23 +218,23 @@ export function getWebapps () {
   })
 }
 
-export function getAppList () {
+export function getAppList() {
   return axios({
-    url: api.appStore.apps,
+    url: api.seqFlow.appStore.apps,
     method: 'get',
     params: {}
   })
 }
 
-export function getAppManifest () {
+export function getAppManifest() {
   return axios({
-    url: api.appStore.manifest,
+    url: api.seqFlow.appStore.manifest,
     method: 'get',
     params: {}
   })
 }
 
-export function getToolManifest () {
+export function getToolManifest() {
   return axios({
     url: api.tservice.manifest,
     method: 'get',
@@ -246,7 +242,7 @@ export function getToolManifest () {
   })
 }
 
-export function getToolSchema (tool) {
+export function getToolSchema(tool) {
   return axios({
     url: api.tservice.root + '/api/' + tool,
     method: 'get',
@@ -254,7 +250,7 @@ export function getToolSchema (tool) {
   })
 }
 
-export function getInstalledAppList () {
+export function getInstalledAppList() {
   return axios({
     url: api.appStore.installedApps,
     method: 'get',
@@ -262,7 +258,7 @@ export function getInstalledAppList () {
   })
 }
 
-export function getAppSchema (appName) {
+export function getAppSchema(appName) {
   return axios({
     url: api.apps + '/' + appName + '/schema.json',
     method: 'get',
@@ -270,7 +266,7 @@ export function getAppSchema (appName) {
   })
 }
 
-export function getHelpMsg (appName) {
+export function getHelpMsg(appName) {
   return axios({
     url: api.apps + '/' + appName + '/README.md',
     method: 'get',
@@ -282,7 +278,7 @@ export function getHelpMsg (appName) {
   })
 }
 
-export function getWorkflowList (parameter) {
+export function getWorkflowList(parameter) {
   return axios({
     url: api.workflow,
     method: 'get',
@@ -290,7 +286,7 @@ export function getWorkflowList (parameter) {
   })
 }
 
-export function updateWorkflow (workflowId, payload) {
+export function updateWorkflow(workflowId, payload) {
   return axios({
     url: api.workflow + '/' + workflowId,
     method: 'put',
@@ -298,7 +294,7 @@ export function updateWorkflow (workflowId, payload) {
   })
 }
 
-export function getWorkflow (workflowId) {
+export function getWorkflow(workflowId) {
   return axios({
     url: api.workflow + '/' + workflowId,
     method: 'get',
@@ -307,14 +303,14 @@ export function getWorkflow (workflowId) {
 }
 
 // TService
-export function getReport (reportId) {
+export function getReport(reportId) {
   return axios({
     url: api.tservice.report + '/' + reportId,
     method: 'get'
   })
 }
 
-export function submitReport (data) {
+export function submitReport(data) {
   return axios({
     url: api.tservice.report,
     method: 'post',
@@ -322,7 +318,7 @@ export function submitReport (data) {
   })
 }
 
-export function getReportList (parameter) {
+export function getReportList(parameter) {
   return axios({
     url: api.tservice.report,
     method: 'get',
@@ -330,7 +326,7 @@ export function getReportList (parameter) {
   })
 }
 
-export function postChart (chartName, data) {
+export function postChart(chartName, data) {
   // data: {} | { data: { dataType: '', dataFile: '' }, attributes: { xAxis: '' ... } }
   return axios({
     url: api.tservice.chart + '/' + chartName,
@@ -339,7 +335,7 @@ export function postChart (chartName, data) {
   })
 }
 
-export function getChartSchema (chartName, parameter) {
+export function getChartSchema(chartName, parameter) {
   // parameter: filepath
   return axios({
     url: api.tservice.chart + '/' + chartName + '/schema',
@@ -348,47 +344,47 @@ export function getChartSchema (chartName, parameter) {
   })
 }
 
-export function submitProject (data) {
+export function submitProject(data) {
   return axios({
-    url: api.project,
+    url: api.seqFlow.project,
     method: 'post',
     data: data
   })
 }
 
-export function getProjectList (parameter) {
+export function getProjectList(parameter) {
   return axios({
-    url: api.project,
+    url: api.seqFlow.project,
     method: 'get',
     params: parameter
   })
 }
 
-export function getProject (projectId) {
+export function getProject(projectId) {
   return axios({
-    url: api.project + '/' + projectId,
+    url: api.seqFlow.project + '/' + projectId,
     method: 'get'
   })
 }
 
-export function getProjectStat (projectId) {
+export function getProjectStat(projectId) {
   return axios({
-    url: api.project + '/' + projectId + '/stats',
+    url: api.seqFlow.project + '/' + projectId + '/stats',
     method: 'get'
   })
 }
 
-export function getLogList (workflowId, parameter) {
+export function getLogList(workflowId, parameter) {
   return axios({
-    url: api.workflow + '/' + workflowId + '/logs',
+    url: api.seqFlow.workflow + '/' + workflowId + '/logs',
     method: 'get',
     params: parameter
   })
 }
 
-export function getNotificationList (parameter) {
+export function getNotificationList(parameter) {
   return axios({
-    url: api.notification,
+    url: api.seqFlow.notification,
     method: 'get',
     params: parameter
   })
@@ -396,59 +392,9 @@ export function getNotificationList (parameter) {
 
 // id == 0 add     post
 // id != 0 update  put
-export function saveReport (parameter) {
+export function saveReport(parameter) {
   return axios({
     url: api.tservice.report,
-    method: parameter.id === 0 ? 'post' : 'put',
-    data: parameter
-  })
-}
-
-export function getUserList (parameter) {
-  return axios({
-    url: api.user,
-    method: 'get',
-    params: parameter
-  })
-}
-
-export function getRoleList (parameter) {
-  return axios({
-    url: api.role,
-    method: 'get',
-    params: parameter
-  })
-}
-
-export function getServiceList (parameter) {
-  return axios({
-    url: api.service,
-    method: 'get',
-    params: parameter
-  })
-}
-
-export function getPermissions (parameter) {
-  return axios({
-    url: api.permissionNoPager,
-    method: 'get',
-    params: parameter
-  })
-}
-
-export function getOrgTree (parameter) {
-  return axios({
-    url: api.orgTree,
-    method: 'get',
-    params: parameter
-  })
-}
-
-// id == 0 add     post
-// id != 0 update  put
-export function saveService (parameter) {
-  return axios({
-    url: api.service,
     method: parameter.id === 0 ? 'post' : 'put',
     data: parameter
   })

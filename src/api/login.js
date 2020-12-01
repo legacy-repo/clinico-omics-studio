@@ -6,31 +6,24 @@ import { axios } from '@/utils/request'
  * parameter: {
  *     username: '',
  *     password: '',
- *     remember_me: true,
- *     captcha: '12345'
+ *     client_id: '',
+ *     client_secret: '',
+ *     scope: 'password'
  * }
  * @param parameter
  * @returns {*}
  */
-export function login (parameter) {
+export function login (payload) {
   return axios({
-    url: '/auth/login',
+    url: api.Login,
     method: 'post',
-    data: parameter
-  })
-}
-
-export function getSmsCaptcha (parameter) {
-  return axios({
-    url: api.SendSms,
-    method: 'post',
-    data: parameter
+    data: payload
   })
 }
 
 export function getInfo () {
   return axios({
-    url: 'https://nordata-cdn.oss-cn-shanghai.aliyuncs.com/clinico-omics/userinfo.json',
+    url: api.UserInfo,
     method: 'get',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
@@ -40,22 +33,10 @@ export function getInfo () {
 
 export function logout () {
   return axios({
-    url: '/auth/logout',
-    method: 'post',
+    url: api.Logout,
+    method: 'get',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
     }
-  })
-}
-
-/**
- * get user 2step code open?
- * @param parameter {*}
- */
-export function get2step (parameter) {
-  return axios({
-    url: api.twoStepCode,
-    method: 'post',
-    data: parameter
   })
 }

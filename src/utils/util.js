@@ -11,7 +11,7 @@ const defaultSettings = {
   websiteDesc: 'The QUALITY Platform for Clinico OMICS & BioMedGPS'
 }
 
-export function getDnaHost () {
+export function getDnaHost() {
   const hostname = window.location.hostname
   if (hostname == 'pgx.fudan.edu.cn') {
     return 'http://pgx.fudan.edu.cn/dnaseq/'
@@ -20,7 +20,7 @@ export function getDnaHost () {
   }
 }
 
-export function getRnaHost () {
+export function getRnaHost() {
   const hostname = window.location.hostname
   if (hostname == 'pgx.fudan.edu.cn') {
     return 'http://pgx.fudan.edu.cn/rnaseq/'
@@ -30,7 +30,7 @@ export function getRnaHost () {
 }
 
 // SeqFlow
-export function initSeqFlowHost () {
+export function initSeqFlowHost() {
   const seqFlowHost = localStorage.getItem('seqFlowHost')
   console.log(`SEQ_FLOW_HOST: ${seqFlowHost}`)
 
@@ -43,14 +43,14 @@ export function initSeqFlowHost () {
 }
 
 // BASE_API
-export function initApiService () {
-  const apiService = initSeqFlowHost()
+export function initBaseURL() {
+  const apiService = 'http://10.157.72.56'
   console.log(`BASE_API_URL: ${apiService}`)
   return apiService
 }
 
 // TService
-export function initTServiceHost () {
+export function initTServiceHost() {
   const tServiceHost = localStorage.getItem('tServiceHost')
   console.log(`TSERVICE_HOST: ${tServiceHost}`)
 
@@ -63,7 +63,7 @@ export function initTServiceHost () {
 }
 
 // DataSeq
-export function initDataSeqHost () {
+export function initDataSeqHost() {
   const dataSeqHost = localStorage.getItem('dataSeqHost')
   console.log(`DATA_SEQ_HOST: ${dataSeqHost}`)
 
@@ -76,7 +76,7 @@ export function initDataSeqHost () {
 }
 
 // Component Settings
-export function initComponentSettings () {
+export function initComponentSettings() {
   let componentSettings = JSON.parse(localStorage.getItem('componentSettings'))
   console.log(`Component Settings(initComponentSettings): ${componentSettings}`)
 
@@ -97,29 +97,37 @@ export const websiteLogo = defaultSettings.websiteLogo
 
 export const websiteDesc = defaultSettings.websiteDesc
 
-export function timeFix () {
+export function timeFix() {
   const time = new Date()
   const hour = time.getHours()
-  return hour < 9 ? 'Good Morning' : hour <= 11 ? 'Good Morning' : hour <= 13 ? 'Good Afternoon' : hour < 20 ? 'Good Afternoon' : 'Good Evening'
+  return hour < 9
+    ? 'Good Morning'
+    : hour <= 11
+    ? 'Good Morning'
+    : hour <= 13
+    ? 'Good Afternoon'
+    : hour < 20
+    ? 'Good Afternoon'
+    : 'Good Evening'
 }
 
-export function saveSeqFlowHost (seqFlowHost) {
+export function saveSeqFlowHost(seqFlowHost) {
   localStorage.setItem('seqFlowHost', seqFlowHost)
 }
 
-export function saveTServiceHost (tServiceHost) {
+export function saveTServiceHost(tServiceHost) {
   localStorage.setItem('tServiceHost', tServiceHost)
 }
 
-export function saveDataSeqHost (dataSeqHost) {
+export function saveDataSeqHost(dataSeqHost) {
   localStorage.setItem('dataSeqHost', dataSeqHost)
 }
 
-export function saveComponentSettings (componentSettings) {
+export function saveComponentSettings(componentSettings) {
   localStorage.setItem('componentSettings', JSON.stringify(componentSettings))
 }
 
-export function welcome () {
+export function welcome() {
   const arr = []
   const index = Math.floor(Math.random() * arr.length)
   return arr[index]
@@ -128,18 +136,18 @@ export function welcome () {
 /**
  * 触发 window.resize
  */
-export function triggerWindowResizeEvent () {
+export function triggerWindowResizeEvent() {
   const event = document.createEvent('HTMLEvents')
   event.initEvent('resize', true, true)
   event.eventType = 'message'
   window.dispatchEvent(event)
 }
 
-export function handleScrollHeader (callback) {
+export function handleScrollHeader(callback) {
   let timer = 0
 
   let beforeScrollTop = window.pageYOffset
-  callback = callback || function () {}
+  callback = callback || function() {}
   window.addEventListener(
     'scroll',
     event => {
@@ -165,7 +173,7 @@ export function handleScrollHeader (callback) {
  * @param id parent element id or class
  * @param timeout
  */
-export function removeLoadingAnimate (id = '', timeout = 1500) {
+export function removeLoadingAnimate(id = '', timeout = 1500) {
   if (id === '') {
     return
   }
@@ -174,7 +182,7 @@ export function removeLoadingAnimate (id = '', timeout = 1500) {
   }, timeout)
 }
 
-export const parseJwt = (token) => {
+export const parseJwt = token => {
   try {
     var base64Url = token.split('.')[1]
     var base64 = base64Url.replace('-', '+').replace('_', '/')
@@ -184,7 +192,7 @@ export const parseJwt = (token) => {
   }
 }
 
-export const tokenExp = (token) => {
+export const tokenExp = token => {
   if (token) {
     const parsed = parseJwt(token)
     return parsed.exp ? parsed.exp * 1000 : null
@@ -192,10 +200,22 @@ export const tokenExp = (token) => {
   return null
 }
 
-export const tokenIsExpired = (token) => {
+export const tokenIsExpired = token => {
   const tokenExpiryTime = tokenExp(token)
   if (tokenExpiryTime) {
     return tokenExpiryTime < new Date().getTime()
   }
   return false
+}
+
+export const checkToken = () => {
+  // Token可能过期
+  const user = JSON.parse(localStorage.getItem('CLINICO_OMICS_AUTH'))
+  var tokenIsValid = false
+  if (user) {
+    tokenIsValid = !tokenIsExpired(user.access_token)
+    console.log('user', user, tokenIsValid, tokenExp(user.access_token))
+  }
+
+  return tokenIsValid
 }

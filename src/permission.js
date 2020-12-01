@@ -5,31 +5,17 @@ import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import notification from 'ant-design-vue/es/notification'
 import { setDocumentTitle } from '@/utils/domUtil'
-import { tokenIsExpired, tokenExp, domTitle } from '@/utils/util'
-import { OIDC_AUTH } from '@/store/mutation-types'
+import { domTitle } from '@/utils/util'
 
 NProgress.configure({ showSpinner: true }) // NProgress Configuration
 
-const whiteList = ['/', '/webapps', '/welcome', '/oidc-popup-callback'] // no redirect whitelist
-
-function CheckToken (commit) {
-  // Token可能过期
-  const user = JSON.parse(localStorage.getItem(OIDC_AUTH))
-  var tokenIsValid = null
-  if (user) {
-    commit('oidcStore/setOidcAuth', user)
-    tokenIsValid = !tokenIsExpired(user.access_token)
-    console.log('user', user, tokenIsValid, tokenExp(user.access_token))
-  }
-  // return tokenIsValid
-  return true
-}
+const whiteList = ['/', '/webapps', '/welcome', '/login', '/logout', '/register'] // no redirect whitelist
 
 router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
   to.meta && (typeof to.meta.title !== 'undefined' && setDocumentTitle(`${to.meta.title} - ${domTitle}`))
 
-  const tokenIsValid = CheckToken(store.commit)
+  const tokenIsValid = store.dispatch('CheckToken')
   console.log('Token', store.commit, store.getters)
   console.log('Debug', to, from)
 

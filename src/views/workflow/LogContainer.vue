@@ -34,7 +34,7 @@
 <script>
 import { getLogList } from '@/api/manage'
 import sortBy from 'lodash.sortby'
-import { initSeqFlowHost } from '@/utils/util'
+import { initSeqFlowHost } from '@/config/defaultSettings'
 
 export default {
   name: 'LogContainer',

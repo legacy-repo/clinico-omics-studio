@@ -70,7 +70,7 @@ import { PageView } from '@/layouts'
 import VueMarkdown from 'vue-markdown'
 import Prism from 'prismjs'
 import moment from 'moment'
-import { initTServiceHost } from '@/utils/util'
+import { initTServiceHost } from '@/config/defaultSettings'
 
 const columns = [
   {

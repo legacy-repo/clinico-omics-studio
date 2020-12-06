@@ -9,8 +9,8 @@ export function actionToObject(json) {
 
 const userInfo = {
   id: '4291d7da9005377ec9aec4a71ea837f',
-  name: 'PGx',
-  username: 'admin',
+  name: 'Anonymous',
+  username: 'anonymous',
   description: '[Past - A Cardiothoracic Surgeon] - [Present - A Software Developer] - [Future - A Data Scientist]',
   title: 'Software Developer',
   organization: 'Fudan University',
@@ -27,7 +27,7 @@ const userInfo = {
   deleted: 0,
   roleId: 'admin',
   role: {},
-  tags: ['很有想法的', '专注设计', '辣~', '大长腿', '川妹子', '海纳百川']
+  tags: ['很有想法的', '专注设计', '海纳百川']
 }
 
 const permissionRole = {

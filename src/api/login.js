@@ -1,5 +1,7 @@
 import api from './index'
 import { axios } from '@/utils/request'
+import { config } from '@/config/defaultSettings'
+import { userInfo } from '@/utils/permissions'
 
 /**
  * login func
@@ -13,7 +15,7 @@ import { axios } from '@/utils/request'
  * @param parameter
  * @returns {*}
  */
-export function login (payload) {
+export function login(payload) {
   return axios({
     url: api.Login,
     method: 'post',
@@ -21,17 +23,23 @@ export function login (payload) {
   })
 }
 
-export function getInfo () {
-  return axios({
-    url: api.UserInfo,
-    method: 'get',
-    headers: {
-      'Content-Type': 'application/json;charset=UTF-8'
-    }
-  })
+export function getInfo() {
+  if (config.noPermission) {
+    return new Promise((resolve) => {
+      resolve(userInfo)
+    })
+  } else {
+    return axios({
+      url: api.UserInfo,
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8'
+      }
+    })
+  }
 }
 
-export function logout () {
+export function logout() {
   return axios({
     url: api.Logout,
     method: 'get',

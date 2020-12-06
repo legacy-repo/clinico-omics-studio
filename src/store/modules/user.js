@@ -1,5 +1,6 @@
 import { getInfo, login, logout } from '@/api/login'
-import { checkToken, welcome } from '@/utils/util'
+import { welcome } from '@/config/defaultSettings'
+import { checkToken } from '@/utils/util'
 import { userInfo } from '@/utils/permissions'
 import v from 'voca'
 
@@ -51,8 +52,11 @@ const user = {
         getInfo()
           .then(response => {
             console.log('GetInfo: ', response, userInfo)
-            userInfo.name = response.preferred_username
-            userInfo.username = v.titleCase(response.preferred_username)
+
+            if (response.preferred_username) {
+              userInfo.name = response.preferred_username
+              userInfo.username = v.titleCase(response.preferred_username)
+            }
 
             if (userInfo.role && userInfo.role.permissions.length > 0) {
               const role = userInfo.role

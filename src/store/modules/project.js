@@ -99,8 +99,6 @@ const project = {
     GetProjectList ({ commit }, parameter) {
       return new Promise((resolve, reject) => {
         getProjectList(parameter).then(response => {
-          console.log('GetProjectList: ', parameter, response)
-
           const data = {
             perPage: response['per_page'],
             page: response['page'],
@@ -108,6 +106,8 @@ const project = {
             data: formatRecords(response.data)
           }
           commit('SET_PROJECT_LIST', data)
+
+          console.log('GetProjectList: ', parameter, response, data)
 
           resolve(data)
         }).catch(error => {

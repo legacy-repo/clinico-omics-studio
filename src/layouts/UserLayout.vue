@@ -32,7 +32,7 @@
 <script>
 import RouteView from './RouteView'
 import { mixinDevice } from '@/utils/mixin'
-import { websiteDesc, websiteLogo, websiteName } from '@/utils/util'
+import { websiteDesc, websiteLogo, websiteName } from '@/config/defaultSettings'
 
 export default {
   name: 'UserLayout',

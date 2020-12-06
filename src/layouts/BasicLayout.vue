@@ -64,7 +64,7 @@
 import { triggerWindowResizeEvent } from '@/utils/util'
 import { mapState, mapActions } from 'vuex'
 import { mixin, mixinDevice } from '@/utils/mixin'
-import config from '@/config/defaultSettings'
+import { config } from '@/config/defaultSettings'
 
 import RouteView from './RouteView'
 import MultiTab from '@/components/MultiTab'

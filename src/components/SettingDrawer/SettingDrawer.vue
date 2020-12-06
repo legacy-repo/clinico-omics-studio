@@ -179,7 +179,7 @@
 <script>
 import { DetailList } from '@/components'
 import SettingItem from './SettingItem'
-import config from '@/config/defaultSettings'
+import { config } from '@/config/defaultSettings'
 import { updateTheme, updateColorWeak, colorList } from './settingConfig'
 import { mixin, mixinDevice } from '@/utils/mixin'
 

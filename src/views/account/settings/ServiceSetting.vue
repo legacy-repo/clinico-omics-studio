@@ -83,7 +83,7 @@ import {
   saveDataSeqHost,
   initComponentSettings,
   saveComponentSettings
-} from '@/utils/util'
+} from '@/config/defaultSettings'
 
 export default {
   components: {},

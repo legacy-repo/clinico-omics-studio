@@ -32,6 +32,7 @@
           </a-collapse>
         </a-tab-pane>
         <a-tab-pane key="2" tab="Samples" disabled></a-tab-pane>
+        <a-tab-pane key="3" tab="Patients" disabled></a-tab-pane>
       </a-tabs>
     </a-col>
     <a-col class="right" :xl="18" :lg="18" :md="18" :sm="24" :xs="24">
@@ -322,9 +323,12 @@ export default {
         return clonedNewData
       }
     },
+    formatField(fieldName) {
+      return fieldName.replace('.', '_')
+    },
     fetchCounts(checkedObj) {
       const collections = map(this.filterKeys, o => {
-        return this.countCollections({ group: o })
+        return this.countCollections({ group: this.formatField(o) })
       })
 
       Promise.all(collections)

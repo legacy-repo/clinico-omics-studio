@@ -1,5 +1,4 @@
 import { getWorkflowList, getWorkflow, updateWorkflow } from '@/api/manage'
-import { reject } from 'core-js/fn/promise'
 import moment from 'moment'
 
 const formatStatus = function (status) {

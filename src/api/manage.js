@@ -1,5 +1,5 @@
 import { axios } from '@/utils/request'
-import { initTServiceHost, initDataSeqHost, initSeqFlowHost } from '@/utils/util'
+import { initTServiceHost, initDataSeqHost, initSeqFlowHost } from '@/config/defaultSettings'
 
 const seqFlowHost = initSeqFlowHost()
 const tserviceHost = initTServiceHost()
@@ -36,9 +36,15 @@ const api = {
 
 export default api
 
-function getServiceApi(service) {
-  return '/api/services/' + service + '/buckets'
-  // return '/api/buckets'
+export function getServices() {
+  return axios({
+    url: seqFlowHost + '/api/fs-services',
+    method: 'get'
+  })
+}
+
+export function getServiceApi(service) {
+  return seqFlowHost + '/api/services/' + service + '/buckets'
 }
 
 // Materials Data
@@ -120,13 +126,6 @@ export function countCollections(collection, parameter, payload) {
     method: 'post',
     params: parameter,
     data: payload
-  })
-}
-
-export function getServices() {
-  return axios({
-    url: '/api/fs-services',
-    method: 'get'
   })
 }
 
@@ -252,7 +251,7 @@ export function getToolSchema(tool) {
 
 export function getInstalledAppList() {
   return axios({
-    url: api.appStore.installedApps,
+    url: api.seqFlow.appStore.installedApps,
     method: 'get',
     params: {}
   })
@@ -260,7 +259,7 @@ export function getInstalledAppList() {
 
 export function getAppSchema(appName) {
   return axios({
-    url: api.apps + '/' + appName + '/schema.json',
+    url: api.seqFlow.appStore.apps + '/' + appName + '/schema.json',
     method: 'get',
     params: {}
   })
@@ -268,7 +267,7 @@ export function getAppSchema(appName) {
 
 export function getHelpMsg(appName) {
   return axios({
-    url: api.apps + '/' + appName + '/README.md',
+    url: api.seqFlow.appStore.apps + '/' + appName + '/README.md',
     method: 'get',
     params: {},
     responseType: 'text',
@@ -280,7 +279,7 @@ export function getHelpMsg(appName) {
 
 export function getWorkflowList(parameter) {
   return axios({
-    url: api.workflow,
+    url: api.seqFlow.workflow,
     method: 'get',
     params: parameter
   })
@@ -288,7 +287,7 @@ export function getWorkflowList(parameter) {
 
 export function updateWorkflow(workflowId, payload) {
   return axios({
-    url: api.workflow + '/' + workflowId,
+    url: api.seqFlow.workflow + '/' + workflowId,
     method: 'put',
     data: payload
   })
@@ -296,7 +295,7 @@ export function updateWorkflow(workflowId, payload) {
 
 export function getWorkflow(workflowId) {
   return axios({
-    url: api.workflow + '/' + workflowId,
+    url: api.seqFlow.workflow + '/' + workflowId,
     method: 'get',
     params: {}
   })

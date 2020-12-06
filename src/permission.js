@@ -5,18 +5,25 @@ import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import notification from 'ant-design-vue/es/notification'
 import { setDocumentTitle } from '@/utils/domUtil'
-import { domTitle } from '@/utils/util'
+import { domTitle, config } from '@/config/defaultSettings'
 
 NProgress.configure({ showSpinner: true }) // NProgress Configuration
 
-const whiteList = ['/', '/404', '/jupyter', '/metabase', '/api-mgmt', '/webapps', '/welcome', '/user/login', '/user/register', '/user/recover'] // no redirect whitelist
+const whiteList = ['/404', '/jupyter', '/metabase', '/api-mgmt', '/webapps', '/welcome', '/user/login', '/user/register', '/user/recover'] // no redirect whitelist
 
 router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
   to.meta && (typeof to.meta.title !== 'undefined' && setDocumentTitle(`${to.meta.title} - ${domTitle}`))
 
-  store.dispatch('CheckToken')
-  const tokenIsValid = store.getters.isAuthenticated
+  // Check token whether is valid and set isAuthenticated variable.
+  let tokenIsValid = false
+  if (config.noPermission) {
+    tokenIsValid = true
+  } else {
+    store.dispatch('CheckToken')
+    tokenIsValid = store.getters.isAuthenticated
+  }
+
   console.log('Token', tokenIsValid)
   console.log('Debug', to, from)
 

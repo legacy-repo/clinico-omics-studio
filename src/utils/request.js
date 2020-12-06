@@ -2,7 +2,7 @@ import axios from 'axios'
 import store from '@/store'
 import notification from 'ant-design-vue/es/notification'
 import { VueAxios } from './axios'
-import { initBaseURL } from './util'
+import { initBaseURL } from '@/config/defaultSettings'
 
 // 创建 axios 实例
 const service = axios.create({

@@ -73,7 +73,7 @@
 <script>
 import qs from 'querystring'
 import { mapActions, mapGetters } from 'vuex'
-import { timeFix, initBaseURL } from '@/utils/util'
+import { timeFix, initBaseURL } from '@/config/defaultSettings'
 import api from '@/api/index'
 
 export default {
@@ -126,8 +126,8 @@ export default {
         if (!err) {
           console.log('Login Form: ', values)
           const loginParams = {
-            client_id: 'test-jwt',
-            client_secret: 'a2519448-d3b3-43c5-a6a7-4863847542f4',
+            client_id: 'clinico-omics',
+            client_secret: '97a7d2e8-94f4-48a7-aa90-c8ed206b89df',
             scope: 'openid',
             grant_type: 'password',
             ...values

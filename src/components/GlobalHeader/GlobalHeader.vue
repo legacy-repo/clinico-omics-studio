@@ -30,7 +30,7 @@ import UserMenu from '../tools/UserMenu'
 import SMenu from '../Menu/'
 import Logo from '../tools/Logo'
 import { mixin } from '@/utils/mixin'
-import { websiteName, websiteLogo } from '@/utils/util'
+import { websiteName, websiteLogo } from '@/config/defaultSettings'
 
 export default {
   name: 'GlobalHeader',

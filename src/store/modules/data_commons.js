@@ -9,7 +9,7 @@ const formatCounts = function (data) {
   const newRecords = []
   for (let item of data) {
     newRecords.push({
-      name: item['_id'] ? item['_id'] : 'Others',
+      name: item['_id'] ? item['_id'] : 'Unknown',
       count: item['total'],
       key: item['_id']
     })
@@ -35,13 +35,13 @@ const formatRecords = function (data) {
 
   for (const record of data) {
     newRecords.push({
-      key: record.data_file_submitter_id,
+      key: record.file_name,
       access: 'Open',
-      fileName: record.data_file_submitter_id,
-      library: record.dna_library_library_preparation,
-      project: 'Quartet',
-      dataCategory: record.data_file_data_category,
-      dataFormat: record.data_file_data_format,
+      fileName: record.file_name,
+      library: record.library_name,
+      project: record.project_id,
+      dataCategory: record.data_category,
+      dataFormat: record.data_format,
       fileSize: null,
       annotations: ''
     })
@@ -153,9 +153,15 @@ const deletePayload = function (payload, field, value, type) {
   }
 }
 
+const formatField = function(fieldName) {
+  console.log('formatField: ', fieldName, fieldName.replace('.', '_'))
+  return fieldName.replace('.', '_')
+}
+
 const data = {
   state: {
-    defaultCollection: 'quartet',
+    // defaultCollection: 'quartet',
+    defaultCollection: 'fuscctnbc',
     queryMap: {
       parameter: {
         page: 1,
@@ -180,10 +186,10 @@ const data = {
       }
     },
     SET_PAYLOAD: (state, {field, value, type}) => {
-      state.queryMap.payload = makePayload(state.queryMap.payload, field, value, type)
+      state.queryMap.payload = makePayload(state.queryMap.payload, formatField(field), value, type)
     },
     DELETE_PAYLOAD: (state, {field, value, type}) => {
-      state.queryMap.payload = deletePayload(state.queryMap.payload, field, value, type)
+      state.queryMap.payload = deletePayload(state.queryMap.payload, formatField(field), value, type)
     }
   },
   actions: {

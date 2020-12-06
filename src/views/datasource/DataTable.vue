@@ -105,7 +105,7 @@ const columns = [
     dataIndex: 'fileSize',
     key: 'fileSize',
     align: 'center',
-    visible: true,
+    visible: false,
     width: 150
   },
   {

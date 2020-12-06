@@ -26,7 +26,7 @@
         <a-select
           show-search
           :value="currentPath"
-          @change="onSearch"
+          @search="onSearch"
           style="width: calc(100% - 276px);"
         >
           <a-select-option v-for="address in addressList" :key="address">{{ address }}</a-select-option>
@@ -38,7 +38,7 @@
           <a-icon type="star" :theme="theme" />
         </a-button>
         <a-input-search
-          placeholder="Enter a file name prefix"
+          placeholder="Enter a link or a prefix of file name"
           allowClear
           style="width: 230px;"
           @search="onSearch"
@@ -692,7 +692,11 @@ export default {
           this.buckets = response.data
           if (this.buckets.length > 0) {
             if (this.path.startsWith('s3://') || this.path.startsWith('oss://') || this.path.startsWith('minio://')) {
-              const bucketName = this.parseBucketName(this.path)
+              const [service, bucketName] = this.parsePath(this.path)
+              if (service) {
+                this.service = service
+              }
+
               if (bucketName) {
                 this.onSearch(this.path)
               } else {
@@ -752,31 +756,37 @@ export default {
       localStorage.setItem('datains_BOOKMARKS', JSON.stringify(allBookmarks))
       this.loadBookmarks()
     },
-    parseBucketName(link) {
-      const parsedList = link.match(/.*:\/\/([a-zA-Z0-9\-._:]+)\/(.*)/)
+    parsePath(link) {
+      // Directory or File
+      const parsedList = link.match(/(.*):\/\/([a-zA-Z0-9\-._:]+)\/(.*)\/([^/]*)/)
       if (parsedList) {
-        // bucketName
-        return parsedList[1]
+        // serviceName, bucketName, prefix, fileName
+        return parsedList.slice(1)
       } else {
         return null
       }
     },
+    isValidLink(link) {
+      if (link.match(/(.*):\/\/([a-zA-Z0-9\-._:]+)\/(.*)\/([^/]*)/)) {
+        return true
+      } else {
+        return false
+      }
+    },
     onSearch(searchStr) {
       console.log('onSearch: ', searchStr)
-      if (searchStr) {
-        const parsedList = searchStr.match(/.*:\/\/([a-zA-Z0-9\-._:]+)\/(.*)\/[^/]*$/)
-        if (parsedList) {
-          // Search with oss://|s3:// link
-          this.bucketName = parsedList[1]
-          const pathList = this.trimSlash(parsedList[2]).split('/')
-          this.redirect(pathList)
-          return
-        }
+      if (this.isValidLink(searchStr)) {
+        // Search with oss://|s3:// link
+        const [service, bucketName, prefix, fileName] = this.parsePath(searchStr)
+        this.service = service
+        this.bucketName = bucketName
+        const pathList = this.trimSlash(prefix).split('/')
+        this.redirect(pathList, fileName)
+      } else {
+        // Search in current directory
+        this.prefix = this.getPrefix(this.pathList, searchStr)
+        this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, this.prefix)
       }
-
-      // Search in current directory
-      this.prefix = this.getPrefix(this.pathList, searchStr)
-      this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, this.prefix)
     },
     selectBucket(value) {
       // Reset File Browser
@@ -850,9 +860,14 @@ export default {
     redirectPath(item, index, pathList) {
       this.redirect(pathList.slice(0, index + 1))
     },
-    redirect(pathList) {
+    redirect(pathList, fileName) {
       this.pathList = pathList
-      const prefix = this.getPrefix(pathList, '')
+      let prefix = this.getPrefix(pathList, '')
+
+      if (fileName) {
+        prefix = this.getPrefix(pathList, fileName)
+      }
+
       this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, prefix)
     },
     resetFilters() {
@@ -872,10 +887,16 @@ export default {
         prefix: prefix
       })
         .then(response => {
-          this.currentPath = response.location
+          // It contains the self, so we need to remove it.
           this.data = filter(response.data, item => {
-            return item.path !== this.currentPath
+            return item.path !== response.location
           })
+
+          // No any results
+          if (this.data.length > 0) {
+            this.currentPath = response.location
+          }
+
           this.pagination.total = response.total
           this.pagination.current = response.page
           this.pagination.pageSize = response.pageSize

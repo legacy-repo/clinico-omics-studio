@@ -1,7 +1,9 @@
 <template>
   <div>
     <a-card style="margin-top: 10px" :bordered="false">
-      <div slot="title"><a-tag color="#87d068">Number of Jobs: {{ data.length }}</a-tag></div>
+      <div slot="title">
+        <a-tag color="#87d068">Number of Jobs: {{ data.length }}</a-tag>
+      </div>
       <div slot="extra">
         <a-radio-group @change="onClickRadioBtn" defaultValue="total" :value="radioGroupValue">
           <a-radio-button value="total">Total</a-radio-button>
@@ -20,22 +22,25 @@
         />
       </div>
 
-      <a-list
-        size="large"
-        :loading="loading"
-        :pagination="pagination"
-        class="job-list">
+      <a-list size="large" :loading="loading" :pagination="pagination" class="job-list">
         <a-list-item :key="index" v-for="(item, index) in data">
           <a-col :lg="8" :md="8" :sm="24" :xs="24">
             <a-list-item-meta>
               <div slot="description">
-                <a-tag color="pink" :key="key" v-for="(value, key) in item.labels">
-                  {{ key }} = {{ value }}
-                </a-tag>
+                <a-tag
+                  color="pink"
+                  :key="key"
+                  v-for="(value, key) in item.labels"
+                >{{ key }} = {{ value }}</a-tag>
               </div>
               <a-popover slot="avatar" placement="right" title="Job Parameters">
                 <template slot="content">
-                  <vue-json-pretty class="json-popover" @click="onClickNode" v-if="Object.keys(item.jobParams).length !== 0" :data="item.jobParams"></vue-json-pretty>
+                  <vue-json-pretty
+                    class="json-popover"
+                    @click="onClickNode"
+                    v-if="Object.keys(item.jobParams).length !== 0"
+                    :data="item.jobParams"
+                  ></vue-json-pretty>
                   <span v-else>No Content</span>
                 </template>
                 <config-logo class="config-logo" />
@@ -44,7 +49,9 @@
                 <template slot="title">
                   <a @click="doCopy(item.workflowId)">Copy WorkflowId</a>
                 </template>
-                <a @click="onShowLog(item.workflowId, item.title)">{{ formatWorkflowId(item.workflowId) }}</a>
+                <a
+                  @click="onShowLog(item.workflowId, item.title)"
+                >{{ formatWorkflowId(item.workflowId) }}</a>
               </a-tooltip>
             </a-list-item-meta>
           </a-col>
@@ -58,7 +65,11 @@
               <p>{{ item.finishedAt }}</p>
             </div>
             <div class="list-content-item">
-              <a-progress :percent="item.percentage" :status="!item.status ? null : item.status" style="width: 180px" />
+              <a-progress
+                :percent="item.percentage"
+                :status="!item.status ? null : item.status"
+                style="width: 180px"
+              />
             </div>
           </a-col>
           <div slot="actions">
@@ -66,11 +77,20 @@
             &nbsp;
             <a-dropdown>
               <a-menu slot="overlay">
-                <a-menu-item><a @click="redirectToFS(item.title, item.workflowId, 'metadata')">Metadata</a></a-menu-item>
-                <a-menu-item><a @click="redirectToFS(item.title, item.workflowId, 'results')">Results</a></a-menu-item>
-                <a-menu-item v-if="item.status == 'exception'"><a @click="resubmitJob(item.id)">Resubmit</a></a-menu-item>
+                <a-menu-item>
+                  <a @click="redirectToFS(item.title, item.workflowId, 'metadata')">Metadata</a>
+                </a-menu-item>
+                <a-menu-item>
+                  <a @click="redirectToFS(item.title, item.workflowId, 'results')">Results</a>
+                </a-menu-item>
+                <a-menu-item v-if="item.status == 'exception'">
+                  <a @click="resubmitJob(item.id)">Resubmit</a>
+                </a-menu-item>
               </a-menu>
-              <a>More Actions<a-icon type="down"/></a>
+              <a>
+                More Actions
+                <a-icon type="down" />
+              </a>
             </a-dropdown>
           </div>
         </a-list-item>
@@ -98,7 +118,7 @@ export default {
     configLogo,
     VueJsonPretty
   },
-  data () {
+  data() {
     return {
       searchStr: '',
       data: [],
@@ -129,10 +149,10 @@ export default {
     }
   },
   computed: {
-    projectId () {
+    projectId() {
       return this.$route.params.projectId
     },
-    projectName () {
+    projectName() {
       return this.$route.query.projectName
     }
   },
@@ -142,34 +162,36 @@ export default {
       getWorkflow: 'GetWorkflow',
       updateWorkflow: 'UpdateWorkflow'
     }),
-    formatWorkflowId (id) {
+    formatWorkflowId(id) {
       if (id && id.length > 0) {
         return id
       } else {
-        'Waiting for running...'
+        ('Waiting for running...')
       }
     },
-    resubmitJob (id) {
+    resubmitJob(id) {
       const payload = {
         workflowId: id,
         percentage: 0,
         workflow_id: null,
         status: 'Submitted'
       }
-      this.updateWorkflow(payload).then(response => {
-        console.log('Update Workflow: ', id, response)
-        this.$message.success('Resubmit Job Successfully!')
-        this.refresh()
-      }).catch(error => {
-        console.log('Error: ', id, error)
-        this.$message.warning('Unknown error, please retry later.')
-        this.refresh()
-      })
+      this.updateWorkflow(payload)
+        .then(response => {
+          console.log('Update Workflow: ', id, response)
+          this.$message.success('Resubmit Job Successfully!')
+          this.refresh()
+        })
+        .catch(error => {
+          console.log('Error: ', id, error)
+          this.$message.warning('Unknown error, please retry later.')
+          this.refresh()
+        })
     },
-    hideLogContainer () {
+    hideLogContainer() {
       this.logContainerActive = !this.logContainerActive
     },
-    searchWorkflow (page, pageSize, projectId, status) {
+    searchWorkflow(page, pageSize, projectId, status) {
       this.loading = true
       this.getWorkflowList({
         page: page,
@@ -186,12 +208,12 @@ export default {
         this.loading = false
       })
     },
-    onClickRadioBtn (event) {
+    onClickRadioBtn(event) {
       this.radioGroupValue = event.target.value
       console.log('Current Radio Button Value: ', this.radioGroupValue)
       this.refresh()
     },
-    refresh () {
+    refresh() {
       if (this.radioGroupValue === 'total') {
         this.searchWorkflow(this.pagination.page, this.pagination.pageSize, this.projectId)
       } else {
@@ -200,45 +222,51 @@ export default {
 
       this.$emit('refresh')
     },
-    onShowLog (workflowId, workflowName) {
+    onShowLog(workflowId, workflowName) {
       this.workflowId = workflowId
       this.workflowName = workflowName
       this.logContainerActive = true
     },
-    doCopy (text) {
-      this.$copyText(text).then(message => {
-        console.log('copy', message)
-        this.$message.success('Copied')
-      }).catch(err => {
-        console.log('copy.err', err)
-        this.$message.error('Failed')
-      })
+    doCopy(text) {
+      this.$copyText(text)
+        .then(message => {
+          console.log('copy', message)
+          this.$message.success('Copied')
+        })
+        .catch(err => {
+          console.log('copy.err', err)
+          this.$message.error('Failed')
+        })
     },
-    redirectToFS (id, workflowId, category="results") {
+    redirectToFS(id, workflowId, category = 'results') {
       this.getWorkflow(workflowId)
         .then(response => {
-          if (category == "results") {
+          if (category == 'results') {
             const workflowOutput = response.workflowOutput
             if (workflowOutput) {
               this.$router.push({
                 name: 'file-manager',
-                query: { path: workflowOutput + '/null' }  // Need an any string as a suffix
-              }) 
+                query: { path: workflowOutput + '/null' } // Need an any string as a suffix
+              })
             } else {
               this.$message.warning('No such result.')
             }
-          } else if (category == "metadata") {
+          } else if (category == 'metadata') {
             // TODO: Backend service need to return metadataOutput path directly
             const metadataOutput = response.workflowOutput
-            const parsedList = metadataOutput.match(/(.*:\/\/).*$/)
-            const protocol = parsedList[1]
-            if (this.projectName == undefined) {
-              this.$message.warning('Please refresh the page and retry.')
+            if (metadataOutput) {
+              const parsedList = metadataOutput.match(/(.*:\/\/).*$/)
+              const protocol = parsedList[1]
+              if (this.projectName == undefined) {
+                this.$message.warning('Please refresh the page and retry.')
+              } else {
+                this.$router.push({
+                  name: 'file-manager',
+                  query: { path: protocol + 'projects/' + this.projectName + '/' + id + '/null' }
+                })
+              }
             } else {
-              this.$router.push({
-                name: 'file-manager',
-                query: { path: protocol + 'projects/' + this.projectName + '/' + id + '/null' }
-              })
+              this.$message.warning('Waiting a moment...')
             }
           }
         })
@@ -247,7 +275,7 @@ export default {
           this.$message.error('Unknown Error.')
         })
     },
-    onClickNode (path, data) {
+    onClickNode(path, data) {
       if (data.startsWith('s3://') || data.startsWith('oss://') || data.startsWith('minio://')) {
         this.$router.push({
           name: 'file-manager',
@@ -258,37 +286,37 @@ export default {
       }
     }
   },
-  created () {
+  created() {
     this.refresh()
   },
-  mounted () {
+  mounted() {
     this.timer = setInterval(() => {
       this.refresh()
     }, 60000)
   },
-  beforeDestroy () {
+  beforeDestroy() {
     clearInterval(this.timer)
   }
 }
 </script>
 
 <style lang="less" scoped>
-@import (reference) "~@/components/index.less";
+@import (reference) '~@/components/index.less';
 
 .list-content-item {
-    color: rgba(0, 0, 0, .45);
-    display: inline-block;
-    vertical-align: middle;
-    font-size: 14px;
-    margin-left: 40px;
-    span {
-        line-height: 20px;
-    }
-    p {
-        margin-top: 4px;
-        margin-bottom: 0;
-        line-height: 22px;
-    }
+  color: rgba(0, 0, 0, 0.45);
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 14px;
+  margin-left: 40px;
+  span {
+    line-height: 20px;
+  }
+  p {
+    margin-top: 4px;
+    margin-bottom: 0;
+    line-height: 22px;
+  }
 }
 
 .job-list {
@@ -314,7 +342,7 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
-  background: rgba(0,0,0,0.3);
+  background: rgba(0, 0, 0, 0.3);
   z-index: 10;
 
   .log-container {

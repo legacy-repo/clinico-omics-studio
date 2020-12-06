@@ -12,6 +12,7 @@ const api = {
     workflow: seqFlowHost + '/api/workflows',
     log: seqFlowHost + '/api/logs',
     notification: seqFlowHost + '/api/notifications',
+    apps: seqFlowHost + '/apps',
     appStore: {
       installedApps: seqFlowHost + '/api/installed-apps',
       apps: seqFlowHost + '/api/apps',
@@ -259,7 +260,7 @@ export function getInstalledAppList() {
 
 export function getAppSchema(appName) {
   return axios({
-    url: api.seqFlow.appStore.apps + '/' + appName + '/schema.json',
+    url: api.seqFlow.apps + '/' + appName + '/schema.json',
     method: 'get',
     params: {}
   })
@@ -267,7 +268,7 @@ export function getAppSchema(appName) {
 
 export function getHelpMsg(appName) {
   return axios({
-    url: api.seqFlow.appStore.apps + '/' + appName + '/README.md',
+    url: api.seqFlow.apps + '/' + appName + '/README.md',
     method: 'get',
     params: {},
     responseType: 'text',

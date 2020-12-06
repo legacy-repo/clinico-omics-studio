@@ -5,7 +5,7 @@ import map from 'lodash.map'
 import filter from 'lodash.filter'
 import isEmpty from 'lodash.isempty'
 
-const formatCounts = function (data) {
+const formatCounts = function(data) {
   const newRecords = []
   for (let item of data) {
     newRecords.push({
@@ -30,7 +30,7 @@ const formatBytes = function(bytes, decimals = 2) {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
 }
 
-const formatRecords = function (data) {
+const formatRecords = function(data) {
   const newRecords = []
 
   for (const record of data) {
@@ -50,7 +50,7 @@ const formatRecords = function (data) {
   return newRecords
 }
 
-const makeRule = function (field, value, type) {
+const makeRule = function(field, value, type) {
   if (type == 'category') {
     return {
       type: 'rule',
@@ -72,18 +72,15 @@ const makeRule = function (field, value, type) {
   }
 }
 
-const makeGroupRule = function (type, rule1, rule2) {
+const makeGroupRule = function(type, rule1, rule2) {
   return {
     type: 'group',
     operator: type,
-    children: [
-      rule1,
-      rule2
-    ]
+    children: [rule1, rule2]
   }
 }
 
-const makePayload = function (payload, field, value, type) {
+const makePayload = function(payload, field, value, type) {
   const cloned_payload = JSON.parse(JSON.stringify(payload))
   if (cloned_payload.type == 'rule') {
     if (cloned_payload.query.variable == field) {
@@ -116,13 +113,13 @@ const makePayload = function (payload, field, value, type) {
 }
 
 const remove = function(array, val) {
-  var index = array.indexOf(val);
+  var index = array.indexOf(val)
   if (index > -1) {
-    array.splice(index, 1);
+    array.splice(index, 1)
   }
 }
 
-const deletePayload = function (payload, field, value, type) {
+const deletePayload = function(payload, field, value, type) {
   const cloned_payload = JSON.parse(JSON.stringify(payload))
   if (cloned_payload.type == 'rule') {
     if (cloned_payload.query.variable == field) {
@@ -142,11 +139,14 @@ const deletePayload = function (payload, field, value, type) {
     }
   } else if (cloned_payload.type == 'group') {
     var children = cloned_payload.children
-    cloned_payload.children = filter(map(children, o => {
-      return deletePayload(o, field, value, type)
-    }), o => {
-      return !isEmpty(o)
-    })
+    cloned_payload.children = filter(
+      map(children, o => {
+        return deletePayload(o, field, value, type)
+      }),
+      o => {
+        return !isEmpty(o)
+      }
+    )
     return cloned_payload
   } else {
     return {}
@@ -176,7 +176,7 @@ const data = {
     }
   },
   mutations: {
-    SET_PAGE: (state, {page, per_page}) => {
+    SET_PAGE: (state, { page, per_page }) => {
       if (page >= 1) {
         state.queryMap.parameter.page = page
       }
@@ -185,63 +185,74 @@ const data = {
         state.queryMap.parameter.per_page = per_page
       }
     },
-    SET_PAYLOAD: (state, {field, value, type}) => {
+    SET_PAYLOAD: (state, { field, value, type }) => {
       state.queryMap.payload = makePayload(state.queryMap.payload, formatField(field), value, type)
     },
-    DELETE_PAYLOAD: (state, {field, value, type}) => {
+    DELETE_PAYLOAD: (state, { field, value, type }) => {
       state.queryMap.payload = deletePayload(state.queryMap.payload, formatField(field), value, type)
     }
   },
   actions: {
-    GetDataSchema ({ state }) {
+    GetDataSchema({ state }) {
       return new Promise((resolve, reject) => {
-        getDataSchema(state.defaultCollection).then(response => {
-          resolve(response)
-        }).catch(error => {
-          reject(error)
-        })
+        getDataSchema(state.defaultCollection)
+          .then(response => {
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error)
+          })
       })
     },
-    ListCollections ({ state }) {
+    ListCollections({ state }) {
       return new Promise((resolve, reject) => {
-        listCollections().then(response => {
-          resolve(response.collections)
-        }).catch(error => {
-          reject(error)
-        })
+        listCollections()
+          .then(response => {
+            resolve(response.collections)
+          })
+          .catch(error => {
+            reject(error)
+          })
       })
     },
-    GetCollections ({ state }) {
+    GetCollections({ state }, formatMode) {
       const parameter = state.queryMap.parameter
       const payload = state.queryMap.payload
       return new Promise((resolve, reject) => {
-        getCollections(state.defaultCollection, parameter, payload).then(response => {
-          const data = {
-            pageSize: response['per_page'],
-            page: response['page'],
-            total: response['total'],
-            data: formatRecords(response.data)
-          }
+        getCollections(state.defaultCollection, parameter, payload)
+          .then(response => {
+            let data = response
+            if (formatMode) {
+              data = {
+                pageSize: response['per_page'],
+                page: response['page'],
+                total: response['total'],
+                data: formatRecords(response.data)
+              }
+            }
 
-          resolve(data)
-        }).catch(error => {
-          reject(error)
-        })
+            resolve(data)
+          })
+          .catch(error => {
+            reject(error)
+          })
       })
     },
-    CountCollections ({ state }, parameter) {
-      const parameters = { ...state.queryMap.parameter, ...parameter}
+    CountCollections({ state }, parameter) {
+      const parameters = { ...state.queryMap.parameter, ...parameter }
       console.log('Parameters: ', parameters, parameter, state.queryMap.parameter)
       const payload = state.queryMap.payload
 
       return new Promise((resolve, reject) => {
-        countCollections(state.defaultCollection, parameters, payload).then(response => {
-          const data = formatCounts(response)
+        countCollections(state.defaultCollection, parameters, payload)
+          .then(response => {
+            const data = formatCounts(response)
 
-          resolve(data)
-        }).catch(error => {
-          reject(error)
-        })
+            resolve(data)
+          })
+          .catch(error => {
+            reject(error)
+          })
       })
     }
   }

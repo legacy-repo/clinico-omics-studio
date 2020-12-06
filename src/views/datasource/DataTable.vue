@@ -20,11 +20,11 @@
               >{{ item.title }}</a-checkbox>
             </a-col>
           </a-row>
-          <a-button @click="showMenu">
+          <a-button>
             <a-icon type="menu" />
           </a-button>
         </a-popover>
-        <a-button @click="showSortMenu">
+        <a-button @click="showSortMenu" disabled>
           <a-icon type="sort-ascending" />
         </a-button>
         <a-button @click="downloadAsJSON">JSON</a-button>
@@ -41,8 +41,8 @@
       :dataSource="data"
       :loading="loading"
       :scroll="{ x: 1000, y: 780 }"
-      @change="handleChange"
     />
+    <a id="downloadAnchorElem" v-show="false"></a>
   </a-row>
 </template>
 
@@ -137,18 +137,24 @@ export default {
         total: 0,
         current: 1,
         onChange: (page, pageSize) => {
-          this.set_page(page, pageSize)
+          this.set_page({
+            page: page,
+            per_page: pageSize
+          })
           this.searchCollections()
         },
         onShowSizeChange: (current, pageSize) => {
-          this.set_page(1, pageSize)
+          this.set_page({
+            page: 1,
+            per_page: pageSize
+          })
           this.searchCollections()
         }
       }
     }
   },
   watch: {
-    queryString (newValue, oldValue) {
+    queryString(newValue, oldValue) {
       console.log('Query Map - Payload: ', newValue, oldValue)
       this.searchCollections()
     }
@@ -178,6 +184,16 @@ export default {
     },
     total() {
       return this.pagination.total
+    },
+    pageSize() {
+      return this.pagination.pageSize
+    },
+    allowDownload() {
+      if (this.total <= 100) {
+        return true
+      } else {
+        return false
+      }
     }
   },
   methods: {
@@ -199,24 +215,88 @@ export default {
         }
       })
     },
-    showMenu() {},
     showSortMenu() {},
     onSelectChange(selectedRowKeys) {
       console.log('selectedRowKeys changed: ', selectedRowKeys)
       this.selectedRowKeys = selectedRowKeys
     },
-    handleChange(pagination, filters, sorter) {},
-    downloadAsJSON() {},
-    downloadAsCSV() {},
-    setAgeSort() {},
-    searchCollections() {
+    json2csv(data) {
+      var fields = Object.keys(data[0])
+      var replacer = function(key, value) {
+        return value === null ? '' : value
+      }
+
+      var csv = data.map(function(row) {
+        return fields
+          .map(function(fieldName) {
+            return JSON.stringify(row[fieldName], replacer)
+          })
+          .join(',')
+      })
+
+      csv.unshift(fields.join(',')) // add header column
+      csv = csv.join('\r\n')
+      return csv
+    },
+    resetPage() {
+      this.set_page({
+        page: 1,
+        per_page: this.pageSize
+      })
+    },
+    setTotal() {
+      this.set_page({
+        page: 1,
+        per_page: this.total
+      })
+    },
+    downloadAsJSON() {
+      if (this.allowDownload) {
+        this.setTotal()
+        this.searchCollections(data => {
+          var dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(data))
+          var dlAnchorElem = document.getElementById('downloadAnchorElem')
+          dlAnchorElem.setAttribute('href', dataStr)
+          dlAnchorElem.setAttribute('download', 'data.json')
+          dlAnchorElem.click()
+
+          this.resetPage()
+        }, true)
+      } else {
+        this.$message.warn('Please filter before downloading (No more than 100 records are supported).')
+      }
+    },
+    downloadAsCSV() {
+      if (this.allowDownload) {
+        this.setTotal()
+        this.searchCollections(data => {
+          const csv = this.json2csv(data)
+          var dataStr = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv)
+          var dlAnchorElem = document.getElementById('downloadAnchorElem')
+          dlAnchorElem.setAttribute('href', dataStr)
+          dlAnchorElem.setAttribute('download', 'data.csv')
+          dlAnchorElem.click()
+
+          this.resetPage()
+        }, true)
+      } else {
+        this.$message.warn('Please filter before downloading (No more than 100 records are supported).')
+      }
+    },
+    searchCollections(callback, disableFormat) {
       this.loading = true
-      this.getCollections()
+      const formatMode = disableFormat ? false : true
+      this.getCollections(formatMode)
         .then(response => {
-          this.data = response.data
-          this.pagination.total = response.total
-          this.pagination.current = response.page
-          this.pagination.pageSize = response.pageSize
+          if (callback) {
+            callback(response.data)
+          } else {
+            this.data = response.data
+            this.pagination.total = response.total
+            this.pagination.current = response.page
+            this.pagination.pageSize = response.pageSize
+          }
+
           setTimeout(() => {
             this.loading = false
           }, 300)

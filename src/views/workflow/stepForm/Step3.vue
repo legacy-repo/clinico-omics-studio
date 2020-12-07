@@ -163,9 +163,17 @@ export default {
       return samples
     },
     postProject () {
+      const samples = this.prepareJobData()
+
+      // Fix Bug: User maybe remove all samples' information before submitting
+      if (samples.length == 0) {
+        this.$message.warn('Not Found Any Samples, Please Check Your Input.')
+        return 
+      }
+
       const data = {
         ...this.projectData,
-        samples: this.prepareJobData()
+        samples: samples
       }
 
       this.submitProject(data).then(result => {

@@ -246,27 +246,21 @@ export default {
             if (workflowOutput) {
               this.$router.push({
                 name: 'file-manager',
-                query: { path: workflowOutput + '/null' } // Need an any string as a suffix
+                query: { path: workflowOutput + '/' }  // Need to add a slash when the path is a directory
               })
             } else {
               this.$message.warning('No such result.')
             }
           } else if (category == 'metadata') {
             // TODO: Backend service need to return metadataOutput path directly
-            const metadataOutput = response.workflowOutput
-            if (metadataOutput) {
-              const parsedList = metadataOutput.match(/(.*:\/\/).*$/)
-              const protocol = parsedList[1]
-              if (this.projectName == undefined) {
-                this.$message.warning('Please refresh the page and retry.')
-              } else {
-                this.$router.push({
-                  name: 'file-manager',
-                  query: { path: protocol + 'projects/' + this.projectName + '/' + id + '/null' }
-                })
-              }
+            const protocol = 'minio'
+            if (this.projectName == undefined) {
+              this.$message.warning('Please refresh the page and retry.')
             } else {
-              this.$message.warning('Waiting a moment...')
+              this.$router.push({
+                name: 'file-manager',
+                query: { path: protocol + '://' + 'projects/' + this.projectName + '/' + id + '/' }
+              })
             }
           }
         })

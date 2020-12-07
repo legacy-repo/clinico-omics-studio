@@ -129,10 +129,7 @@
           :style="{ color: filtered ? '#108ee9' : undefined }"
         />
         <template slot="customRender" slot-scope="text, record, index, column">
-          <a-tooltip
-            placement="top"
-            :mouseEnterDelay="0.3"
-          >
+          <a-tooltip placement="top" :mouseEnterDelay="0.3">
             <template slot="title">
               <a @click="doCopy(formatFileName(record.path))">{{ formatFileName(text) }}</a>
             </template>
@@ -685,11 +682,18 @@ export default {
         .then(response => {
           console.log('Load Services: ', response)
           this.services = response.services
-          console.log(this.defaultService, this.services)
+          console.log('loadServices: ', this.defaultService, this.services)
           if (this.services.indexOf(this.defaultService) > -1) {
             this.service = this.defaultService
           } else {
             this.service = this.services[0]
+          }
+
+          if (this.isValidLink(this.path)) {
+            // Initialize the service and bucket when redirecting from other place with path.
+            const [service, bucketName] = this.parsePath(this.path)
+            this.service = service
+            this.bucketName = bucketName
           }
 
           func()
@@ -704,20 +708,15 @@ export default {
         .then(response => {
           this.buckets = response.data
           if (this.buckets.length > 0) {
-            if (this.path.startsWith('s3://') || this.path.startsWith('oss://') || this.path.startsWith('minio://')) {
-              const [service, bucketName] = this.parsePath(this.path)
-              if (service) {
-                this.service = service
-              }
-
-              if (bucketName) {
+            if (this.isValidLink(this.path)) {
+              if (this.bucketName) {
                 this.onSearch(this.path)
               } else {
                 this.$message.error('No such link.')
-                // Back
                 this.$router.go(-1)
               }
             } else {
+              // Invalid path
               this.bucketName = this.buckets[0]
               this.redirectHome()
             }
@@ -769,18 +768,45 @@ export default {
       localStorage.setItem('datains_BOOKMARKS', JSON.stringify(allBookmarks))
       this.loadBookmarks()
     },
-    parsePath(link) {
-      // Directory or File
-      const parsedList = link.match(/(.*):\/\/([a-zA-Z0-9\-._:]+)\/(.*)\/([^/]*)/)
+    isDirectory(link) {
+      if (link.match(/.*\/$/)) {
+        return true
+      } else {
+        return false
+      }
+    },
+    parseFile(link) {
+      // e.g. "oss://share-data-temp/NARD/R20059380-20201027-LCL3-3-20201027-LCL3-3_combined_R2.fastq.gz"
+      let parsedList = link.match(/(.*):\/\/([a-zA-Z0-9\-._:]+)\/(.*)\/([^/]*)$/)
       if (parsedList) {
         // serviceName, bucketName, prefix, fileName
         return parsedList.slice(1)
+      }
+
+      // e.g. "oss://share-data-temp/R20059380-20201027-LCL3-3-20201027-LCL3-3_combined_R2.fastq.gz"
+      parsedList = link.match(/(.*):\/\/([a-zA-Z0-9\-._:]+)\/([^/]*)$/)
+      if (parsedList) {
+        // serviceName, bucketName, prefix, fileName
+        return [parsedList[1], parsedList[2], '/', parsedList[3]]
+      }
+    },
+    parseDirectory(link) {
+      let parsedList = link.match(/(.*):\/\/([a-zA-Z0-9\-._:]+)\/(.*)\/$/)
+      if (parsedList) {
+        // serviceName, bucketName, prefix, fileName
+        return parsedList.slice(1).concat('')
+      }
+    },
+    parsePath(link) {
+      // Directory or File
+      if (this.isDirectory(link)) {
+        return this.parseDirectory(link)
       } else {
-        return null
+        return this.parseFile(link)
       }
     },
     isValidLink(link) {
-      if (link.match(/(.*):\/\/([a-zA-Z0-9\-._:]+)\/(.*)\/([^/]*)/)) {
+      if (link.match(/(.*):\/\/([a-zA-Z0-9\-._:]+)\/(.*)/)) {
         return true
       } else {
         return false

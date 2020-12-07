@@ -29,7 +29,12 @@
           @search="onSearch"
           style="width: calc(100% - 276px);"
         >
-          <a-select-option v-for="address in addressList" :key="address">{{ address }}</a-select-option>
+          <a-select-option v-for="address in addressList" :key="address">
+            <a-tooltip>
+              <template slot="title">{{ address }}</template>
+              {{ address }}
+            </a-tooltip>
+          </a-select-option>
         </a-select>
         <a-button
           style="line-height: unset; margin-top: 0px; padding: 0px 10px;"
@@ -53,9 +58,14 @@
             </a>
           </a-breadcrumb-item>
           <a-breadcrumb-item v-for="(item, index) in pathList" :key="index">
-            <a @click="redirectPath(item, index, pathList)">
-              <span>{{ item }}</span>
-            </a>
+            <a-tooltip>
+              <template slot="title">
+                <a @click="doCopy(concatPathList(pathList, index))">Copy Link</a>
+              </template>
+              <a @click="redirectPath(item, index, pathList)">
+                <span>{{ item }}</span>
+              </a>
+            </a-tooltip>
           </a-breadcrumb-item>
         </a-breadcrumb>
       </a-row>
@@ -122,11 +132,9 @@
           <a-tooltip
             placement="top"
             :mouseEnterDelay="0.3"
-            :mouseLeaveDelay="0"
-            destroyTooltipOnHide
           >
             <template slot="title">
-              <span>{{ formatFileName(text) }}</span>
+              <a @click="doCopy(formatFileName(record.path))">{{ formatFileName(text) }}</a>
             </template>
             <a @click="onClickName(record)">
               <template
@@ -483,7 +491,7 @@ export default {
           this.searchObjects(this.bucketName, page, pageSize, this.getPrefix(this.pathList, ''))
         },
         onShowSizeChange: (current, pageSize) => {
-          this.searchObjects(this.bucketName, 1, pageSize, this.getPrefix(this.pathList, ''))
+          this.searchObjects(this.bucketName, this.defaultPage, pageSize, this.getPrefix(this.pathList, ''))
         }
       }
     }
@@ -499,6 +507,11 @@ export default {
       getObjectMeta: 'GetObjectMeta',
       uploadObject: 'UploadObject'
     }),
+    concatPathList(pathList, index) {
+      const subPathList = pathList.slice(0, index + 1)
+      const prefix = this.getPrefix(subPathList, '')
+      return this.service + '://' + this.bucketName + '/' + prefix
+    },
     onChangeCheckBtn() {
       this.checkBtnActive = !this.checkBtnActive
     },
@@ -785,7 +798,7 @@ export default {
       } else {
         // Search in current directory
         this.prefix = this.getPrefix(this.pathList, searchStr)
-        this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, this.prefix)
+        this.searchObjects(this.bucketName, this.defaultPage, this.defaultPageSize, this.prefix)
       }
     },
     selectBucket(value) {
@@ -868,7 +881,7 @@ export default {
         prefix = this.getPrefix(pathList, fileName)
       }
 
-      this.searchObjects(this.bucketName, this.pagination.current, this.pagination.pageSize, prefix)
+      this.searchObjects(this.bucketName, this.defaultPage, this.defaultPageSize, prefix)
     },
     resetFilters() {
       console.log('resetFilters: ', this.$refs.resetBtn)
@@ -957,12 +970,8 @@ export default {
       }
 
       console.log('enterDirectory: ', this.pathList, record)
-      this.searchObjects(
-        this.bucketName,
-        this.pagination.current,
-        this.pagination.pageSize,
-        this.getPrefix(this.pathList, '')
-      )
+      // Reset page and pageSize, otherwise it maybe return nothing
+      this.searchObjects(this.bucketName, this.defaultPage, this.defaultPageSize, this.getPrefix(this.pathList, ''))
     },
     formatFileName(name) {
       return name.replace(this.pathList.join('/') + '/', '')
@@ -1077,6 +1086,12 @@ export default {
     },
     theme() {
       return this.savedBookmark ? 'filled' : 'outlined'
+    },
+    defaultPage() {
+      return 1
+    },
+    defaultPageSize() {
+      return 30
     }
   },
   created() {

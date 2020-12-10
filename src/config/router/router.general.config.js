@@ -31,6 +31,12 @@ export const asyncRouterMap = [
         meta: { title: 'Data', icon: 'deployment-unit', keepAlive: false },
         children: [
           {
+            path: 'http://10.157.72.56:8081/data-model/',
+            name: 'metadata-definition',
+            hidden: false,
+            meta: { title: 'Metadata Definition', icon: 'info-circle', disabled: false, target: '_blank' }
+          },
+          {
             path: 'http://zenodo.3steps.cn',
             name: 'metadata-collaboration',
             hidden: false,

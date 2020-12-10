@@ -36,6 +36,7 @@ const formatRecords = function(data) {
   for (const record of data) {
     newRecords.push({
       key: record.file_name,
+      path: record.file_path,
       access: 'Open',
       fileName: record.file_name,
       library: record.library_name,
@@ -112,7 +113,7 @@ const makePayload = function(payload, field, value, type) {
   }
 }
 
-const remove = function(array, val) {
+const removeItem = function(array, val) {
   var index = array.indexOf(val)
   if (index > -1) {
     array.splice(index, 1)
@@ -124,7 +125,7 @@ const deletePayload = function(payload, field, value, type) {
   if (cloned_payload.type == 'rule') {
     if (cloned_payload.query.variable == field) {
       if (cloned_payload.query.operator == 'in') {
-        remove(cloned_payload.query.value, value)
+        removeItem(cloned_payload.query.value, value)
         if (cloned_payload.query.value.length > 0) {
           return cloned_payload
         } else {
@@ -158,6 +159,27 @@ const formatField = function(fieldName) {
   return fieldName.replace('.', '_')
 }
 
+const existRecord = function(collection, record) {
+  const filtered = filter(collection, o => {
+    return o.key === record.key
+  })
+
+  if (filtered.length > 0) {
+    return true
+  } else {
+    return false
+  }
+}
+
+const initCurrentDataSet = function() {
+  const dataset = JSON.parse(localStorage.getItem('datains__cart_files'))
+  if (dataset) {
+    return dataset
+  } else {
+    return []
+  }
+}
+
 const data = {
   state: {
     // defaultCollection: 'quartet',
@@ -168,11 +190,24 @@ const data = {
         per_page: 10
       },
       payload: {}
-    }
+    },
+    dataSets: [],
+    currentDataSet: initCurrentDataSet()
   },
   getters: {
     queryString: state => {
       return JSON.stringify(state.queryMap.payload)
+    },
+    dataSets: state => {
+      return state.dataSets
+    },
+    currentDataSet: state => {
+      return state.currentDataSet
+    },
+    selectedRowKeys: state => {
+      return map(state.currentDataSet, o => {
+        return o.key
+      })
     }
   },
   mutations: {
@@ -190,9 +225,28 @@ const data = {
     },
     DELETE_PAYLOAD: (state, { field, value, type }) => {
       state.queryMap.payload = deletePayload(state.queryMap.payload, formatField(field), value, type)
+    },
+    PUSH_RECORD: (state, record) => {
+      if (!existRecord(state.currentDataSet, record)) {
+        state.currentDataSet.push(record)
+      }
+    },
+    POP_RECORD: (state, record) => {
+      state.currentDataSet = state.currentDataSet.filter(o => {
+        return o.key !== record.key
+      })
     }
   },
   actions: {
+    SaveCurrentDataSet({ state }) {
+      localStorage.setItem('datains__cart_files', JSON.stringify(state.currentDataSet))
+    },
+    AddRecord({ commit }, record) {
+      commit('PUSH_RECORD', record)
+    },
+    RemoveRecord({ commit }, record) {
+      commit('POP_RECORD', record)
+    },
     GetDataSchema({ state }) {
       return new Promise((resolve, reject) => {
         getDataSchema(state.defaultCollection)

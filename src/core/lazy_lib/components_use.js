@@ -1,4 +1,3 @@
-
 /* eslint-disable */
 /**
  * 该文件是为了按需加载，剔除掉了一些不需要的框架组件。
@@ -95,6 +94,11 @@ Vue.use(notification)
 
 Vue.prototype.$confirm = Modal.confirm
 Vue.prototype.$message = message
+Vue.prototype.$message.config({
+  top: `100px`,
+  duration: 3,
+  maxCount: 3
+})
 Vue.prototype.$notification = notification
 Vue.prototype.$info = Modal.info
 Vue.prototype.$success = Modal.success

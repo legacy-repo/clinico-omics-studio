@@ -39,7 +39,15 @@
       <a-tabs class="chart-container" defaultActiveKey="1" @change="onChangeChartTab">
         <a-tab-pane tab="Files" key="1">
           <a-row class="pie-container">
-            <a-col v-for="item in fieldsList" v-if="item.data.length <= maxLimit" :key="item.name" :xl="5" :lg="5" :md="8" :sm="12">
+            <a-col
+              v-for="item in fieldsList"
+              v-if="item.data.length <= maxLimit"
+              :key="item.name"
+              :xl="5"
+              :lg="5"
+              :md="8"
+              :sm="12"
+            >
               <pie :dataSource="item.data" :height="120" :width="120" :title="item.short" />
             </a-col>
           </a-row>
@@ -78,10 +86,20 @@
         @change="filterFields"
       />
       <a-row style="width: 100%;">
-        <a-checkbox style="float: right;" :checked="hideActive" @change="hideSelectedFields">Hide selected fields?</a-checkbox>
+        <a-checkbox
+          style="float: right;"
+          :checked="hideActive"
+          @change="hideSelectedFields"
+        >Hide selected fields?</a-checkbox>
       </a-row>
       <a-card class="field-list">
-        <a-row @click.native="addField(field.key)" v-for="(field, index) in filteredFields" v-if="hideActive ? !field.selected : true" :key="field.key" class="field-row">
+        <a-row
+          @click.native="addField(field.key)"
+          v-for="(field, index) in filteredFields"
+          v-if="hideActive ? !field.selected : true"
+          :key="field.key"
+          class="field-row"
+        >
           <a-row class="field-index">FL {{ index }}</a-row>
           <a-row class="field-content">
             <a-col>
@@ -155,7 +173,9 @@ export default {
     filteredFields() {
       if (this.searchValue.length > 0) {
         return filter(this.allFields, record => {
-          return record.key.match(new RegExp(this.searchValue, 'i')) || record.name.match(new RegExp(this.searchValue, 'i'))
+          return (
+            record.key.match(new RegExp(this.searchValue, 'i')) || record.name.match(new RegExp(this.searchValue, 'i'))
+          )
         })
       } else {
         return this.allFields

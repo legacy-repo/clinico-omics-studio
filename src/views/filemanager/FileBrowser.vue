@@ -7,7 +7,7 @@
     >
       <a-col slot="title" :lg="12" :md="12" :sm="24" :xs="24">
         <a-select :value="service" style="width: 80px" @change="selectService">
-          <a-select-option v-for="item in services" :key="item" :value="item">{{ item }}</a-select-option>
+          <a-select-option v-for="item in services" :key="item" :value="item">{{ translateName(item) }}</a-select-option>
         </a-select>
         <a-select :value="bucketName" style="width: 200px" @change="selectBucket">
           <a-select-option v-for="bucket in buckets" :key="bucket">{{ bucket }}</a-select-option>
@@ -504,6 +504,17 @@ export default {
       getObjectMeta: 'GetObjectMeta',
       uploadObject: 'UploadObject'
     }),
+    translateName(item) {
+      if (item === 'oss') {
+        return 'Aliyun'
+      } else if (item === 's3') {
+        return 'Amazon'
+      } else if (item === 'minio') {
+        return 'Local'
+      } else {
+        return 'Unknown'
+      }
+    },
     concatPathList(pathList, index) {
       const subPathList = pathList.slice(0, index + 1)
       const prefix = this.getPrefix(subPathList, '')

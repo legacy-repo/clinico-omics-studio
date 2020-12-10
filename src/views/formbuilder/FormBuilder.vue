@@ -105,20 +105,13 @@
       </a-form-item>
     </a-form>
     <a-row class="box" v-if="fileManagerActive">
-      <a-row class="file-manager-container">
-        <file-browser
-          @file-select="onFileSelect"
-          :selected="selected"
-          :standalone="false"
-          :height="350"
-          :allowMultiSelection="multiple"
-          :filterType="filterType"
-        ></file-browser>
-        <a-button-group>
-          <a-button @click="cancelSelectFiles()">Cancel</a-button>
-          <a-button @click="confirmSelectFiles()">Confirm</a-button>
-        </a-button-group>
-      </a-row>
+      <popup-file-browser
+        @select-files="confirmSelectFiles"
+        @cancel-select-files="cancelSelectFiles"
+        :multiple="multiple"
+        :filterType="filterType"
+        :selected="selected"
+      ></popup-file-browser>
     </a-row>
   </div>
 </template>
@@ -135,6 +128,7 @@ export default {
     // 解决方案1 组件间循环依赖：https://cn.vuejs.org/v2/guide/components-edge-cases.html#%E7%BB%84%E4%BB%B6%E4%B9%8B%E9%97%B4%E7%9A%84%E5%BE%AA%E7%8E%AF%E5%BC%95%E7%94%A8
     // 解决方案2 异步组件：https://cn.vuejs.org/v2/guide/components-dynamic-async.html#%E5%BC%82%E6%AD%A5%E7%BB%84%E4%BB%B6
     FileBrowser: () => import('@/views/filemanager/FileBrowser'),
+    PopupFileBrowser: () => import('@/views/filemanager/PopupFileBrowser')
   },
   props: {
     fields: {
@@ -162,10 +156,6 @@ export default {
     this.$forceUpdate()
   },
   methods: {
-    onFileSelect(files) {
-      console.log('onFileSelect: ', files)
-      this.files = files
-    },
     selectFiles(model, multiple, filterType) {
       // Reset all related values
       this.fileManagerActive = true
@@ -194,10 +184,9 @@ export default {
       // return filePaths.join('\n')
       return filePaths
     },
-    confirmSelectFiles() {
+    confirmSelectFiles(filePathList) {
       this.fileManagerActive = false
       const fields = {}
-      const filePathList = this.getFilePathLst(this.files)
       if (this.multiple) {
         fields[this.whichFileManager] = filePathList
       } else {
@@ -206,7 +195,7 @@ export default {
 
       this.options[this.whichFileManager] = flatMap(filePathList, o => ({ value: o, text: o }))
       this.clonedModel.setFieldsValue(fields)
-      console.log('Selected Files: ', fields, this.whichFileManager, this.files)
+      console.log('Selected Files: ', fields, this.whichFileManager, filePathList)
     },
     genSampleIds(numStr) {
       // Init
@@ -294,20 +283,6 @@ export default {
     left: 0;
     background: rgba(0, 0, 0, 0.3);
     z-index: 10;
-
-    .file-manager-container {
-      position: absolute;
-      top: 100px;
-      left: 10%;
-      width: 80%;
-      margin: 0px auto;
-      z-index: 11;
-
-      .ant-btn-group {
-        margin-top: 5px;
-        float: right;
-      }
-    }
   }
 }
 </style>

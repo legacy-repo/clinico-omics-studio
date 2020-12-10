@@ -1,12 +1,32 @@
 <template>
   <a-row class="file-manager-container">
-    <file-browser
-      @file-select="onFileSelect"
-      :standalone="false"
-      :height="400"
-      :allowMultiSelection="multiple"
-      :filterType="filterType"
-    ></file-browser>
+    <a-tabs default-active-key="file-browser">
+      <a-tab-pane key="file-browser">
+        <span slot="tab">
+          <a-icon type="cloud" />FileBrowser
+        </span>
+        <file-browser
+          @file-select="onFileSelect"
+          :standalone="false"
+          :selected="selected"
+          :height="400"
+          :allowMultiSelection="multiple"
+          :filterType="filterType"
+        ></file-browser>
+      </a-tab-pane>
+      <a-tab-pane key="dataset">
+        <span slot="tab">
+          <a-icon type="experiment" />DataSet
+        </span>
+        <data-set
+          @file-select="onFileSelect"
+          :selected="selected"
+          :height="400"
+          :allowMultiSelection="multiple"
+          :filterType="filterType"
+        ></data-set>
+      </a-tab-pane>
+    </a-tabs>
     <a-button-group>
       <a-button @click="cancelSelectFiles()">Cancel</a-button>
       <a-button @click="confirmSelectFiles()">Confirm</a-button>
@@ -17,10 +37,12 @@
 <script>
 import FileBrowser from './FileBrowser'
 import flatMap from 'lodash.flatmap'
+import DataSet from '@/views/datasource/DataSet'
 
 export default {
   components: {
-    FileBrowser
+    FileBrowser: () => import('@/views/filemanager/FileBrowser'),
+    DataSet: () => import('@/views/datasource/DataSet')
   },
   props: {
     multiple: {
@@ -30,6 +52,11 @@ export default {
     filterType: {
       type: String,
       default: ''
+    },
+    selected: {
+      required: false,
+      default: () => [],
+      type: Array
     }
   },
   data() {
@@ -70,9 +97,29 @@ export default {
   margin-left: -500px;
   z-index: 1001;
 
+  .file-list {
+    border: 1px solid #d3d3d3;
+    border-radius: 5px;
+  }
+
   .ant-btn-group {
     margin-top: 5px;
     float: right;
+  }
+}
+</style>
+
+<style lang="less">
+.file-manager-container {
+  .ant-tabs-bar {
+    background-color: #fff;
+    margin: 0px 0px 3px;
+    border-radius: 3px;
+    border-bottom: unset;
+
+    .ant-tabs-ink-bar-animated {
+      display: none !important;
+    }
   }
 }
 </style>

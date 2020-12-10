@@ -29,13 +29,18 @@
         </a-button>
         <a-button @click="downloadAsJSON">JSON</a-button>
         <a-button @click="downloadAsCSV">CSV</a-button>
+        <a-button @click="switchCartTable">
+          <a-icon type="experiment" />
+          <span>Cart Files &nbsp;</span>
+          <a-tag color="#87d068" style="margin: 0px;">{{ recordCounts }}</a-tag>
+        </a-button>
       </a-col>
       <a-col :xl="12" :lg="12" :md="24" :sm="24" :xs="24">
         <p class="header-info">Showing {{ first }} - {{ last }} of {{ total }} files</p>
       </a-col>
     </a-row>
     <a-table
-      :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
+      :row-selection="{ onSelect: onSelectRecord, selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       :columns="visibleColumns"
       :pagination="pagination"
       :dataSource="data"
@@ -43,6 +48,16 @@
       :scroll="{ x: 1000, y: 780 }"
     />
     <a id="downloadAnchorElem" v-show="false"></a>
+    <a-drawer
+      title="Cart Files"
+      :placement="placement"
+      :visible="cartTableActive"
+      @close="switchCartTable"
+      width="80%"
+      class="dataset-panel"
+    >
+      <data-set></data-set>
+    </a-drawer>
   </a-row>
 </template>
 
@@ -50,6 +65,7 @@
 import filter from 'lodash.filter'
 import map from 'lodash.map'
 import { mapActions, mapMutations, mapGetters } from 'vuex'
+import DataSet from '@/views/datasource/DataSet'
 
 const columns = [
   {
@@ -120,13 +136,18 @@ const columns = [
 
 export default {
   props: {},
+  components: {
+    DataSet
+  },
   data() {
     return {
+      cartTableActive: false,
+      placement: 'right',
       data: [],
       filterValue: '',
       loading: false,
       menuVisible: false,
-      selectedRowKeys: [],
+      // selectedRowKeys: [],
       columns,
       pagination: {
         size: 'small',
@@ -157,12 +178,22 @@ export default {
     queryString(newValue, oldValue) {
       console.log('Query Map - Payload: ', newValue, oldValue)
       this.searchCollections()
+    },
+    $route(to, from) {
+      console.log('DataTable(to, from): ', to, from)
+      this.saveCurrentDataSet()
     }
   },
   computed: {
     ...mapGetters({
       queryString: 'queryString'
     }),
+    selectedRowKeys() {
+      return this.$store.getters.selectedRowKeys
+    },
+    recordCounts() {
+      return this.$store.getters.currentDataSet.length
+    },
     hasSelected() {
       return this.selectedRowKeys.length > 0
     },
@@ -202,8 +233,24 @@ export default {
       set_payload: 'SET_PAYLOAD'
     }),
     ...mapActions({
-      getCollections: 'GetCollections'
+      getCollections: 'GetCollections',
+      addRecord: 'AddRecord',
+      removeRecord: 'RemoveRecord',
+      saveCurrentDataSet: 'SaveCurrentDataSet'
     }),
+    switchCartTable() {
+      this.cartTableActive = !this.cartTableActive
+    },
+    onSelectRecord(record, selected, selectedRows) {
+      console.log('onSelectRecord: ', record, selected, selectedRows)
+      if (selected) {
+        this.addRecord(record)
+        this.$message.success(`Added ${record.key} to the Current Dataset.`, 3)
+      } else {
+        this.removeRecord(record)
+        this.$message.warn(`Removed ${record.key} from the Current Dataset.`, 3)
+      }
+    },
     onSearch(e) {
       this.filterValue = e.target.value
     },
@@ -218,7 +265,7 @@ export default {
     showSortMenu() {},
     onSelectChange(selectedRowKeys) {
       console.log('selectedRowKeys changed: ', selectedRowKeys)
-      this.selectedRowKeys = selectedRowKeys
+      // this.selectedRowKeys = selectedRowKeys
     },
     json2csv(data) {
       var fields = Object.keys(data[0])
@@ -308,6 +355,11 @@ export default {
         })
     }
   },
+  mounted() {
+    setTimeout(() => {
+      this.saveCurrentDataSet()
+    }, 6000)
+  },
   created() {
     this.searchCollections()
   }
@@ -344,6 +396,12 @@ export default {
 
   .ant-checkbox-wrapper + .ant-checkbox-wrapper {
     margin-left: 0px;
+  }
+}
+
+.dataset-panel {
+  .ant-drawer-body {
+    padding: 0px;
   }
 }
 </style>

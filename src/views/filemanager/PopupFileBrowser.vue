@@ -1,6 +1,6 @@
 <template>
   <a-row class="file-manager-container">
-    <a-tabs default-active-key="file-browser">
+    <a-tabs :default-active-key="defaultActiveKey">
       <a-tab-pane key="file-browser">
         <span slot="tab">
           <a-icon type="cloud" />FileBrowser
@@ -16,9 +16,10 @@
       </a-tab-pane>
       <a-tab-pane key="dataset">
         <span slot="tab">
-          <a-icon type="experiment" />DataSet
+          <a-icon type="experiment" />Custom DataSet
         </span>
         <data-set
+          mode="selection"
           @file-select="onFileSelect"
           :selected="selected"
           :height="400"
@@ -64,6 +65,11 @@ export default {
       files: []
     }
   },
+  computed: {
+    defaultActiveKey() {
+      return 'file-browser'
+    }
+  },
   methods: {
     getPath(file) {
       return file.path
@@ -93,7 +99,7 @@ export default {
   width: 1000px;
   top: 30%;
   left: 50%;
-  margin-top: -150px;
+  margin-top: -100px;
   margin-left: -500px;
   z-index: 1001;
 

@@ -3,13 +3,12 @@
     <a-table
       :row-selection="rowSelection"
       :data-source="data"
-      :columns="columns"
+      :columns="filteredColumns"
       :scroll="{y: scrollHeight}"
       :pagination="false"
     >
       <span
         slot="action"
-        v-if="mode !== 'selection'"
         slot-scope="text, record"
         @click="deleteRecord(record)"
         style="cursor: pointer"
@@ -45,21 +44,26 @@
         :style="{ color: filtered ? '#108ee9' : undefined }"
       />
       <template slot="customRender" slot-scope="text, record, index, column">
-        <span v-if="searchText && searchedColumn === column.dataIndex">
-          <template
-            v-for="(fragment, i) in text
+        <a-tooltip placement="topLeft" :mouseEnterDelay="0.3">
+          <template slot="title">
+            <a @click="doCopy(record.path)">{{ text }}</a>
+          </template>
+          <span v-if="searchText && searchedColumn === column.dataIndex">
+            <template
+              v-for="(fragment, i) in text
             .toString()
             .split(new RegExp(`(?<=${searchText})|(?=${searchText})`, 'i'))"
-          >
-            <mark
-              v-if="fragment.toLowerCase() === searchText.toLowerCase()"
-              :key="i"
-              class="highlight"
-            >{{ fragment }}</mark>
-            <template v-else>{{ fragment }}</template>
-          </template>
-        </span>
-        <template v-else>{{ text }}</template>
+            >
+              <mark
+                v-if="fragment.toLowerCase() === searchText.toLowerCase()"
+                :key="i"
+                class="highlight"
+              >{{ fragment }}</mark>
+              <template v-else>{{ fragment }}</template>
+            </template>
+          </span>
+          <template v-else>{{ text }}</template>
+        </a-tooltip>
       </template>
     </a-table>
   </a-row>
@@ -83,7 +87,7 @@ export default {
     },
     mode: {
       type: String,
-      default: 'dataset',  // selection or dataset
+      default: 'dataset', // selection or dataset
       required: false
     },
     selected: {
@@ -102,12 +106,12 @@ export default {
       searchText: '',
       searchInput: null,
       searchedColumn: '',
-      selectedRowKeys: [],
       columns: [
         {
           title: '',
           width: 30,
           key: 'action',
+          visible: this.mode === 'dataset' ? true : false,
           scopedSlots: { customRender: 'action' }
         },
         {
@@ -115,6 +119,7 @@ export default {
           dataIndex: 'fileName',
           align: 'center',
           key: 'fileName',
+          visible: true,
           scopedSlots: {
             filterDropdown: 'filterDropdown',
             filterIcon: 'filterIcon',
@@ -131,11 +136,13 @@ export default {
                 this.searchInput.focus()
               }, 0)
             }
-          }
+          },
+          ellipsis: true
         },
         {
           title: 'Library',
           align: 'center',
+          visible: true,
           dataIndex: 'library',
           key: 'library',
           scopedSlots: {
@@ -154,12 +161,14 @@ export default {
                 this.searchInput.focus()
               })
             }
-          }
+          },
+          ellipsis: true
         },
         {
           title: 'Project',
-          width: 100,
+          width: 120,
           align: 'center',
+          visible: true,
           dataIndex: 'project',
           key: 'project',
           scopedSlots: {
@@ -184,6 +193,7 @@ export default {
           title: 'Data Category',
           width: 150,
           align: 'center',
+          visible: true,
           dataIndex: 'dataCategory',
           key: 'dataCategory',
           scopedSlots: {
@@ -208,6 +218,7 @@ export default {
           title: 'Data Format',
           align: 'center',
           width: 150,
+          visible: true,
           dataIndex: 'dataFormat',
           key: 'dataFormat',
           scopedSlots: {
@@ -231,37 +242,38 @@ export default {
         {
           title: 'File Size',
           width: 100,
+          visible: true,
           align: 'center',
           dataIndex: 'fileSize',
           key: 'fileSize'
         }
       ],
-      rowSelection() {
-        return {
-          onChange: (selectedRowKeys, selectedRows) => {
-            console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
-            this.selectedRowKeys = selectedRowKeys
-          },
-          type: this.allowMultiSelection ? 'checkbox' : 'radio',
-          onSelect: (record, selected, selectedRows) => {
-            const selectedItems = this.filterByType(selectedRows, this.filterType)
+      selectedRows: [],
+      rowSelection: {
+        selectedRowKeys: [],
+        onChange: (selectedRowKeys, selectedRows) => {
+          console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
+          this.rowSelection.selectedRowKeys = selectedRowKeys
+        },
+        type: this.allowMultiSelection ? 'checkbox' : 'radio',
+        onSelect: (record, selected, selectedRows) => {
+          const selectedItems = this.filterByType(selectedRows, this.filterType)
 
-            if (selectedItems.length !== selectedRows.length) {
-              if (this.filterType === '/') {
-                this.$message.warn('Only support directory.')
-              } else {
-                this.$message.warn('Only support ' + this.filterType + ' files')
-              }
-
-              this.selectedRowKeys = this.getFilePath(selectedItems)
+          if (selectedItems.length !== selectedRows.length) {
+            if (this.filterType === '/') {
+              this.$message.warn('Only support directory.')
+            } else {
+              this.$message.warn('Only support ' + this.filterType + ' files')
             }
 
-            this.selectedRows = this.selectedRows.concat(selectedItems)
-            this.selectedRows = uniqBy(this.filterByArray(this.selectedRows, this.selectedRowKeys), 'path')
-
-            this.$emit('file-select', this.selectedRows)
-            console.log('File selection: ', selectedRows, selectedItems, this.selectedRows, this.selectedRowKeys)
+            this.rowSelection.selectedRowKeys = this.getFilePath(selectedItems)
           }
+
+          this.selectedRows = this.selectedRows.concat(selectedItems)
+          this.selectedRows = uniqBy(this.filterByArray(this.selectedRows, this.rowSelection.selectedRowKeys), 'path')
+
+          this.$emit('file-select', this.selectedRows)
+          console.log('File selection: ', selectedRows, selectedItems, this.selectedRows, this.rowSelection.selectedRowKeys)
         }
       }
     }
@@ -276,6 +288,11 @@ export default {
       } else {
         return 500
       }
+    },
+    filteredColumns() {
+      return filter(this.columns, o => {
+        return o.visible
+      })
     }
   },
   methods: {
@@ -283,6 +300,17 @@ export default {
       removeRecord: 'RemoveRecord',
       saveCurrentDataSet: 'SaveCurrentDataSet'
     }),
+    doCopy(text) {
+      this.$copyText(text)
+        .then(message => {
+          console.log('copy', message)
+          this.$message.success('Copied')
+        })
+        .catch(err => {
+          console.log('copy.err', err)
+          this.$message.error('Failed')
+        })
+    },
     filterByArray(items, keys) {
       return filter(items, o => {
         return keys.includes(o.path)
@@ -322,7 +350,11 @@ export default {
     }, 5000)
   },
   created() {
-    this.selectedRowKeys = this.selected
+    if (this.mode === 'selection') {
+      this.rowSelection.selectedRowKeys = this.selected
+    } else {
+      this.rowSelection = null
+    }
   }
 }
 </script>

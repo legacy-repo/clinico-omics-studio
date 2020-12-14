@@ -99,6 +99,9 @@
     <a-row class="box" v-if="logContainerActive">
       <log-container :workflowId="workflowId" :title="workflowName" @close="hideLogContainer()"></log-container>
     </a-row>
+    <a-row class="box" v-if="resultsActive" @click.native="hideResultsContainer()">
+      <results :results="workflowResults"></results>
+    </a-row>
   </div>
 </template>
 
@@ -106,6 +109,7 @@
 import HeadInfo from '@/components/tools/HeadInfo'
 // import LogContainer from '@/components/LogContainer/LogContainer'
 import LogContainer from '@/views/workflow/LogContainer'
+import Results from '@/views/workflow/Results'
 import { configLogo } from '@/core/icons'
 import VueJsonPretty from 'vue-json-pretty'
 import { mapActions } from 'vuex'
@@ -116,7 +120,8 @@ export default {
     HeadInfo,
     LogContainer,
     configLogo,
-    VueJsonPretty
+    VueJsonPretty,
+    Results
   },
   data() {
     return {
@@ -143,6 +148,8 @@ export default {
       },
       radioGroupValue: 'total',
       logContainerActive: false,
+      resultsActive: false,
+      workflowResults: [],
       workflowId: '',
       workflowName: 'Log Container',
       loading: false
@@ -190,6 +197,9 @@ export default {
     },
     hideLogContainer() {
       this.logContainerActive = !this.logContainerActive
+    },
+    hideResultsContainer() {
+      this.resultsActive = !this.resultsActive
     },
     searchWorkflow(page, pageSize, projectId, status) {
       this.loading = true
@@ -242,11 +252,15 @@ export default {
       this.getWorkflow(workflowId)
         .then(response => {
           if (category == 'results') {
+            const output = response.output
             const workflowOutput = response.workflowOutput
-            if (workflowOutput) {
+            if (output) {
+              this.workflowResults = response
+              this.resultsActive = true
+            } else if (workflowOutput) {
               this.$router.push({
                 name: 'file-manager',
-                query: { path: workflowOutput + '/' }  // Need to add a slash when the path is a directory
+                query: { path: workflowOutput + '/' } // Need to add a slash when the path is a directory
               })
             } else {
               this.$message.warning('No such result.')

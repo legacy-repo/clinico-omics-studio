@@ -126,6 +126,7 @@ import DataTable from './DataTable'
 import filter from 'lodash.filter'
 import map from 'lodash.map'
 import merge from 'lodash.merge'
+import sortBy from 'lodash.sortby'
 
 export default {
   name: 'FilterPanel',
@@ -154,9 +155,9 @@ export default {
   },
   computed: {
     fieldsList() {
-      return filter(this.allFields, o => {
+      return sortBy(filter(this.allFields, o => {
         return o.selected
-      })
+      }), 'priority')
     },
     activeFilterList() {
       const active = []

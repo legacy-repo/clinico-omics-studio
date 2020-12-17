@@ -140,31 +140,6 @@ export default {
           ellipsis: true
         },
         {
-          title: 'Library',
-          align: 'center',
-          visible: true,
-          dataIndex: 'library',
-          key: 'library',
-          scopedSlots: {
-            filterDropdown: 'filterDropdown',
-            filterIcon: 'filterIcon',
-            customRender: 'customRender'
-          },
-          onFilter: (value, record) =>
-            record.library
-              .toString()
-              .toLowerCase()
-              .includes(value.toLowerCase()),
-          onFilterDropdownVisibleChange: visible => {
-            if (visible) {
-              setTimeout(() => {
-                this.searchInput.focus()
-              })
-            }
-          },
-          ellipsis: true
-        },
-        {
           title: 'Project',
           width: 120,
           align: 'center',

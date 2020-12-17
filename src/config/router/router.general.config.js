@@ -31,10 +31,24 @@ export const asyncRouterMap = [
         meta: { title: 'Data', icon: 'deployment-unit', keepAlive: false },
         children: [
           {
-            path: 'http://10.157.72.56:8081/data-model/',
+            path: '/data-model',
             name: 'metadata-definition',
             hidden: false,
-            meta: { title: 'Metadata Definition', icon: 'info-circle', disabled: false, target: '_blank' }
+            meta: { title: 'Metadata Definition', icon: 'info-circle', disabled: false },
+            children: [
+              {
+                path: '/gdc',
+                name: 'genomics-data-commons',
+                hidden: false,
+                redirect: {
+                  name: 'embeded-frame',
+                  query: {
+                    src: `http://${window.location.host}/data-model/?project=gdc`
+                  }
+                },
+                meta: { title: 'Genomics Data Commons', icon: 'dot-chart' }
+              }
+            ]
           },
           {
             path: 'http://zenodo.3steps.cn',
@@ -56,10 +70,11 @@ export const asyncRouterMap = [
             meta: { title: 'Omics Data Commons', icon: 'dashboard', permission: ['dashboard'], keepAlive: false }
           },
           {
-            path: 'http://data.3steps.cn',
+            path: '/data/data-portal',
             name: 'portal',
             hidden: false,
-            meta: { title: 'Fudan Data Portal', icon: 'file-search', target: '_blank' }
+            component: () => import('@/views/iframe/DataPortal'),
+            meta: { title: 'Omics Data Portal', icon: 'file-search' }
           },
           // Exploratory
           {

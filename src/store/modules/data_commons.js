@@ -4,6 +4,7 @@ import findIndex from 'lodash.findindex'
 import map from 'lodash.map'
 import filter from 'lodash.filter'
 import isEmpty from 'lodash.isempty'
+import { config } from '@/config/defaultSettings'
 
 const formatCounts = function(data) {
   const newRecords = []
@@ -39,11 +40,10 @@ const formatRecords = function(data) {
       path: record.file_path,
       access: 'Open',
       fileName: record.file_name,
-      library: record.library_name,
-      project: record.project_id,
+      project: record.project_name ? record.project_name : record.project_id,
       dataCategory: record.data_category,
       dataFormat: record.data_format,
-      fileSize: null,
+      fileSize: formatBytes(record.file_size),
       annotations: ''
     })
   }
@@ -148,7 +148,12 @@ const deletePayload = function(payload, field, value, type) {
         return !isEmpty(o)
       }
     )
-    return cloned_payload
+
+    if (cloned_payload.children.length <= 1) {
+      return cloned_payload.children[0]
+    } else {
+      return cloned_payload
+    }
   } else {
     return {}
   }
@@ -182,8 +187,7 @@ const initCurrentDataSet = function() {
 
 const data = {
   state: {
-    // defaultCollection: 'quartet',
-    defaultCollection: 'fuscctnbc',
+    defaultCollection: config.defaultCollection,
     queryMap: {
       parameter: {
         page: 1,

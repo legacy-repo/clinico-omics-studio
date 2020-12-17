@@ -85,14 +85,6 @@ const columns = [
     width: 200
   },
   {
-    title: 'Library',
-    dataIndex: 'library',
-    key: 'library',
-    align: 'center',
-    visible: true,
-    width: 100
-  },
-  {
     title: 'Project',
     dataIndex: 'project',
     key: 'project',
@@ -121,7 +113,7 @@ const columns = [
     dataIndex: 'fileSize',
     key: 'fileSize',
     align: 'center',
-    visible: false,
+    visible: true,
     width: 150
   },
   {

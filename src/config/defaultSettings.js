@@ -37,13 +37,21 @@ export const config = {
     disabledExploratory: 'true',
     dashboardName: 'QuartetDashboard'
   },
-  domTitle: 'The ClinicoOmics Platform',
+  domTitle: 'Quartet Data Portal',  // The ClinicoOmics Platform
   // eslint-disable-next-line no-undef
   websiteLogo: require('@/assets/logo.png'),
-  websiteName: 'ClinicoOmics',
-  websiteId: 'clinicoomics',
-  noPermission: false,
-  websiteDesc: 'The ClinicoOmics Platform for Clinico OMICS & BioMedGPS'
+  websiteName: 'Quartet',  // ClinicoOmics
+  websiteId: 'quartet',  // clinicoomics
+  noPermission: true,  // false
+  websiteDesc: 'The Quartet Project for the Quality Control of Omics Data',  // The ClinicoOmics Platform for Clinico OMICS & BioMedGPS
+  defaultCollection: 'quartet'
+}
+
+// BASE_API
+export function initBaseURL() {
+  const apiService = 'http://10.157.72.56'
+  console.log(`BASE_API_URL: ${apiService}`)
+  return apiService
 }
 
 export function getDnaHost() {
@@ -51,7 +59,7 @@ export function getDnaHost() {
   if (hostname == 'pgx.fudan.edu.cn') {
     return 'http://pgx.fudan.edu.cn/dnaseq/'
   } else {
-    return 'http://10.157.72.56:8081/quartet-dna-vis/'
+    return `${initBaseURL()}:8081/quartet-dna-vis/`
   }
 }
 
@@ -60,7 +68,7 @@ export function getRnaHost() {
   if (hostname == 'pgx.fudan.edu.cn') {
     return 'http://pgx.fudan.edu.cn/rnaseq/'
   } else {
-    return 'http://10.157.72.56:8081/quartet-rna-vis/'
+    return `${initBaseURL()}:8081/quartet-rna-vis/`
   }
 }
 
@@ -74,14 +82,7 @@ export function initSeqFlowHost() {
     return 'http://pgx.fudan.edu.cn/seqflow'
   }
 
-  return seqFlowHost || 'http://10.157.72.54/datains'
-}
-
-// BASE_API
-export function initBaseURL() {
-  const apiService = 'http://10.157.72.54'
-  console.log(`BASE_API_URL: ${apiService}`)
-  return apiService
+  return seqFlowHost || `${initBaseURL()}/datains`
 }
 
 // TService
@@ -94,7 +95,7 @@ export function initTServiceHost() {
     return 'http://pgx.fudan.edu.cn/tservice'
   }
 
-  return tServiceHost || 'http://10.157.72.54/tservice'
+  return tServiceHost || `${initBaseURL()}/tservice`
 }
 
 // DataSeq
@@ -107,7 +108,7 @@ export function initDataSeqHost() {
     return 'http://pgx.fudan.edu.cn/dataseq'
   }
 
-  return dataSeqHost || 'http://10.157.72.54/dataseq'
+  return dataSeqHost || `${initBaseURL()}/dataseq`
 }
 
 // Component Settings

@@ -119,15 +119,20 @@ const user = {
           }
         }
         if (localStorage.getItem('CLINICO_OMICS_AUTH')) {
-          logout()
-            .then(response => {
-              console.log('Logout ', response)
-              localStorage.removeItem('CLINICO_OMICS_AUTH')
-              resolve(response)
-            })
-            .catch(error => {
-              reject(error)
-            })
+          if (window.location.hostname !== 'localhost') {
+            logout()
+              .then(response => {
+                console.log('Logout ', response)
+                localStorage.removeItem('CLINICO_OMICS_AUTH')
+                resolve(response)
+              })
+              .catch(error => {
+                reject(error)
+              })
+          } else {
+            localStorage.removeItem('CLINICO_OMICS_AUTH')
+            resolve()
+          }
         } else {
           resolve()
         }

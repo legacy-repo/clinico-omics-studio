@@ -7,7 +7,7 @@
           <a-row style="display: flex; justify-content: center; margin: 10px 10px;">
             <a-input-search
               allowClear
-              placeholder="Enter search text"
+              placeholder="Enter Search Text"
               @change="filterFieldsList"
               style="margin-right: 5px;"
             />
@@ -16,10 +16,11 @@
               <a-button icon="setting" style="width: 50px;" @click="showFilterPanel"></a-button>
             </a-tooltip>
           </a-row>
-          <a-collapse :activeKey="activeFilterList">
+          <a-collapse :activeKey="activeFilterList" ref="collapse">
             <a-collapse-panel
               :header="toTitleCase(field.name)"
               :key="field.name"
+              :id="field.key"
               v-for="field in filteredFieldsList"
               v-if="field.data.length <= maxLimit"
             >
@@ -81,7 +82,7 @@
       </a-row>
       <a-input-search
         allowClear
-        placeholder="Enter search text"
+        placeholder="Enter Search Text"
         size="large"
         @change="filterFields"
       />
@@ -96,7 +97,6 @@
         <a-row
           @click.native="addField(field.key)"
           v-for="(field, index) in filteredFields"
-          v-if="hideActive ? !field.selected : true"
           :key="field.key"
           class="field-row"
         >
@@ -127,6 +127,7 @@ import filter from 'lodash.filter'
 import map from 'lodash.map'
 import merge from 'lodash.merge'
 import sortBy from 'lodash.sortby'
+import orderBy from 'lodash.orderby'
 
 export default {
   name: 'FilterPanel',
@@ -143,7 +144,7 @@ export default {
       visible: false,
       searchValue: '',
       filterValue: '',
-      reverseOrder: true
+      reverseOrder: false
     }
   },
   props: {
@@ -155,9 +156,12 @@ export default {
   },
   computed: {
     fieldsList() {
-      return sortBy(filter(this.allFields, o => {
-        return o.selected
-      }), 'priority')
+      return sortBy(
+        filter(this.allFields, o => {
+          return o.selected
+        }),
+        'priority'
+      )
     },
     activeFilterList() {
       const active = []
@@ -172,14 +176,27 @@ export default {
       })
     },
     filteredFields() {
+      let fields = []
       if (this.searchValue.length > 0) {
-        return filter(this.allFields, record => {
+        fields = filter(this.allFields, record => {
           return (
             record.key.match(new RegExp(this.searchValue, 'i')) || record.name.match(new RegExp(this.searchValue, 'i'))
           )
         })
       } else {
-        return this.allFields
+        fields = this.allFields
+      }
+
+      if (this.hideActive) {
+        fields = filter(fields, o => {
+          return !o.selected
+        })
+      }
+
+      if (this.reverseOrder) {
+        return orderBy(fields, ['key'], 'desc')
+      } else {
+        return orderBy(fields, ['key'], 'asc')
       }
     },
     filteredFieldsList() {
@@ -240,12 +257,20 @@ export default {
       this.visible = !this.visible
       this.fetchCounts()
       console.log('addField: ', key)
+      this.$message.success(`Added Field ${key} into Filter Panel.`)
+      this.focusField(key)
     },
     showFilterPanel() {
       this.visible = !this.visible
     },
     hideFieldPanel() {
       this.visible = !this.visible
+    },
+    focusField(field) {
+      // Very Tricky, Better Solution？
+      setTimeout(() => {
+        document.getElementById(field).scrollIntoView({ behavior: 'smooth' })
+      }, 300)
     },
     removeField(fieldKey) {
       const field = filter(this.allFields, o => {
@@ -256,6 +281,8 @@ export default {
         field[0].selected = false
       }
       this.fetchCounts()
+
+      this.$message.success(`Removed Field ${fieldKey} from Filter Panel.`)
     },
     filterFields(e) {
       this.searchValue = e.target.value
@@ -264,12 +291,6 @@ export default {
       this.filterValue = e.target.value
     },
     sortFields() {
-      this.filteredFields.sort()
-
-      if (this.reverseOrder) {
-        this.filteredFields.reverse()
-      }
-
       this.reverseOrder = !this.reverseOrder
     },
     onChangeChartTab() {},

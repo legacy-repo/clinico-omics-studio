@@ -7,7 +7,7 @@
           <a-row style="display: flex; justify-content: center; margin: 10px 10px;">
             <a-input-search
               allowClear
-              placeholder="Enter search text"
+              placeholder="Enter Search Text"
               style="margin-bottom: 5px;"
               @change="filterFieldsList"
             />

@@ -432,7 +432,7 @@ export default {
 
 .filter-field-panel {
   .ant-modal {
-    top: 60px;
+    top: 100px;
 
     .ant-modal-content {
       .ant-modal-header {
@@ -470,7 +470,7 @@ export default {
         }
 
         .field-list {
-          max-height: 500px;
+          max-height: 350px;
           overflow: scroll;
 
           .ant-card-body {

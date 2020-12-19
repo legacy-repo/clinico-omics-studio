@@ -5,7 +5,10 @@
         <h4 class="fact-item-title">{{ item.title }}</h4>
         <div class="fact-info">
           <project-icon class="custom-icon fact-icon" v-if="item.name.toUpperCase() == 'PROJECTS'" />
-          <sitemap-icon class="custom-icon fact-icon" v-if="item.name.toUpperCase() == 'PRIMARYSITES'" />
+          <sitemap-icon
+            class="custom-icon fact-icon"
+            v-if="item.name.toUpperCase() == 'PRIMARYSITES'"
+          />
           <analysis-icon class="custom-icon fact-icon" v-if="item.name.toUpperCase() == 'CASES'" />
           <case-icon class="custom-icon fact-icon" v-if="item.name.toUpperCase() == 'FILES'" />
           <span class="fact-num" :class="'fact-num__' + item.name.toLowerCase()">{{ item.num }}</span>
@@ -17,6 +20,10 @@
 
 <script>
 import { projectIcon, sitemapIcon, analysisIcon, caseIcon } from '@/core/icons'
+import { getCollections } from '@/api/manage'
+import { mapActions } from 'vuex'
+import filter from 'lodash.filter'
+import { config } from '@/config/defaultSettings'
 
 export default {
   name: 'Fact',
@@ -26,31 +33,92 @@ export default {
     analysisIcon,
     caseIcon
   },
-  data () {
+  data() {
     return {
       factData: [
         {
           title: 'MATERIALS',
           name: 'MATERIALS',
-          num: '4'
+          num: '0'
         },
         {
           title: 'PLATFORMS',
           name: 'PLATFORMS',
-          num: '14'
+          num: '0'
         },
         {
           title: 'FILES',
           name: 'FILES',
-          num: '648'
+          num: '0'
         },
         {
           title: 'PRIMARY SITES',
           name: 'PRIMARYSITES',
-          num: '19'
+          num: '0'
         }
       ]
     }
+  },
+  methods: {
+    ...mapActions({
+      countCollections: 'CountCollections',
+      resetPayload: 'ResetPayload'
+    }),
+    setNum(field, num) {
+      const items = filter(this.factData, o => {
+        return o.name == field
+      })
+
+      if (items.length > 0) {
+        items[0].num = String(num)
+      }
+    },
+    getProjectCount() {
+      this.countCollections({ group: 'project_name' })
+        .then(data => {
+          this.setNum('MATERIALS', data.length)
+        })
+        .catch(error => {
+          console.log('getProjectCount: ', error)
+        })
+    },
+    getPlatformCount() {
+      this.countCollections({ group: 'platform' })
+        .then(data => {
+          this.setNum('PLATFORMS', data.length)
+        })
+        .catch(error => {
+          console.log('getPlatformCount: ', error)
+        })
+    },
+    getSiteCount() {
+      this.countCollections({ group: 'site' })
+        .then(data => {
+          this.setNum('PRIMARYSITES', data.length)
+        })
+        .catch(error => {
+          console.log('getSiteCount: ', error)
+        })
+    },
+    getFileCount() {
+      getCollections(config.defaultCollection, { page: 1, per_page: 1 }, {})
+        .then(response => {
+          this.setNum('FILES', this.formatNum(response.total))
+        })
+        .catch(error => {
+          console.log('getFileCount: ', error)
+        })
+    },
+    formatNum(num) {
+      return num.toLocaleString('en-US');
+    }
+  },
+  created() {
+    this.resetPayload()
+    this.getProjectCount()
+    this.getSiteCount()
+    this.getFileCount()
+    this.getPlatformCount()
   }
 }
 </script>
@@ -107,6 +175,5 @@ export default {
       font-size: 2.1rem;
     }
   }
-
 }
 </style>

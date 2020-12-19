@@ -230,6 +230,13 @@ const data = {
     DELETE_PAYLOAD: (state, { field, value, type }) => {
       state.queryMap.payload = deletePayload(state.queryMap.payload, formatField(field), value, type)
     },
+    RESET_PAYLOAD: state => {
+      state.queryMap.payload = {}
+      state.queryMap.parameter = {
+        page: 1,
+        per_page: 10
+      }
+    },
     PUSH_RECORD: (state, record) => {
       if (!existRecord(state.currentDataSet, record)) {
         state.currentDataSet.push(record)
@@ -244,6 +251,9 @@ const data = {
   actions: {
     SaveCurrentDataSet({ state }) {
       localStorage.setItem('datains__cart_files', JSON.stringify(state.currentDataSet))
+    },
+    ResetPayload({commit}) {
+      commit('RESET_PAYLOAD')
     },
     AddRecord({ commit }, record) {
       commit('PUSH_RECORD', record)

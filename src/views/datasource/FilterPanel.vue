@@ -229,7 +229,8 @@ export default {
     ...mapActions({
       listCollections: 'ListCollections',
       getDataSchema: 'GetDataSchema',
-      countCollections: 'CountCollections'
+      countCollections: 'CountCollections',
+      resetPayload: 'ResetPayload'
     }),
     hideSelectedFields() {
       this.hideActive = !this.hideActive
@@ -426,6 +427,10 @@ export default {
           console.log('getFieldsList: ', error)
         })
     }
+  },
+  beforeDestroy() {
+    console.log('Reset Payload...')
+    this.resetPayload()
   },
   created() {
     this.getFieldsList(this.fetchCounts)

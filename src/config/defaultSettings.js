@@ -40,7 +40,7 @@ export const config = {
   domTitle: 'Quartet Data Portal',  // The ClinicoOmics Platform
   // eslint-disable-next-line no-undef
   websiteLogo: require('@/assets/logo.png'),
-  websiteName: 'Quartet',  // ClinicoOmics
+  websiteName: 'QUARTET',  // ClinicoOmics
   websiteId: 'quartet',  // clinicoomics
   noPermission: true,  // false
   websiteDesc: 'The Quartet Project for the Quality Control of Omics Data',  // The ClinicoOmics Platform for Clinico OMICS & BioMedGPS

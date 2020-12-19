@@ -171,6 +171,10 @@ export default {
       console.log('Query Map - Payload: ', newValue, oldValue)
       this.searchCollections()
     },
+    defaultCollection(newValue, oldValue) {
+      console.log('DefaultCollection: ', newValue, oldValue)
+      this.searchCollections()
+    },
     $route(to, from) {
       console.log('DataTable(to, from): ', to, from)
       this.saveCurrentDataSet()
@@ -178,7 +182,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      queryString: 'queryString'
+      queryString: 'queryString',
+      defaultCollection: 'defaultCollection'
     }),
     selectedRowKeys() {
       return this.$store.getters.selectedRowKeys

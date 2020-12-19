@@ -176,8 +176,8 @@ const existRecord = function(collection, record) {
   }
 }
 
-const initCurrentDataSet = function() {
-  const dataset = JSON.parse(localStorage.getItem('datains__cart_files'))
+const initCurrentDataSet = function(defaultCollection) {
+  const dataset = JSON.parse(localStorage.getItem(`datains__${defaultCollection}__cart_files`))
   if (dataset) {
     return dataset
   } else {
@@ -188,6 +188,17 @@ const initCurrentDataSet = function() {
 const data = {
   state: {
     defaultCollection: config.defaultCollection,
+    collections: [
+      {
+        key: 'quartet',
+        name: 'Chinese Quartet',
+        description: 'The Quartet Projectfor Quality Controlof Multi-omics Profiling'
+      }, {
+        key: 'fuscctnbc',
+        name: 'FUSCC TNBC',
+        description: 'Multi-omics data for primary triple-negative breast cancer (TNBC).'
+      }
+    ],
     queryMap: {
       parameter: {
         page: 1,
@@ -196,11 +207,17 @@ const data = {
       payload: {}
     },
     dataSets: [],
-    currentDataSet: initCurrentDataSet()
+    currentDataSet: initCurrentDataSet(config.defaultCollection)
   },
   getters: {
     queryString: state => {
       return JSON.stringify(state.queryMap.payload)
+    },
+    defaultCollection: state => {
+      return state.defaultCollection
+    },
+    collections: state => {
+      return state.collections
     },
     dataSets: state => {
       return state.dataSets
@@ -237,6 +254,10 @@ const data = {
         per_page: 10
       }
     },
+    SET_COLLECTION: (state, collectionName) => {
+      state.defaultCollection = collectionName
+      state.currentDataSet = initCurrentDataSet(collectionName)
+    },
     PUSH_RECORD: (state, record) => {
       if (!existRecord(state.currentDataSet, record)) {
         state.currentDataSet.push(record)
@@ -250,10 +271,13 @@ const data = {
   },
   actions: {
     SaveCurrentDataSet({ state }) {
-      localStorage.setItem('datains__cart_files', JSON.stringify(state.currentDataSet))
+      localStorage.setItem(`datains__${state.defaultCollection}__cart_files`, JSON.stringify(state.currentDataSet))
     },
     ResetPayload({commit}) {
       commit('RESET_PAYLOAD')
+    },
+    SetCollection({commit}, collectionName) {
+      commit('SET_COLLECTION', collectionName)
     },
     AddRecord({ commit }, record) {
       commit('PUSH_RECORD', record)

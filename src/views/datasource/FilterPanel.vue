@@ -5,11 +5,15 @@
       <a-tabs default-active-key="1">
         <a-tab-pane key="1" tab="Files">
           <a-row style="display: flex; justify-content: center; margin: 10px 10px;">
+            <a-tooltip>
+              <template slot="title">Show Projects</template>
+              <a-button icon="pic-left" style="width: 50px;" @click="switchProjectPanel"></a-button>
+            </a-tooltip>
             <a-input-search
               allowClear
               placeholder="Enter Search Text"
               @change="filterFieldsList"
-              style="margin-right: 5px;"
+              style="margin: 0px 5px;"
             />
             <a-tooltip>
               <template slot="title">Add a File Filter</template>
@@ -35,6 +39,36 @@
         <a-tab-pane key="2" tab="Samples" disabled></a-tab-pane>
         <a-tab-pane key="3" tab="Patients" disabled></a-tab-pane>
       </a-tabs>
+      <a-drawer
+        v-show="projectVisible"
+        title="All Projects"
+        placement="left"
+        :mask="false"
+        :closable="true"
+        width="320"
+        :visible="projectVisible"
+        :bodyStyle="{ padding: '0px' }"
+        :get-container="false"
+        wrapClassName="project-panel"
+        :wrap-style="{ position: 'absolute' }"
+        @close="switchProjectPanel"
+      >
+        <a-list item-layout="horizontal" :data-source="collections">
+          <a-list-item
+            slot="renderItem"
+            slot-scope="item, index"
+            :class="{active: item.key == defaultCollection}"
+            @click="loadProject(item.key)"
+          >
+            <a-list-item-meta :description="item.description">
+              <a slot="title">{{ item.name }}</a>
+              <a-avatar slot="avatar" :class="{active: item.key == defaultCollection}">
+                <a-icon slot="icon" type="project" style="backgroundColor: #1890ff;" />
+              </a-avatar>
+            </a-list-item-meta>
+          </a-list-item>
+        </a-list>
+      </a-drawer>
     </a-col>
     <a-col class="right" :xl="18" :lg="18" :md="18" :sm="24" :xs="24">
       <a-tabs class="chart-container" defaultActiveKey="1" @change="onChangeChartTab">
@@ -119,7 +153,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations } from 'vuex'
+import { mapActions, mapMutations, mapGetters } from 'vuex'
 import { FilterList } from '@/components'
 import Pie from './Pie'
 import DataTable from './DataTable'
@@ -139,6 +173,7 @@ export default {
   data() {
     return {
       hideActive: false,
+      projectVisible: false,
       allFields: [],
       maxLimit: 20,
       visible: false,
@@ -147,14 +182,12 @@ export default {
       reverseOrder: false
     }
   },
-  props: {
-    projectName: {
-      default: 'quartet',
-      required: false,
-      type: String
-    }
-  },
+  props: {},
   computed: {
+    ...mapGetters({
+      collections: 'collections',
+      defaultCollection: 'defaultCollection'
+    }),
     fieldsList() {
       return sortBy(
         filter(this.allFields, o => {
@@ -220,18 +253,29 @@ export default {
       }
     }
   },
+  watch: {
+    defaultCollection() {
+      this.getFieldsList(this.fetchCounts)
+    }
+  },
   methods: {
     ...mapMutations({
-      set_page: 'SET_PAGE',
-      set_payload: 'SET_PAYLOAD',
-      delete_payload: 'DELETE_PAYLOAD'
+      setPayload: 'SET_PAYLOAD',
+      deletePayload: 'DELETE_PAYLOAD'
     }),
     ...mapActions({
-      listCollections: 'ListCollections',
       getDataSchema: 'GetDataSchema',
       countCollections: 'CountCollections',
-      resetPayload: 'ResetPayload'
+      resetPayload: 'ResetPayload',
+      setCollection: 'SetCollection'
     }),
+    loadProject(name) {
+      this.resetPayload()
+      this.setCollection(name)
+    },
+    switchProjectPanel() {
+      this.projectVisible = !this.projectVisible
+    },
     hideSelectedFields() {
       this.hideActive = !this.hideActive
     },
@@ -320,13 +364,13 @@ export default {
       const checked = event.checked
 
       if (checked) {
-        this.set_payload({
+        this.setPayload({
           field: fieldKey,
           value: key,
           type: 'category'
         })
       } else {
-        this.delete_payload({
+        this.deletePayload({
           field: fieldKey,
           value: key,
           type: 'category'
@@ -604,6 +648,30 @@ export default {
       justify-content: center;
       align-items: center;
     }
+  }
+}
+
+.project-panel {
+  .ant-list-item {
+    padding: 10px;
+    cursor: pointer;
+
+    .ant-avatar {
+      background-color: #1890ff;
+    }
+  }
+
+  .ant-list-item.active {
+    background-color: #1890ff;
+
+    .ant-list-item-meta-title > a,
+    .ant-list-item-meta-description {
+      color: #fff;
+    }
+  }
+
+  .ant-avatar.active {
+    background-color: #fff;
   }
 }
 </style>

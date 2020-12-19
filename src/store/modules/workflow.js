@@ -60,7 +60,8 @@ const formatRecord = function (record) {
     labels: record.labels,
     status: formatStatus(record.status),
     percentage: Math.floor(record.percentage * 100) / 100,
-    workflowOutput: record.workflow_output
+    workflowOutput: record.workflow_output,
+    outputs: record.outputs,
   }
 }
 

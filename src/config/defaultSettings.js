@@ -13,45 +13,90 @@
  *
  */
 
-export const config = {
-  primaryColor: '#2F54EB', // primary color of ant design
-  navTheme: 'light', // theme for nav menu
-  layout: 'topmenu', // nav menu position: sidemenu or topmenu
-  contentWidth: 'Fluid', // layout of content: Fluid or Fixed, only works when layout is topmenu
-  hiddenHeader: false, // Hide header
-  fixedHeader: true, // sticky header
-  fixSiderbar: false, // sticky siderbar
-  autoHideHeader: true, //  auto hide header
-  colorWeak: false,
-  multiTab: false,
-  // eslint-disable-next-line
-  production: process.env.NODE_ENV === 'production' && process.env.VUE_APP_PREVIEW !== 'true',
-  // vue-ls options
-  storageOptions: {
-    namespace: 'pro__', // key prefix
-    name: 'ls', // name variable Vue.[ls] or this.[$ls],
-    storage: 'local' // storage name session, local, memory
-  },
-  initialComponentSettings: {
-    disabledContextMenu: 'true',
-    disabledExploratory: 'true',
-    dashboardName: 'QuartetDashboard'
-  },
-  domTitle: 'Quartet Data Portal',  // The ClinicoOmics Platform
-  // eslint-disable-next-line no-undef
-  websiteLogo: require('@/assets/logo.png'),
-  websiteName: 'QUARTET',  // ClinicoOmics
-  websiteId: 'quartet',  // clinicoomics
-  noPermission: true,  // false
-  websiteDesc: 'The Quartet Project for the Quality Control of Omics Data',  // The ClinicoOmics Platform for Clinico OMICS & BioMedGPS
-  defaultCollection: 'quartet'
-}
+const project = 'clinico-omics'
+export const config = (function() {
+  if (project == 'quartet') {
+    return {
+      primaryColor: '#2F54EB', // primary color of ant design
+      navTheme: 'light', // theme for nav menu
+      layout: 'topmenu', // nav menu position: sidemenu or topmenu
+      contentWidth: 'Fluid', // layout of content: Fluid or Fixed, only works when layout is topmenu
+      hiddenHeader: false, // Hide header
+      fixedHeader: true, // sticky header
+      fixSiderbar: false, // sticky siderbar
+      autoHideHeader: true, //  auto hide header
+      colorWeak: false,
+      multiTab: false,
+      // eslint-disable-next-line
+      production: process.env.NODE_ENV === 'production' && process.env.VUE_APP_PREVIEW !== 'true',
+      // vue-ls options
+      storageOptions: {
+        namespace: 'pro__', // key prefix
+        name: 'ls', // name variable Vue.[ls] or this.[$ls],
+        storage: 'local' // storage name session, local, memory
+      },
+      initialComponentSettings: {
+        disabledContextMenu: 'true',
+        disabledExploratory: 'true',
+        dashboardName: 'QuartetDashboard'
+      },
+      domTitle: 'Quartet Data Portal', // The ClinicoOmics Platform
+      // eslint-disable-next-line no-undef
+      websiteLogo: require('@/assets/logo.png'),
+      websiteName: 'QUARTET', // ClinicoOmics
+      websiteId: 'quartet', // clinicoomics
+      noPermission: true, // false
+      websiteDesc: 'The Quartet Project for the Quality Control of Omics Data', // The ClinicoOmics Platform for Clinico OMICS & BioMedGPS
+      defaultCollection: 'quartet'
+    }
+  } else if (project == 'clinico-omics') {
+    return {
+      primaryColor: '#2F54EB', // primary color of ant design
+      navTheme: 'light', // theme for nav menu
+      layout: 'topmenu', // nav menu position: sidemenu or topmenu
+      contentWidth: 'Fluid', // layout of content: Fluid or Fixed, only works when layout is topmenu
+      hiddenHeader: false, // Hide header
+      fixedHeader: true, // sticky header
+      fixSiderbar: false, // sticky siderbar
+      autoHideHeader: true, //  auto hide header
+      colorWeak: false,
+      multiTab: false,
+      // eslint-disable-next-line
+      production: process.env.NODE_ENV === 'production' && process.env.VUE_APP_PREVIEW !== 'true',
+      // vue-ls options
+      storageOptions: {
+        namespace: 'pro__', // key prefix
+        name: 'ls', // name variable Vue.[ls] or this.[$ls],
+        storage: 'local' // storage name session, local, memory
+      },
+      initialComponentSettings: {
+        disabledContextMenu: 'true',
+        disabledExploratory: 'true',
+        dashboardName: 'QuartetDashboard'
+      },
+      domTitle: 'The ClinicoOmics Platform',
+      // eslint-disable-next-line no-undef
+      websiteLogo: require('@/assets/logo.png'),
+      websiteName: 'ClinicoOmics',
+      websiteId: 'clinicoomics',
+      noPermission: false,
+      websiteDesc: 'The ClinicoOmics Platform for Clinico OMICS & BioMedGPS',
+      defaultCollection: 'fuscctnbc'
+    }
+  }
+})()
 
 // BASE_API
 export function initBaseURL() {
-  const apiService = 'http://10.157.72.56'
-  console.log(`BASE_API_URL: ${apiService}`)
-  return apiService
+  if (project === 'clinico-omics') {
+    const apiService = 'http://10.157.72.54'
+    console.log(`BASE_API_URL: ${apiService}`)
+    return apiService
+  } else if (project === 'quartet') {
+    const apiService = 'http://10.157.72.56'
+    console.log(`BASE_API_URL: ${apiService}`)
+    return apiService
+  }
 }
 
 export function getDnaHost() {

@@ -84,7 +84,16 @@
                   <a @click="redirectToFS(item.title, item.workflowId, 'results')">Results</a>
                 </a-menu-item>
                 <a-menu-item v-if="item.status == 'exception'">
-                  <a @click="resubmitJob(item.id)">Resubmit</a>
+                  <a-popover title="Notice" trigger="hover" placement="bottomRight">
+                    <span
+                      slot="content"
+                      style="font-size: 16px; margin-bottom: 10px; display: block;"
+                    >All tasks will rerun, sure?</span>
+                    <a-button type="danger" @click="resubmitJob(item.id)" slot="content" size="small" style="margin-left: 50%;">
+                      <a-icon type="redo" />Resubmit
+                    </a-button>
+                    <a>Resubmit</a>
+                  </a-popover>
                 </a-menu-item>
               </a-menu>
               <a>
@@ -99,25 +108,26 @@
     <a-row class="box" v-if="logContainerActive">
       <log-container :workflowId="workflowId" :title="workflowName" @close="hideLogContainer()"></log-container>
     </a-row>
-    <a-row class="box" v-if="resultsActive" @click.native="hideResultsContainer()">
-      <results :results="workflowResults"></results>
+    <a-row class="box" v-if="resultsActive">
+      <results :workflowRoot="workflowRoot" :data="workflowResults" @close="hideResultsContainer()"></results>
     </a-row>
   </div>
 </template>
 
 <script>
-import HeadInfo from '@/components/tools/HeadInfo'
+// import HeadInfo from '@/components/tools/HeadInfo'
 // import LogContainer from '@/components/LogContainer/LogContainer'
 import LogContainer from '@/views/workflow/LogContainer'
 import Results from '@/views/workflow/Results'
 import { configLogo } from '@/core/icons'
 import VueJsonPretty from 'vue-json-pretty'
 import { mapActions } from 'vuex'
+import orderBy from 'lodash.orderby'
 
 export default {
   name: 'WorkflowList',
   components: {
-    HeadInfo,
+    // HeadInfo,
     LogContainer,
     configLogo,
     VueJsonPretty,
@@ -150,6 +160,7 @@ export default {
       logContainerActive: false,
       resultsActive: false,
       workflowResults: [],
+      workflowRoot: '',
       workflowId: '',
       workflowName: 'Log Container',
       loading: false
@@ -248,14 +259,57 @@ export default {
           this.$message.error('Failed')
         })
     },
+    formatWorkflowOutputs(outputs) {
+      const splitKey = key => {
+        let splitted = key.split('.')
+        return {
+          project: splitted[0],
+          jobName: splitted[1],
+          name: splitted[2],
+          fileName: '',
+          fileType: '',
+          path: ''
+        }
+      }
+
+      const getFileName = path => path.substring(path.lastIndexOf('/') + 1)
+      const getFileType = path => {
+        const fileName = getFileName(path)
+        return fileName.substring(fileName.indexOf('.') + 1)
+      }
+
+      const keys = Object.keys(outputs)
+      let workflowOutputs = []
+      keys.forEach(o => {
+        if (Array.isArray(outputs[o])) {
+          let output = splitKey(o)
+          outputs[o].forEach(path => {
+            output['path'] = path
+            output['fileName'] = getFileName(path)
+            output['fileType'] = getFileType(path)
+            workflowOutputs.push(JSON.parse(JSON.stringify(output)))
+          })
+        } else {
+          let output = splitKey(o)
+          let path = outputs[o]
+          output['path'] = path
+          output['fileName'] = getFileName(path)
+          output['fileType'] = getFileType(path)
+          workflowOutputs.push(output)
+        }
+      })
+
+      return orderBy(workflowOutputs, ['jobName', 'name'], ['asc', 'asc'])
+    },
     redirectToFS(id, workflowId, category = 'results') {
       this.getWorkflow(workflowId)
         .then(response => {
           if (category == 'results') {
-            const output = response.output
+            const outputs = response.outputs
             const workflowOutput = response.workflowOutput
-            if (output) {
-              this.workflowResults = response
+            if (outputs) {
+              this.workflowRoot = workflowOutput + '/'
+              this.workflowResults = this.formatWorkflowOutputs(outputs)
               this.resultsActive = true
             } else if (workflowOutput) {
               this.$router.push({
@@ -363,6 +417,17 @@ export default {
     padding: 20px 30px 30px;
     border-radius: 5px;
     min-height: 300px;
+  }
+
+  .results-container {
+    position: absolute;
+    top: 100px;
+    left: 10%;
+    width: 80%;
+    margin: 0px auto;
+    z-index: 11;
+    padding: 0px;
+    border-radius: 5px;
   }
 }
 

@@ -1,1 +1,1 @@
-export { constantRouterMap, asyncRouterMap } from '@/config/router/router.quartet.config'
+export { constantRouterMap, asyncRouterMap } from '@/config/router/router.general.config'

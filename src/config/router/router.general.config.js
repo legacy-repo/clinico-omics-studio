@@ -69,6 +69,18 @@ export const asyncRouterMap = [
             component: () => import('@/views/datasource/FilterPanel'),
             meta: { title: 'Omics Data Commons', icon: 'dashboard', permission: ['dashboard'], keepAlive: false }
           },
+          // Data Record
+          {
+            path: '/data/record-viewer',
+            name: 'record-viewer',
+            hidden: true,
+            component: () => import('@/views/datasource/Record'),
+            props: route => ({
+              recordId: route.query.recordId,
+              project: route.query.project
+            }),
+            meta: { title: 'Record Viewer', icon: 'dribbble', keepAlive: false }
+          },
           {
             path: '/data/data-portal',
             name: 'portal',

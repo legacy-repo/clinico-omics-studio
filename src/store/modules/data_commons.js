@@ -193,7 +193,8 @@ const data = {
         key: 'quartet',
         name: 'Chinese Quartet',
         description: 'The Quartet Projectfor Quality Controlof Multi-omics Profiling'
-      }, {
+      },
+      {
         key: 'fuscctnbc',
         name: 'FUSCC TNBC',
         description: 'Multi-omics data for primary triple-negative breast cancer (TNBC).'
@@ -273,10 +274,10 @@ const data = {
     SaveCurrentDataSet({ state }) {
       localStorage.setItem(`datains__${state.defaultCollection}__cart_files`, JSON.stringify(state.currentDataSet))
     },
-    ResetPayload({commit}) {
+    ResetPayload({ commit }) {
       commit('RESET_PAYLOAD')
     },
-    SetCollection({commit}, collectionName) {
+    SetCollection({ commit }, collectionName) {
       commit('SET_COLLECTION', collectionName)
     },
     AddRecord({ commit }, record) {
@@ -301,6 +302,33 @@ const data = {
         listCollections()
           .then(response => {
             resolve(response.collections)
+          })
+          .catch(error => {
+            reject(error)
+          })
+      })
+    },
+    GetCollection({ state }, { filePath, defaultCollection }) {
+      const parameter = {
+        page: 1,
+        per_page: 10
+      }
+
+      const payload = {
+        type: 'rule',
+        query: {
+          variable: 'file_path',
+          operator: '=',
+          value: filePath
+        }
+      }
+
+      return new Promise((resolve, reject) => {
+        getCollections(defaultCollection, parameter, payload)
+          .then(response => {
+            if (response.length > 0) {
+              resolve(response[0])
+            }
           })
           .catch(error => {
             reject(error)

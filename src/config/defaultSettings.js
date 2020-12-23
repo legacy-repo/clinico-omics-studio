@@ -79,7 +79,7 @@ export const config = (function() {
       websiteLogo: require('@/assets/logo.png'),
       websiteName: 'ClinicoOmics',
       websiteId: 'clinicoomics',
-      noPermission: true,
+      noPermission: false,
       websiteDesc: 'The ClinicoOmics Platform for Clinico OMICS & BioMedGPS',
       defaultCollection: 'fuscctnbc'
     }

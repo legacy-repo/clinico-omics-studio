@@ -51,30 +51,27 @@ export default {
   },
   data() {
     return {
-      // instanceId: 'FUSCCTNBC118',
-      // baseUrl: 'http://10.157.72.54/pathology',
-      // viewerType: 'PATHOLOGY',
-      instanceId: 'FUSCCTNBC185',
-      baseUrl: 'http://10.157.72.54/dicom',
-      viewerType: 'DICOM',
-      title: 'Pathology Viewer',
+      instanceId: '',  // e.g. FUSCCTNBC185
+      baseUrl: '',  // http://10.157.72.54/pathology or http://10.157.72.54/dicom
+      viewerType: '',  // PATHOLOGY or DICOM
+      title: '',  // Pathology Viewer or DICOM Viewer
       record: {}
     }
   },
   computed: {
     fileRecord() {
-      return (({ file_name, project_id, md5sum, data_format, file_size }) => ({
-        file_name,
-        project_id,
+      return (({ fileName, projectId, md5sum, dataFormat, fileSize }) => ({
+        fileName,
+        projectId,
         md5sum,
-        data_format,
-        file_size
+        dataFormat,
+        fileSize
       }))(this.record)
     },
     dataRecord() {
-      return (({ data_category, data_type, experimental_strategy, read_group_platform }) => ({
-        data_category,
-        data_type,
+      return (({ dataCategory, dataType, experimental_strategy, read_group_platform }) => ({
+        dataCategory,
+        dataType,
         experimental_strategy,
         read_group_platform
       }))(this.record)
@@ -85,13 +82,27 @@ export default {
       getCollection: 'GetCollection'
     }),
     formatKey(key) {
-      return v.titleCase(key.split('_').join(' '))
+      const formattedKey = key.replace(/([A-Z])/g, " $1")
+      return v.titleCase(formattedKey.split('_').join(' '))
     }
   },
   created() {
     this.getCollection({ filePath: this.recordId, defaultCollection: this.project })
       .then(response => {
         this.record = response
+        if (this.record.dataFormat == 'NDPI') {
+          this.instanceId = this.record.patientId
+          this.baseUrl = 'http://10.157.72.54/pathology'
+          this.viewerType = 'PATHOLOGY'
+          this.title = 'Pathology Viewer'
+        } else if (this.record.dataFormat == 'NIFTI') {
+          this.instanceId = this.record.patientId
+          this.baseUrl = 'http://10.157.72.54/dicom'
+          this.viewerType = 'DICOM'
+          this.title = 'DICOM Viewer'          
+        } else {
+          this.title = 'File Viewer'
+        }
       })
       .catch(error => {
         console.log(`No Such Record(${error}): `, this.recordId, this.project)

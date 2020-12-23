@@ -51,6 +51,37 @@ const formatRecords = function(data) {
   return newRecords
 }
 
+const formatRecord = function(record) {
+  const newRecord = {
+    key: record.file_name,
+    path: record.file_path,
+    access: 'Open',
+    fileName: record.file_name,
+    patientId: record.patient_id,
+    projectId: record.project_name ? record.project_name : record.project_id,
+    dataCategory: record.data_category,
+    dataType: record.data_type,
+    dataFormat: record.data_format,
+    fileSize: formatBytes(record.file_size),
+    annotations: ''
+  }
+
+  const deletedItems = [
+    'patient_id',
+    'file_name',
+    'file_path',
+    'project_id',
+    'data_category',
+    'data_format',
+    'file_size'
+  ]
+  deletedItems.forEach(o => {
+    delete record[o]
+  })
+
+  return { ...record, ...newRecord }
+}
+
 const makeRule = function(field, value, type) {
   if (type == 'category') {
     return {
@@ -326,8 +357,8 @@ const data = {
       return new Promise((resolve, reject) => {
         getCollections(defaultCollection, parameter, payload)
           .then(response => {
-            if (response.length > 0) {
-              resolve(response[0])
+            if (response.total > 0) {
+              resolve(formatRecord(response.data[0]))
             }
           })
           .catch(error => {

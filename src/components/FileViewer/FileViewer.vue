@@ -3,6 +3,7 @@
     <a-row class="title">{{ title }}</a-row>
     <pathology :data="data" v-if="viewerType == 'PATHOLOGY'"></pathology>
     <dicom :data="data" v-else-if="viewerType == 'DICOM'"></dicom>
+    <a-empty v-else />
   </a-row>
 </template>
 
@@ -87,6 +88,13 @@ export default {
     height: calc(100% - 47px);
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
+  }
+
+  .ant-empty {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 }
 </style>

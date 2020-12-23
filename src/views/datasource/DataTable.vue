@@ -45,8 +45,9 @@
       :pagination="pagination"
       :dataSource="data"
       :loading="loading"
-      :scroll="{ x: 1000, y: 780 }"
-    />
+      :scroll="{ x: 1000, y: 780 }">
+      <a slot="fileName" slot-scope="text, record" @click="redirectToRecord(record.path)">{{ text }}</a>
+    </a-table>
     <a id="downloadAnchorElem" v-show="false"></a>
     <a-drawer
       title="Cart Files"
@@ -81,6 +82,7 @@ const columns = [
     dataIndex: 'fileName',
     key: 'fileName',
     align: 'center',
+    scopedSlots: { customRender: 'fileName' },
     visible: true,
     width: 200
   },
@@ -235,6 +237,15 @@ export default {
       removeRecord: 'RemoveRecord',
       saveCurrentDataSet: 'SaveCurrentDataSet'
     }),
+    redirectToRecord(path) {
+      this.$router.push({
+        name: 'record-viewer',
+        query: {
+          recordId: path,
+          project: this.defaultCollection
+        }
+      })
+    },
     switchCartTable() {
       this.cartTableActive = !this.cartTableActive
     },

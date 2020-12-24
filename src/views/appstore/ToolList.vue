@@ -13,9 +13,7 @@
           <a-icon type="share-alt" />
         </template>
         <a-card-meta :title="tool.title" :description="tool.description" class="card-meta">
-          <a-avatar slot="avatar" style="backgroundColor: #87d068">
-            {{ tool.title[0].toUpperCase() }}
-          </a-avatar>
+          <a-avatar slot="avatar" style="backgroundColor: #87d068">{{ tool.title[0].toUpperCase() }}</a-avatar>
         </a-card-meta>
       </a-card>
     </a-col>
@@ -36,14 +34,15 @@ export default {
     onView(tool) {
       if (tool.repoUrl && tool.repoUrl.match(/^http[s]?:.*/)) {
         window.open(tool.repoUrl, '_blank')
-      } else if (tool.category.toUpperCase() === 'CONVERTOR') {
-        this.$router.push({
-          name: tool.shortName
-        })
       } else if (tool.category.toUpperCase() === 'REPORT') {
         this.$router.push({
           name: 'report-management',
           query: { creationMode: true, reportTool: tool.title }
+        })
+      } else {
+        // Tool or Convertor
+        this.$router.push({
+          name: tool.shortName
         })
       }
     }

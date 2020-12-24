@@ -292,6 +292,13 @@ export const asyncRouterMap = [
             hidden: true,
             component: () => import('@/views/tools/XPS2PDF'),
             meta: { title: 'XPS2PDF', keepAlive: false }
+          },
+          {
+            path: '/tool/sigma',
+            name: 'sigma',
+            hidden: true,
+            component: () => import('@/views/tools/SigMA'),
+            meta: { title: 'SigMA', keepAlive: false }
           }
         ]
       },

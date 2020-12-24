@@ -29,8 +29,15 @@
         <a-tab-pane tab="Apps" key="app">
           <app-list :appList="filteredApps" :key="localAppMode"></app-list>
         </a-tab-pane>
+        <!-- TService -->
         <a-tab-pane tab="Tools" key="tool">
           <tool-list :toolList="filteredTools" :key="localToolMode"></tool-list>
+        </a-tab-pane>
+        <a-tab-pane tab="Reports" key="report">
+          <report-list :reportList="filteredReports" :key="localReportMode"></report-list>
+        </a-tab-pane>
+        <a-tab-pane tab="Charts" key="chart">
+          <chart-list :chartList="filteredCharts" :key="localChartMode"></chart-list>
         </a-tab-pane>
       </a-tabs>
     </a-col>
@@ -43,6 +50,8 @@ import { mapActions } from 'vuex'
 import { FilterList } from '@/components'
 import AppList from '@/views/appstore/AppList'
 import ToolList from '@/views/appstore/ToolList'
+import ReportList from '@/views/appstore/ReportList'
+import ChartList from '@/views/appstore/ChartList'
 import orderBy from 'lodash.orderby'
 import map from 'lodash.map'
 import groupBy from 'lodash.groupby'
@@ -53,13 +62,15 @@ export default {
   components: {
     FilterList,
     AppList,
-    ToolList
+    ToolList,
+    ReportList,
+    ChartList
   },
   data() {
     return {
       loading: true,
       appList: [],
-      toolList: [],
+      tools: [],
       fieldsList: [
         {
           name: 'Category',
@@ -84,8 +95,13 @@ export default {
       currentTab: 'app',
       localAppMode: false,
       localApps: [],
+      // Tservice
       localToolMode: false,
-      localTools: []
+      localTools: [],
+      localReportMode: false,
+      localReports: [],
+      localChartMode: false,
+      localCharts: []
     }
   },
   props: {},
@@ -128,6 +144,35 @@ export default {
       } else {
         return orderBy(this.toolList, 'title', 'aes')
       }      
+    },
+    filteredReports() {
+      if (this.localReportMode) {
+        return orderBy(this.localReports, 'title', 'aes')
+      } else {
+        return orderBy(this.reportList, 'title', 'aes')
+      }      
+    },
+    filteredCharts() {
+      if (this.localChartMode) {
+        return orderBy(this.localCharts, 'title', 'aes')
+      } else {
+        return orderBy(this.chartList, 'title', 'aes')
+      }      
+    },
+    toolList() {
+      return filter(this.tools, o => {
+        return o.category.toUpperCase() == 'TOOL'
+      })
+    },
+    reportList() {
+      return filter(this.tools, o => {
+        return o.category.toUpperCase() == 'REPORT'
+      })
+    },
+    chartList() {
+      return filter(this.tools, o => {
+        return o.category.toUpperCase() == 'CHART'
+      })
     }
   },
   mounted() {
@@ -143,9 +188,14 @@ export default {
       this.currentTab = activeKey
 
       if (activeKey === 'app') {
-        this.getList()
+        // this.getList()
+        this.generateFieldsList(this.appList)
       } else if (activeKey === 'tool') {
         this.generateFieldsList(this.toolList)
+      } else if (activeKey === 'report') {
+        this.generateFieldsList(this.reportList)
+      } else if (activeKey === 'chart') {
+        this.generateFieldsList(this.chartList)
       }
     },
     generateFieldsList(appList) {
@@ -199,14 +249,24 @@ export default {
         this.localApps = filter(this.appList, (record) => {
           return record[key] === e.key
         })
-      } else {
+      } else if (this.currentTab === 'tool') {
         this.localToolMode = true
         this.localTools = filter(this.toolList, (record) => {
           return record[key] === e.key
         })
+      } else if (this.currentTab === 'report') {
+        this.localReportMode = true
+        this.localReports = filter(this.reportList, (record) => {
+          return record[key] === e.key
+        })
+      } else if (this.currentTab === 'chart') {
+        this.localChartMode = true
+        this.localCharts = filter(this.chartList, (record) => {
+          return record[key] === e.key
+        })
       }
 
-      console.log(key, e, this.localApps, this.localTools)
+      console.log(key, e, this.localApps, this.localTools, this.localReports, this.localCharts)
     },
     getList() {
       this.getAppManifest().then(res => {
@@ -215,9 +275,10 @@ export default {
         this.generateFieldsList(this.appList)
         this.loading = false
       })
+
       this.getToolManifest().then(res => {
         console.log('res', res)
-        this.toolList = res.data
+        this.tools = res.data
         this.loading = false
       })
     }

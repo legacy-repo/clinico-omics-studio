@@ -27,8 +27,7 @@
           </p>
           <p class="ant-upload-text">Click this area to upload</p>
           <p class="ant-upload-hint">
-            Support for a single or bulk upload. Strictly prohibit from uploading company data or other
-            band files
+            Support for a single or bulk upload.
           </p>
         </a-upload-dragger>
         <a-collapse v-model="activeKey">

@@ -131,7 +131,7 @@
           <a-table :columns="columns" :data-source="data" size="small">
             <span slot="result" slot-scope="result, record">
               <a
-                :href="tServiceHost + '/' + result"
+                @click="redirectToFS(result)"
                 target="_blank"
                 :disabled="record.status !== 'success'"
               >Download</a>
@@ -140,10 +140,7 @@
               <a-tag :color="status === 'success' ? 'green' : 'volcano'">{{ status.toUpperCase() }}</a-tag>
             </span>
           </a-table>
-          <a-tooltip>
-            <template slot="title">Clean History</template>
-            <a-icon slot="extra" type="delete" @click="removeHistory" />
-          </a-tooltip>
+          <a-icon slot="extra" type="delete" @click="removeHistory" />
         </a-collapse-panel>
       </a-collapse>
       <a-drawer
@@ -166,6 +163,7 @@ import VueMarkdown from 'vue-markdown'
 import Prism from 'prismjs'
 import moment from 'moment'
 import orderBy from 'lodash.orderby'
+import filter from 'lodash.filter'
 import { initTServiceHost } from '@/config/defaultSettings'
 
 const columns = [
@@ -256,7 +254,32 @@ export default {
       form: this.$form.createForm(this, { name: 'coordinated' })
     }
   },
+  mounted() {
+    this.timer = setInterval(this.updateTasks, 10000)
+  },
+  beforeDestroy() {
+    clearInterval(this.timer)
+  },
+  watch: {
+    data: {
+      handler(newData, oldData) {
+        console.log('Data Updated!', newData, oldData)
+        if (newData.length > 0) {
+          localStorage.setItem('sigma-history', JSON.stringify(this.data))
+        }
+      },
+      immediate: true,
+      deep: true
+    }
+  },
   methods: {
+    redirectToFS(result) {
+      const minioLink = 'minio://tservice/' + result
+      this.$router.push({
+        name: 'file-manager',
+        query: { path: minioLink }
+      })
+    },
     formatParameters(values) {
       const parameters = JSON.parse(JSON.stringify(values))
       const fields = ['check_msi', 'lite_format', 'do_mva', 'do_assign']
@@ -329,25 +352,56 @@ export default {
       this.fileList = [...this.fileList, file]
       return false
     },
+    updateTasks() {
+      const runningTasks = filter(this.data, o => {
+        return o.status === 'running'
+      })
+
+      runningTasks.forEach(task => {
+        this.updateTask(task, resp => {
+          console.log('updateTask: ', task, resp)
+          const idx = this.data.findIndex(obj => obj.log == task.log)
+          if (resp.status.toUpperCase() == 'SUCCESS') {
+            this.data[idx].status = 'success'
+          } else if (resp.status.toUpperCase == 'ERROR') {
+            this.data[idx].status = 'error'
+          }
+        })
+      })
+    },
+    updateTask(task, callback) {
+      this.$http({
+        url: this.tServiceHost + '/' + task.log,
+        method: 'get'
+      })
+        .then(resp => {
+          callback(resp)
+        })
+        .catch(error => {
+          console.log('updateTask: ', error)
+        })
+    },
     handleConvert(file) {
       const history = JSON.parse(localStorage.getItem('sigma-history'))
       var sigmaHistory = history !== null ? history : []
+
+      console.log('handleConvert: ', file.filepath, this.parameters)
 
       this.$http({
         url: this.tServiceHost + '/api/tool/sigma',
         method: 'post',
         data: {
           filepath: file.filepath,
-          parameters: {}
+          parameters: this.parameters
         }
       })
         .then(resp => {
           this.uploading = false
-          this.$message.success('Convert successfully.')
+          this.$message.success('Submit successfully.')
 
           file['result'] = resp['output_file']
           file['log'] = resp['log_url']
-          file['status'] = 'success'
+          file['status'] = 'running'
           sigmaHistory.splice(0, 0, file)
           localStorage.setItem('sigma-history', JSON.stringify(sigmaHistory))
           this.loadHistory()
@@ -387,10 +441,10 @@ export default {
           this.fileList = []
 
           const file = {
-            filename: fileList[0].name + ' et al.',
+            filename: fileList[0].name,
             createdTime: moment().toString(),
             key: moment().toString(),
-            filepath: resp['upload_path']
+            filepath: resp['upload_path'] + '/' + fileList[0].name
           }
           this.handleConvert(file)
         })

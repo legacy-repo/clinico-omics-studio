@@ -299,6 +299,13 @@ export const asyncRouterMap = [
             hidden: true,
             component: () => import('@/views/tools/SigMA'),
             meta: { title: 'SigMA', keepAlive: false }
+          },
+          {
+            path: '/tool/igv',
+            name: 'igv',
+            hidden: true,
+            component: () => import('@/components/GenomeViewer'),
+            meta: { title: 'Genome Viewer', keepAlive: false }
           }
         ]
       },

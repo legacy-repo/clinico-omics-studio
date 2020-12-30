@@ -24,7 +24,6 @@
               <a-select
                 v-decorator="['filetype', { initialValue: 'maf', rules: [{ required: true, message: 'Please select a file type!' }]}]"
                 placeholder="Select a option"
-                @change="handleSelectChange"
               >
                 <a-select-option value="maf">MAF</a-select-option>
                 <a-select-option value="vcf">VCF</a-select-option>
@@ -34,7 +33,6 @@
               <a-select
                 v-decorator="['tumor_type', { initialValue: 'breast', rules: [{ required: true, message: 'Please select a tumor type!' }]}]"
                 placeholder="Select a option"
-                @change="handleSelectChange"
               >
                 <a-select-option
                   v-for="item in orderedTumorTypeList"
@@ -52,7 +50,6 @@
               <a-select
                 v-decorator="['data', { initialValue: 'seqcap', rules: [{ required: true, message: 'Please select a file type!' }]}]"
                 placeholder="Select a option"
-                @change="handleSelectChange"
               >
                 <a-select-option
                   v-for="item in orderedDataTypeList"
@@ -70,7 +67,6 @@
               <a-select
                 v-decorator="['do_assign', { initialValue: 'true', rules: [{ required: true, message: 'Please select a file type!' }]}]"
                 placeholder="Select a option"
-                @change="handleSelectChange"
               >
                 <a-select-option value="true">True</a-select-option>
                 <a-select-option value="false">False</a-select-option>
@@ -80,7 +76,6 @@
               <a-select
                 v-decorator="['do_mva', { initialValue: 'true', rules: [{ required: true, message: 'Please select a file type!' }]}]"
                 placeholder="Select a option"
-                @change="handleSelectChange"
               >
                 <a-select-option value="true">True</a-select-option>
                 <a-select-option value="false">False</a-select-option>
@@ -90,7 +85,6 @@
               <a-select
                 v-decorator="['lite_format', { initialValue: 'true', rules: [{ required: true, message: 'Please select a file type!' }]}]"
                 placeholder="Select a option"
-                @change="handleSelectChange"
               >
                 <a-select-option value="true">True</a-select-option>
                 <a-select-option value="false">False</a-select-option>
@@ -100,7 +94,6 @@
               <a-select
                 v-decorator="['check_msi', { initialValue: 'true', rules: [{ required: true, message: 'Please select a file type!' }]}]"
                 placeholder="Select a option"
-                @change="handleSelectChange"
               >
                 <a-select-option value="true">True</a-select-option>
                 <a-select-option value="false">False</a-select-option>
@@ -295,15 +288,6 @@ export default {
 
       return parameters
     },
-    handleSelectChange() {
-      this.form.validateFields((err, values) => {
-        if (!err) {
-          console.log('Received values of form: ', values)
-        }
-
-        this.parameters = this.formatParameters(values)
-      })
-    },
     showHelp() {
       this.helpVisible = true
     },
@@ -385,37 +369,44 @@ export default {
       const history = JSON.parse(localStorage.getItem('sigma-history'))
       var sigmaHistory = history !== null ? history : []
 
-      console.log('handleConvert: ', file.filepath, this.parameters)
-
-      this.$http({
-        url: this.tServiceHost + '/api/tool/sigma',
-        method: 'post',
-        data: {
-          filepath: file.filepath,
-          parameters: this.parameters
+      this.form.validateFields((err, values) => {
+        if (!err) {
+          console.log('Received values of form: ', values)
         }
-      })
-        .then(resp => {
-          this.uploading = false
-          this.$message.success('Submit successfully.')
 
-          file['result'] = resp['output_file']
-          file['log'] = resp['log_url']
-          file['status'] = 'running'
-          sigmaHistory.splice(0, 0, file)
-          localStorage.setItem('sigma-history', JSON.stringify(sigmaHistory))
-          this.loadHistory()
+        this.parameters = this.formatParameters(values)
+        console.log('handleConvert: ', file.filepath, this.parameters)
+
+        this.$http({
+          url: this.tServiceHost + '/api/tool/sigma',
+          method: 'post',
+          data: {
+            filepath: file.filepath,
+            parameters: this.parameters
+          }
         })
-        .catch(error => {
-          file['result'] = null
-          file['log'] = null
-          file['status'] = 'error'
-          sigmaHistory.splice(0, 0, file)
-          localStorage.setItem('sigma-history', JSON.stringify(sigmaHistory))
-          this.uploading = false
-          console.log('Error: ', error)
-          this.$message.error('Convert failed.')
-        })
+          .then(resp => {
+            this.uploading = false
+            this.$message.success('Submit successfully.')
+
+            file['result'] = resp['output_file']
+            file['log'] = resp['log_url']
+            file['status'] = 'running'
+            sigmaHistory.splice(0, 0, file)
+            localStorage.setItem('sigma-history', JSON.stringify(sigmaHistory))
+            this.loadHistory()
+          })
+          .catch(error => {
+            file['result'] = null
+            file['log'] = null
+            file['status'] = 'error'
+            sigmaHistory.splice(0, 0, file)
+            localStorage.setItem('sigma-history', JSON.stringify(sigmaHistory))
+            this.uploading = false
+            console.log('Error: ', error)
+            this.$message.error('Convert failed.')
+          })
+      })
     },
     handleUpload() {
       const { fileList } = this

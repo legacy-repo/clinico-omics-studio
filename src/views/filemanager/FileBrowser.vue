@@ -7,7 +7,11 @@
     >
       <a-col slot="title" :lg="12" :md="12" :sm="24" :xs="24">
         <a-select :value="service" style="width: 80px" @change="selectService">
-          <a-select-option v-for="item in services" :key="item" :value="item">{{ translateName(item) }}</a-select-option>
+          <a-select-option
+            v-for="item in services"
+            :key="item"
+            :value="item"
+          >{{ translateName(item) }}</a-select-option>
         </a-select>
         <a-select :value="bucketName" style="width: 200px" @change="selectBucket">
           <a-select-option v-for="bucket in buckets" :key="bucket">{{ bucket }}</a-select-option>
@@ -1110,7 +1114,7 @@ export default {
 
         // 1048576 = 1024 * 1024 = 1MB
         if (this.recordDetail.size < 1048576) {
-          this.$http.get(this.downloadUrl).then(response => {
+          this.$http.get(this.downloadUrl, { headers: { Origin: 'randomhost' } }).then(response => {
             this.previewContent = response
           })
         }

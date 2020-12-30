@@ -17,11 +17,12 @@
             @click="fullscreenChange"
           >Full Screen</a-button>
           <a-button :size="buttonSize" icon="fullscreen-exit" v-else @click="fullscreenChange">Exit</a-button>
-          <a-button :size="buttonSize" icon="save">Save Session</a-button>
-          <a-button :size="buttonSize" icon="plus">Add Track</a-button>
+          <a-button :size="buttonSize" icon="save" disabled>Save Session</a-button>
+          <a-button :size="buttonSize" icon="plus" disabled>Add Track</a-button>
         </a-col>
       </a-row>
-      <div :id="id" class="viewer-content"></div>
+      <div :id="id" class="viewer-content" v-show="!loading"></div>
+      <a-spin class="viewer-content" style="min-height: 300px; display: flex; justify-content: center; align-items: center;" v-if="loading" />
     </a-row>
     <a-empty class="empty-viewer" v-show="!isValid" />
   </fullscreen>
@@ -52,7 +53,6 @@ export default {
     search: {
       type: String,
       // 最大分辨率为40bp
-      default: 'chr8:170681-170702',
       required: false
     },
     sampleName: {
@@ -62,38 +62,30 @@ export default {
     },
     vcfUrl: {
       type: String,
-      required: false,
-      default:
-        'https://s3.amazonaws.com/1000genomes/release/20130502/ALL.chr22.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz'
+      required: false
+    },
+    vcfIndexUrl: {
+      type: String,
+      required: false
     },
     bamUrl: {
       type: String,
-      required: false,
-      default: 'gs://genomics-public-data/platinum-genomes/bam/NA12878_S1.bam'
+      required: false
+    },
+    bamIndexUrl: {
+      type: String,
+      required: false
     }
   },
   data() {
     return {
       fullscreenActive: false,
       isValid: false,
-      buttonSize: 'default'
+      buttonSize: 'default',
+      loading: false
     }
   },
   computed: {
-    vcfIndexUrl() {
-      if (this.vcfUrl) {
-        return `${this.vcfUrl}.tbi`
-      } else {
-        return ''
-      }
-    },
-    bamIndexUrl() {
-      if (this.bamUrl) {
-        return `${this.bamUrl}.bai`
-      } else {
-        return ''
-      }
-    },
     vcfTrackName() {
       if (this.sampleName) {
         return `${this.sampleName} VCF`
@@ -130,21 +122,27 @@ export default {
         if (this.search) {
           browser.search(this.search)
         }
+
+        this.loading = false
         console.log('Created IGV browser', browser)
       })
     },
     makeTrack(name, type, url, indexURL) {
       // TODO: how to deal with invalid track?
-      return {
-        type: type,
-        format: type == 'variant' ? 'vcf' : 'bam',
-        url: url,
-        indexURL: indexURL,
-        name: name,
-        squishedCallHeight: 1,
-        expandedCallHeight: 4,
-        displayMode: 'squished',
-        visibilityWindow: 1000
+      if (url && indexURL) {
+        return {
+          type: type,
+          format: type == 'variant' ? 'vcf' : 'bam',
+          url: url,
+          indexURL: indexURL,
+          name: name,
+          squishedCallHeight: 1,
+          expandedCallHeight: 4,
+          displayMode: 'expanded',
+          visibilityWindow: 1000
+        }
+      } else {
+        return null
       }
     },
     makeTracks(vcfTrack, bamTrack) {
@@ -171,21 +169,27 @@ export default {
       }
 
       return options
+    },
+    checkInputs() {
+      if (!this.vcfUrl && !this.bamUrl) {
+        this.isValid = false
+        console.log('GenomeViewer Error: need to specify vcfUrl or bamUrl at least.')
+      } else {
+        this.isValid = true
+        this.loading = true
+      }
     }
   },
   created() {
-    if (!this.vcfUrl && !this.bamUrl) {
-      this.isValid = false
-      console.log('GenomeViewer Error: need to specify vcfUrl or bamUrl at least.')
-    } else {
-      this.isValid = true
-    }
+    this.checkInputs()
   }
 }
 </script>
 
 <style lang="less" scoped>
 .genome-viewer {
+  text-align: center;
+
   .viewer-header {
     display: flex;
     flex-direction: row;

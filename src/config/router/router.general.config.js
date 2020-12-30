@@ -305,6 +305,14 @@ export const asyncRouterMap = [
             name: 'igv',
             hidden: true,
             component: () => import('@/components/GenomeViewer'),
+            props: route => ({
+              sampleName: route.query.sampleName,
+              vcfUrl: route.query.vcfUrl,
+              vcfIndexUrl: route.query.vcfIndexUrl,
+              bamUrl: route.query.bamUrl,
+              bamIndexUrl: route.query.bamIndexUrl,
+              search: route.query.search
+            }),
             meta: { title: 'Genome Viewer', keepAlive: false }
           }
         ]

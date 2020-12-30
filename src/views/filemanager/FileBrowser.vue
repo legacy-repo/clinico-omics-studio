@@ -95,10 +95,19 @@
         <span slot="size" slot-scope="text, record">{{ formatBytes(text) }}</span>
         <span slot="action" slot-scope="text, record" v-if="record.storageClass">
           <a style="margin-right: 10px;" @click="switchDetailsPanel(record)">Details</a>
-          <a class="ant-dropdown-link" disabled>
-            More
-            <a-icon type="down" />
-          </a>
+          <a-dropdown>
+            <a class="ant-dropdown-link" @click="e => e.preventDefault()">
+              More
+              <a-icon type="down" />
+            </a>
+            <a-menu slot="overlay">
+              <a-menu-item key="preview">
+                <a @click="previewFile(record)">Preview</a>
+              </a-menu-item>
+              <a-menu-divider />
+              <a-menu-item key="delete" disabled>Delete</a-menu-item>
+            </a-menu>
+          </a-dropdown>
         </span>
         <div
           slot="filterDropdown"
@@ -517,6 +526,43 @@ export default {
         return 'Local'
       } else {
         return 'Unknown'
+      }
+    },
+    whichFileType(path) {
+      if (path.match(/.*.vcf$|.*.vcf.gz$/i)) {
+        return 'VCF'
+      } else if (path.match(/.*.bam$|.*.bam.gz$/i)) {
+        return 'BAM'
+      } else if (path.match(/.*.fastq$|.*.fq$|.*.fq.gz$|.*.fastq.gz$/i)) {
+        return 'FASTQ'
+      } else {
+        return 'OTHER'
+      }
+    },
+    async previewFile(record) {
+      this.loading = true
+      const path = record.path
+      const fileType = this.whichFileType(path)
+
+      if (fileType == 'VCF') {
+        const responses = await Promise.all([
+          this.makeDownloadUrl({ service: this.service, name: this.bucketName, key: record.name }),
+          this.makeDownloadUrl({ service: this.service, name: this.bucketName, key: record.name + '.tbi' })
+        ])
+
+        console.log('Preview File: ', responses)
+        this.loading = false
+        this.$router.push({
+          name: 'igv',
+          query: {
+            sampleName: record.name,
+            vcfUrl: responses[0].download_url,
+            vcfIndexUrl: responses[1].download_url
+          }
+        })
+      } else {
+        this.loading = false
+        this.$message.info('Preview plugin is comming soon...')
       }
     },
     concatPathList(pathList, index) {
@@ -1114,7 +1160,8 @@ export default {
 
         // 1048576 = 1024 * 1024 = 1MB
         if (this.recordDetail.size < 1048576) {
-          this.$http.get(this.downloadUrl, { headers: { Origin: 'randomhost' } }).then(response => {
+          // Authorization header will cause invalid request error, so we need use axios instead of this.$http
+          axios.get(this.downloadUrl).then(response => {
             this.previewContent = response
           })
         }

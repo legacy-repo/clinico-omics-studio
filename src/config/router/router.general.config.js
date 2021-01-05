@@ -31,13 +31,13 @@ export const asyncRouterMap = [
         meta: { title: 'Data', icon: 'deployment-unit', keepAlive: false },
         children: [
           {
-            path: '/data-model',
+            path: '/data/data-model',
             name: 'metadata-definition',
             hidden: false,
             meta: { title: 'Metadata Definition', icon: 'info-circle', disabled: false },
             children: [
               {
-                path: '/gdc',
+                path: '/data/data-model/gdc',
                 name: 'genomics-data-commons',
                 hidden: false,
                 redirect: {
@@ -51,10 +51,11 @@ export const asyncRouterMap = [
             ]
           },
           {
-            path: 'http://zenodo.3steps.cn',
-            name: 'metadata-collaboration',
+            path: '/data/git-management',
+            name: 'git-management',
             hidden: false,
-            meta: { title: 'Metadata Collaboration', icon: 'cloud-sync', disabled: true, target: '_blank' }
+            component: () => import('@/views/git/GitList'),
+            meta: { title: 'Metadata Collaboration', icon: 'history', permission: ['table'] }
           },
           {
             path: 'http://metabase.3steps.cn',
@@ -347,16 +348,6 @@ export const asyncRouterMap = [
         meta: { title: 'Notifications', icon: 'notification', permission: ['table'] }
       },
 
-      // Subcomponent - Git
-      {
-        path: '/git-management',
-        name: 'git-management',
-        hidden: true,
-        component: () => import('@/views/git/GitList'),
-
-        meta: { title: 'Git', icon: 'history', permission: ['table'] }
-      },
-
       // Exception
       {
         path: '/exception',
@@ -409,6 +400,13 @@ export const constantRouterMap = [
     path: '/welcome',
     name: 'welcome',
     component: () => import('@/custom/general/Home'),
+    meta: { isPublic: true, keepAlive: false }
+  },
+
+  {
+    path: '/cool-dashboard',
+    name: 'cool-dashboard',
+    component: () => import('@/custom/quartet/CoolDashboard'),
     meta: { isPublic: true, keepAlive: false }
   },
 

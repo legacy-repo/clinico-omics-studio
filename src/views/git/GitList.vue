@@ -67,10 +67,9 @@
               placeholder="Which Service"
               style="width: 180px; margin-right: 5px;"
               @change="handleChange">
-              <a-select-option value="jack">Jack</a-select-option>
-              <a-select-option value="lucy">Lucy</a-select-option>
-              <a-select-option value="disabled" disabled>Disabled</a-select-option>
-              <a-select-option value="Yiminghe">yiminghe</a-select-option>
+              <a-select-option value="jack">Metadata Quality Review</a-select-option>
+              <a-select-option value="lucy">Omics Data Commons</a-select-option>
+              <a-select-option value="disabled" disabled>Data Fusion</a-select-option>
             </a-select>
             <a-tooltip placement="topLeft">
               <template slot="title">

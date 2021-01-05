@@ -9,7 +9,7 @@ import { domTitle, config } from '@/config/defaultSettings'
 
 NProgress.configure({ showSpinner: true }) // NProgress Configuration
 
-const whiteList = ['/404', '/jupyter', '/metabase', '/api-mgmt', '/webapps', '/welcome', '/user/login', '/user/register', '/user/recover'] // no redirect whitelist
+const whiteList = ['/404', '/jupyter', '/metabase', '/api-mgmt', '/webapps', '/welcome', '/user/login', '/user/register', '/user/recover', '/cool-dashboard'] // no redirect whitelist
 
 router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar

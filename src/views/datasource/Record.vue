@@ -26,7 +26,12 @@
         </a-row>
       </a-col>
     </a-row>
-    <file-viewer :title="title" :instanceId="instanceId" :viewerType="viewerType" :baseUrl="baseUrl"></file-viewer>
+    <file-viewer
+      :title="title"
+      :instanceId="instanceId"
+      :viewerType="viewerType"
+      :baseUrl="baseUrl"
+    ></file-viewer>
   </a-row>
 </template>
 
@@ -34,6 +39,7 @@
 import v from 'voca'
 import FileViewer from '@/components/FileViewer'
 import { mapActions } from 'vuex'
+import { initBaseURL } from '@/config/defaultSettings'
 
 export default {
   components: {
@@ -51,10 +57,10 @@ export default {
   },
   data() {
     return {
-      instanceId: '',  // e.g. FUSCCTNBC185
-      baseUrl: '',  // http://10.157.72.54/pathology or http://10.157.72.54/dicom
-      viewerType: '',  // PATHOLOGY or DICOM
-      title: '',  // Pathology Viewer or DICOM Viewer
+      instanceId: '', // e.g. FUSCCTNBC185
+      baseUrl: '', // http://10.157.72.54/pathology or http://10.157.72.54/dicom
+      viewerType: '', // PATHOLOGY or DICOM
+      title: '', // Pathology Viewer or DICOM Viewer
       record: {}
     }
   },
@@ -82,7 +88,7 @@ export default {
       getCollection: 'GetCollection'
     }),
     formatKey(key) {
-      const formattedKey = key.replace(/([A-Z])/g, " $1")
+      const formattedKey = key.replace(/([A-Z])/g, ' $1')
       return v.titleCase(formattedKey.split('_').join(' '))
     }
   },
@@ -92,14 +98,14 @@ export default {
         this.record = response
         if (this.record.dataFormat == 'NDPI') {
           this.instanceId = this.record.patientId
-          this.baseUrl = 'http://10.157.72.54/pathology'
+          this.baseUrl = `${initBaseURL()}/attachments/pathology`
           this.viewerType = 'PATHOLOGY'
           this.title = 'Pathology Viewer'
         } else if (this.record.dataFormat == 'NIFTI') {
           this.instanceId = this.record.patientId
-          this.baseUrl = 'http://10.157.72.54/dicom'
+          this.baseUrl = `${initBaseURL()}/attachments/dicom`
           this.viewerType = 'DICOM'
-          this.title = 'DICOM Viewer'          
+          this.title = 'DICOM Viewer'
         } else {
           this.title = 'File Viewer'
         }

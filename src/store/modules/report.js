@@ -57,27 +57,10 @@ const formatRecords = function(records) {
   return newRecords
 }
 
+
+// eslint-disable-next-line no-unused-vars
 const timeToInt = function(datetime) {
   return moment(datetime, 'YYYY-MM-DD HH:mm:ss').valueOf()
-}
-
-const formatPostData = function(data) {
-  const script = {
-    'plugin-name': data.reportTool,
-    metadata: data.metadata,
-  }
-
-  const newData = {
-    report_name: data.reportName,
-    started_time: timeToInt(data.startedTime),
-    script: JSON.stringify(script),
-    project_id: data.project,
-    report_type: 'multiqc',
-    status: 'Submitted',
-    description: data.description
-  }
-
-  return newData
 }
 
 const report = {
@@ -136,10 +119,11 @@ const report = {
       })
     },
     SubmitReport({ commit }, data) {
-      const formatedData = formatPostData(data)
-      console.log('SubmitReport: ', formatedData)
+      const reportName = data.reportName
+      const payload = data.payload
+      console.log('SubmitReport: ', data)
       return new Promise((resolve, reject) => {
-        submitReport(formatedData)
+        submitReport(reportName, payload)
           .then(response => {
             resolve(response)
           })

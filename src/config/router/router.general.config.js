@@ -47,6 +47,42 @@ export const asyncRouterMap = [
                   }
                 },
                 meta: { title: 'Genomics Data Commons', icon: 'dot-chart' }
+              },
+              {
+                path: '/data/data-model/quartet',
+                name: 'chinese-quartet',
+                hidden: false,
+                redirect: {
+                  name: 'embeded-frame',
+                  query: {
+                    src: `http://${window.location.host}/data-model/?project=chinese-quartet`
+                  }
+                },
+                meta: { title: 'Chinese Quartet', icon: 'border-inner' }
+              },
+              {
+                path: '/data/data-model/omics-data-commons',
+                name: 'Omics Data Commons',
+                hidden: false,
+                redirect: {
+                  name: 'embeded-frame',
+                  query: {
+                    src: `http://${window.location.host}/data-model/?project=omics-data-commons`
+                  }
+                },
+                meta: { title: 'Omics Data Commons', icon: 'retweet' }
+              },
+              {
+                path: '/data/data-model/chiglitazar',
+                name: 'Chiglitazar',
+                hidden: false,
+                redirect: {
+                  name: 'embeded-frame',
+                  query: {
+                    src: `http://${window.location.host}/data-model/?project=chiglitazar`
+                  }
+                },
+                meta: { title: 'Chiglitazar', icon: 'play-circle' }
               }
             ]
           },

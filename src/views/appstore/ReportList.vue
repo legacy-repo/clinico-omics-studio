@@ -38,7 +38,7 @@ export default {
       if (report.category.toUpperCase() === 'REPORT') {
         this.$router.push({
           name: 'report-management',
-          query: { creationMode: true, reportTool: report.title }
+          query: { creationMode: 'directory', reportTool: report.title }
         })
       } else {
         console.log('No Such Option: ', report)

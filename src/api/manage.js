@@ -23,6 +23,7 @@ const api = {
   tservice: {
     manifest: tserviceHost + '/api/manifest',
     root: tserviceHost,
+    reportEndpoint: tserviceHost + '/api/report/',
     report: tserviceHost + '/api/reports',
     chart: tserviceHost + '/api/chart'
   },
@@ -310,9 +311,9 @@ export function getReport(reportId) {
   })
 }
 
-export function submitReport(data) {
+export function submitReport(reportName, data) {
   return axios({
-    url: api.tservice.report,
+    url: api.tservice.reportEndpoint + reportName,
     method: 'post',
     data: data
   })

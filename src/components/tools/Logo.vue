@@ -19,7 +19,7 @@ export default {
     logo: {
       type: String,
       required: false,
-      default: '@/assets/logo.png'
+      default: require('@/assets/logo.png')
     },
     showTitle: {
       type: Boolean,

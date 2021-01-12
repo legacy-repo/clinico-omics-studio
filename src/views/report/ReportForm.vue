@@ -31,10 +31,7 @@
           <a-select-option v-for="tool in reportTools" :key="tool.value">{{ tool.text }}</a-select-option>
         </a-select>
       </a-form-item>
-      <a-form-item label="OSS" v-if="mode == 'oss'">
-        <a-input placeholder="Enter an oss link." v-decorator="['filepath', {rules: [{required: true, message: 'Please enter an oss link!'}]}]"/>
-      </a-form-item>
-      <a-form-item label="Data" v-if="mode == 'minio'">
+      <a-form-item label="Data" v-if="mode == 'directory'">
         <a-button @click="selectDirectory" style="margin-bottom: 5px;">
           <a-icon type="plus" />Select Directory
         </a-button>
@@ -162,7 +159,7 @@ export default {
   props: {
     mode: {
       type: String,
-      default: 'minio',
+      default: 'directory',  // directory, project
       required: false
     },
     reportTool: {
@@ -309,6 +306,8 @@ export default {
         parameters[record[0]] = record[1]
       })
 
+      console.log('formatParameters: ', data, parameters)
+
       return parameters
     },
     handleSubmit(e) {
@@ -333,17 +332,24 @@ export default {
         }
 
         if (!err) {
-          const metadata = {
+          const payload = {
             // TODO: when metadataType is object, the metadataBody may work improperly.
             metadata: this.metadataBody,
             parameters: this.formatParameters(this.parametersBody),
-            filepath: values.filepath
+            filepath: values.filepath,
+            name: values['reportName'],
+            description: values['description'],
+            project_id: values['projectId']
           }
 
-          console.log("Validated messages: ", validate(metadata, this.schema))
+          console.log("Validated messages: ", validate(payload, this.schema))
 
-          values['metadata'] = metadata
-          console.log('Received values of form: ', values)
+          const data = {
+            payload: payload,
+            reportName: values['reportTool']
+          }
+
+          console.log('Received values of form: ', data)
 
           this.submitReport(values)
             .then(result => {

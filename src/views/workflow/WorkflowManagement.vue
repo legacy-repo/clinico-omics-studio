@@ -6,71 +6,73 @@
     <detail-list slot="headerContent" size="small" :col="3" class="detail-layout">
       <detail-list-item term="Name">{{ project.title }}</detail-list-item>
       <detail-list-item term="Author">{{ project.author }}</detail-list-item>
-      <detail-list-item term="Started Time">{{ project.startedAt }}</detail-list-item>
-      <detail-list-item term="Finished Time">{{ project.finishedAt }}</detail-list-item>
-      <detail-list-item term="Description">{{ project.description }}</detail-list-item>
-      <a-row class="badge-list" :gutter="10">
-        <!-- Total -->
-        <a-tooltip placement="top">
-          <template slot="title">
-            <span>Total Jobs</span>
-          </template>
-          <a-col
-            class="badge"
-            :style="{ backgroundColor: '#d9d9d9', color: '#fff' }"
-          >{{ project.statusDetails.total }}</a-col>
-        </a-tooltip>
-        <!-- Submitted -->
-        <a-tooltip placement="top">
-          <template slot="title">
-            <span>Submitted Jobs</span>
-          </template>
-          <a-col
-            class="badge"
-            :style="{ backgroundColor: '#838383', color: '#fff' }"
-          >{{ countSubmitted(project) }}</a-col>
-        </a-tooltip>
-        <!-- Running -->
-        <a-tooltip placement="top">
-          <template slot="title">
-            <span>Running Jobs</span>
-          </template>
-          <a-col
-            class="badge"
-            :style="{ backgroundColor: '#108ee9', color: '#fff' }"
-          >{{ project.statusDetails.running }}</a-col>
-        </a-tooltip>
-        <!-- Red -->
-        <a-tooltip placement="top">
-          <template slot="title">
-            <span>Failed Jobs</span>
-          </template>
-          <a-col
-            class="badge"
-            :style="{ backgroundColor: '#f5222d', color: '#fff' }"
-          >{{ project.statusDetails.error }}</a-col>
-        </a-tooltip>
-        <!-- Green -->
-        <a-tooltip placement="top">
-          <template slot="title">
-            <span>Succeeded Jobs</span>
-          </template>
-          <a-col
-            class="badge"
-            :style="{ backgroundColor: '#52c41a', color: '#fff' }"
-          >{{ project.statusDetails.success }}</a-col>
-        </a-tooltip>
-        <!-- Yellow -->
-        <a-tooltip placement="top">
-          <template slot="title">
-            <span>Warning Jobs</span>
-          </template>
-          <a-col class="badge" :style="{ backgroundColor: '#faad14', color: '#fff' }">0</a-col>
-        </a-tooltip>
-      </a-row>
+      <detail-list-item term="Status">
+        <a-row class="badge-list">
+          <!-- Total -->
+          <a-tooltip placement="top">
+            <template slot="title">
+              <span>Total Jobs</span>
+            </template>
+            <a-col
+              class="badge"
+              :style="{ backgroundColor: '#d9d9d9', color: '#fff' }"
+            >{{ project.statusDetails.total }}</a-col>
+          </a-tooltip>
+          <!-- Submitted -->
+          <a-tooltip placement="top">
+            <template slot="title">
+              <span>Submitted Jobs</span>
+            </template>
+            <a-col
+              class="badge"
+              :style="{ backgroundColor: '#838383', color: '#fff' }"
+            >{{ countSubmitted(project) }}</a-col>
+          </a-tooltip>
+          <!-- Running -->
+          <a-tooltip placement="top">
+            <template slot="title">
+              <span>Running Jobs</span>
+            </template>
+            <a-col
+              class="badge"
+              :style="{ backgroundColor: '#108ee9', color: '#fff' }"
+            >{{ project.statusDetails.running }}</a-col>
+          </a-tooltip>
+          <!-- Red -->
+          <a-tooltip placement="top">
+            <template slot="title">
+              <span>Failed Jobs</span>
+            </template>
+            <a-col
+              class="badge"
+              :style="{ backgroundColor: '#f5222d', color: '#fff' }"
+            >{{ project.statusDetails.error }}</a-col>
+          </a-tooltip>
+          <!-- Green -->
+          <a-tooltip placement="top">
+            <template slot="title">
+              <span>Succeeded Jobs</span>
+            </template>
+            <a-col
+              class="badge"
+              :style="{ backgroundColor: '#52c41a', color: '#fff' }"
+            >{{ project.statusDetails.success }}</a-col>
+          </a-tooltip>
+          <!-- Yellow -->
+          <a-tooltip placement="top">
+            <template slot="title">
+              <span>Warning Jobs</span>
+            </template>
+            <a-col class="badge" :style="{ backgroundColor: '#faad14', color: '#fff' }">0</a-col>
+          </a-tooltip>
+        </a-row>
+      </detail-list-item>
       <!-- <detail-list-item term="Percentage"> -->
       <!-- <a-progress :percent="project.percentage" :status="project.status" /> -->
       <!-- </detail-list-item> -->
+      <detail-list-item term="Started Time">{{ project.startedAt }}</detail-list-item>
+      <detail-list-item term="Finished Time">{{ project.finishedAt }}</detail-list-item>
+      <detail-list-item term="Description" style="width: 100%;">{{ project.description }}</detail-list-item>
     </detail-list>
     <a-row slot="extra" class="status-list">
       <a-col :xs="8" :sm="8">
@@ -80,7 +82,7 @@
             type="primary"
             size="small"
             icon="logout"
-            @click.native="onShowReport(project.id)"
+            @click.native="onShowReport(project)"
           />
         </div>
       </a-col>
@@ -94,6 +96,7 @@
     <!-- actions -->
     <template slot="action">
       <a-button-group style="margin-right: 4px;">
+        <a-button @click="onShowReport(project)">Report</a-button>
         <a-button disabled>Stop</a-button>
         <a-button disabled>Restart</a-button>
         <a-button type="primary" disabled>Archive</a-button>
@@ -138,12 +141,14 @@ export default {
       getProjectStat: 'GetProjectStat',
       getReportList: 'GetReportList'
     }),
-    countSubmitted (item) {
-      return item.statusDetails.total - (item.statusDetails.success + item.statusDetails.running + item.statusDetails.error)
+    countSubmitted(item) {
+      return (
+        item.statusDetails.total - (item.statusDetails.success + item.statusDetails.running + item.statusDetails.error)
+      )
     },
-    onShowReport(projectId) {
+    onShowReport(project) {
       this.getReportList({
-        project_id: projectId
+        project_id: project.id
       })
         .then(result => {
           console.log('onShowReport: ', result)
@@ -159,6 +164,11 @@ export default {
             })
           } else {
             this.$message.warn('No related report.')
+            // TODO: Create Report?
+            // this.$router.push({
+            //   name: 'report-management',
+            //   query: { creationMode: 'project', reportTool: project.projectName }
+            // })
           }
         })
         .catch(error => {
@@ -211,10 +221,6 @@ export default {
 .detail-layout {
   .badge-list {
     display: flex;
-    flex-direction: row;
-    margin-top: 4px;
-    margin-left: 0px !important;
-    margin-bottom: 0px;
 
     .badge {
       margin-right: 5px;

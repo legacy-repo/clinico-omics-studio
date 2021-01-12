@@ -74,8 +74,7 @@ const columns = [
     dataIndex: 'access',
     key: 'access',
     align: 'center',
-    visible: false,
-    width: 80
+    visible: false
   },
   {
     title: 'File Name',
@@ -83,48 +82,42 @@ const columns = [
     key: 'fileName',
     align: 'center',
     scopedSlots: { customRender: 'fileName' },
-    visible: true,
-    width: 200
+    visible: true
   },
   {
     title: 'Project',
     dataIndex: 'project',
     key: 'project',
     align: 'center',
-    visible: true,
-    width: 100
+    visible: true
   },
   {
     title: 'Data Category',
     dataIndex: 'dataCategory',
     key: 'dataCategory',
     align: 'center',
-    visible: true,
-    width: 150
+    visible: true
   },
   {
     title: 'Data Format',
     dataIndex: 'dataFormat',
     key: 'dataFormat',
     align: 'center',
-    visible: true,
-    width: 150
+    visible: true
   },
   {
     title: 'File Size',
     dataIndex: 'fileSize',
     key: 'fileSize',
     align: 'center',
-    visible: true,
-    width: 150
+    visible: true
   },
   {
     title: 'Annotations',
     dataIndex: 'annotations',
     key: 'annotations',
     align: 'center',
-    visible: false,
-    width: 150
+    visible: false
   }
 ]
 

@@ -2,7 +2,10 @@
   <a-row class="record-container">
     <a-row class="info">
       <a-col :sm="24" :xs="24" :md="12" :lg="12" class="file-info">
-        <a-row class="title">File Properties</a-row>
+        <a-row class="title" style="padding-left: 0px;">
+          <span>File Properties</span>
+          <a-button style="float: right; height: 18px; padding-right: 0px;" type="link" icon="info-circle" @click="showDetails(recordId)">Details</a-button>
+        </a-row>
         <a-row v-for="(value, key) in fileRecord" :key="key" class="content">
           <a-col :sm="8" :xs="24" class="key">{{ formatKey(key) }}</a-col>
           <a-tooltip placement="topLeft">
@@ -87,6 +90,12 @@ export default {
     ...mapActions({
       getCollection: 'GetCollection'
     }),
+    showDetails(link) {
+      this.$router.push({
+        name: 'file-manager',
+        query: { path: link }
+      })
+    },
     formatKey(key) {
       const formattedKey = key.replace(/([A-Z])/g, ' $1')
       return v.titleCase(formattedKey.split('_').join(' '))
@@ -136,8 +145,7 @@ export default {
     border-radius: 5px;
 
     .title {
-      font-size: 18px;
-      font-weight: 500;
+      font-size: 16px;
       margin-bottom: 10px;
       color: #6b6262;
       border-bottom: 1px solid #d9d9d9;
@@ -151,11 +159,11 @@ export default {
     .data-info {
       width: calc(50% - 5px);
       background-color: #fff;
-      font-size: 16px;
+      // font-size: 16px;
       border-radius: 5px;
 
       .key {
-        font-weight: 450;
+        // font-weight: 450;
       }
 
       .value {

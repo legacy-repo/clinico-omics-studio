@@ -74,8 +74,7 @@ export default {
   border: 1px solid #d9d9d9;
 
   .title {
-    font-size: 18px;
-    font-weight: 500;
+    font-size: 16px;
     background-color: #fff;
     color: #6b6262;
     padding: 10px;

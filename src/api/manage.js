@@ -242,9 +242,9 @@ export function getToolManifest() {
   })
 }
 
-export function getToolSchema(tool) {
+export function getReportSchema(tool) {
   return axios({
-    url: api.tservice.root + '/api/' + tool,
+    url: api.tservice.root + '/api/report' + tool,
     method: 'get',
     params: {}
   })

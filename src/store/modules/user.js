@@ -127,7 +127,10 @@ const user = {
                 resolve(response)
               })
               .catch(error => {
-                reject(error)
+                localStorage.removeItem('CLINICO_OMICS_AUTH')
+                // It will be failed When encounter CORS problem
+                // reject(error)
+                resolve()
               })
           } else {
             localStorage.removeItem('CLINICO_OMICS_AUTH')

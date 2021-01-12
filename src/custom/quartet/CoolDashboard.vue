@@ -287,7 +287,7 @@ li {
 
     .chart {
       width: 100%;
-      height: calc(100% - 10px);
+      height: calc(100% - 20px);
       margin-top: 10px;
     }
   }

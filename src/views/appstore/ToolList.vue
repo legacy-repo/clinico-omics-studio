@@ -34,11 +34,6 @@ export default {
     onView(tool) {
       if (tool.repoUrl && tool.repoUrl.match(/^http[s]?:.*/)) {
         window.open(tool.repoUrl, '_blank')
-      } else if (tool.category.toUpperCase() === 'REPORT') {
-        this.$router.push({
-          name: 'report-management',
-          query: { creationMode: true, reportTool: tool.title }
-        })
       } else {
         // Tool or Convertor
         this.$router.push({

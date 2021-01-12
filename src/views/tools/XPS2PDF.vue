@@ -170,7 +170,7 @@ export default {
       var xps2pdfHistory = history !== null ? history : []
 
       this.$http({
-        url: this.tServiceHost + '/api/xps2pdf',
+        url: this.tServiceHost + '/api/tool/xps2pdf',
         method: 'post',
         data: {
           filepath: file.filepath

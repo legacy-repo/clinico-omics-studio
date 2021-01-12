@@ -2,7 +2,7 @@
   <div class="git-list">
     <a-card :bordered="false">
       <a-col slot="title" :lg="12" :md="12" :sm="24" :xs="24">
-        <a-popover placement="bottomRight">
+        <a-popover placement="bottom" style="min-width: 260px;">
           <template slot="content">
             <a-timeline class="json-popover" :reverse="true">
               <a-timeline-item color="green" @click="loadVersion(item.id)" :key="item.id" v-for="item in versions">
@@ -25,7 +25,7 @@
           class="comment-box"
           v-model="visible"
           @ok="hideModal"
-          okText="Enter"
+          okText="Submit"
           cancelText="Cancel">
           <a-textarea
             v-model="commentValue"
@@ -56,7 +56,7 @@
               <span>Data Repo</span>
             </a-breadcrumb-item>
             <a-breadcrumb-item>
-              VCF Data
+              Quartet Project
             </a-breadcrumb-item>
           </a-breadcrumb>
           <a-badge showZero :count="totalFiles" :numberStyle="{backgroundColor: '#52c41a'}"/>
@@ -143,86 +143,97 @@ export default {
       latestVersion: 'ffff',
       commentValue: '',
       visible: false,
-      totalVersions: 6,
-      totalFiles: 10,
+      totalVersions: 3,
+      totalFiles: 7,
       data: [
         {
-          'name': 'test',
-          'size': 96,
+          'name': 'datafile',
+          'size': 0,
           'isFile': false,
           'modified': 1585924514000,
           'created': '2020-04-03T14:35:08Z',
           'type': null,
           'status': 'unchanged',
           'location': '/Users/choppy/Downloads/vcf',
-          'md5': ''
+          'md5': 'ec5b89dc49c433a9521a13928c032120'
         },
         {
-          'name': 'port.vcf',
+          'name': 'library',
           'size': 0,
-          'isFile': true,
+          'isFile': false,
           'modified': 1585906390000,
           'created': '2020-04-03T09:33:10Z',
-          'type': '.vcf',
+          'type': null,
           'status': 'unchanged',
           'location': '/Users/choppy/Downloads/vcf',
           'md5': 'ec5b89dc49c433a9521a13928c032121'
         },
         {
-          'name': 'ports.vcf',
+          'name': 'patient',
           'size': 0,
-          'isFile': true,
+          'isFile': false,
           'modified': 1585906529000,
           'created': '2020-04-03T09:35:29Z',
-          'type': '.vcf',
+          'type': null,
           'location': '/Users/choppy/Downloads/vcf',
           'status': 'unchanged',
           'md5': 'ec5b89dc49c433a9521a13928c032100'
         },
         {
-          'name': 'port1.vcf',
+          'name': 'project',
           'size': 0,
-          'isFile': true,
+          'isFile': false,
           'modified': 1585906390000,
           'created': '2020-04-03T09:33:10Z',
-          'type': '.vcf',
+          'type': null,
           'location': '/Users/choppy/Downloads/vcf',
           'status': 'unchanged',
           'md5': 'ec5b89dc49c433a9521a13928c032124'
         },
         {
-          'name': 'ports1.vcf',
+          'name': 'sample',
           'size': 0,
-          'isFile': true,
+          'isFile': false,
           'modified': 1585906529000,
           'created': '2020-04-03T09:35:29Z',
-          'type': '.vcf',
+          'type': null,
           'location': '/Users/choppy/Downloads/vcf',
-          'status': 'modified',
+          'status': 'unchanged',
           'md5': 'ec5b89dc49c433a9521a13928c032130'
         },
         {
-          'name': 'ports2.vcf',
+          'name': 'sequencing',
           'size': 0,
+          'isFile': false,
+          'modified': 1585906529000,
+          'created': '2020-04-03T09:35:29Z',
+          'type': null,
+          'location': '/Users/choppy/Downloads/vcf',
+          'status': 'unchanged',
+          'md5': 'ec5b89dc49c433a9521a13928c032129'
+        },
+        {
+          'name': 'schema.json',
+          'size': 500,
           'isFile': true,
           'modified': 1585906529000,
           'created': '2020-04-03T09:35:29Z',
-          'type': '.vcf',
+          'type': '.json',
           'location': '/Users/choppy/Downloads/vcf',
-          'status': 'modified',
+          'status': 'unchanged',
           'md5': 'ec5b89dc49c433a9521a13928c032129'
         }
       ],
       versions: [
         {
-          id: 'dddd',
-          content: 'Create a services site 2015-09-01'
+          id: 'v0.1.0',
+          content: 'First Commit.'
         }, {
-          id: 'eeee',
-          content: 'Solve initial network problems 2015-09-01'
+          id: 'v0.1.1',
+          content: 'Fix some bugs.'
         }, {
-          id: 'ffff',
-          content: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.'
+          id: 'v0.1.2',
+          content: 'Add some records.'
         }
       ],
       loading: false

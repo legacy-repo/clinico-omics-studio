@@ -13,7 +13,10 @@
           <a-icon type="share-alt" />
         </template>
         <a-card-meta :title="report.title" :description="report.description" class="card-meta">
-          <a-avatar slot="avatar" style="backgroundColor: #87d068">{{ report.title[0].toUpperCase() }}</a-avatar>
+          <a-avatar
+            slot="avatar"
+            style="backgroundColor: #87d068"
+          >{{ report.title[0].toUpperCase() }}</a-avatar>
         </a-card-meta>
       </a-card>
     </a-col>
@@ -32,7 +35,14 @@ export default {
   },
   methods: {
     onView(report) {
-
+      if (report.category.toUpperCase() === 'REPORT') {
+        this.$router.push({
+          name: 'report-management',
+          query: { creationMode: true, reportTool: report.title }
+        })
+      } else {
+        console.log('No Such Option: ', report)
+      }
     }
   }
 }

@@ -89,7 +89,7 @@ export const config = (function() {
 // BASE_API
 export function initBaseURL() {
   if (project === 'clinico-omics') {
-    const apiService = 'http://10.157.72.54'
+    const apiService = 'http://service.3steps.cn'
     console.log(`BASE_API_URL: ${apiService}`)
     return apiService
   } else if (project === 'quartet') {

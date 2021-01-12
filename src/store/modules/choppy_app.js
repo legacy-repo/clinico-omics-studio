@@ -5,7 +5,7 @@ import {
   getAppSchema,
   getHelpMsg,
   getToolManifest,
-  getToolSchema
+  getReportSchema
 } from '@/api/manage'
 import orderBy from 'lodash.orderby'
 
@@ -136,11 +136,11 @@ const app = {
           })
       })
     },
-    GetToolSchema({ commit }, parameter) {
+    GetReportSchema({ commit }, parameter) {
       return new Promise((resolve, reject) => {
-        getToolSchema(parameter)
+        getReportSchema(parameter)
           .then(response => {
-            console.log('GetToolSchema: ', parameter, response)
+            console.log('GetReportSchema: ', parameter, response)
 
             resolve(response)
           })

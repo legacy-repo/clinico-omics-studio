@@ -201,7 +201,7 @@ export default {
   methods: {
     ...mapActions({
       getToolManifest: 'GetToolManifest',
-      getToolSchema: 'GetToolSchema',
+      getReportSchema: 'GetReportSchema',
       submitReport: 'SubmitReport'
     }),
     hideConfigPanel() {
@@ -228,7 +228,7 @@ export default {
     },
     selectReportTool(reportTool) {
       // Load tool's schema and make data for form-table component.
-      this.getToolSchema(reportTool).then(res => {
+      this.getReportSchema(reportTool).then(res => {
         const properties = res.properties
         // eslint-disable-next-line no-unused-vars
         const filepath = properties.filepath

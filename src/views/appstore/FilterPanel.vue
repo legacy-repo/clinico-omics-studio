@@ -36,7 +36,7 @@
         <a-tab-pane tab="Reports" key="report">
           <report-list :reportList="filteredReports" :key="localReportMode"></report-list>
         </a-tab-pane>
-        <a-tab-pane tab="Charts" key="chart">
+        <a-tab-pane tab="Charts" key="chart" disabled>
           <chart-list :chartList="filteredCharts" :key="localChartMode"></chart-list>
         </a-tab-pane>
       </a-tabs>

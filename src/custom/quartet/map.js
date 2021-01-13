@@ -1,4 +1,7402 @@
-export function registerChinaMap(exports, echarts) {
+import world from '@/custom/quartet/map/world.json'
+import china from '@/custom/quartet/map/china.json'
+import asia from '@/custom/quartet/map/asia.json'
+import shanghai from '@/custom/quartet/map/shanghai.json'
+import map from 'lodash.map'
+
+export const metadata = [
+  {
+    date: '20160621',
+    latitude: 31.1109237555,
+    longitude: 121.3849986165,
+    position: '莘庄',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_L01_01',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1210126,
+    longitude: 121.3929642,
+    position: '外环路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_L01_02',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1309716,
+    longitude: 121.4027682,
+    position: '莲花路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_L01_03',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1419686,
+    longitude: 121.4138212,
+    position: '锦江乐园',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_L01_04',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1545316,
+    longitude: 121.4299962,
+    position: '上海南站',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_L01_05',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1682416,
+    longitude: 121.4348402,
+    position: '漕宝路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_L01_06',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1817637408,
+    longitude: 121.4362728596,
+    position: '上海体育馆',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_L01_07',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1939432665,
+    longitude: 121.4388263226,
+    position: '徐家汇',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_L01_08',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2045786,
+    longitude: 121.4463202,
+    position: '衡山路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_L01_09',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2132625422,
+    longitude: 121.4509257674,
+    position: '常熟路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_L01_10',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2173112668,
+    longitude: 121.4601874352,
+    position: '陕西南路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_L01_11',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2227336,
+    longitude: 121.4731552,
+    position: '黄陂南路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_L01_12',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2327156,
+    longitude: 121.4756182,
+    position: '人民广场',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_L01_13',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2384236,
+    longitude: 121.4679042,
+    position: '新闸路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_L01_14',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2416246,
+    longitude: 121.4581842,
+    position: '汉中路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_L01_15',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2495870467,
+    longitude: 121.4583152533,
+    position: '上海火车站',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_L01_16',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2587646,
+    longitude: 121.4590832,
+    position: '中山北路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_L01_17',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2716296,
+    longitude: 121.4552242,
+    position: '延长路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_L01_18',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2799386,
+    longitude: 121.4518802,
+    position: '上海马戏城',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_L01_19',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2925976,
+    longitude: 121.4501032,
+    position: '汶水路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_L01_20',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3066086,
+    longitude: 121.4485052,
+    position: '彭浦新村',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_L01_21',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3189626,
+    longitude: 121.4469592,
+    position: '共康路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_L01_22',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3311346,
+    longitude: 121.4414012,
+    position: '通河新村',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_L01_23',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3398856,
+    longitude: 121.4375702,
+    position: '呼兰路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_L01_24',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3551846,
+    longitude: 121.4339772,
+    position: '共富新村',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_L01_25',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3695706,
+    longitude: 121.4308442,
+    position: '宝安公路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_L01_26',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3809886,
+    longitude: 121.4279082,
+    position: '友谊西路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_L01_27',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3922546,
+    longitude: 121.4245232,
+    position: '富 锦 路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_L01_28',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1504666,
+    longitude: 121.8057162,
+    position: '浦东国际机场',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_L02_01',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1683606,
+    longitude: 121.7969142,
+    position: '海天三路',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_L02_02',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1994486,
+    longitude: 121.7552372,
+    position: '远东大道',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_L02_03',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1926596,
+    longitude: 121.7226802,
+    position: '凌空路',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_L02_04',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1867506,
+    longitude: 121.6980992,
+    position: '川沙',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_L02_05',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1965786,
+    longitude: 121.6809642,
+    position: '华夏东路',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_L02_06',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2138626,
+    longitude: 121.6735982,
+    position: '创新中路',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_L02_07',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2133486,
+    longitude: 121.6564282,
+    position: '唐镇',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_L02_08',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2110546,
+    longitude: 121.6209592,
+    position: '广兰路',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_L02_09',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2042246,
+    longitude: 121.6019012,
+    position: '金科路',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_L02_10',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2018346,
+    longitude: 121.5875342,
+    position: '张江高科',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_L02_11',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2024956,
+    longitude: 121.5575882,
+    position: '龙阳路',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_L02_12',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2095516,
+    longitude: 121.5507302,
+    position: '世纪公园',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_L02_13',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2173776,
+    longitude: 121.5453244,
+    position: '上海科技馆',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_L02_14',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2289826,
+    longitude: 121.5267132,
+    position: '世纪大道',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_L02_15',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2333216,
+    longitude: 121.5152762,
+    position: '东昌路',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_L02_16',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2382033,
+    longitude: 121.5021478,
+    position: '陆家嘴',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_L02_17',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.238073,
+    longitude: 121.484641,
+    position: '南京东路',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_L02_18',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2327156,
+    longitude: 121.4756182,
+    position: '人民广场',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_L02_19',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2298656,
+    longitude: 121.4598522,
+    position: '南京西路',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_L02_20',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2232086,
+    longitude: 121.4463182,
+    position: '静安寺',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_L02_21',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.219871164,
+    longitude: 121.4325875044,
+    position: '江苏路',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_L02_22',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.21849259,
+    longitude: 121.4185139537,
+    position: '中山公园',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_L02_23',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2110919,
+    longitude: 121.4039195,
+    position: '娄山关路',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_L02_24',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2149536,
+    longitude: 121.3867952,
+    position: '威宁路',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_L02_25',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2166076,
+    longitude: 121.3740642,
+    position: '北新泾',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_L02_26',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2182306,
+    longitude: 121.3593362,
+    position: '淞虹路',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_L02_27',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1942346,
+    longitude: 121.326112,
+    position: '虹桥2号航站楼',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_L02_28',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1939546,
+    longitude: 121.3214132,
+    position: '虹桥火车站',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_L02_29',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1882906,
+    longitude: 121.2991902,
+    position: '徐泾东',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_L02_30',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1545316,
+    longitude: 121.4299962,
+    position: '上海南站',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_L03_01',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1579296,
+    longitude: 121.4430602,
+    position: '石龙路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_L03_02',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1694656,
+    longitude: 121.4442522,
+    position: '龙漕路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_L03_03',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1767406,
+    longitude: 121.4382282,
+    position: '漕溪路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_L03_04',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1871256,
+    longitude: 121.4270182,
+    position: '宜山路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_L03_05',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1974526,
+    longitude: 121.4206362,
+    position: '虹桥路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_L03_06',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2095926,
+    longitude: 121.4169292,
+    position: '延安西路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_L03_07',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2180106,
+    longitude: 121.4155672,
+    position: '中山公园',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_L03_08',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2321396,
+    longitude: 121.4130802,
+    position: '金沙江路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_L03_09',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2394146,
+    longitude: 121.4177462,
+    position: '曹杨路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_L03_10',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2465146,
+    longitude: 121.4298652,
+    position: '镇坪路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_L03_11',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2545946,
+    longitude: 121.4409792,
+    position: '中潭路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_L03_12',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2496946,
+    longitude: 121.4580792,
+    position: '上海火车站',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_L03_13',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2515756,
+    longitude: 121.4762312,
+    position: '宝山路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_L03_14',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2597876,
+    longitude: 121.4801082,
+    position: '东宝兴路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_L03_15',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2706036,
+    longitude: 121.4792772,
+    position: '虹口足球场',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_L03_16',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2812556,
+    longitude: 121.4823532,
+    position: '赤峰路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_L03_17',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2895566,
+    longitude: 121.4830872,
+    position: '大柏树',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_L03_18',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3055206,
+    longitude: 121.4849412,
+    position: '江湾镇',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_L03_19',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3198636,
+    longitude: 121.4848232,
+    position: '殷高西路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_L03_20',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3320546,
+    longitude: 121.4914192,
+    position: '长江南路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_L03_21',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3451526,
+    longitude: 121.5002792,
+    position: '淞发路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_L03_22',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3580266,
+    longitude: 121.4985722,
+    position: '张华浜',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_L03_23',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3710866,
+    longitude: 121.4926912,
+    position: '淞滨路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_L03_24',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3814066,
+    longitude: 121.4880402,
+    position: '水产路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_L03_25',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3953196,
+    longitude: 121.4794462,
+    position: '宝杨路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_L03_26',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.404014,
+    longitude: 121.47595,
+    position: '友谊路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_L03_27',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.4081686,
+    longitude: 121.4610822,
+    position: '铁力路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_L03_28',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.4078606,
+    longitude: 121.4396862,
+    position: '江杨北路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_L03_29',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1871256,
+    longitude: 121.4270182,
+    position: '宜山路',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_L04_01',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1827856,
+    longitude: 121.4371402,
+    position: '上海体育馆',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_L04_02',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1854926,
+    longitude: 121.4432532,
+    position: '上海体育场',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_L04_03',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1908196,
+    longitude: 121.4547332,
+    position: '东安路',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_L04_04',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1940086,
+    longitude: 121.4631792,
+    position: '大木桥路',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_L04_05',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1991996,
+    longitude: 121.4748482,
+    position: '鲁班路',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_L04_06',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2019676,
+    longitude: 121.4894242,
+    position: '西藏南路',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_L04_07',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2085986,
+    longitude: 121.4994392,
+    position: '南浦大桥',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_L04_08',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2098026,
+    longitude: 121.5184882,
+    position: '塘桥',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_L04_09',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.211854,
+    longitude: 121.527734,
+    position: '蓝村路',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_L04_10',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2223716,
+    longitude: 121.5319152,
+    position: '浦电路',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_L04_11',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2289826,
+    longitude: 121.5267132,
+    position: '世纪大道',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_L04_12',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2400176,
+    longitude: 121.5192422,
+    position: '浦东大道',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_L04_13',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2519276,
+    longitude: 121.5170792,
+    position: '杨树浦路',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_L04_14',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2579426,
+    longitude: 121.5129512,
+    position: '大连路',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_L04_15',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2608716,
+    longitude: 121.5005232,
+    position: '临平路',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_L04_16',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2589583274,
+    longitude: 121.4896059036,
+    position: '海伦路',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_L04_17',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2515756,
+    longitude: 121.4762312,
+    position: '宝山路',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_L04_18',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2496946,
+    longitude: 121.4580792,
+    position: '上海火车站',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_L04_19',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2545946,
+    longitude: 121.4409792,
+    position: '中潭路',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_L04_20',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2465146,
+    longitude: 121.4298652,
+    position: '镇坪路',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_L04_21',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2394146,
+    longitude: 121.4177462,
+    position: '曹杨路',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_L04_22',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2321396,
+    longitude: 121.4130802,
+    position: '金沙江路',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_L04_23',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2180106,
+    longitude: 121.4155672,
+    position: '中山公园',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_L04_24',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2095926,
+    longitude: 121.4169292,
+    position: '延安西路',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_L04_25',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1974526,
+    longitude: 121.4206362,
+    position: '虹桥路',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_L04_26',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1210126,
+    longitude: 121.3929642,
+    position: '莘庄',
+    receiver: 'Line 5',
+    sample_id: 'CN_SH_L05_01',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.0982096,
+    longitude: 121.3856462,
+    position: '春申路',
+    receiver: 'Line 5',
+    sample_id: 'CN_SH_L05_02',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.0893256,
+    longitude: 121.3902192,
+    position: '银都路',
+    receiver: 'Line 5',
+    sample_id: 'CN_SH_L05_03',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.0669916,
+    longitude: 121.4017412,
+    position: '颛桥',
+    receiver: 'Line 5',
+    sample_id: 'CN_SH_L05_04',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.0450716,
+    longitude: 121.4099512,
+    position: '北桥',
+    receiver: 'Line 5',
+    sample_id: 'CN_SH_L05_05',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.0264286,
+    longitude: 121.4164412,
+    position: '剑川路',
+    receiver: 'Line 5',
+    sample_id: 'CN_SH_L05_06',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.0182266,
+    longitude: 121.4197232,
+    position: '东川路',
+    receiver: 'Line 5',
+    sample_id: 'CN_SH_L05_07',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.0112316,
+    longitude: 121.4100292,
+    position: '金平路',
+    receiver: 'Line 5',
+    sample_id: 'CN_SH_L05_08',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.0073836,
+    longitude: 121.3951182,
+    position: '华宁路',
+    receiver: 'Line 5',
+    sample_id: 'CN_SH_L05_09',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.0035646,
+    longitude: 121.3806682,
+    position: '文井路',
+    receiver: 'Line 5',
+    sample_id: 'CN_SH_L05_10',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.0005526,
+    longitude: 121.3696392,
+    position: '闵行开发区',
+    receiver: 'Line 5',
+    sample_id: 'CN_SH_L05_11',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3530196,
+    longitude: 121.5747032,
+    position: '港城路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_L06_01',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3478446,
+    longitude: 121.5867772,
+    position: '外高桥保税区北',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_L06_02',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3354456,
+    longitude: 121.5938442,
+    position: '航津路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_L06_03',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3216076,
+    longitude: 121.6018562,
+    position: '外高桥保税区南',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_L06_04',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3123216,
+    longitude: 121.5892702,
+    position: '洲海路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_L06_05',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3025936,
+    longitude: 121.5891772,
+    position: '五洲大道',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_L06_06',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2906726,
+    longitude: 121.5887102,
+    position: '东靖路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_L06_07',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2806846,
+    longitude: 121.5883112,
+    position: '巨峰路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_L06_08',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2720776,
+    longitude: 121.5878192,
+    position: '五莲路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_L06_09',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2635056,
+    longitude: 121.5865522,
+    position: '博兴路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_L06_10',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2571856,
+    longitude: 121.5817632,
+    position: '金桥路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_L06_11',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2503936,
+    longitude: 121.5725962,
+    position: '云山路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_L06_12',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2453952,
+    longitude: 121.5640942,
+    position: '德平路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_L06_13',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2391256,
+    longitude: 121.5521232,
+    position: '北洋泾路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_L06_14',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2358546,
+    longitude: 121.5433882,
+    position: '民生路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_L06_15',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2330086,
+    longitude: 121.5345062,
+    position: '源深体育中心',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_L06_16',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2289826,
+    longitude: 121.5267132,
+    position: '世纪大道',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_L06_17',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2201566,
+    longitude: 121.5289672,
+    position: '浦电路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_L06_18',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2118633,
+    longitude: 121.5279301,
+    position: '蓝村路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_L06_19',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2032936,
+    longitude: 121.5233542,
+    position: '上海儿童医学中心',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_L06_20',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1931886,
+    longitude: 121.5165282,
+    position: '临沂新村',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_L06_21',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1857496,
+    longitude: 121.5096562,
+    position: '高科西路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_L06_22',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1726506,
+    longitude: 121.5107312,
+    position: '东明路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_L06_23',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1600926,
+    longitude: 121.5155422,
+    position: '高青路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_L06_24',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1498746,
+    longitude: 121.5143782,
+    position: '华夏西路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_L06_25',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1491376,
+    longitude: 121.5061452,
+    position: '上南路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_L06_26',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1487676,
+    longitude: 121.4951792,
+    position: '灵岩南路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_L06_27',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1533706,
+    longitude: 121.4801672,
+    position: '东方体育中心',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_L06_28',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2112166,
+    longitude: 121.5626172,
+    position: '花木路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_01',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2030424693,
+    longitude: 121.5574282408,
+    position: '龙阳路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_02',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1931646,
+    longitude: 121.5499622,
+    position: '芳华路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_03',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1875966,
+    longitude: 121.5399042,
+    position: '锦绣路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_04',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1875776,
+    longitude: 121.5249692,
+    position: '杨高南路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_05',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1857496,
+    longitude: 121.5096562,
+    position: '高科西路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_06',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1821326,
+    longitude: 121.5002382,
+    position: '云台路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_07',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1785176,
+    longitude: 121.4944752,
+    position: '耀华路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_08',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1732211,
+    longitude: 121.4834805,
+    position: '长清路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_09',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1718876,
+    longitude: 121.4737992,
+    position: '后滩',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_10',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1849706,
+    longitude: 121.4570012,
+    position: '龙华中路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_11',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1908196,
+    longitude: 121.4547332,
+    position: '东安路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_12',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1994986,
+    longitude: 121.4502012,
+    position: '肇嘉浜路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_13',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2135286,
+    longitude: 121.4490042,
+    position: '常熟路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_14',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2232613156,
+    longitude: 121.4484661818,
+    position: '静安寺',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_15',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2338851,
+    longitude: 121.4423902,
+    position: '昌平路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_16',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.239912121,
+    longitude: 121.4381048083,
+    position: '长寿路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_17',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2464523784,
+    longitude: 121.4319384098,
+    position: '镇坪路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_18',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2562266,
+    longitude: 121.4216562,
+    position: '岚皋路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_19',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2639566,
+    longitude: 121.4225452,
+    position: '新村路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_20',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2738746,
+    longitude: 121.4229092,
+    position: '大华三路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_21',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2849466,
+    longitude: 121.4213562,
+    position: '行知路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_22',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2933246,
+    longitude: 121.4164112,
+    position: '大场镇',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_23',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3038686,
+    longitude: 121.4135572,
+    position: '场中路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_24',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3149676,
+    longitude: 121.4084642,
+    position: '上大路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_25',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3214406,
+    longitude: 121.3985872,
+    position: '南陈路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_26',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3205776,
+    longitude: 121.3886752,
+    position: '上海大学',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_27',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3223196,
+    longitude: 121.3734322,
+    position: '祁华路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_28',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3448136,
+    longitude: 121.3726262,
+    position: '顾村公园',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_29',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3575726,
+    longitude: 121.3622652,
+    position: '刘行',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_30',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3641836,
+    longitude: 121.3557002,
+    position: '潘广路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_31',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3887376,
+    longitude: 121.3573142,
+    position: '罗南新村',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_32',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.4017256,
+    longitude: 121.3499852,
+    position: '美兰湖',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_L07_33',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.0614136,
+    longitude: 121.5120912,
+    position: '沈杜公路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_L08_01',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.0734216,
+    longitude: 121.5104532,
+    position: '联航路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_L08_02',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.0840266,
+    longitude: 121.5084952,
+    position: '江月路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_L08_03',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.0962496,
+    longitude: 121.5062512,
+    position: '浦江镇',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_L08_04',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1190786,
+    longitude: 121.4976762,
+    position: '芦恒路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_L08_05',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1413616,
+    longitude: 121.4895062,
+    position: '凌兆新村',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_L08_06',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1533706,
+    longitude: 121.4801672,
+    position: '东方体育中心',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_L08_07',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1610716,
+    longitude: 121.4933262,
+    position: '杨思',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_L08_08',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1706926,
+    longitude: 121.4960992,
+    position: '成山路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_L08_09',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1785176,
+    longitude: 121.4944752,
+    position: '耀华路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_L08_10',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1854156,
+    longitude: 121.4934882,
+    position: '中华艺术宫',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_L08_11',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2019676,
+    longitude: 121.4894242,
+    position: '西藏南路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_L08_12',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2117731,
+    longitude: 121.4859712,
+    position: '陆家浜路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_L08_13',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2188756,
+    longitude: 121.4828022,
+    position: '老西门',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_L08_14',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2271866,
+    longitude: 121.4791785,
+    position: '大世界',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_L08_15',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2332698,
+    longitude: 121.4747606,
+    position: '人民广场',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_L08_16',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2423116,
+    longitude: 121.4714062,
+    position: '曲阜路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_L08_17',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2532326,
+    longitude: 121.4688892,
+    position: '中兴路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_L08_18',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2635276,
+    longitude: 121.4686462,
+    position: '西藏北路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_L08_19',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2698899303,
+    longitude: 121.4794135094,
+    position: '虹口足球场',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_L08_20',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2765246,
+    longitude: 121.4905732,
+    position: '曲阳路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_L08_21',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2748836,
+    longitude: 121.5013442,
+    position: '四平路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_L08_22',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2732526,
+    longitude: 121.5095932,
+    position: '鞍山新村',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_L08_23',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2749636,
+    longitude: 121.5183102,
+    position: '江浦路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_L08_24',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2787926,
+    longitude: 121.5282262,
+    position: '黄兴路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_L08_25',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2885966,
+    longitude: 121.5348032,
+    position: '延吉中路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_L08_26',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2958356,
+    longitude: 121.5330042,
+    position: '黄兴公园',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_L08_27',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3050066,
+    longitude: 121.5318372,
+    position: '翔殷路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_L08_28',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3147936,
+    longitude: 121.5318152,
+    position: '嫩江路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_L08_29',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3227616,
+    longitude: 121.5317972,
+    position: '市光路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_L08_30',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2275316,
+    longitude: 121.5485772,
+    position: '杨高中路',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_L09_01',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2289826,
+    longitude: 121.5267132,
+    position: '世纪大道',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_L09_02',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2303046,
+    longitude: 121.5160772,
+    position: '商城路',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_L09_03',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2168676,
+    longitude: 121.4982602,
+    position: '小南门',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_L09_04',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2117731,
+    longitude: 121.4859712,
+    position: '陆家浜路',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_L09_05',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2095246,
+    longitude: 121.4771192,
+    position: '马当路',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_L09_06',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2063176,
+    longitude: 121.4685522,
+    position: '打浦桥',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_L09_07',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2028596,
+    longitude: 121.4607192,
+    position: '嘉善路',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_L09_08',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1994986,
+    longitude: 121.4502012,
+    position: '肇嘉浜路',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_L09_09',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1946326,
+    longitude: 121.4359982,
+    position: '徐家汇',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_L09_10',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1871256,
+    longitude: 121.4270182,
+    position: '宜山路',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_L09_11',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1747656,
+    longitude: 121.4179322,
+    position: '桂林路',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_L09_12',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1706296,
+    longitude: 121.3976732,
+    position: '漕河泾开发区',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_L09_13',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1665496,
+    longitude: 121.3846452,
+    position: '合川路',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_L09_14',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1581526,
+    longitude: 121.3689132,
+    position: '星中路',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_L09_15',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1552966,
+    longitude: 121.3490932,
+    position: '七宝',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_L09_16',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1496426,
+    longitude: 121.3380462,
+    position: '中春路',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_L09_17',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1377366,
+    longitude: 121.3191532,
+    position: '九亭',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_L09_18',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1183236,
+    longitude: 121.2603132,
+    position: '泗泾',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_L09_19',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1044716,
+    longitude: 121.2295842,
+    position: '佘山',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_L09_20',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.0844936,
+    longitude: 121.2303362,
+    position: '洞泾',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_L09_21',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.0540936,
+    longitude: 121.2324802,
+    position: '松江大学城',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_L09_22',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.0303146,
+    longitude: 121.2306022,
+    position: '松江新城',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_L09_23',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.0155706,
+    longitude: 121.2303512,
+    position: '松江体育中心',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_L09_24',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.0015336,
+    longitude: 121.2292142,
+    position: '醉白池',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_L09_25',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 30.9852276,
+    longitude: 121.2309302,
+    position: '松江南站',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_L09_26',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3285926,
+    longitude: 121.5066292,
+    position: '新江湾城站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_L10_01',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3217816,
+    longitude: 121.5066782,
+    position: '殷高东路站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_L10_02',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3131696,
+    longitude: 121.5081562,
+    position: '三门路站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_L10_03',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3028656,
+    longitude: 121.5140812,
+    position: '江湾体育场站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_L10_04',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2980676,
+    longitude: 121.5145112,
+    position: '五角场站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_L10_05',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2893076,
+    longitude: 121.5099022,
+    position: '国权路站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_L10_06',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2821866,
+    longitude: 121.5061732,
+    position: '同济大学站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_L10_07',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2748836,
+    longitude: 121.5013442,
+    position: '四平路站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_L10_08',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2687086,
+    longitude: 121.4944242,
+    position: '邮电新村站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_L10_09',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2592771,
+    longitude: 121.4885382,
+    position: '海伦路站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_L10_10',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2520806,
+    longitude: 121.4842152,
+    position: '四川北路站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_L10_11',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2439126,
+    longitude: 121.4823122,
+    position: '天潼路站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_L10_12',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2380776,
+    longitude: 121.4845042,
+    position: '南京东路站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_L10_13',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2277646,
+    longitude: 121.4873412,
+    position: '豫园站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_L10_14',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2188756,
+    longitude: 121.4828022,
+    position: '老西门站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_L10_15',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2164696,
+    longitude: 121.4751582,
+    position: '新天地站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_L10_16',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2150046,
+    longitude: 121.4581292,
+    position: '陕西南路站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_L10_17',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2081046,
+    longitude: 121.4442132,
+    position: '上海图书馆站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_L10_18',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2021985,
+    longitude: 121.4351835,
+    position: '交通大学站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_L10_19',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1966231024,
+    longitude: 121.4224943519,
+    position: '虹桥路站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_L10_20',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1965976,
+    longitude: 121.4115932,
+    position: '宋园路站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_L10_21',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1988386,
+    longitude: 121.4039322,
+    position: '伊犁路站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_L10_22',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1994296,
+    longitude: 121.3919392,
+    position: '水城路站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_L10_23',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1943356,
+    longitude: 121.3797802,
+    position: '龙溪路站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_L10_24',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1902506,
+    longitude: 121.3680092,
+    position: '上海动物园站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_L10_25',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1913696,
+    longitude: 121.3469442,
+    position: '虹桥1号航站楼站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_L10_26',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1942346,
+    longitude: 121.3261122,
+    position: '虹桥2号航站楼站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_L10_27',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1939546,
+    longitude: 121.3214132,
+    position: '虹桥火车站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_L10_28',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1770726,
+    longitude: 121.3702412,
+    position: '龙柏新村站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_L10_29',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1697646,
+    longitude: 121.3642752,
+    position: '紫藤路站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_L10_30',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1658576,
+    longitude: 121.3550262,
+    position: '航中路站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_L10_31',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.141423,
+    longitude: 121.668561,
+    position: '迪士尼',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_01',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.130434,
+    longitude: 121.617479,
+    position: '康新公路',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_02',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.13772,
+    longitude: 121.599149,
+    position: '秀沿路',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_03',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1528031,
+    longitude: 121.5932112,
+    position: '罗山路',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_04',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1581329,
+    longitude: 121.5710801,
+    position: '御桥',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_05',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1508406,
+    longitude: 121.5387422,
+    position: '浦三路',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_06',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1464576,
+    longitude: 121.5228382,
+    position: '三林东',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_07',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1432316,
+    longitude: 121.5113822,
+    position: '三林',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_08',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1533706,
+    longitude: 121.4801672,
+    position: '东方体育中心',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_09',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1598516,
+    longitude: 121.4596262,
+    position: '龙耀路',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_10',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1665044,
+    longitude: 121.458476,
+    position: '云锦路',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_11',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1726758,
+    longitude: 121.4527375,
+    position: '龙华',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_12',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1792256,
+    longitude: 121.4415757,
+    position: '上海游泳馆',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_13',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1946326,
+    longitude: 121.4359982,
+    position: '徐家汇',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_14',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2021985,
+    longitude: 121.4351835,
+    position: '交通大学',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_15',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2205226,
+    longitude: 121.4305342,
+    position: '江苏路',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_16',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2305126,
+    longitude: 121.4234312,
+    position: '隆德路',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_17',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2377013565,
+    longitude: 121.4177441597,
+    position: '曹杨路',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_18',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2418181,
+    longitude: 121.4113162,
+    position: '枫桥路',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_19',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2508416,
+    longitude: 121.4070572,
+    position: '真如',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_20',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2626976,
+    longitude: 121.4007892,
+    position: '上海西站',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_21',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2690246,
+    longitude: 121.3898322,
+    position: '李子园',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_22',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2716616,
+    longitude: 121.3758202,
+    position: '祁连山路',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_23',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2764708,
+    longitude: 121.3648287,
+    position: '武威路',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_24',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2816046,
+    longitude: 121.3498288,
+    position: '桃浦新村',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_25',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2968476,
+    longitude: 121.3231322,
+    position: '南翔',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_26',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3194646,
+    longitude: 121.2767022,
+    position: '马陆',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_27',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3296327,
+    longitude: 121.2546845,
+    position: '嘉定新城',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_28',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3451926,
+    longitude: 121.2452842,
+    position: '白银路',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_29',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3770886,
+    longitude: 121.2277262,
+    position: '嘉定西',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_30',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3915156,
+    longitude: 121.2371892,
+    position: '嘉定北',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_31',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.3318426,
+    longitude: 121.2259242,
+    position: '上海赛车场',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_32',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2935586,
+    longitude: 121.2002472,
+    position: '昌吉东路',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_33',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2853906,
+    longitude: 121.1806712,
+    position: '上海汽车城',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_34',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2877866,
+    longitude: 121.1631272,
+    position: '安亭',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_35',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2889796,
+    longitude: 121.1502112,
+    position: '兆丰路',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_36',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2963346,
+    longitude: 121.1171422,
+    position: '光明路',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_37',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2988006,
+    longitude: 121.1041792,
+    position: '花桥',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_L11_38',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2630466,
+    longitude: 121.6384352,
+    position: '金海路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_L12_01',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2801936,
+    longitude: 121.6266442,
+    position: '申江路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_L12_02',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2798256,
+    longitude: 121.6153752,
+    position: '金京路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_L12_03',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2800966,
+    longitude: 121.6028002,
+    position: '杨高北路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_L12_04',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2800225417,
+    longitude: 121.5897971392,
+    position: '巨峰路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_L12_05',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2825366,
+    longitude: 121.5787702,
+    position: '东陆路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_L12_06',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2805316,
+    longitude: 121.5610442,
+    position: '复兴岛',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_L12_07',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2797926,
+    longitude: 121.5525182,
+    position: '爱国路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_L12_08',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2752136,
+    longitude: 121.5445512,
+    position: '隆昌路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_L12_09',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2686666,
+    longitude: 121.5323032,
+    position: '宁国路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_L12_10',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.266602,
+    longitude: 121.5280594,
+    position: '江浦公园',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_L12_11',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2579426,
+    longitude: 121.5129512,
+    position: '大连路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_L12_12',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2534716,
+    longitude: 121.5065392,
+    position: '提篮桥',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_L12_13',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2500596,
+    longitude: 121.4979102,
+    position: '国际客运中心',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_L12_14',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2439126,
+    longitude: 121.4823122,
+    position: '天潼路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_L12_15',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2423116,
+    longitude: 121.4714062,
+    position: '曲阜路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_L12_16',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2416246,
+    longitude: 121.4581842,
+    position: '汉中路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_L12_17',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2298942,
+    longitude: 121.4598666,
+    position: '南京西路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_L12_18',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2172505,
+    longitude: 121.4597002,
+    position: '陕西南路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_L12_19',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2028596,
+    longitude: 121.4607192,
+    position: '嘉善路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_L12_20',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1940086,
+    longitude: 121.4631792,
+    position: '大木桥路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_L12_21',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1849065,
+    longitude: 121.4572633,
+    position: '龙华中路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_L12_22',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1725036,
+    longitude: 121.4527712,
+    position: '龙华',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_L12_23',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1694055,
+    longitude: 121.4442815,
+    position: '龙漕路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_L12_24',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1682568,
+    longitude: 121.4349185,
+    position: '漕宝路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_L12_25',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1668728,
+    longitude: 121.4183627,
+    position: '桂林公园',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_L12_26',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.164231,
+    longitude: 121.410519,
+    position: '虹漕路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_L12_27',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1622032,
+    longitude: 121.4024209,
+    position: '虹梅路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_L12_28',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1547229,
+    longitude: 121.3919739,
+    position: '东兰路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_L12_29',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1412146,
+    longitude: 121.3942132,
+    position: '顾戴路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_L12_30',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1373106,
+    longitude: 121.3792372,
+    position: '虹莘路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_L12_31',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1326579,
+    longitude: 121.3641913,
+    position: '七莘路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_L12_32',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2410306,
+    longitude: 121.3189902,
+    position: '金运路',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_L13_01',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2411546,
+    longitude: 121.3350012,
+    position: '金沙江西路',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_L13_02',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2425466,
+    longitude: 121.3550572,
+    position: '丰庄',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_L13_03',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2376296,
+    longitude: 121.3671382,
+    position: '祁连山南路',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_L13_04',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2323616,
+    longitude: 121.3815752,
+    position: '真北路',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_L13_05',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2317806,
+    longitude: 121.3947572,
+    position: '大渡河路',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_L13_06',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2312338855,
+    longitude: 121.411703825,
+    position: '金沙江路',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_L13_07',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2305126,
+    longitude: 121.4234312,
+    position: '隆德路',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_L13_08',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2343706,
+    longitude: 121.4303852,
+    position: '武宁路',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_L13_09',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2409269,
+    longitude: 121.4381836,
+    position: '长寿路',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_L13_10',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2439446,
+    longitude: 121.4434212,
+    position: '江宁路',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_L13_11',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2417385,
+    longitude: 121.4581787,
+    position: '汉中路',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_L13_12',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2367561,
+    longitude: 121.4626195,
+    position: '自然博物馆',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_L13_13',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2298481,
+    longitude: 121.4598355,
+    position: '南京西路',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_L13_14',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.221247,
+    longitude: 121.4633695,
+    position: '淮海中路',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_L13_15',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.216435,
+    longitude: 121.4750808,
+    position: '新天地',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_L13_16',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2093839,
+    longitude: 121.476387,
+    position: '马当路',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_L13_17',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.196559,
+    longitude: 121.48212,
+    position: '世博会博物馆',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_L13_18',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.182425,
+    longitude: 121.4844115,
+    position: '世博大道',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_L13_19',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 30.9072726,
+    longitude: 121.9294222,
+    position: '滴水湖',
+    receiver: 'Line 16',
+    sample_id: 'CN_SH_L16_01',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 30.9242026,
+    longitude: 121.9099362,
+    position: '临港大道',
+    receiver: 'Line 16',
+    sample_id: 'CN_SH_L16_02',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 30.9592946,
+    longitude: 121.8503982,
+    position: '书院',
+    receiver: 'Line 16',
+    sample_id: 'CN_SH_L16_03',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.0265606,
+    longitude: 121.7936622,
+    position: '惠南东',
+    receiver: 'Line 16',
+    sample_id: 'CN_SH_L16_04',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.0537886,
+    longitude: 121.7615492,
+    position: '惠南',
+    receiver: 'Line 16',
+    sample_id: 'CN_SH_L16_05',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.0502006,
+    longitude: 121.6991072,
+    position: '野生动物园',
+    receiver: 'Line 16',
+    sample_id: 'CN_SH_L16_06',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.0454786,
+    longitude: 121.6488452,
+    position: '新场',
+    receiver: 'Line 16',
+    sample_id: 'CN_SH_L16_07',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.0549106,
+    longitude: 121.6172972,
+    position: '航头东',
+    receiver: 'Line 16',
+    sample_id: 'CN_SH_L16_08',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.0776346,
+    longitude: 121.6110982,
+    position: '鹤沙航城',
+    receiver: 'Line 16',
+    sample_id: 'CN_SH_L16_09',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1099596,
+    longitude: 121.6067692,
+    position: '周浦东',
+    receiver: 'Line 16',
+    sample_id: 'CN_SH_L16_10',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1528066,
+    longitude: 121.5932112,
+    position: '罗山路',
+    receiver: 'Line 16',
+    sample_id: 'CN_SH_L16_11',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.1758486,
+    longitude: 121.5829632,
+    position: '华夏中路站',
+    receiver: 'Line 16',
+    sample_id: 'CN_SH_L16_12',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20160621',
+    latitude: 31.2024956,
+    longitude: 121.5575882,
+    position: '龙阳路站',
+    receiver: 'Line 16',
+    sample_id: 'CN_SH_L16_13',
+    tubes: 2,
+    year: '2016'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1109237555,
+    longitude: 121.3849986165,
+    position: '莘庄',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_MG_03',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1210126,
+    longitude: 121.3929642,
+    position: '外环路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_MG_04',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1309716,
+    longitude: 121.4027682,
+    position: '莲花路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_MG_05',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1419686,
+    longitude: 121.4138212,
+    position: '锦江乐园',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_MG_06',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1545316,
+    longitude: 121.4299962,
+    position: '上海南站',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_MG_07',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1682416,
+    longitude: 121.4348402,
+    position: '漕宝路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_MG_08',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1817637408,
+    longitude: 121.4362728596,
+    position: '上海体育馆',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_MG_09',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1939432665,
+    longitude: 121.4388263226,
+    position: '徐家汇',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_MG_10',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2045786,
+    longitude: 121.4463202,
+    position: '衡山路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_MG_11',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2132625422,
+    longitude: 121.4509257674,
+    position: '常熟路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_MG_12',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2173112668,
+    longitude: 121.4601874352,
+    position: '陕西南路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_MG_13',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2227336,
+    longitude: 121.4731552,
+    position: '黄陂南路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_MG_14',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2327156,
+    longitude: 121.4756182,
+    position: '人民广场',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_MG_15',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2384236,
+    longitude: 121.4679042,
+    position: '新闸路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_MG_16',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2416246,
+    longitude: 121.4581842,
+    position: '汉中路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_MG_17',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2495870467,
+    longitude: 121.4583152533,
+    position: '上海火车站',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_MG_18',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2587646,
+    longitude: 121.4590832,
+    position: '中山北路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_MG_19',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2716296,
+    longitude: 121.4552242,
+    position: '延长路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_MG_20',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2799386,
+    longitude: 121.4518802,
+    position: '上海马戏城',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_MG_21',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2925976,
+    longitude: 121.4501032,
+    position: '汶水路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_MG_22',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3066086,
+    longitude: 121.4485052,
+    position: '彭浦新村',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_MG_23',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3189626,
+    longitude: 121.4469592,
+    position: '共康路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_MG_24',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3311346,
+    longitude: 121.4414012,
+    position: '通河新村',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_MG_25',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3398856,
+    longitude: 121.4375702,
+    position: '呼兰路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_MG_26',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3551846,
+    longitude: 121.4339772,
+    position: '共富新村',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_MG_27',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3695706,
+    longitude: 121.4308442,
+    position: '宝安公路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_MG_28',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3809886,
+    longitude: 121.4279082,
+    position: '友谊西路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_MG_29',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3922546,
+    longitude: 121.4245232,
+    position: '富 锦 路',
+    receiver: 'Line 1',
+    sample_id: 'CN_SH_MG_30',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1926596,
+    longitude: 121.7226802,
+    position: '凌空路',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_MG_31',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1994486,
+    longitude: 121.7552372,
+    position: '远东大道',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_MG_32',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1504666,
+    longitude: 121.8057162,
+    position: '浦东国际机场',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_MG_33',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1867506,
+    longitude: 121.6980992,
+    position: '川沙',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_MG_34',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1965786,
+    longitude: 121.6809642,
+    position: '华夏东路',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_MG_35',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2138626,
+    longitude: 121.6735982,
+    position: '创新中路',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_MG_36',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2133486,
+    longitude: 121.6564282,
+    position: '唐镇',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_MG_37',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2110546,
+    longitude: 121.6209592,
+    position: '广兰路',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_MG_38',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2018346,
+    longitude: 121.5875342,
+    position: '张江高科',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_MG_39',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2042246,
+    longitude: 121.6019012,
+    position: '金科路',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_MG_40',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1882906,
+    longitude: 121.2991902,
+    position: '徐泾东',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_MG_41',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1939546,
+    longitude: 121.3214132,
+    position: '虹桥火车站',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_MG_42',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1942346,
+    longitude: 121.326112,
+    position: '虹桥2号航站楼',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_MG_43',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2182306,
+    longitude: 121.3593362,
+    position: '淞虹路',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_MG_44',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2166076,
+    longitude: 121.3740642,
+    position: '北新泾',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_MG_45',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2149536,
+    longitude: 121.3867952,
+    position: '威宁路',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_MG_46',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2110919,
+    longitude: 121.4039195,
+    position: '娄山关路',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_MG_47',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.21849259,
+    longitude: 121.4185139537,
+    position: '中山公园',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_MG_48',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.219871164,
+    longitude: 121.4325875044,
+    position: '江苏路',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_MG_49',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2232086,
+    longitude: 121.4463182,
+    position: '静安寺',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_MG_50',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2298656,
+    longitude: 121.4598522,
+    position: '南京西路',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_MG_51',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2327156,
+    longitude: 121.4756182,
+    position: '人民广场',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_MG_52',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.238073,
+    longitude: 121.484641,
+    position: '南京东路',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_MG_53',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2024956,
+    longitude: 121.5575882,
+    position: '龙阳路',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_MG_54',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2382033,
+    longitude: 121.5021478,
+    position: '陆家嘴',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_MG_55',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2333216,
+    longitude: 121.5152762,
+    position: '东昌路',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_MG_56',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1683606,
+    longitude: 121.7969142,
+    position: '海天三路',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_MG_57',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2289826,
+    longitude: 121.5267132,
+    position: '世纪大道',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_MG_58',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2173776,
+    longitude: 121.5453244,
+    position: '上海科技馆',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_MG_59',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2095516,
+    longitude: 121.5507302,
+    position: '世纪公园',
+    receiver: 'Line 2',
+    sample_id: 'CN_SH_MG_60',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1545316,
+    longitude: 121.4299962,
+    position: '上海南站',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_MG_61',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1579296,
+    longitude: 121.4430602,
+    position: '石龙路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_MG_62',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1694656,
+    longitude: 121.4442522,
+    position: '龙漕路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_MG_63',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1767406,
+    longitude: 121.4382282,
+    position: '漕溪路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_MG_64',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1871256,
+    longitude: 121.4270182,
+    position: '宜山路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_MG_65',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1974526,
+    longitude: 121.4206362,
+    position: '虹桥路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_MG_66',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2095926,
+    longitude: 121.4169292,
+    position: '延安西路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_MG_67',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2180106,
+    longitude: 121.4155672,
+    position: '中山公园',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_MG_68',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2321396,
+    longitude: 121.4130802,
+    position: '金沙江路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_MG_69',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2394146,
+    longitude: 121.4177462,
+    position: '曹杨路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_MG_70',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2465146,
+    longitude: 121.4298652,
+    position: '镇坪路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_MG_71',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2545946,
+    longitude: 121.4409792,
+    position: '中潭路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_MG_72',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2496946,
+    longitude: 121.4580792,
+    position: '上海火车站',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_MG_73',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2515756,
+    longitude: 121.4762312,
+    position: '宝山路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_MG_74',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2597876,
+    longitude: 121.4801082,
+    position: '东宝兴路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_MG_75',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2706036,
+    longitude: 121.4792772,
+    position: '虹口足球场',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_MG_76',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2812556,
+    longitude: 121.4823532,
+    position: '赤峰路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_MG_77',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2895566,
+    longitude: 121.4830872,
+    position: '大柏树',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_MG_78',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3055206,
+    longitude: 121.4849412,
+    position: '江湾镇',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_MG_79',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3198636,
+    longitude: 121.4848232,
+    position: '殷高西路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_MG_80',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3320546,
+    longitude: 121.4914192,
+    position: '长江南路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_MG_81',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3451526,
+    longitude: 121.5002792,
+    position: '淞发路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_MG_82',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3580266,
+    longitude: 121.4985722,
+    position: '张华浜',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_MG_83',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3710866,
+    longitude: 121.4926912,
+    position: '淞滨路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_MG_84',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3814066,
+    longitude: 121.4880402,
+    position: '水产路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_MG_85',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3953196,
+    longitude: 121.4794462,
+    position: '宝杨路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_MG_86',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.404014,
+    longitude: 121.47595,
+    position: '友谊路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_MG_87',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.4081686,
+    longitude: 121.4610822,
+    position: '铁力路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_MG_88',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.4078606,
+    longitude: 121.4396862,
+    position: '江杨北路',
+    receiver: 'Line 3',
+    sample_id: 'CN_SH_MG_89',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1827856,
+    longitude: 121.4371402,
+    position: '上海体育馆',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_MG_90',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1854926,
+    longitude: 121.4432532,
+    position: '上海体育场',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_MG_91',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1908196,
+    longitude: 121.4547332,
+    position: '东安路',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_MG_92',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1940086,
+    longitude: 121.4631792,
+    position: '大木桥路',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_MG_93',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1991996,
+    longitude: 121.4748482,
+    position: '鲁班路',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_MG_94',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2019676,
+    longitude: 121.4894242,
+    position: '西藏南路',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_MG_95',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2085986,
+    longitude: 121.4994392,
+    position: '南浦大桥',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_MG_96',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2098026,
+    longitude: 121.5184882,
+    position: '塘桥',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_MG_97',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.211854,
+    longitude: 121.527734,
+    position: '蓝村路',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_MG_98',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2223716,
+    longitude: 121.5319152,
+    position: '浦电路',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_MG_99',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2289826,
+    longitude: 121.5267132,
+    position: '世纪大道',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_MG_100',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2400176,
+    longitude: 121.5192422,
+    position: '浦东大道',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_MG_101',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2519276,
+    longitude: 121.5170792,
+    position: '杨树浦路',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_MG_102',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2579426,
+    longitude: 121.5129512,
+    position: '大连路',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_MG_103',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2608716,
+    longitude: 121.5005232,
+    position: '临平路',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_MG_104',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2589583274,
+    longitude: 121.4896059036,
+    position: '海伦路',
+    receiver: 'Line 4',
+    sample_id: 'CN_SH_MG_105',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1210126,
+    longitude: 121.3929642,
+    position: '莘庄',
+    receiver: 'Line 5',
+    sample_id: 'CN_SH_MG_106',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.0982096,
+    longitude: 121.3856462,
+    position: '春申路',
+    receiver: 'Line 5',
+    sample_id: 'CN_SH_MG_107',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.0893256,
+    longitude: 121.3902192,
+    position: '银都路',
+    receiver: 'Line 5',
+    sample_id: 'CN_SH_MG_108',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.0669916,
+    longitude: 121.4017412,
+    position: '颛桥',
+    receiver: 'Line 5',
+    sample_id: 'CN_SH_MG_109',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.0450716,
+    longitude: 121.4099512,
+    position: '北桥',
+    receiver: 'Line 5',
+    sample_id: 'CN_SH_MG_110',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.0264286,
+    longitude: 121.4164412,
+    position: '剑川路',
+    receiver: 'Line 5',
+    sample_id: 'CN_SH_MG_111',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.0182266,
+    longitude: 121.4197232,
+    position: '东川路',
+    receiver: 'Line 5',
+    sample_id: 'CN_SH_MG_112',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.0112316,
+    longitude: 121.4100292,
+    position: '金平路',
+    receiver: 'Line 5',
+    sample_id: 'CN_SH_MG_113',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.0073836,
+    longitude: 121.3951182,
+    position: '华宁路',
+    receiver: 'Line 5',
+    sample_id: 'CN_SH_MG_114',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.0035646,
+    longitude: 121.3806682,
+    position: '文井路',
+    receiver: 'Line 5',
+    sample_id: 'CN_SH_MG_115',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.0005526,
+    longitude: 121.3696392,
+    position: '闵行开发区',
+    receiver: 'Line 5',
+    sample_id: 'CN_SH_MG_116',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3530196,
+    longitude: 121.5747032,
+    position: '港城路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_MG_117',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3478446,
+    longitude: 121.5867772,
+    position: '外高桥保税区北',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_MG_118',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3354456,
+    longitude: 121.5938442,
+    position: '航津路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_MG_119',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3216076,
+    longitude: 121.6018562,
+    position: '外高桥保税区南',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_MG_120',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3123216,
+    longitude: 121.5892702,
+    position: '洲海路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_MG_121',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3025936,
+    longitude: 121.5891772,
+    position: '五洲大道',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_MG_122',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2906726,
+    longitude: 121.5887102,
+    position: '东靖路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_MG_123',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2806846,
+    longitude: 121.5883112,
+    position: '巨峰路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_MG_124',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2720776,
+    longitude: 121.5878192,
+    position: '五莲路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_MG_125',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2635056,
+    longitude: 121.5865522,
+    position: '博兴路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_MG_126',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2571856,
+    longitude: 121.5817632,
+    position: '金桥路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_MG_127',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2503936,
+    longitude: 121.5725962,
+    position: '云山路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_MG_128',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2453952,
+    longitude: 121.5640942,
+    position: '德平路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_MG_129',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2391256,
+    longitude: 121.5521232,
+    position: '北洋泾路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_MG_130',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2358546,
+    longitude: 121.5433882,
+    position: '民生路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_MG_131',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2330086,
+    longitude: 121.5345062,
+    position: '源深体育中心',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_MG_132',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2289826,
+    longitude: 121.5267132,
+    position: '世纪大道',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_MG_133',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2201566,
+    longitude: 121.5289672,
+    position: '浦电路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_MG_134',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2118633,
+    longitude: 121.5279301,
+    position: '蓝村路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_MG_135',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2032936,
+    longitude: 121.5233542,
+    position: '上海儿童医学中心',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_MG_136',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1931886,
+    longitude: 121.5165282,
+    position: '临沂新村',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_MG_137',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1857496,
+    longitude: 121.5096562,
+    position: '高科西路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_MG_138',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1726506,
+    longitude: 121.5107312,
+    position: '东明路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_MG_139',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1600926,
+    longitude: 121.5155422,
+    position: '高青路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_MG_140',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1498746,
+    longitude: 121.5143782,
+    position: '华夏西路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_MG_141',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1491376,
+    longitude: 121.5061452,
+    position: '上南路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_MG_142',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1487676,
+    longitude: 121.4951792,
+    position: '灵岩南路',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_MG_143',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1533706,
+    longitude: 121.4801672,
+    position: '东方体育中心',
+    receiver: 'Line 6',
+    sample_id: 'CN_SH_MG_144',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2112166,
+    longitude: 121.5626172,
+    position: '花木路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_145',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2030424693,
+    longitude: 121.5574282408,
+    position: '龙阳路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_146',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1931646,
+    longitude: 121.5499622,
+    position: '芳华路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_147',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1875966,
+    longitude: 121.5399042,
+    position: '锦绣路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_148',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1875776,
+    longitude: 121.5249692,
+    position: '杨高南路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_149',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1857496,
+    longitude: 121.5096562,
+    position: '高科西路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_150',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1821326,
+    longitude: 121.5002382,
+    position: '云台路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_151',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1785176,
+    longitude: 121.4944752,
+    position: '耀华路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_152',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1732211,
+    longitude: 121.4834805,
+    position: '长清路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_153',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1718876,
+    longitude: 121.4737992,
+    position: '后滩',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_154',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1849706,
+    longitude: 121.4570012,
+    position: '龙华中路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_155',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1908196,
+    longitude: 121.4547332,
+    position: '东安路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_156',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1994986,
+    longitude: 121.4502012,
+    position: '肇嘉浜路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_157',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2135286,
+    longitude: 121.4490042,
+    position: '常熟路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_158',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2232613156,
+    longitude: 121.4484661818,
+    position: '静安寺',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_159',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2338851,
+    longitude: 121.4423902,
+    position: '昌平路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_160',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.239912121,
+    longitude: 121.4381048083,
+    position: '长寿路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_161',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2464523784,
+    longitude: 121.4319384098,
+    position: '镇坪路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_162',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2562266,
+    longitude: 121.4216562,
+    position: '岚皋路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_163',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2639566,
+    longitude: 121.4225452,
+    position: '新村路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_164',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2738746,
+    longitude: 121.4229092,
+    position: '大华三路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_165',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2849466,
+    longitude: 121.4213562,
+    position: '行知路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_166',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2933246,
+    longitude: 121.4164112,
+    position: '大场镇',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_167',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3038686,
+    longitude: 121.4135572,
+    position: '场中路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_168',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3149676,
+    longitude: 121.4084642,
+    position: '上大路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_169',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3214406,
+    longitude: 121.3985872,
+    position: '南陈路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_170',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3205776,
+    longitude: 121.3886752,
+    position: '上海大学',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_171',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3223196,
+    longitude: 121.3734322,
+    position: '祁华路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_172',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3448136,
+    longitude: 121.3726262,
+    position: '顾村公园',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_173',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3575726,
+    longitude: 121.3622652,
+    position: '刘行',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_174',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3641836,
+    longitude: 121.3557002,
+    position: '潘广路',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_175',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3887376,
+    longitude: 121.3573142,
+    position: '罗南新村',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_176',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.4017256,
+    longitude: 121.3499852,
+    position: '美兰湖',
+    receiver: 'Line 7',
+    sample_id: 'CN_SH_MG_177',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.0614136,
+    longitude: 121.5120912,
+    position: '沈杜公路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_MG_178',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.0734216,
+    longitude: 121.5104532,
+    position: '联航路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_MG_179',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.0840266,
+    longitude: 121.5084952,
+    position: '江月路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_MG_180',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.0962496,
+    longitude: 121.5062512,
+    position: '浦江镇',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_MG_181',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1190786,
+    longitude: 121.4976762,
+    position: '芦恒路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_MG_182',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1413616,
+    longitude: 121.4895062,
+    position: '凌兆新村',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_MG_183',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1533706,
+    longitude: 121.4801672,
+    position: '东方体育中心',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_MG_184',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1610716,
+    longitude: 121.4933262,
+    position: '杨思',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_MG_185',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1706926,
+    longitude: 121.4960992,
+    position: '成山路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_MG_186',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1785176,
+    longitude: 121.4944752,
+    position: '耀华路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_MG_187',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1854156,
+    longitude: 121.4934882,
+    position: '中华艺术宫',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_MG_188',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2019676,
+    longitude: 121.4894242,
+    position: '西藏南路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_MG_189',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2117731,
+    longitude: 121.4859712,
+    position: '陆家浜路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_MG_190',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2188756,
+    longitude: 121.4828022,
+    position: '老西门',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_MG_191',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2271866,
+    longitude: 121.4791785,
+    position: '大世界',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_MG_192',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2332698,
+    longitude: 121.4747606,
+    position: '人民广场',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_MG_193',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2423116,
+    longitude: 121.4714062,
+    position: '曲阜路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_MG_194',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2532326,
+    longitude: 121.4688892,
+    position: '中兴路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_MG_195',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2635276,
+    longitude: 121.4686462,
+    position: '西藏北路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_MG_196',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2698899303,
+    longitude: 121.4794135094,
+    position: '虹口足球场',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_MG_197',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2765246,
+    longitude: 121.4905732,
+    position: '曲阳路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_MG_198',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2748836,
+    longitude: 121.5013442,
+    position: '四平路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_MG_199',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2732526,
+    longitude: 121.5095932,
+    position: '鞍山新村',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_MG_200',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2749636,
+    longitude: 121.5183102,
+    position: '江浦路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_MG_201',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2787926,
+    longitude: 121.5282262,
+    position: '黄兴路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_MG_202',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2885966,
+    longitude: 121.5348032,
+    position: '延吉中路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_MG_203',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2958356,
+    longitude: 121.5330042,
+    position: '黄兴公园',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_MG_204',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3050066,
+    longitude: 121.5318372,
+    position: '翔殷路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_MG_205',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3147936,
+    longitude: 121.5318152,
+    position: '嫩江路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_MG_206',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3227616,
+    longitude: 121.5317972,
+    position: '市光路',
+    receiver: 'Line 8',
+    sample_id: 'CN_SH_MG_207',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2168676,
+    longitude: 121.4982602,
+    position: '小南门',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_MG_208',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2303046,
+    longitude: 121.5160772,
+    position: '商城路',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_MG_209',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2275316,
+    longitude: 121.5485772,
+    position: '杨高中路',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_MG_210',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1994986,
+    longitude: 121.4502012,
+    position: '肇嘉浜路',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_MG_211',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2028596,
+    longitude: 121.4607192,
+    position: '嘉善路',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_MG_212',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2117731,
+    longitude: 121.4859712,
+    position: '陆家浜路',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_MG_213',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2063176,
+    longitude: 121.4685522,
+    position: '打浦桥',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_MG_214',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2095246,
+    longitude: 121.4771192,
+    position: '马当路',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_MG_215',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2289826,
+    longitude: 121.5267132,
+    position: '世纪大道',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_MG_216',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1946326,
+    longitude: 121.4359982,
+    position: '徐家汇',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_MG_217',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1871256,
+    longitude: 121.4270182,
+    position: '宜山路',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_MG_218',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1747656,
+    longitude: 121.4179322,
+    position: '桂林路',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_MG_219',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1706296,
+    longitude: 121.3976732,
+    position: '漕河泾开发区',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_MG_220',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1665496,
+    longitude: 121.3846452,
+    position: '合川路',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_MG_221',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1581526,
+    longitude: 121.3689132,
+    position: '星中路',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_MG_222',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1552966,
+    longitude: 121.3490932,
+    position: '七宝',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_MG_223',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1496426,
+    longitude: 121.3380462,
+    position: '中春路',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_MG_224',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1377366,
+    longitude: 121.3191532,
+    position: '九亭',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_MG_225',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1183236,
+    longitude: 121.2603132,
+    position: '泗泾',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_MG_226',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1044716,
+    longitude: 121.2295842,
+    position: '佘山',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_MG_227',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.0844936,
+    longitude: 121.2303362,
+    position: '洞泾',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_MG_228',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.0540936,
+    longitude: 121.2324802,
+    position: '松江大学城',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_MG_229',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.0303146,
+    longitude: 121.2306022,
+    position: '松江新城',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_MG_230',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.0155706,
+    longitude: 121.2303512,
+    position: '松江体育中心',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_MG_231',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.0015336,
+    longitude: 121.2292142,
+    position: '醉白池',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_MG_232',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 30.9852276,
+    longitude: 121.2309302,
+    position: '松江南站',
+    receiver: 'Line 9',
+    sample_id: 'CN_SH_MG_233',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3285926,
+    longitude: 121.5066292,
+    position: '新江湾城站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_MG_234',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3217816,
+    longitude: 121.5066782,
+    position: '殷高东路站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_MG_235',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3131696,
+    longitude: 121.5081562,
+    position: '三门路站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_MG_236',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3028656,
+    longitude: 121.5140812,
+    position: '江湾体育场站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_MG_237',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2980676,
+    longitude: 121.5145112,
+    position: '五角场站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_MG_238',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2893076,
+    longitude: 121.5099022,
+    position: '国权路站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_MG_239',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2821866,
+    longitude: 121.5061732,
+    position: '同济大学站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_MG_240',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2748836,
+    longitude: 121.5013442,
+    position: '四平路站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_MG_241',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2687086,
+    longitude: 121.4944242,
+    position: '邮电新村站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_MG_242',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2592771,
+    longitude: 121.4885382,
+    position: '海伦路站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_MG_243',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2520806,
+    longitude: 121.4842152,
+    position: '四川北路站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_MG_244',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2439126,
+    longitude: 121.4823122,
+    position: '天潼路站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_MG_245',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2380776,
+    longitude: 121.4845042,
+    position: '南京东路站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_MG_246',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2277646,
+    longitude: 121.4873412,
+    position: '豫园站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_MG_247',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2188756,
+    longitude: 121.4828022,
+    position: '老西门站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_MG_248',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2164696,
+    longitude: 121.4751582,
+    position: '新天地站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_MG_249',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2150046,
+    longitude: 121.4581292,
+    position: '陕西南路站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_MG_250',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2081046,
+    longitude: 121.4442132,
+    position: '上海图书馆站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_MG_251',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2021985,
+    longitude: 121.4351835,
+    position: '交通大学站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_MG_252',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1966231024,
+    longitude: 121.4224943519,
+    position: '虹桥路站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_MG_253',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1965976,
+    longitude: 121.4115932,
+    position: '宋园路站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_MG_254',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1988386,
+    longitude: 121.4039322,
+    position: '伊犁路站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_MG_255',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1994296,
+    longitude: 121.3919392,
+    position: '水城路站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_MG_256',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1943356,
+    longitude: 121.3797802,
+    position: '龙溪路站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_MG_257',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1902506,
+    longitude: 121.3680092,
+    position: '上海动物园站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_MG_258',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1913696,
+    longitude: 121.3469442,
+    position: '虹桥1号航站楼站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_MG_259',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1942346,
+    longitude: 121.3261122,
+    position: '虹桥2号航站楼站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_MG_260',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1939546,
+    longitude: 121.3214132,
+    position: '虹桥火车站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_MG_261',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1770726,
+    longitude: 121.3702412,
+    position: '龙柏新村站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_MG_262',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1697646,
+    longitude: 121.3642752,
+    position: '紫藤路站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_MG_263',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1658576,
+    longitude: 121.3550262,
+    position: '航中路站',
+    receiver: 'Line 10',
+    sample_id: 'CN_SH_MG_264',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.141423,
+    longitude: 121.668561,
+    position: '迪士尼',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_265',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.130434,
+    longitude: 121.617479,
+    position: '康新公路',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_266',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.13772,
+    longitude: 121.599149,
+    position: '秀沿路',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_267',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1528031,
+    longitude: 121.5932112,
+    position: '罗山路',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_268',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1581329,
+    longitude: 121.5710801,
+    position: '御桥',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_269',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1508406,
+    longitude: 121.5387422,
+    position: '浦三路',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_270',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1464576,
+    longitude: 121.5228382,
+    position: '三林东',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_271',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1432316,
+    longitude: 121.5113822,
+    position: '三林',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_272',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1533706,
+    longitude: 121.4801672,
+    position: '东方体育中心',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_273',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1598516,
+    longitude: 121.4596262,
+    position: '龙耀路',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_274',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1665044,
+    longitude: 121.458476,
+    position: '云锦路',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_275',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1726758,
+    longitude: 121.4527375,
+    position: '龙华',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_276',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1792256,
+    longitude: 121.4415757,
+    position: '上海游泳馆',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_277',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1946326,
+    longitude: 121.4359982,
+    position: '徐家汇',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_278',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2021985,
+    longitude: 121.4351835,
+    position: '交通大学',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_279',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2205226,
+    longitude: 121.4305342,
+    position: '江苏路',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_280',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2305126,
+    longitude: 121.4234312,
+    position: '隆德路',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_281',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2377013565,
+    longitude: 121.4177441597,
+    position: '曹杨路',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_282',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2418181,
+    longitude: 121.4113162,
+    position: '枫桥路',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_283',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2508416,
+    longitude: 121.4070572,
+    position: '真如',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_284',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2626976,
+    longitude: 121.4007892,
+    position: '上海西站',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_285',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2690246,
+    longitude: 121.3898322,
+    position: '李子园',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_286',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2716616,
+    longitude: 121.3758202,
+    position: '祁连山路',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_287',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2764708,
+    longitude: 121.3648287,
+    position: '武威路',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_288',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2816046,
+    longitude: 121.3498288,
+    position: '桃浦新村',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_289',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2968476,
+    longitude: 121.3231322,
+    position: '南翔',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_290',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3194646,
+    longitude: 121.2767022,
+    position: '马陆',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_291',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.3296327,
+    longitude: 121.2546845,
+    position: '嘉定新城',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_292',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.3451926,
+    longitude: 121.2452842,
+    position: '白银路',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_293',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.3770886,
+    longitude: 121.2277262,
+    position: '嘉定西',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_294',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.3915156,
+    longitude: 121.2371892,
+    position: '嘉定北',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_295',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.3318426,
+    longitude: 121.2259242,
+    position: '上海赛车场',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_296',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2935586,
+    longitude: 121.2002472,
+    position: '昌吉东路',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_297',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2853906,
+    longitude: 121.1806712,
+    position: '上海汽车城',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_298',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2877866,
+    longitude: 121.1631272,
+    position: '安亭',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_299',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2889796,
+    longitude: 121.1502112,
+    position: '兆丰路',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_300',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2963346,
+    longitude: 121.1171422,
+    position: '光明路',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_301',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2988006,
+    longitude: 121.1041792,
+    position: '花桥',
+    receiver: 'Line 11',
+    sample_id: 'CN_SH_MG_302',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2630466,
+    longitude: 121.6384352,
+    position: '金海路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_MG_303',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2801936,
+    longitude: 121.6266442,
+    position: '申江路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_MG_304',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2798256,
+    longitude: 121.6153752,
+    position: '金京路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_MG_305',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2800966,
+    longitude: 121.6028002,
+    position: '杨高北路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_MG_306',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2800225417,
+    longitude: 121.5897971392,
+    position: '巨峰路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_MG_307',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2825366,
+    longitude: 121.5787702,
+    position: '东陆路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_MG_308',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2805316,
+    longitude: 121.5610442,
+    position: '复兴岛',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_MG_309',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2797926,
+    longitude: 121.5525182,
+    position: '爱国路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_MG_310',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2752136,
+    longitude: 121.5445512,
+    position: '隆昌路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_MG_311',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2686666,
+    longitude: 121.5323032,
+    position: '宁国路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_MG_312',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.266602,
+    longitude: 121.5280594,
+    position: '江浦公园',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_MG_313',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2579426,
+    longitude: 121.5129512,
+    position: '大连路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_MG_314',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2534716,
+    longitude: 121.5065392,
+    position: '提篮桥',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_MG_315',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2500596,
+    longitude: 121.4979102,
+    position: '国际客运中心',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_MG_316',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2439126,
+    longitude: 121.4823122,
+    position: '天潼路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_MG_317',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2423116,
+    longitude: 121.4714062,
+    position: '曲阜路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_MG_318',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2416246,
+    longitude: 121.4581842,
+    position: '汉中路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_MG_319',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2298942,
+    longitude: 121.4598666,
+    position: '南京西路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_MG_320',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2172505,
+    longitude: 121.4597002,
+    position: '陕西南路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_MG_321',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2028596,
+    longitude: 121.4607192,
+    position: '嘉善路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_MG_322',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1940086,
+    longitude: 121.4631792,
+    position: '大木桥路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_MG_323',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1849065,
+    longitude: 121.4572633,
+    position: '龙华中路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_MG_324',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1725036,
+    longitude: 121.4527712,
+    position: '龙华',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_MG_325',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1694055,
+    longitude: 121.4442815,
+    position: '龙漕路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_MG_326',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1682568,
+    longitude: 121.4349185,
+    position: '漕宝路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_MG_327',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1668728,
+    longitude: 121.4183627,
+    position: '桂林公园',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_MG_328',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.164231,
+    longitude: 121.410519,
+    position: '虹漕路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_MG_329',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1622032,
+    longitude: 121.4024209,
+    position: '虹梅路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_MG_330',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1547229,
+    longitude: 121.3919739,
+    position: '东兰路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_MG_331',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1412146,
+    longitude: 121.3942132,
+    position: '顾戴路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_MG_332',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1373106,
+    longitude: 121.3792372,
+    position: '虹莘路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_MG_333',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.1326579,
+    longitude: 121.3641913,
+    position: '七莘路',
+    receiver: 'Line 12',
+    sample_id: 'CN_SH_MG_334',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2410306,
+    longitude: 121.3189902,
+    position: '金运路',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_MG_335',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2411546,
+    longitude: 121.3350012,
+    position: '金沙江西路',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_MG_336',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2425466,
+    longitude: 121.3550572,
+    position: '丰庄',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_MG_337',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2376296,
+    longitude: 121.3671382,
+    position: '祁连山南路',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_MG_338',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2323616,
+    longitude: 121.3815752,
+    position: '真北路',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_MG_339',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2317806,
+    longitude: 121.3947572,
+    position: '大渡河路',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_MG_340',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2312338855,
+    longitude: 121.411703825,
+    position: '金沙江路',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_MG_341',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2305126,
+    longitude: 121.4234312,
+    position: '隆德路',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_MG_342',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2343706,
+    longitude: 121.4303852,
+    position: '武宁路',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_MG_343',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2409269,
+    longitude: 121.4381836,
+    position: '长寿路',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_MG_344',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2439446,
+    longitude: 121.4434212,
+    position: '江宁路',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_MG_345',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2417385,
+    longitude: 121.4581787,
+    position: '汉中路',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_MG_346',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2367561,
+    longitude: 121.4626195,
+    position: '自然博物馆',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_MG_347',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2298481,
+    longitude: 121.4598355,
+    position: '南京西路',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_MG_348',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.221247,
+    longitude: 121.4633695,
+    position: '淮海中路',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_MG_349',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.216435,
+    longitude: 121.4750808,
+    position: '新天地',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_MG_350',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170621',
+    latitude: 31.2093839,
+    longitude: 121.476387,
+    position: '马当路',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_MG_351',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.196559,
+    longitude: 121.48212,
+    position: '世博会博物馆',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_MG_352',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.182425,
+    longitude: 121.4844115,
+    position: '世博大道',
+    receiver: 'Line 13',
+    sample_id: 'CN_SH_MG_353',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 30.9072726,
+    longitude: 121.9294222,
+    position: '滴水湖',
+    receiver: 'Line 16',
+    sample_id: 'CN_SH_MG_354',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 30.9242026,
+    longitude: 121.9099362,
+    position: '临港大道',
+    receiver: 'Line 16',
+    sample_id: 'CN_SH_MG_355',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 30.9592946,
+    longitude: 121.8503982,
+    position: '书院',
+    receiver: 'Line 16',
+    sample_id: 'CN_SH_MG_356',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.0265606,
+    longitude: 121.7936622,
+    position: '惠南东',
+    receiver: 'Line 16',
+    sample_id: 'CN_SH_MG_357',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.0537886,
+    longitude: 121.7615492,
+    position: '惠南',
+    receiver: 'Line 16',
+    sample_id: 'CN_SH_MG_358',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.0502006,
+    longitude: 121.6991072,
+    position: '野生动物园',
+    receiver: 'Line 16',
+    sample_id: 'CN_SH_MG_359',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.0454786,
+    longitude: 121.6488452,
+    position: '新场',
+    receiver: 'Line 16',
+    sample_id: 'CN_SH_MG_360',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.0549106,
+    longitude: 121.6172972,
+    position: '航头东',
+    receiver: 'Line 16',
+    sample_id: 'CN_SH_MG_361',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.0776346,
+    longitude: 121.6110982,
+    position: '鹤沙航城',
+    receiver: 'Line 16',
+    sample_id: 'CN_SH_MG_362',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1099596,
+    longitude: 121.6067692,
+    position: '周浦东',
+    receiver: 'Line 16',
+    sample_id: 'CN_SH_MG_363',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1528066,
+    longitude: 121.5932112,
+    position: '罗山路',
+    receiver: 'Line 16',
+    sample_id: 'CN_SH_MG_364',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.1758486,
+    longitude: 121.5829632,
+    position: '华夏中路站',
+    receiver: 'Line 16',
+    sample_id: 'CN_SH_MG_365',
+    tubes: 2,
+    year: '2017'
+  },
+  {
+    date: '20170622',
+    latitude: 31.2024956,
+    longitude: 121.5575882,
+    position: '龙阳路站',
+    receiver: 'Line 16',
+    sample_id: 'CN_SH_MG_366',
+    tubes: 2,
+    year: '2017'
+  }
+]
+
+export function mapValue(data) {
+  return map(data, o => {
+    return {
+      name: o.position,
+      value: [o.longitude, o.latitude, o.tubes]
+    }
+  })
+}
+
+export function registerChinaMap(echarts) {
   var log = function(msg) {
     if (typeof console !== 'undefined') {
       console && console.error && console.error(msg)
@@ -12,2474 +7410,107 @@ export function registerChinaMap(exports, echarts) {
     log('ECharts Map is not loaded')
     return
   }
-  echarts.registerMap('china1', {
-    type: 'FeatureCollection',
-    features: [
-      {
-        id: '710000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@°Ü¯Û',
-              '@@ƛĴÕƊÉɼģºðʀ\\ƎsÆNŌÔĚänÜƤɊĂǀĆĴĤǊŨxĚĮǂƺòƌâÔ®ĮXŦţƸZûÐƕƑGđ¨ĭMó·ęcëƝɉlÝƯֹÅŃ^Ó·śŃǋƏďíåɛGɉ¿IċããF¥ĘWǬÏĶñÄ',
-              '@@\\p|WoYG¿¥Ij@',
-              '@@¡@V^RqBbAnTXeQr©C',
-              '@@ÆEEkWqë I'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [122886, 24033],
-              [123335, 22980],
-              [122375, 24193],
-              [122518, 24117],
-              [124427, 22618]
-            ]
-          ]
-        },
-        properties: { cp: [121.509062, 25.044332], name: '台湾', childNum: 5 }
-      },
-      {
-        id: '130000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@\\aM`Ç½ÓnUKĜēs¤­©yrý§uģcJ»eIP]ªrºc_ħ²G¼s`jÎŸnüsÂľP',
-              '@@U`Ts¿mÄ',
-              '@@FOhđ©OiÃ`ww^ÌkÑH«ƇǤŗĺtFu{Z}Ö@U´ʚLg®¯Oı°Ãw ^VbÉsmAê]]w§RRl£ŭuwNÁ`ÇFēÝčȻuT¡Ĺ¯Õ¯sŗő£YªhVƍ£ƅnëYNgq¼ś¿µı²UºÝUąąŖóxV@tƯJ]eR¾fe|rHA|h~Ėƍl§ÏjVë` ØoÅbbx³^zÃĶ¶Sj®AyÂhðk`«PËµEFÛ¬Y¨Ļrõqi¼Wi°§Ð±²°`[À|ĠO@ÆxO\\ta\\p_Zõ^û{ġȧXýĪÓjùÎRb^Î»j{íděYfíÙTymńŵōHim½éŅ­aVcř§ax¹XŻácWU£ôãºQ¨÷Ñws¥qEHÙ|šYQoŕÇyáĂ£MÃ°oťÊP¡mWO¡v{ôvîēÜISpÌhp¨ jdeŔQÖjX³àĈ[n`Yp@UcM`RKhEbpŞlNut®EtqnsÁgAiúoHqCXhfgu~ÏWP½¢G^}¯ÅīGCÑ^ãziMáļMTÃƘrMc|O_¯Ŏ´|morDkO\\mĆJfl@cĢ¬¢aĦtRıÒXòë¬WP{ŵǫƝīÛ÷ąV×qƥV¿aȉd³BqPBmaËđŻģmÅ®V¹d^KKonYg¯XhqaLdu¥Ípǅ¡KąÅkĝęěhq}HyÃ]¹ǧ£Í÷¿qágPmoei¤o^á¾ZEY^Ný{nOl±Í@Mċèk§daNaÇį¿]øRiiñEūiǱàUtėGyl}ÓM}jpEC~¡FtoQiHkk{ILgĽxqÈƋÄdeVDJj£J|ÅdzÂFt~KŨ¸IÆv|¢r}èonb}`RÎÄn°ÒdÞ²^®lnÐèĄlðÓ×]ªÆ}LiĂ±Ö`^°Ç¶p®đDcŋ`ZÔ¶êqvFÆN®ĆTH®¦O¾IbÐã´BĐɢŴÆíȦpĐÞXR·nndO¤OÀĈƒ­QgµFo|gȒęSWb©osx|hYhgŃfmÖĩnºTÌSp¢dYĤ¶UĈjlǐpäðëx³kÛfw²Xjz~ÂqbTÑěŨ@|oMzv¢ZrÃVw¬ŧĖ¸f°ÐTªqs{S¯r æÝl¼ÖĞ ǆiGĘJ¼lr}~K¨ŸƐÌWö¼Þ°nÞoĦL|C~D©|q]SvKÑcwpÏÏĿćènĪWlĄkT}¬Tp~®Hgd˒ĺBVtEÀ¢ôPĎƗè@~kü\\rÊĔÖæW_§¼F´©òDòjYÈrbĞāøŀG{ƀ|¦ðrb|ÀH`pʞkvGpuARhÞÆǶgĘTǼƹS£¨¡ù³ŘÍ]¿ÂyôEP xX¶¹ÜO¡gÚ¡IwÃé¦ÅBÏ|Ç°N«úmH¯âbęU~xĈbȒ{^xÖlD¸dɂ~'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [120023, 41045],
-              [121616, 39981],
-              [122102, 42307]
-            ]
-          ]
-        },
-        properties: { cp: [114.502461, 38.045474], name: '河北', childNum: 3 }
-      },
-      {
-        id: '140000',
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            '@@ħÜ_ªlìwGkÛÃǏokćiµVZģ¡coTSË¹ĪmnÕńehZg{gtwªpXaĚThȑp{¶Eh®RćƑP¿£PmcªaJyý{ýȥoÅîɡųAďä³aÏJ½¥PG­ąSM­sWz½µÛYÓŖgxoOkĒCo­Èµ]¯_²ÕjāK~©ÅØ^ÔkïçămÏk]­±cÝ¯ÑÃmQÍ~_apm~ç¡qu{JÅŧ·Ls}EyÁÆcI{¤IiCfUcƌÃp§]ě«vD@¡SÀµMÅwuYY¡DbÑc¡h×]nkoQdaMç~eDÛtT©±@¥ù@É¡ZcW|WqOJmĩl«ħşvOÓ«IqăV¥D[mI~Ó¢cehiÍ]Ɠ~ĥqX·eƷn±}v[ěďŕ]_œ`¹§ÕōIo©b­s^}Ét±ū«³p£ÿ¥WÑxçÁ«h×u×¥ř¾dÒ{ºvĴÎêÌɊ²¶ü¨|ÞƸµȲLLúÉƎ¤ϊęĔV`_bªS^|dzY|dz¥pZbÆ£¶ÒK}tĦÔņƠPYznÍvX¶Ěn ĠÔzý¦ª÷ÑĸÙUȌ¸dòÜJð´ìúNM¬XZ´¤ŊǸ_tldI{¦ƀðĠȤ¥NehXnYGR° ƬDj¬¸|CĞKqºfƐiĺ©ª~ĆOQª ¤@ìǦɌ²æBÊTĞHƘÁĪËĖĴŞȀÆÿȄlŤĒötÎ½î¼ĨXh|ªM¤ÐzÞĩÒSrao³'
-          ],
-          encodeOffsets: [[117016, 41452]]
-        },
-        properties: { cp: [112.549248, 37.857014], name: '山西', childNum: 1 }
-      },
-      {
-        id: '150000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@ǪƫÌÛMĂ[`ÕCn}¶Vcês¯PqFB|S³C|kñHdiÄ¥sŉÅPóÑÑE^ÅPpy_YtShQ·aHwsOnŉÃs©iqjUSiº]ïW«gW¡ARëśĳĘů`çõh]y»ǃǛҤxÒm~zf}pf|ÜroÈzrKÈĵSƧż؜Ġu~è¬vîS¼ĂhĖMÈÄw\\fŦ°W ¢¾luŸDw\\Ŗĝ',
-              '@@GVu»Aylßí¹ãe]Eāò³C¹ð¾²iÒAdkò^P²CǜңǄ z¼g^èöŰ_Ĳĕê}gÁnUI«m]jvV¼euhwqAaW_µj»çjioQR¹ēÃßt@r³[ÛlćË^ÍÉáGOUÛOB±XkÅ¹£k|e]olkVÍ¼ÕqtaÏõjgÁ£§U^RLËnX°ÇBz^~wfvypV ¯ƫĉ˭ȫƗŷɿÿĿƑ˃ĝÿÃǃßËőó©ǐȍŒĖM×ÍEyxþp]ÉvïèvƀnÂĴÖ@V~Ĉ³MEĸÅĖtējyÄDXÄxGQuv_i¦aBçw˛wD©{tāmQ{EJ§KPśƘƿ¥@sCTÉ}ɃwƇy±gÑ}T[÷kÐç¦«SÒ¥¸ëBX½HáÅµÀğtSÝÂa[ƣ°¯¦Pï¡]£ġÒk®G²èQ°óMq}EóƐÇ\\@áügQÍu¥FTÕ¿Jû]|mvāÎYua^WoÀa·­ząÒot×¶CLƗi¯¤mƎHǊ¤îìɾŊìTdåwsRÖgĒųúÍġäÕ}Q¶¿A[¡{d×uQAMxVvMOmăl«ct[wº_ÇÊjbÂ£ĦS_éQZ_lwgOiýe`YYJq¥IÁǳ£ÙË[ÕªuƏ³ÍTs·bÁĽäė[b[ŗfãcn¥îC¿÷µ[ŏÀQ­ōĉm¿Á^£mJVmL[{Ï_£F¥Ö{ŹA}×Wu©ÅaųĳƳhB{·TQqÙIķËZđ©Yc|M¡LeVUóK_QWk_ĥ¿ãZ»X\\ĴuUèlG®ěłTĠğDŃGÆÍz]±ŭ©Å]ÅÐ}UË¥©TċïxgckfWgi\\ÏĒ¥HkµEë{»ÏetcG±ahUiñiWsɁ·cCÕk]wȑ|ća}wVaĚá G°ùnM¬¯{ÈÐÆA¥ÄêJxÙ¢hP¢ÛºµwWOóFÁz^ÀŗÎú´§¢T¤ǻƺSėǵhÝÅQgvBHouʝl_o¿Ga{ïq{¥|ſĿHĂ÷aĝÇqZñiñC³ª»E`¨åXēÕqÉû[l}ç@čƘóO¿¡FUsAʽīccocÇS}£IS~ălkĩXçmĈŀÐoÐdxÒuL^T{r@¢ÍĝKén£kQyÅõËXŷƏL§~}kq»IHėǅjĝ»ÑÞoå°qTt|r©ÏS¯·eŨĕx«È[eM¿yupN~¹ÏyN£{©għWí»Í¾səšǅ_ÃĀɗ±ąĳĉʍŌŷSÉA±åǥɋ@ë£R©ąP©}ĹªƏj¹erLDĝ·{i«ƫC½ÉshVzGS|úþXgp{ÁX¿ć{ƱȏñZáĔyoÁhA}ŅĆfdŉ_¹Y°ėǩÑ¡H¯¶oMQqð¡Ë|Ñ`ƭŁX½·óÛxğįÅcQs«tȋǅFù^it«Č¯[hAi©á¥ÇĚ×l|¹y¯Kȝqgů{ñǙµïċĹzŚȭ¶¡oŽäÕG\\ÄT¿Òõr¯LguÏYęRƩɷŌO\\İÐ¢æ^Ŋ ĲȶȆbÜGĝ¬¿ĚVĎgª^íu½jÿĕęjık@Ľ]ėl¥ËĭûÁėéV©±ćn©­ȇÍq¯½YÃÔŉÉNÑÅÝy¹NqáʅDǡËñ­ƁYÅy̱os§ȋµʽǘǏƬɱàưN¢ƔÊuľýľώȪƺɂļxZĈ}ÌŉŪĺœĭFЛĽ̅ȣͽÒŵìƩÇϋÿȮǡŏçƑůĕ~Ç¼ȳÐUfdIxÿ\\G zâɏÙOº·pqy£@qþ@Ǟ˽IBäƣzsÂZÁàĻdñ°ŕzéØűzșCìDȐĴĺf®Àľưø@ɜÖÞKĊŇƄ§͑těï͡VAġÑÑ»d³öǍÝXĉĕÖ{þĉu¸ËʅğU̎éhɹƆ̗̮ȘǊ֥ड़ࡰţાíϲäʮW¬®ҌeרūȠkɬɻ̼ãüfƠSצɩςåȈHϚÎKǳͲOðÏȆƘ¼CϚǚ࢚˼ФÔ¤ƌĞ̪Qʤ´¼mȠJˀƲÀɠmɆǄĜƠ´ǠN~ʢĜ¶ƌĆĘźʆȬ˪ĚĒ¸ĞGȖƴƀj`ĢçĶāàŃºēĢĖćYÀŎüôQÐÂŎŞǆŞêƖoˆDĤÕºÑǘÛˤ³̀gńƘĔÀ^ªƂ`ªt¾äƚêĦĀ¼ÐĔǎ¨Ȕ»͠^ˮÊȦƤøxRrŜH¤¸ÂxDÄ|ø˂˜ƮÐ¬ɚwɲFjĔ²Äw°ǆdÀÉ_ĸdîàŎjÊêTĞªŌŜWÈ|tqĢUB~´°ÎFCU¼pĀēƄN¦¾O¶łKĊOjĚj´ĜYp{¦SĚÍ\\T×ªV÷Ší¨ÅDK°ßtŇĔK¨ǵÂcḷ̌ĚǣȄĽFlġUĵŇȣFʉɁMğįʏƶɷØŭOǽ«ƽū¹Ʊő̝Ȩ§ȞʘĖiɜɶʦ}¨֪ࠜ̀ƇǬ¹ǨE˦ĥªÔêFxúQEr´Wrh¤Ɛ \\talĈDJÜ|[Pll̚¸ƎGú´P¬W¦^¦H]prRn|or¾wLVnÇIujkmon£cX^Bh`¥V¦U¤¸}xRj[^xN[~ªxQ[`ªHÆÂExx^wN¶Ê|¨ìMrdYpoRzNyÀDs~bcfÌ`L¾n|¾T°c¨È¢ar¤`[|òDŞĔöxElÖdHÀI`Ď\\Àì~ÆR¼tf¦^¢ķ¶eÐÚMptgjɡČÅyġLûŇV®ÄÈƀĎ°P|ªVVªj¬ĚÒêp¬E|ŬÂ_~¼rƐK f{ĘFĒƌXưăkÃĄ}nµo×q£ç­kX{uĩ«āíÓUŅÝVUŌ]Ť¥lyň[oi{¦LĸĦ^ôâJ¨^UZðÚĒL¿Ìf£K£ʺoqNwğc`uetOj×°KJ±qÆġmĚŗos¬qehqsuH{¸kH¡ÊRǪÇƌbȆ¢´äÜ¢NìÉʖ¦â©Ɨؗ'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [128500, 52752],
-              [127089, 51784]
-            ]
-          ]
-        },
-        properties: { cp: [111.670801, 40.818311], name: '内蒙古', childNum: 2 }
-      },
-      {
-        id: '210000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@L@@s]',
-              '@@MnNm',
-              '@@dc',
-              '@@eÀC@b',
-              '@@fXwkbrÄ`qg',
-              '@@^jtWQ',
-              '@@~ Y[c',
-              '@@I`ĖN^_¿ZÁM',
-              '@@Ïxǌ{q_×^Gigp',
-              '@@iX¶BY',
-              '@@YZ',
-              '@@L_yG`b',
-              '@@^WqCTZ',
-              '@@\\[§t|]',
-              '@@m`p[',
-              '@@@é^BntaÊU]x ¯ÄPĲ­°hʙK³VÕ@Y~|EvĹsÇ¦­L^pÃ²ŸÒG Ël]xxÄ_fT¤Ď¤cPC¨¸TVjbgH²sdÎdHt`B²¬GJję¶[ÐhjeXdlwhðSČ¦ªVÊÏÆZÆŶ®²^ÎyÅHńĚDMħĜŁH­kçvV[ĳ¼WYÀäĦ`XlR`ôLUVfK¢{NZdĒªYĸÌÚJRr¸SA|ƴgŴĴÆbvªØX~źB|¦ÕE¤Ð`\\|KUnnI]¤ÀÂĊnŎR®Ő¿¶\\ÀøíDm¦ÎbŨabaĘ\\ľãÂ¸atÎSƐ´©v\\ÖÚÌǴ¤Â¨JKrZ_ZfjþhPkx`YRIjJcVf~sCN¤ EhæmsHy¨SðÑÌ\\\\ĐRÊwS¥fqŒßýáĞÙÉÖ[^¯ǤŲê´\\¦¬ĆPM¯£»uïpùzExanµyoluqe¦W^£ÊL}ñrkqWňûPUP¡ôJoo·U}£[·¨@XĸDXm­ÛÝºGUCÁª½{íĂ^cjk¶Ã[q¤LÉö³cux«|Zd²BWÇ®Yß½ve±ÃCý£W{Ú^q^sÑ·¨ËMr¹·C¥GDrí@wÕKţÃ«V·i}xËÍ÷i©ĝɝǡ]{c±OW³Ya±_ç©HĕoƫŇqr³Lys[ñ³¯OSďOMisZ±ÅFC¥Pq{Ã[Pg}\\¿ghćOk^ĩÃXaĕËĥM­oEqqZûěŉ³F¦oĵhÕP{¯~TÍlªNßYÐ{Ps{ÃVUeĎwk±ŉVÓ½ŽJãÇÇ»Jm°dhcÀffdF~ĀeĖd`sx² ®EĦ¦dQÂd^~ăÔH¦\\LKpĄVez¤NP ǹÓRÆąJSh­a[¦´ÂghwmBÐ¨źhI|VV|p] Â¼èNä¶ÜBÖ¼L`¼bØæKVpoúNZÞÒKxpw|ÊEMnzEQIZZNBčÚFÜçmĩWĪñtÞĵÇñZ«uD±|ƏlǗw·±PmÍada CLǑkùó¡³Ï«QaċÏOÃ¥ÕđQȥċƭy³ÁA'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [123686, 41445],
-              [126019, 40435],
-              [124393, 40128],
-              [126117, 39963],
-              [125322, 40140],
-              [126686, 40700],
-              [126041, 40374],
-              [125584, 40168],
-              [125509, 40217],
-              [125453, 40165],
-              [125362, 40214],
-              [125280, 40291],
-              [125774, 39997],
-              [125976, 40496],
-              [125822, 39993],
-              [122731, 40949]
-            ]
-          ]
-        },
-        properties: { cp: [123.429096, 41.796767], name: '辽宁', childNum: 16 }
-      },
-      {
-        id: '220000',
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            '@@ñr½ÉKāGÁ¤ia ÉÈ¹`\\xs¬dĆkNnuNUwNx¶c¸|\\¢GªóĄ~RãÖÎĢùđŴÕhQxtcæëSɽŉíëǉ£ƍG£nj°KƘµDsØÑpyĆ¸®¿bXp]vbÍZuĂ{n^IüÀSÖ¦EvRÎûh@â[ƏÈô~FNr¯ôçR±­HÑlĢ^¤¢OðætxsŒ]ÞÁTĠs¶¿âÆGW¾ìA¦·TÑ¬è¥ÏÐJ¨¼ÒÖ¼ƦɄxÊ~StD@Ă¼Ŵ¡jlºWvÐzƦZÐ²CH AxiukdGgetqmcÛ£Ozy¥cE}|¾cZk¿uŐã[oxGikfeäT@SUwpiÚFM©£è^Ú`@v¶eňf heP¶täOlÃUgÞzŸU`l}ÔÆUvØ_Ō¬Öi^ĉi§²ÃB~¡ĈÚEgc|DC_Ȧm²rBx¼MÔ¦ŮdĨÃâYxƘDVÇĺĿg¿cwÅ\\¹¥Yĭl¤OvLjM_a W`zļMž·\\swqÝSAqŚĳ¯°kRē°wx^ĐkǂÒ\\]nrĂ}²ĊŲÒøãh·M{yMzysěnĒġV·°G³¼XÀ¤¹i´o¤ŃÈ`ÌǲÄUĞd\\iÖmÈBĤÜɲDEh LG¾ƀÄ¾{WaYÍÈĢĘÔRîĐj}ÇccjoUb½{h§Ǿ{KƖµÎ÷GĄØŜçưÌs«lyiē«`å§H¥Ae^§GK}iã\\c]v©ģZmÃ|[M}ģTɟĵÂÂ`ÀçmFK¥ÚíÁbX³ÌQÒHof{]ept·GŋĜYünĎųVY^ydõkÅZW«WUa~U·SbwGçǑiW^qFuNĝ·EwUtW·Ýďæ©PuqEzwAVXRãQ`­©GYYhcUGorBd}ģÉb¡·µMicF«Yƅ»é\\ɹ~ǙG³mØ©BšuT§Ĥ½¢Ã_Ã½L¡ûsT\\rke\\PnwAKy}ywdSefµ]UhĿD@mÿvaÙNSkCuncÿ`lWėVâ¦÷~^fÏ~vwHCį`xqT­­lW«ï¸skmßEGqd¯R©Ý¯¯S\\cZ¹iűƏCuƍÓXoR}M^o£R}oªU­FuuXHlEÅÏ©¤ßgXþ¤D²ÄufàÀ­XXÈ±Ac{Yw¬dvõ´KÊ£\\rµÄlidā]|î©¾DÂVH¹Þ®ÜWnCķ W§@\\¸~¤Vp¸póIO¢VOŇürXql~òÉK]¤¥Xrfkvzpm¶bwyFoúvð¼¤ N°ąO¥«³[éǣű]°Õ\\ÚÊĝôîŇÔaâBYlďQ[ Ë[ïÒ¥RI|`j]P'
-          ],
-          encodeOffsets: [[126831, 44503]]
-        },
-        properties: { cp: [125.3245, 43.886841], name: '吉林', childNum: 1 }
-      },
-      {
-        id: '230000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@UµNÿ¥īèçHÍøƕ¶Lǽ|g¨|a¾pVidd~ÈiíďÓQġėÇZÎXb½|ſÃH½KFgɱCģÛÇAnjÕc[VĝǱÃËÇ_ £ń³pj£º¿»WH´¯U¸đĢmtĜyzzNN|g¸÷äűÑ±ĉā~mq^[ǁÑďlw]¯xQĔ¯l°řĴrBÞTxr[tŽ¸ĻN_yX`biNKuP£kZĮ¦[ºxÆÀdhĹŀUÈƗCwáZħÄŭcÓ¥»NAw±qȥnD`{ChdÙFć}¢A±Äj¨]ĊÕjŋ«×`VuÓÅ~_kŷVÝyhVkÄãPsOµfgeŇµf@u_Ù ÙcªNªÙEojVxT@ãSefjlwH\\pŏäÀvlY½d{F~¦dyz¤PÜndsrhfHcvlwjF£G±DÏƥYyÏu¹XikĿ¦ÏqƗǀOŜ¨LI|FRĂn sª|C˜zxAè¥bfudTrFWÁ¹Am|ĔĕsķÆF´N}ćUÕ@Áĳſmuçuð^ÊýowFzØÎĕNőǏȎôªÌŒǄàĀÄ˄ĞŀƒʀĀƘŸˮȬƬĊ°Uzouxe]}AyÈW¯ÌmKQ]Īºif¸ÄX|sZt|½ÚUÎ lk^p{f¤lºlÆW A²PVÜPHÊâ]ÎĈÌÜk´\\@qàsĔÄQºpRij¼èi`¶bXrBgxfv»uUi^v~J¬mVp´£´VWrnP½ì¢BX¬hðX¹^TjVriªjtŊÄmtPGx¸bgRsT`ZozÆO]ÒFôÒOÆŊvÅpcGêsx´DR{AEOr°x|íb³Wm~DVjºéNNËÜ˛ɶ­GxŷCSt}]ûōSmtuÇÃĕNāg»íT«u}ç½BĵÞʣ¥ëÊ¡MÛ³ãȅ¡ƋaǩÈÉQG¢·lG|tvgrrf«ptęŘnÅĢrI²¯LiØsPf_vĠdxM prʹL¤¤eËÀđKïÙVY§]Ióáĥ]ķK¥j|pŇ\\kzţ¦šnņäÔVĂîĪ¬|vW®l¤èØrxm¶ă~lÄƯĄ̈́öȄEÔ¤ØQĄĄ»ƢjȦOǺ¨ìSŖÆƬyQv`cwZSÌ®ü±Ǆ]ŀç¬B¬©ńzƺŷɄeeOĨSfm ĊƀP̎ēz©ĊÄÕÊmgÇsJ¥ƔŊśæÎÑqv¿íUOµªÂnĦÁ_½ä@êí£P}Ġ[@gġ}gɊ×ûÏWXá¢užƻÌsNÍ½ƎÁ§čŐAēeL³àydl¦ĘVçŁpśǆĽĺſÊQíÜçÛġÔsĕ¬Ǹ¯YßċġHµ ¡eå`ļrĉŘóƢFìĎWøxÊkƈdƬv|I|·©NqńRŀ¤éeŊŀàŀU²ŕƀBQ£Ď}L¹Îk@©ĈuǰųǨÚ§ƈnTËÇéƟÊcfčŤ^XmHĊĕË«W·ċëx³ǔķÐċJāwİ_ĸȀ^ôWr­°oú¬ĦŨK~ȰCĐ´Ƕ£fNÎèâw¢XnŮeÂÆĶ¾¾xäLĴĘlļO¤ÒĨA¢Êɚ¨®ØCÔ ŬGƠƦYĜĘÜƬDJg_ͥœ@čŅĻA¶¯@wÎqC½Ĉ»NăëKďÍQÙƫ[«ÃígßÔÇOÝáWñuZ¯ĥŕā¡ÑķJu¤E å¯°WKÉ±_d_}}vyõu¬ï¹ÓU±½@gÏ¿rÃ½DgCdµ°MFYxw¿CG£Rƛ½Õ{]L§{qqą¿BÇƻğëܭǊË|c²}Fµ}ÙRsÓpg±QNqǫŋRwŕnéÑÉK«SeYRŋ@{¤SJ}D Ûǖ֍]gr¡µŷjqWÛham³~S«Ü[',
-              '@@ƨĶTLÇyqpÇÛqe{~oyen}s`qiXGù]Ëp½©lÉÁp]Þñ´FĂ^fäîºkàz¼BUv¬D'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [134456, 44547],
-              [127123, 51780]
-            ]
-          ]
-        },
-        properties: { cp: [126.642464, 45.756967], name: '黑龙江', childNum: 2 }
-      },
-      {
-        id: '320000',
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            '@@Õg^vÁbnÀ`Jnĝ¬òM¶ĘTÖŒbe¦¦{¸ZâćNp©Hp|`mjhSEb\\afv`sz^lkljÄtg¤D­¾X¿À|ĐiZȀåB·î}GL¢õcßjayBFµÏC^ĭcÙt¿sğH]j{s©HM¢QnDÀ©DaÜÞ·jgàiDbPufjDk`dPOîhw¡ĥ¥GP²ĐobºrYî¶aHŢ´ ]´rılw³r_{£DB_Ûdåuk|Ũ¯F Cºyr{XFye³Þċ¿ÂkĭB¿MvÛpm`rÚã@Ę¹hågËÖƿxnlč¶Åì½Ot¾dJlVJĂǀŞqvnO^JZż·Q}êÍÅmµÒ]ƍ¦Dq}¬R^èĂ´ŀĻĊIÔtĲyQŐĠMNtR®òLhĚs©»}OÓGZz¶A\\jĨFäOĤHYJvÞHNiÜaĎÉnFQlNM¤B´ĄNöɂtpŬdZÅglmuÇUšŞÚb¤uŃJŴu»¹ĄlȖħŴw̌ŵ²ǹǠ͛hĭłƕrçü±Yrřl¥i`ã__¢ćSÅr[Çq^ùzWmOĈaŐÝɞï²ʯʊáĘĳĒǭPħ͍ôƋÄÄÍīçÛɈǥ£­ÛmY`ó£Z«§°Ó³QafusNıǅ_k}¢m[ÝóDµ¡RLčiXyÅNïă¡¸iĔÏNÌķoıdōîåŤûHcs}~Ûwbù¹£¦ÓCtOPrE^ÒogĉIµÛÅʹK¤½phMú`mR¸¦PƚgÉLRs`£¯ãhD¨|³¤C'
-          ],
-          encodeOffsets: [[121451, 32518]]
-        },
-        properties: { cp: [118.767413, 32.041544], name: '江苏', childNum: 1 }
-      },
-      {
-        id: '330000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@jX^n',
-              '@@sfdM',
-              '@@qP\\xz[_i',
-              '@@o\\VzRZ}mECy',
-              '@@R¢FX}°[m]',
-              '@@Cb\\}',
-              '@@e|v\\laus',
-              '@@v~s{',
-              '@@QxÂF©}',
-              '@@¹nvÞs©m',
-              '@@rQgYIh',
-              '@@bi«ZX',
-              '@@p[}ILd',
-              '@@À¿|',
-              '@@¹dnb',
-              '@@rS}[Kl',
-              '@@g~h}',
-              '@@FlCk',
-              '@@ůTG°ĄLHm°UF',
-              '@@OdRe',
-              '@@v[u\\',
-              '@@FjâL~wyoo~sµLZ',
-              '@@¬e¹aH',
-              '@@\\nÔ¡q]L³ë\\ÿ®QÌ',
-              '@@ÊA­©]ª',
-              '@@Kxv{­',
-              '@@@hlIk_',
-              '@@pWcrxp',
-              '@@Md|_iA',
-              '@@¢X£½z\\ðpN',
-              '@@hlÜ[LykAvyfw^E ',
-              '@@fp¤MusH',
-              '@@®_ma~LÁ¬`',
-              '@@@°¡mÛGĕ¨§Ianá[ýƤjfæÐNäGp',
-              '@@iMt\\',
-              '@@Zc[b',
-              '@@X®±GrÆ°Zæĉm',
-              '@@Z~dOSo|A¿qZv',
-              '@@@`EN£p',
-              '@@|s',
-              '@@@nDi',
-              '@@na£¾uYL¯QªmĉÅdMgÇjcº«ę¬­K­´B«Âącoċ\\xK`cįŧ«®á[~ıxu·ÅKsËÉc¢Ù\\ĭƛëbf¹­ģSĜkáƉÔ­ĈZB{aMµfzŉfÓÔŹŁƋǝÊĉ{ğč±g³ne{ç­ií´S¬\\ßðK¦w\\iqªĭiAuA­µ_W¥ƣO\\lċĢttC¨£t`PZäuXßBsĻyekOđġĵHuXBµ]×­­\\°®¬F¢¾pµ¼kŘó¬Wät¸|@L¨¸µrºù³Ù~§WIZW®±Ð¨ÒÉx`²pĜrOògtÁZ{üÙ[|ûKwsPlU[}¦Rvn`hsª^nQ´ĘRWb_ rtČFIÖkĦPJ¶ÖÀÖJĈĄTĚòC ²@PúØz©Pî¢£CÈÚĒ±hŖl¬â~nm¨f©iļ«mntqÒTÜÄjL®EÌFª²iÊxØ¨IÈhhst[Ôx}dtüGæţŔïĬaĸpMËÐjē¢·ðĄÆMzjWKĎ¢Q¶À_ê_@ıi«pZgf¤Nrq]§ĂN®«H±yƳí¾×ŊďŀĐÏŴǝĂíÀBŖÕªÁŐTFqĉ¯³ËCĕģi¨hÜ·ñt»¯Ï',
-              '@@ºwZRkĕWK '
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [125785, 31436],
-              [125729, 31431],
-              [125513, 31380],
-              [125329, 30690],
-              [125223, 30438],
-              [125115, 30114],
-              [124815, 29155],
-              [124419, 28746],
-              [124095, 28635],
-              [124005, 28609],
-              [125000, 30713],
-              [125111, 30698],
-              [125078, 30682],
-              [125150, 30684],
-              [124014, 28103],
-              [125008, 31331],
-              [125411, 31468],
-              [125329, 31479],
-              [125369, 31139],
-              [125626, 30916],
-              [125417, 30956],
-              [125254, 30976],
-              [125199, 30997],
-              [125095, 31058],
-              [125083, 30915],
-              [124885, 31015],
-              [125218, 30798],
-              [124867, 30838],
-              [124755, 30788],
-              [124802, 30809],
-              [125267, 30657],
-              [125218, 30578],
-              [125200, 30562],
-              [125192, 30787],
-              [124968, 30474],
-              [125167, 30396],
-              [125115, 30363],
-              [124955, 29879],
-              [124714, 29781],
-              [124762, 29462],
-              [124325, 28754],
-              [124863, 30077],
-              [125366, 31477]
-            ]
-          ]
-        },
-        properties: { cp: [120.153576, 30.287459], name: '浙江', childNum: 43 }
-      },
-      {
-        id: '340000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@^iuLV\\',
-              '@@e©Edh',
-              '@@´CE¶zAXêeödK¡~H¸íæAȽd{ďÅÀ½W®£ChÃsikkly]_teu[bFaTign{]GqªoĈMYá|·¥f¥őaSÕėNµñĞ«Im_m¿Âa]uĜp Z_§{Cäg¤°r[_YjÆOdý[I[á·¥Q_nùgL¾mzˆDÜÆ¶ĊJhpc¹O]iŠ]¥ jtsggDÑ¡w×jÉ©±EFË­KiÛÃÕYvsm¬njĻª§emná}k«ŕgđ²ÙDÇ¤í¡ªOy×Où±@DñSęćăÕIÕ¿IµĥOlJÕÍRÍ|JìĻÒåyķrĕq§ÄĩsWÆßF¶X®¿mwRIÞfßoG³¾©uyHį{Ɓħ¯AFnuPÍÔzVdàôº^Ðæd´oG¤{S¬ćxã}ŧ×Kǥĩ«ÕOEÐ·ÖdÖsƘÑ¨[Û^Xr¢¼§xvÄÆµ`K§ tÒ´Cvlo¸fzŨð¾NY´ı~ÉĔēßúLÃÃ_ÈÏ|]ÂÏHlg`ben¾¢pUh~ƴĖ¶_r sĄ~cƈ]|r c~`¼{À{ȒiJjz`îÀT¥Û³]u}fïQl{skloNdjäËzDvčoQďHI¦rbrHĖ~BmlNRaĥTX\\{fÁKÁ®TLÂÄMtÊgĀDĄXƔvDcÎJbt[¤D@®hh~kt°ǾzÖ@¾ªdbYhüóV´ŮŒ¨Üc±r@J|àuYÇÔG·ĚąĐlŪÚpSJ¨ĸLvÞcPæķŨ®mÐálsgd×mQ¨ųÆ©Þ¤IÎs°KZpĄ|XwWdĎµmkǀwÌÕæhºgBĝâqÙĊzÖgņtÀÁĂÆáhEz|WzqD¹°Eŧl{ævÜcA`¤C`|´qxĲkq^³³GšµbíZ¹qpa±ď OH¦Ħx¢gPícOl_iCveaOjChß¸iÝbÛªCC¿mRV§¢A|tbkĜEÀtîm^g´fÄ'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [121722, 32278],
-              [119475, 30423],
-              [121606, 33646]
-            ]
-          ]
-        },
-        properties: { cp: [117.283042, 31.86119], name: '安徽', childNum: 3 }
-      },
-      {
-        id: '350000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@zht´}[',
-              '@@aj^~ĆGå',
-              '@@edHse',
-              '@@@vPGsyQ',
-              '@@sBzddW[O',
-              '@@S¨Qy',
-              '@@NVucW',
-              '@@qptB@q',
-              '@@¸[iu',
-              '@@Q\\pD[_',
-              '@@jSwUappI',
-              '@@eXª~',
-              '@@AjvFoo',
-              '@@fT_Çí\\v|ba¦jZÆy|®',
-              '@@IjLg',
-              '@@wJIx«¼AoNe{M¥',
-              '@@K±¡ÓČ~N¾',
-              '@@k¡¹Eh~c®uDqZì¡I~Māe£bN¨gZý¡a±Öcp©PhI¢QqÇGj|¥U g[Ky¬ŏv@OptÉEF\\@ åA¬V{XģĐBycpě¼³Ăp·¤¥ohqqÚ¡ŅLs^Ã¡§qlÀhH¨MCe»åÇGD¥zPO£čÙkJA¼ßėuĕeûÒiÁŧS[¡Uûŗ½ùěcÝ§SùĩąSWó«íęACµeRåǃRCÒÇZÍ¢ź±^dlstjD¸ZpuÔâÃH¾oLUêÃÔjjēò´ĄWƛ^Ñ¥Ħ@ÇòmOw¡õyJyD}¢ďÑÈġfZda©º²z£NjD°Ötj¶¬ZSÎ~¾c°¶ÐmxO¸¢Pl´SL|¥AȪĖMņĲg®áIJČĒü` QF¬h|ĂJ@zµ |ê³È ¸UÖŬŬÀCtrĸr]ðM¤ĶĲHtÏ AĬkvsq^aÎbvdfÊòSD´Z^xPsĂrvƞŀjJd×ŘÉ ®AÎ¦ĤdxĆqAZRÀMźnĊ»İÐZ YXæJyĊ²·¶q§·K@·{sXãô«lŗ¶»o½E¡­«¢±¨Y®Ø¶^AvWĶGĒĢPlzfļtàAvWYãO_¤sD§ssČġ[kƤPX¦`¶®BBvĪjv©jx[L¥àï[F¼ÍË»ğV`«Ip}ccÅĥZEãoP´B@D¸m±z«Ƴ¿å³BRØ¶Wlâþäą`]Z£Tc ĹGµ¶Hm@_©k¾xĨôȉðX«½đCIbćqK³ÁÄš¬OAwã»aLŉËĥW[ÂGIÂNxĳ¤D¢îĎÎB§°_JGs¥E@¤ućPåcuMuw¢BI¿]zG¹guĮI'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [123250, 27563],
-              [122541, 27268],
-              [123020, 27189],
-              [122916, 27125],
-              [122887, 26845],
-              [122808, 26762],
-              [122568, 25912],
-              [122778, 26197],
-              [122515, 26757],
-              [122816, 26587],
-              [123388, 27005],
-              [122450, 26243],
-              [122578, 25962],
-              [121255, 25103],
-              [120987, 24903],
-              [122339, 25802],
-              [121042, 25093],
-              [122439, 26024]
-            ]
-          ]
-        },
-        properties: { cp: [119.306239, 26.075302], name: '福建', childNum: 18 }
-      },
-      {
-        id: '360000',
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            '@@ÖP¬ǦĪØLŨä~Ĉw«|TH£pc³Ïå¹]ĉđxe{ÎÓvOEm°BƂĨİ|Gvz½ª´HàpeJÝQxnÀW­EµàXÅĪt¨ÃĖrÄwÀFÎ|Ă¡WÕ¸cf¥XaęST±m[r«_gmQu~¥V\\OkxtL E¢Ú^~ýØkbēqoě±_Êw§Ñ²ÏƟė¼mĉŹ¿NQYBąrwģcÍ¥B­ŗÊcØiIƝĿuqtāwO]³YCñTeÉcaubÍ]trluīBÐGsĵıN£ï^ķqsq¿DūūVÕ·´Ç{éĈýÿOER_đûIċâJh­ŅıNȩĕB¦K{Tk³¡OP·wnµÏd¯}½TÍ«YiµÕsC¯iM¤­¦¯P|ÿUHvhe¥oFTuõ\\OSsMòđƇiaºćXĊĵà·çhƃ÷Ç{ígu^đgm[ÙxiIN¶Õ»lđÕwZSÆv©_ÈëJbVkĔVÀ¤P¾ºÈMÖxlò~ªÚàGĂ¢B±ÌKyñ`w²¹·`gsÙfIěxŕeykpudjuTfb·hh¿Jd[\\LáƔĨƐAĈepÀÂMD~ņªe^\\^§ý©j×cZØ¨zdÒa¶lÒJìõ`oz÷@¤uŞ¸´ôęöY¼HČƶajlÞƩ¥éZ[|h}^U  ¥pĄžƦO lt¸Æ Q\\aÆ|CnÂOjt­ĚĤdÈF`¶@Ðë ¦ōÒ¨SêvHĢÛ@[ÆQoxHW[ŰîÀt¦Ǆ~NĠ¢lĄtZoCƞÔºCxrpČNpj¢{f_Y`_eq®Aot`@oDXfkp¨|s¬\\DÄSfè©Hn¬^DhÆyøJhØxĢĀLÊƠPżċĄwĮ¶'
-          ],
-          encodeOffsets: [[118923, 30536]]
-        },
-        properties: { cp: [115.892151, 28.676493], name: '江西', childNum: 1 }
-      },
-      {
-        id: '370000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@Xjd]mE',
-              '@@itnq',
-              '@@Dl@k',
-              '@@TGw',
-              '@@K¬U',
-              '@@Wd`c',
-              '@@PtMs',
-              '@@LnXlc',
-              '@@ppVu]Qn',
-              '@@cdzAU_',
-              '@@udRhnCE',
-              '@@oIpP',
-              '@@M{ĿčwbxƨîKÎMĮ]ZF½Y]â£ph¶¨râøÀÎǨ¤^ºÄGz~grĚĜlĞÆLĆǆ¢Îo¦cvKbgr°WhmZp L]LºcUÆ­nżĤÌĒbAnrOA´ȊcÀbƦUØrĆUÜøĬƞŶǬĴóò_A̈«ªdÎÉnb²ĦhņBĖįĦåXćì@L¯´ywƕCéÃµė ƿ¸lµZæyj|BíÂKNNnoƈfÈMZwnŐNàúÄsTJULîVjǎ¾ĒØDz²XPn±ŴPè¸ŔLƔÜƺ_TüÃĤBBċÈöA´faM¨{«M`¶d¡ôÖ°mȰBÔjj´PM|c^d¤u¤Û´ä«ƢfPk¶Môl]Lb}su^ke{lCMrDÇ­]NÑFsmoõľHyGă{{çrnÓEƕZGª¹Fj¢ÿ©}ÌCǷë¡ąuhÛ¡^KxC`C\\bÅxì²ĝÝ¿_NīCȽĿåB¥¢·IŖÕy\\¹kxÃ£ČáKµË¤ÁçFQ¡KtŵƋ]CgÏAùSedcÚźuYfyMmhUWpSyGwMPqŀÁ¼zK¶G­Y§Ë@´śÇµƕBm@IogZ¯uTMx}CVKï{éƵP_K«pÛÙqċtkkù]gTğwoɁsMõ³ăAN£MRkmEÊčÛbMjÝGuIZGPģãħE[iµBEuDPÔ~ª¼ęt]ûG§¡QMsğNPŏįzs£Ug{đJĿļā³]ç«Qr~¥CƎÑ^n¶ÆéÎR~Ż¸YI] PumŝrƿIā[xeÇ³L¯v¯s¬ÁY~}ťuŁgƋpÝĄ_ņī¶ÏSR´ÁP~¿Cyċßdwk´SsX|t`Ä ÈðAªìÎT°¦Dda^lĎDĶÚY°`ĪŴǒàŠv\\ebZHŖR¬ŢƱùęOÑM­³FÛaj'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [123806, 39303],
-              [123821, 39266],
-              [123742, 39256],
-              [123702, 39203],
-              [123649, 39066],
-              [123847, 38933],
-              [123580, 38839],
-              [123894, 37288],
-              [123043, 36624],
-              [123344, 38676],
-              [123522, 38857],
-              [123628, 38858],
-              [118267, 36772]
-            ]
-          ]
-        },
-        properties: { cp: [117.000923, 36.675807], name: '山东', childNum: 13 }
-      },
-      {
-        id: '410000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@dXD}~Hgq~ÔN~zkĘHVsǲßjŬŢ`Pûàl¢\\ÀEhİgÞē X¼`khÍLùµP³swIÓzeŠĠð´E®ÚPtºIŊÊºL«šŕQGYfa[şußǑĩų_Z¯ĵÙčC]kbc¥CS¯ëÍB©ïÇÃ_{sWTt³xlàcČzÀD}ÂOQ³ÐTĬµƑÐ¿ŸghłŦv~}ÂZ«¤lPÇ£ªÝŴÅR§ØnhctâknÏ­ľŹUÓÝdKuķI§oTũÙďkęĆH¸Ó\\Ä¿PcnS{wBIvÉĽ[GqµuŇôYgûZca©@½Õǽys¯}lgg@­C\\£asIdÍuCQñ[L±ęk·ţb¨©kK»KC²òGKmĨS`UQnk}AGēsqaJ¥ĐGRĎpCuÌy ã iMcplk|tRkðev~^´¦ÜSí¿_iyjI|ȑ|¿_»d}q^{Ƈdă}tqµ`ŷé£©V¡om½ZÙÏÁRD|JOÈpÀRsI{ùÓjuµ{t}uËRivGçJFjµåkWê´MÂHewixGw½Yŷpµú³XU½ġyłåkÚwZX·l¢Á¢KzOÎÎjc¼htoDHr|­J½}JZ_¯iPq{tę½ĕ¦Zpĵø«kQĹ¤]MÛfaQpě±ǽ¾]u­Fu÷nčÄ¯ADp}AjmcEÇaª³o³ÆÍSƇĈÙDIzçñİ^KNiÞñ[aA²zzÌ÷D|[íÄ³gfÕÞd®|`Ć~oĠƑô³ŊD×°¯CsøÂ«ìUMhTº¨¸ǝêWÔDruÂÇZ£ĆPZW~ØØv¬gèÂÒw¦X¤Ā´oŬ¬²Ês~]®tªapŎJ¨Öº_ŔfŐ\\Đ\\Ĝu~m²Ƹ¸fWĦrƔ}Î^gjdfÔ¡J}\\n C¦þWxªJRÔŠu¬ĨĨmFdM{\\d\\YÊ¢ú@@¦ª²SÜsC}fNècbpRmlØ^gd¢aÒ¢CZZxvÆ¶N¿¢T@uC¬^ĊðÄn|lIlXhun[',
-              '@@hzUq'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [116744, 37216],
-              [116480, 33048]
-            ]
-          ]
-        },
-        properties: { cp: [113.665412, 34.757975], name: '河南', childNum: 2 }
-      },
-      {
-        id: '420000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@ASd',
-              '@@ls{d',
-              '@@¾«}{ra®pîÃ\\{øCËyyB±b\\òÝjKL ]ĎĽÌJyÚCƈćÎT´Å´pb©ÈdFin~BCo°BĎÃømv®E^vǾ½Ĝ²RobÜeN^ĺ£R¬lĶ÷YoĖ¥Ě¾|sOr°jY`~I¾®I{GqpCgyl{£ÍÍyPLÂ¡¡¸kWxYlÙæŁĢz¾V´W¶ùŸo¾ZHxjwfxGNÁ³Xéæl¶EièIH ujÌQ~v|sv¶Ôi|ú¢FhQsğ¦SiŠBgÐE^ÁÐ{čnOÂÈUÎóĔÊēĲ}Z³½Mŧïeyp·uk³DsÑ¨L¶_ÅuÃ¨w»¡WqÜ]\\Ò§tƗcÕ¸ÕFÏǝĉăxŻČƟOKÉġÿ×wg÷IÅzCg]m«ªGeçÃTC«[t§{loWeC@ps_Bp­rf_``Z|ei¡oċMqow¹DƝÓDYpûsYkıǃ}s¥ç³[§cY§HK«Qy]¢wwö¸ïx¼ņ¾Xv®ÇÀµRĠÐHM±cÏdƒǍũȅȷ±DSyúĝ£ŤĀàtÖÿï[îb\\}pĭÉI±Ñy¿³x¯No|¹HÏÛmjúË~TuęjCöAwě¬Rđl¯ Ñb­ŇTĿ_[IčĄʿnM¦ğ\\É[T·k¹©oĕ@A¾wya¥Y\\¥Âaz¯ãÁ¡k¥ne£ÛwE©Êō¶˓uoj_U¡cF¹­[WvP©whuÕyBF`RqJUw\\i¡{jEPïÿ½fćQÑÀQ{°fLÔ~wXgītêÝ¾ĺHd³fJd]HJ²EoU¥HhwQsƐ»Xmg±çve]DmÍPoCc¾_hhøYrŊU¶eD°Č_N~øĹĚ·`z]Äþp¼äÌQv\\rCé¾TnkžŐÚÜa¼ÝƆĢ¶ÛodĔňÐ¢JqPb ¾|J¾fXƐîĨ_Z¯À}úƲN_ĒÄ^ĈaŐyp»CÇÄKñL³ġM²wrIÒŭxjb[n«øæà ^²­h¯ÚŐªÞ¸Y²ĒVø}Ā^İ´LÚm¥ÀJÞ{JVųÞŃx×sxxƈē ģMřÚðòIfĊŒ\\Ʈ±ŒdÊ§ĘDvČ_Àæ~Dċ´A®µ¨ØLV¦êHÒ¤'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [113712, 34000],
-              [115612, 30507],
-              [113649, 34054]
-            ]
-          ]
-        },
-        properties: { cp: [114.298572, 30.584355], name: '湖北', childNum: 3 }
-      },
-      {
-        id: '430000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@nFZw',
-              '@@ãÆá½ÔXrCOËRïÿĩ­TooQyÓ[ŅBE¬ÎÓXaį§Ã¸G °ITxpúxÚĳ¥ÏĢ¾edÄ©ĸGàGhM¤Â_U}Ċ}¢pczfþg¤ÇôAV',
-              '@@ȴÚĖÁĐiOĜ«BxDõĚivSÌ}iùÜnÐºG{p°M°yÂÒzJ²Ì ÂcXëöüiáÿñőĞ¤ùTz²CȆȸǎŪƑÐc°dPÎğË¶[È½u¯½WM¡­ÉB·rínZÒ `¨GA¾\\pēXhÃRC­üWGġuTé§ŎÑ©êLM³}_EÇģc®ęisÁPDmÅ{b[RÅs·kPŽƥóRoOV~]{g\\êYƪ¦kÝbiċƵGZ»Ěõó·³vŝ£ø@pyö_ëIkÑµbcÑ§y×dYØªiþUjŅ³C}ÁN»hĻħƏâƓKA·³CQ±µ§¿AUƑ¹AtćOwD]JUÖgk¯b£ylZFËÑ±H­}EbóľA¡»Ku¦·³åş¥ùBD^{ÌC´­¦ŷJ£^[ª¿ğ|ƅN skóā¹¿ï]ă~÷O§­@Vm¡Qđ¦¢Ĥ{ºjÔª¥nf´~Õo×ÛąGû¥cÑ[Z¶ŨĪ²SÊǔƐƀAÚŌ¦QØ¼rŭ­«}NÏürÊ¬mjr@ĘrTW ­SsdHzƓ^ÇÂyUi¯DÅYlŹu{hT}mĉ¹¥ěDÿë©ıÓ[Oº£¥ótł¹MÕƪ`PDiÛU¾ÅâìUñBÈ£ýhedy¡oċ`pfmjP~kZaZsÐd°wj§@Ĵ®w~^kÀÅKvNmX\\¨aŃqvíó¿F¤¡@ũÑVw}S@j}¾«pĂrªg àÀ²NJ¶¶DôK|^ª°LX¾ŴäPĪ±£EXd^¶ĲÞÜ~u¸ǔMRhsRe`ÄofIÔ\\Ø  ićymnú¨cj ¢»GČìƊÿÐ¨XeĈĀ¾Oð Fi ¢|[jVxrIQ_EzAN¦zLU`cªxOTu RLÄªpUĪȴ^ŎµªÉFxÜf¤ºgĲèy°Áb[¦Zb¦z½xBĖ@ªpºjS´rVźOd©ʪiĎăJP`'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [115640, 30489],
-              [112577, 27316],
-              [114113, 30649]
-            ]
-          ]
-        },
-        properties: { cp: [112.982279, 28.19409], name: '湖南', childNum: 3 }
-      },
-      {
-        id: '440000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@QdAsa',
-              '@@lxDRm',
-              '@@sbhNLo',
-              '@@Ă ý',
-              '@@WltOY[',
-              '@@Kr]S',
-              '@@e~AS}',
-              '@@I|Mym',
-              '@@Û³LS²Q',
-              '@@nvºBë¥cÕº',
-              '@@zdÛJm',
-              '@@°³',
-              '@@a yAª¸ËJIxØ@ĀHÉÕZofoo',
-              '@@sŗÃÔėAƁZÄ ~°ČPºb',
-              '@@¶ÝÌvmĞh¹Ĺ',
-              '@@HdSjĒ¢D}waru«ZqadY{K',
-              '@@el\\LqqO',
-              '@@~rMmX',
-              '@@f^E',
-              '@@øPªoj÷ÍÝħXČx°Q¨ıXJp',
-              '@@gÇƳmxatfu',
-              '@@EÆC½',
-              '@@¸B_¶ekWvSivc}p}Ăº¾NĎyj¦Èm th_®Ä}»âUzLË²Aā¡ßH©Ùñ}wkNÕ¹ÇO½¿£ēUlaUìIÇª`uTÅxYĒÖ¼kÖµMjJÚwn\\hĒv]îh|ÈƄøèg¸Ķß ĉĈWb¹ƀdéĘNTtP[öSvrCZaGubo´ŖÒÇĐ~¡zCIözx¢PnÈñ @ĥÒ¦]ƜX³ăĔñiiÄÓVépKG½ÄÓávYoC·sitiaÀyŧÎ¡ÈYDÑům}ý|m[węõĉZÅxUO}÷N¹³ĉo_qtăqwµŁYÙǝŕ¹tïÛUÃ¯mRCºĭ|µÕÊK½Rē ó]GªęAxNqSF|ām¡diď×YïYWªŉOeÚtĐ«zđ¹TāúEáÎÁWwíHcòßÎſ¿Çdğ·ùT×Çūʄ¡XgWÀǇğ·¿ÃOj YÇ÷Sğ³kzőõmĝ[³¡VÙæÅöMÌ³¹pÁaËýý©D©ÜJŹƕģGą¤{ÙūÇO²«BƱéAÒĥ¡«BhlmtÃPµyU¯ucd·w_bŝcīímGOGBȅŹãĻFŷŽŕ@Óoo¿ē±ß}}ÓF÷tĲWÈCőâUâǙIğŉ©IĳE×Á³AĥDĈ±ÌÜÓĨ£L]ĈÙƺZǾĆĖMĸĤfÎĵlŨnÈĐtFFĤêk¶^k°f¶g}®Faf`vXŲxl¦ÔÁ²¬Ð¦pqÊÌ²iXØRDÎ}Ä@ZĠsx®AR~®ETtĄZƈfŠŠHâÒÐAµ\\S¸^wĖkRzalŜ|E¨ÈNĀňZTpBh£\\ĎƀuXĖtKL¶G|»ĺEļĞ~ÜĢÛĊrOÙîvd]n¬VÊĜ°RÖpMƀ¬HbwEÀ©\\¤]ŸI®¥D³|Ë]CúAŠ¦æ´¥¸Lv¼¢ĽBaôF~®²GÌÒEYzk¤°ahlVÕI^CxĈPsBƒºVÀB¶¨R²´D',
-              '@@OR'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [117381, 22988],
-              [116552, 22934],
-              [116790, 22617],
-              [116973, 22545],
-              [116444, 22536],
-              [116931, 22515],
-              [116496, 22490],
-              [116453, 22449],
-              [113301, 21439],
-              [118726, 21604],
-              [118709, 21486],
-              [113210, 20816],
-              [115482, 22082],
-              [113171, 21585],
-              [113199, 21590],
-              [115232, 22102],
-              [115739, 22373],
-              [115134, 22184],
-              [113056, 21175],
-              [119573, 21271],
-              [119957, 24020],
-              [115859, 22356],
-              [116680, 26053],
-              [116561, 22649]
-            ]
-          ]
-        },
-        properties: { cp: [113.280637, 23.125178], name: '广东', childNum: 24 }
-      },
-      {
-        id: '450000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@H TI¡U',
-              '@@Ɣ_LÊFZgčP­kini«qÇczÍY®¬Ů»qR×ō©DÕ§ƙǃŵTÉĩ±ıdÑnYYĲvNĆĆØÜ Öp}e³¦m©iÓ|¹ħņ|ª¦QF¢Â¬ʖovg¿em^ucäāmÇÖåB¡Õçĝ}FĻ¼Ĺ{µHKsLSđƃrč¤[AgoSŇYMÿ§Ç{FśbkylQxĕ]T·¶[BÑÏGáşşƇeăYSs­FQ}­BwtYğÃ@~CÍQ ×WjË±rÉ¥oÏ ±«ÓÂ¥kwWűue_b­E~µh¯ecl¯Ïr¯EģJğ}w³Ƈē`ãògK_ÛsUʝćğ¶höO¤Ǜn³c`¡yię[ďĵűMę§]XÎ_íÛ]éÛUćİÕBƣ±dy¹T^dûÅÑŦ·PĻþÙ`K¦¢ÍeĥR¿³£[~äu¼dltW¸oRM¢ď\\z}Æzdvň{ÎXF¶°Â_ÒÂÏL©ÖTmu¼ãlīkiqéfA·Êµ\\őDc¥ÝFyÔćcűH_hLÜêĺĐ¨c}rn`½Ì@¸¶ªVLhŒ\\Ţĺk~Ġið°|gtTĭĸ^xvKVGréAébUuMJVÃO¡qĂXËSģãlýà_juYÛÒBG^éÖ¶§EGÅzěƯ¤EkN[kdåucé¬dnYpAyČ{`]þ±X\\ÞÈk¡ĬjàhÂƄ¢Hè ŔâªLĒ^Öm¶ħĊAǦė¸zÚGn£¾rªŀÜt¬@ÖÚSx~øOŒŶÐÂæȠ\\ÈÜObĖw^oÞLf¬°bI lTØBÌF£Ć¹gñĤaYt¿¤VSñK¸¤nM¼JE±½¸ñoÜCƆæĪ^ĚQÖ¦^f´QüÜÊz¯lzUĺš@ìp¶n]sxtx¶@~ÒĂJb©gk{°~c°`Ô¬rV\\la¼¤ôá`¯¹LCÆbxEræOv[H­[~|aB£ÖsºdAĐzNÂðsÞÆĤªbab`ho¡³F«èVZs\\\\ÔRzpp®SĪº¨ÖºNĳd`a¦¤F³¢@`¢ĨĀìhYvlĆº¦Ċ~nS|gźv^kGÆÀè·'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [111707, 21520],
-              [113706, 26955]
-            ]
-          ]
-        },
-        properties: { cp: [108.320004, 22.82402], name: '广西', childNum: 2 }
-      },
-      {
-        id: '460000',
-        geometry: {
-          type: 'Polygon',
-          coordinates: ['@@¦Ŝil¢XƦƞòïè§ŞCêɕrŧůÇąĻõ·ĉ³œ̅kÇm@ċȧŧĥĽʉ­ƅſȓÒË¦ŝE}ºƑ[ÍĜȋ gÎfǐÏĤ¨êƺ\\Ɔ¸ĠĎvʄȀÐ¾jNðĀÒRZǆzÐĊ¢DÀɘZ'],
-          encodeOffsets: [[112750, 20508]]
-        },
-        properties: { cp: [110.33119, 20.031971], name: '海南', childNum: 1 }
-      },
-      {
-        id: '510000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@LqSn',
-              '@@ĆOìÛÐ@ĞǔNY{¤Á§di´ezÝúØãwIþËQÇ¦ÃqÉSJ»ĂéʔõÔƁİlƞ¹§ĬqtÀƄmÀêErĒtD®ċæcQE®³^ĭ¥©l}äQtoŖÜqÆkµªÔĻĴ¡@Ċ°B²Èw^^RsºTĀ£ŚæQPJvÄz^Đ¹Æ¯fLà´GC²dt­ĀRt¼¤ĦOðğfÔðDŨŁĞƘïPÈ®âbMüÀXZ ¸£@Å»»QÉ­]dsÖ×_Í_ÌêŮPrĔĐÕGĂeZÜîĘqBhtO ¤tE[h|YÔZśÎs´xº±Uñt|OĩĠºNbgþJy^dÂY Į]Řz¦gC³R`Āz¢Aj¸CL¤RÆ»@­Ŏk\\Ç´£YW}z@Z}Ã¶oû¶]´^NÒ}èNªPÍy¹`S°´ATeVamdUĐwʄvĮÕ\\uÆŗ¨Yp¹àZÂmWh{á}WØǍÉüwga§ßAYrÅÂQĀÕ¬LŐý®Xøxª½Ű¦¦[þ`ÜUÖ´òrÙŠ°²ÄkĳnDX{U~ET{ļº¦PZcjF²Ė@pg¨B{u¨ŦyhoÚD®¯¢ WòàFÎ¤¨GDäz¦kŮPġqË¥À]eâÚ´ªKxīPÖ|æ[xÃ¤JÞĥsNÖ½I¬nĨY´®ÐƐmDŝuäđđEbee_v¡}ìęǊē}qÉåT¯µRs¡M@}ůaa­¯wvƉåZw\\Z{åû`[±oiJDÅ¦]ĕãïrG réÏ·~ąSfy×Í·ºſƽĵȁŗūmHQ¡Y¡®ÁÃ×t«­T¤JJJyJÈ`Ohß¦¡uËhIyCjmÿwZGTiSsOB²fNmsPa{M{õE^Hj}gYpaeu¯oáwHjÁ½M¡pMuåmni{fk\\oÎqCwEZ¼KĝAy{m÷LwO×SimRI¯rKõBS«sFe]fµ¢óY_ÆPRcue°Cbo×bd£ŌIHgtrnyPt¦foaXďxlBowz_{ÊéWiêEGhÜ¸ºuFĈIxf®Y½ĀǙ]¤EyF²ċw¸¿@g¢§RGv»áW`ÃĵJwi]t¥wO­½a[×]`Ãi­üL¦LabbTÀåc}ÍhÆh®BHî|îºÉk­¤Sy£ia©taį·Ɖ`ō¥UhOĝLk}©Fos´JmµlŁuønÑJWÎªYÀïAetTŅÓGË«bo{ıwodƟ½OġÜÂµxàNÖ¾P²§HKv¾]|BÆåoZ`¡Ø`ÀmºĠ~ÌÐ§nÇ¿¤]wğ@srğu~Io[é±¹ ¿ſđÓ@qg¹zƱřaí°KtÇ¤V»Ã[ĩǭƑ^ÇÓ@áťsZÏÅĭƋěpwDóÖáŻneQËq·GCœýS]x·ýq³OÕ¶Qzßti{řáÍÇWŝŭñzÇWpç¿JXĩè½cFÂLiVjx}\\NŇĖ¥GeJA¼ÄHfÈu~¸Æ«dE³ÉMA|bÒćhG¬CMõƤąAvüVéŀ_VÌ³ĐwQj´·ZeÈÁ¨X´Æ¡Qu·»ÕZ³ġqDoy`L¬gdp°şp¦ėìÅĮZ°Iähzĵf²å ĚÑKpIN|Ñz]ń·FU×é»R³MÉ»GM«kiér}Ã`¹ăÞmÈnÁîRǀ³ĜoİzŔwǶVÚ£À]ɜ»ĆlƂ²ĠþTº·àUȞÏʦ¶I«dĽĢdĬ¿»Ĕ×h\\c¬ä²GêëĤł¥ÀǿżÃÆMº}BÕĢyFVvwxBèĻĒ©Ĉt@Ğû¸£B¯¨ˋäßkķ½ªôNÔ~t¼Ŵu^s¼{TA¼ø°¢İªDè¾Ň¶ÝJ®Z´ğ~Sn|ªWÚ©òzPOȸbð¢|øĞA'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [108815, 30935],
-              [100197, 35028]
-            ]
-          ]
-        },
-        properties: { cp: [104.065735, 30.659462], name: '四川', childNum: 2 }
-      },
-      {
-        id: '520000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@G\\lY£cj',
-              '@@q|mc¯vÏV',
-              '@@hÑ£IsNgßHHªķÃh_¹¡ĝÄ§ń¦uÙùgS¯JH|sÝÅtÁïyMDč»eÕtA¤{b\\}G®u\\åPFqwÅaDK°ºâ_£ùbµmÁÛĹM[q|hlaªāI}Ñµ@swtwm^oµDéĽŠyVky°ÉûÛR³e¥]RÕěħ[ƅåÛDpJiVÂF²I»mN·£LbÒYbWsÀbpkiTZĄă¶Hq`ĥ_J¯ae«KpÝx]aĕÛPÇȟ[ÁåŵÏő÷Pw}TÙ@Õs«ĿÛq©½m¤ÙH·yǥĘĉBµĨÕnđ]K©œáGçş§ÕßgǗĦTèƤƺ{¶ÉHÎd¾ŚÊ·OÐjXWrãLyzÉAL¾ę¢bĶėy_qMĔąro¼hĊw¶øV¤w²Ĉ]ÊKx|`ź¦ÂÈdrcÈbe¸`I¼čTF´¼Óýȃr¹ÍJ©k_șl³´_pĐ`oÒh¶pa^ÓĔ}D»^Xy`d[KvJPhèhCrĂĚÂ^Êƌ wZL­Ġ£ÁbrzOIlMMĪŐžËr×ÎeŦtw|¢mKjSǘňĂStÎŦEtqFT¾Eì¬¬ôxÌO¢ K³ŀºäYPVgŎ¦ŊmŞ¼VZwVlz¤£Tl®ctĽÚó{G­AÇge~Îd¿æaSba¥KKûj®_Ä^\\Ø¾bP®¦x^sxjĶI_Ä Xâ¼Hu¨Qh¡À@Ëô}±GNìĎlT¸`V~R°tbÕĊ`¸úÛtÏFDu[MfqGH·¥yAztMFe|R_GkChZeÚ°tov`xbDnÐ{E}ZèxNEÞREn[Pv@{~rĆAB§EO¿|UZ~ìUf¨J²ĂÝÆsªB`s¶fvö¦Õ~dÔq¨¸º»uù[[§´sb¤¢zþF¢ÆÀhÂW\\ıËIÝo±ĭŠ£þÊs}¡R]ěDg´VG¢j±®èºÃmpU[Áëº°rÜbNu¸}º¼`niºÔXĄ¤¼ÔdaµÁ_ÃftQQgR·Ǔv}Ý×ĵ]µWc¤F²OĩųãW½¯K©]{LóµCIµ±Mß¿h©āq¬o½~@i~TUxð´Đhw­ÀEîôuĶb[§nWuMÆJl½]vuıµb'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [112158, 27383],
-              [112105, 27474],
-              [112095, 27476]
-            ]
-          ]
-        },
-        properties: { cp: [106.713478, 26.578343], name: '贵州', childNum: 3 }
-      },
-      {
-        id: '530000',
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            '@@[ùx½}ÑRHYīĺûsÍniEoã½Ya²ė{c¬ĝgĂsAØÅwďõzFjw}«Dx¿}Uũlê@HÅ­F¨ÇoJ´Ónũuą¡Ã¢pÒÅØ TF²xa²ËXcÊlHîAßËŁkŻƑŷÉ©hW­æßUËs¡¦}teèÆ¶StÇÇ}Fd£jĈZĆÆ¤Tč\\D}O÷£U§~ŃGåŃDĝ¸Tsd¶¶Bª¤u¢ŌĎo~t¾ÍŶÒtD¦ÚiôözØX²ghįh½Û±¯ÿm·zR¦Ɵ`ªŊÃh¢rOÔ´£Ym¼èêf¯ŪĽncÚbw\\zlvWªâ ¦gmĿBĹ£¢ƹřbĥkǫßeeZkÙIKueT»sVesbaĕ  ¶®dNĄÄpªy¼³BE®lGŭCǶwêżĔÂepÍÀQƞpC¼ŲÈ­AÎô¶RäQ^Øu¬°_Èôc´¹ò¨PÎ¢hlĎ¦´ĦÆ´sâÇŲPnÊD^¯°Upv}®BPÌªjǬxSöwlfòªvqĸ|`H­viļndĜ­Ćhňem·FyÞqóSį¯³X_ĞçêtryvL¤§z¦c¦¥jnŞklD¤øz½ĜàĂŧMÅ|áƆàÊcðÂFÜáŢ¥\\\\ºİøÒÐJĴîD¦zK²ǏÎEh~CD­hMn^ÌöÄ©ČZÀaüfɭyœpį´ěFűk]Ôě¢qlÅĆÙa¶~ÄqêljN¬¼HÊNQ´ê¼VØ¸E^ŃÒyM{JLoÒęæe±Ķygã¯JYÆĭĘëo¥Šo¯hcK«z_prC´ĢÖY¼ v¸¢RÅW³Â§fÇ¸Yi³xR´ďUË`êĿUûuĆBƣöNDH«ĈgÑaB{ÊNF´¬c·Åv}eÇÃGB»If¦HňĕM~[iwjUÁKE¾dĪçWIèÀoÈXòyŞŮÈXâÎŚj|àsRyµÖPr´þ ¸^wþTDŔHr¸RÌmfżÕâCôoxĜƌÆĮÐYtâŦÔ@]ÈǮƒ\\Ī¼Ä£UsÈ¯LbîƲŚºyhr@ĒÔƀÀ²º\\êpJ}ĠvqtĠ@^xÀ£È¨mËÏğ}n¹_¿¢×Y_æpÅA^{½Lu¨GO±Õ½ßM¶wÁĢÛPƢ¼pcĲx|apÌ¬HÐŊSfsðBZ¿©XÏÒKk÷Eû¿SrEFsÕūkóVǥŉiTL¡n{uxţÏhôŝ¬ğōNNJkyPaqÂğ¤K®YxÉƋÁ]āęDqçgOgILu\\_gz]W¼~CÔē]bµogpÑ_oď`´³Țkl`IªºÎȄqÔþ»E³ĎSJ»_f·adÇqÇc¥Á_Źw{L^É±ćxU£µ÷xgĉp»ĆqNē`rĘzaĵĚ¡K½ÊBzyäKXqiWPÏÉ¸½řÍcÊG|µƕƣGË÷k°_^ý|_zċBZocmø¯hhcæ\\lMFlư£ĜÆyHF¨µêÕ]HAàÓ^it `þßäkĤÎT~Wlÿ¨ÔPzUCNVv [jâôDôď[}z¿msSh¯{jïğl}šĹ[őgK©U·µË@¾m_~q¡f¹ÅË^»f³ø}Q¡ÖË³gÍ±^Ç\\ëÃA_¿bWÏ[¶ƛé£F{īZgm@|kHǭƁć¦UĔť×ëǟeċ¼ȡȘÏíBÉ£āĘPªĳ¶ŉÿy©nď£G¹¡I±LÉĺÑdĉÜW¥}gÁ{aqÃ¥aıęÏZÁ`'
-          ],
-          encodeOffsets: [[104636, 22969]]
-        },
-        properties: { cp: [102.712251, 25.040609], name: '云南', childNum: 1 }
-      },
-      {
-        id: '540000',
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            '@@ÂhľxŖxÒVºÅâAĪÝȆµę¯Ňa±r_w~uSÕňqOj]ɄQ£ZUDûoY»©M[L¼qãË{VÍçWVi]ë©Ä÷àyƛhÚU°adcQ~Mx¥caÛcSyFÖk­uRýq¿ÔµQĽ³aG{¿FµëªéĜÿª@¬·K·àariĕĀ«V»ŶĴūgèLǴŇƶaftèBŚ£^âǐÝ®M¦ÁǞÿ¬LhJ¾óƾÆºcxwf]Y´¦|QLn°adĊ\\¨oǀÍŎ´ĩĀd`tÊQŞŕ|¨C^©Ĉ¦¦ÎJĊ{ëĎjª²rÐl`¼Ą[t|¦Stè¾PÜK¸dƄı]s¤î_v¹ÎVòŦj£Əsc¬_Ğ´|Ł¦Av¦w`ăaÝaa­¢e¤ı²©ªSªÈMĄwÉØŔì@T¤Ę\\õª@þo´­xA sÂtŎKzó²ÇČµ¢r^nĊ­Æ¬×üG¢³ {âĊ]G~bÀgVjzlhǶfOfdªB]pjTOtĊn¤}®¦Č¥d¢¼»ddY¼t¢eȤJ¤}Ǿ¡°§¤AÐlc@ĝsªćļđAçwxUuzEÖġ~AN¹ÄÅȀŻ¦¿ģŁéì±Hãd«g[Ø¼ēÀcīľġ¬cJµÐʥVȝ¸ßS¹ý±ğkƁ¼ą^ɛ¤Ûÿb[}¬ōõÃ]ËNm®g@Bg}ÍF±ǐyL¥íCIĳÏ÷Ñį[¹¦[âšEÛïÁÉdƅß{âNÆāŨß¾ě÷yC£k­´ÓH@Â¹TZ¥¢į·ÌAÐ§®Zcv½Z­¹|ÅWZqgW|ieZÅYVÓqdqbc²R@c¥Rã»GeeƃīQ}J[ÒK¬Ə|oėjġĠÑN¡ð¯EBčnwôɍėª²CλŹġǝʅįĭạ̃ūȹ]ΓͧgšsgȽóϧµǛęgſ¶ҍć`ĘąŌJÞä¤rÅň¥ÖÁUětęuůÞiĊÄÀ\\Æs¦ÓRb|Â^řÌkÄŷ¶½÷f±iMÝ@ĥ°G¬ÃM¥n£Øąğ¯ß§aëbéüÑOčk£{\\eµª×MÉfm«Ƒ{Å×Gŏǩãy³©WÑăû··Qòı}¯ãIéÕÂZ¨īès¶ZÈsæĔTŘvgÌsN@îá¾ó@ÙwU±ÉTå»£TđWxq¹Zobs[×¯cĩvėŧ³BM|¹kªħ¥TzNYnÝßpęrñĠĉRS~½ěVVµõ«M££µBĉ¥áºae~³AuĐh`Ü³ç@BÛïĿa©|z²Ý¼D£àč²ŸIûI āóK¥}rÝ_Á´éMaň¨~ªSĈ½½KÙóĿeƃÆB·¬ën×W|Uº}LJrƳlŒµ`bÔ`QÐÓ@s¬ñIÍ@ûws¡åQÑßÁ`ŋĴ{ĪTÚÅTSÄ³Yo|Ç[Ç¾µMW¢ĭiÕØ¿@MhpÕ]jéò¿OƇĆƇpêĉâlØwěsǩĵ¸cbU¹ř¨WavquSMzeo_^gsÏ·¥Ó@~¯¿RiīB\\qTGªÇĜçPoÿfñòą¦óQīÈáPābß{ZŗĸIæÅhnszÁCËìñÏ·ąĚÝUm®ó­L·ăUÈíoù´Êj°ŁŤ_uµ^°ìÇ@tĶĒ¡ÆM³Ģ«İĨÅ®ğRāðggheÆ¢zÊ©Ô\\°ÝĎz~ź¤PnMĪÖB£kné§żćĆKĒ°¼L¶èâz¨u¦¥LDĘz¬ýÎmĘd¾ßFzhg²Fy¦ĝ¤ċņbÎ@yĄæm°NĮZRÖíJ²öLĸÒ¨Y®ƌÐVàtt_ÚÂyĠz]ŢhzĎ{ÂĢXc|ÐqfO¢¤ögÌHNPKŖUú´xx[xvĐCûĀìÖT¬¸^}Ìsòd´_KgžLĴÀBon|H@Êx¦BpŰŌ¿fµƌA¾zǈRx¶FkĄźRzŀ~¶[´HnªVƞuĒ­È¨ƎcƽÌm¸ÁÈM¦x͊ëÀxǆBú^´W£dkɾĬpw˂ØɦļĬIŚÊnŔa¸~J°îlɌxĤÊÈðhÌ®gT´øàCÀ^ªerrƘd¢İP|Ė ŸWªĦ^¶´ÂLaT±üWƜǀRÂŶUńĖ[QhlLüAÜ\\qRĄ©'
-          ],
-          encodeOffsets: [[90849, 37210]]
-        },
-        properties: { cp: [91.132212, 29.660361], name: '西藏', childNum: 1 }
-      },
-      {
-        id: '610000',
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            '@@¸ÂW¢xR­Fq§uF@N¢XLRMº[ğȣſï|¥Jkc`sŉǷ£Y³WN«ùMëï³ÛIg÷±mTșÚÒķø©þ¥yÓğęmWµÎumZyOŅƟĥÓ~sÑL¤µaÅY¦ocyZ{y c]{Ta©`U_Ěē£ωÊƍKùK¶ȱÝƷ§{û»ÅÁȹÍéuĳ|¹cÑdìUYOuFÕÈYvÁCqÓTǢí§·S¹NgV¬ë÷Át°DØ¯C´ŉƒópģ}ąiEËFéGU¥×K§­¶³BČ}C¿åċ`wġB·¤őcƭ²ő[Å^axwQOñJÙïŚĤNĔwƇÄńwĪ­o[_KÓª³ÙnKÇěÿ]ďă_d©·©Ýŏ°Ù®g]±ß×¥¬÷m\\iaǑkěX{¢|ZKlçhLtŇîŵœè[É@ƉĄEtƇÏ³­ħZ«mJ×¾MtÝĦ£IwÄå\\Õ{OwĬ©LÙ³ÙTª¿^¦rÌĢŭO¥lãyC§HÍ£ßEñX¡­°ÙCgpťzb`wIvA|¥hoĕ@E±iYd¥OÿµÇvPW|mCĴŜǂÒW¶¸AĜh^Wx{@¬­F¸¡ķn£P|ªĴ@^ĠĈæbÔc¶lYi^MicĎ°Â[ävï¶gv@ÀĬ·lJ¸sn|¼u~a]ÆÈtŌºJpþ£KKf~¦UbyäIĺãnÔ¿^­ŵMThĠÜ¤ko¼Ŏìąǜh`[tRd²Ĳ_XPrɲlXiL§à¹H°Ȧqº®QCbAŌJ¸ĕÚ³ĺ§ `d¨YjiZvRĺ±öVKkjGȊÄePĞZmļKÀ[`ösìhïÎoĬdtKÞ{¬èÒÒBÔpĲÇĬJŊ¦±J«[©ārHµàåVKe§|P²ÇÓ·vUzgnN¾yI@oHĆÛķhxen¡QQ±ƝJǖRbzy¸ËÐl¼EºpĤ¼x¼½~Ğà@ÚüdK^mÌSjp²ȮµûGĦ}Ħðǚ¶òƄjɂz°{ºØkÈęâ¦jªBg\\ċ°s¬]jú EȌǆ¬stRÆdĠİwÜ¸ôW¾ƮłÒ_{Ìû¼jº¹¢GǪÒ¯ĘZ`ºŊecņą~BÂgzpâēòYƲȐĎ'
-          ],
-          encodeOffsets: [[113634, 40474]]
-        },
-        properties: { cp: [108.948024, 34.263161], name: '陕西', childNum: 1 }
-      },
-      {
-        id: '620000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@Vu_^',
-              '@@ųEĠtt~nkh`Q¦ÅÄÜdwAb×ĠąJ¤DüègĺqBqj°lI¡Ĩ¶ĖIHdjÎB°aZ¢KJO[|A£Dx}NĂ¬HUnrk kp¼Y kMJn[aGáÚÏ[½rc}aQxOgsPMnUsncZsKúvAtÞġ£®ĀYKdnFw¢JE°Latf`¼h¬we|Æbj}GA·~W`¢MC¤tL©Ĳ°qdfObÞĬ¹ttu`^ZúE`[@Æsîz®¡CƳƜG²R¢RmfwĸgÜą G@pzJM½mhVy¸uÈÔO±¨{LfæU¶ßGĂq\\ª¬²I¥IŉÈīoıÓÑAçÑ|«LÝcspīðÍgtë_õ\\ĉñLYnĝgRǡÁiHLlõUĹ²uQjYi§Z_c¨´ĹĖÙ·ŋIaBD­R¹ȥr¯GºßK¨jWkɱOqWĳ\\a­Q\\sg_ĆǛōëp»£lğÛgSŶN®À]ÓämĹãJaz¥V}Le¤Lýo¹IsŋÅÇ^bz³tmEÁ´a¹cčecÇNĊãÁ\\č¯dNj]jZµkÓdaćå]ğĳ@ ©O{¤ĸm¢E·®«|@Xwg]Aģ±¯XǁÑǳªcwQÚŝñsÕ³ÛV_ý¥\\ů¥©¾÷w©WÕÊĩhÿÖÁRo¸V¬âDb¨hûxÊ×ǌ~Zâg|XÁnßYoº§ZÅŘv[ĭÖʃuďxcVbnUSfB¯³_TzºÎO©çMÑ~M³]µ^püµÄY~y@X~¤Z³[Èōl@®Å¼£QK·Di¡ByÿQ_´D¥hŗy^ĭÁZ]cIzýah¹MĪğPs{ò²Vw¹t³ŜË[Ñ}X\\gsF£sPAgěp×ëfYHāďÖqēŭOÏëdLü\\it^c®RÊº¶¢H°mrY£B¹čIoľu¶uI]vģSQ{UŻÅ}QÂ|Ì°ƅ¤ĩŪU ęĄÌZÒ\\v²PĔ»ƢNHĂyAmƂwVm`]ÈbH`Ì¢²ILvĜH®¤Dlt_¢JJÄämèÔDëþgºƫaʎÌrêYi~ Îİ¤NpÀA¾Ĕ¼bð÷®üszMzÖĖQdȨýv§Tè|ªHÃ¾a¸|Ð ƒwKĢx¦ivr^ÿ ¸l öæfƟĴ·PJv}n\\h¹¶v·À|\\ƁĚN´ĜçèÁz]ġ¤²¨QÒŨTIlªťØ}¼˗ƦvÄùØEÂ«FïËIqōTvāÜŏíÛßÛVj³âwGăÂíNOPìyV³ŉĖýZso§HÑiYw[ß\\X¦¥c]ÔƩÜ·«jÐqvÁ¦m^ċ±R¦΋ƈťĚgÀ»IïĨʗƮ°ƝĻþÍAƉſ±tÍEÕÞāNUÍ¡\\ſčåÒʻĘm ƭÌŹöʥëQ¤µ­ÇcƕªoIýIÉ_mkl³ăƓ¦j¡YzŇi}Msßõīʋ }ÁVm_[n}eı­Uĥ¼ªI{Î§DÓƻėojqYhĹT©oūĶ£]ďxĩǑMĝq`B´ƃ˺Чç~²ņj@¥@đ´ί}ĥtPńÇ¾V¬ufÓÉCtÓ̻¹£G³]ƖƾŎĪŪĘ̖¨ʈĢƂlɘ۪üºňUðǜȢƢż̌ȦǼĤŊɲĖÂ­KqĘŉ¼ĔǲņɾªǀÞĈĂD½ĄĎÌŗĞrôñnN¼â¾ʄľԆ|Ǆ֦ज़ȗǉ̘̭ɺƅêgV̍ʆĠ·ÌĊv|ýĖÕWĊǎÞ´õ¼cÒÒBĢ͢UĜð͒s¨ňƃLĉÕÝ@ɛƯ÷¿Ľ­ĹeȏĳëCȚDŲyê×Ŗyò¯ļcÂßYtÁƤyAã˾J@ǝrý@¤rz¸oP¹ɐÚyáHĀ[JwcVeȴÏ»ÈĖ}ƒŰŐèȭǢόĀƪÈŶë;Ñ̆ȤМľĮEŔĹŊũ~ËUă{ĻƹɁύȩþĽvĽƓÉ@ēĽɲßǐƫʾǗĒpäWÐxnsÀ^ƆwW©¦cÅ¡Ji§vúF¶¨c~c¼īeXǚ\\đ¾JwÀďksãAfÕ¦L}waoZD½Ml«]eÒÅaÉ²áo½FõÛ]ĻÒ¡wYR£¢rvÓ®y®LFLzĈôe]gx}|KK}xklL]c¦£fRtív¦PŨ£',
-              '@@M T¥'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [108619, 36299],
-              [108594, 36341],
-              [108600, 36306]
-            ]
-          ]
-        },
-        properties: { cp: [103.823557, 36.058039], name: '甘肃', childNum: 3 }
-      },
-      {
-        id: '630000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@InJo',
-              '@@CÆ½OŃĦsΰ~Ē³¦@@Ņi±è}ШƄ˹A³r_ĞǒNĪĐw¤^ŬĵªpĺSZgrpiƼĘÔ¨C|ÍJ©Ħ»®VĲ~f\\m `UnÂ~ʌĬàöNt~ňjy¢ZiƔ¥Ąk´nl`JÊJþ©pdƖ®È£¶ìRʦźõƮËnʼėæÑƀĎ[¢VÎĂMÖÝÎF²sƊƀÎBļýƞ¯ʘƭðħ¼Jh¿ŦęΌƇ¥²Q]Č¥nuÂÏri¸¬ƪÛ^Ó¦d¥[Wàx\\ZjÒ¨GtpþYŊĕ´zUOëPîMĄÁxH´áiÜUàîÜŐĂÛSuŎrJðÌ¬EFÁú×uÃÎkrĒ{V}İ«O_ÌËĬ©ÓŧSRÑ±§Ģ£^ÂyèçěM³Ƃę{[¸¿uºµ[gt£¸OƤĿéYõ·kĀq]juw¥DĩƍõÇPéÄ½G©ã¤GuȧþRcÕĕNyyût­øï»a½ē¿BMoį£Íj}éZËqbʍƬh¹ìÿÓAçãnIÃ¡I`ks£CG­ěUy×Cy@¶ʡÊBnāzGơMē¼±O÷õJËĚăVĪũƆ£¯{ËL½ÌzżVR|ĠTbuvJvµhĻĖHAëáa­OÇðñęNwœľ·LmI±íĠĩPÉ×®ÿscB³±JKßĊ«`ađ»·QAmOVţéÿ¤¹SQt]]Çx±¯A@ĉĳ¢Óļ©l¶ÅÛrŕspãRk~¦ª]Į­´FRåd­ČsCqđéFn¿ÅƃmÉx{W©ºƝºįkÕƂƑ¸wWūÐ©ÈF£\\tÈ¥ÄRÈýÌJ lGr^×äùyÞ³fjc¨£ÂZ|ǓMĝÏ@ëÜőRĝ÷¡{aïȷPu°ËXÙ{©TmĠ}Y³­ÞIňµç½©C¡į÷¯B»|St»]vųs»}MÓ ÿʪƟǭA¡fs»PY¼c¡»¦cċ­¥£~msĉPSi^o©AecPeǵkgyUi¿h}aHĉ^|á´¡HØûÅ«ĉ®]m¡qċ¶±ÈyôōLÁstB®wn±ă¥HSòė£Së@×œÊăxÇN©©T±ª£Ĳ¡fb®Þbb_Ą¥xu¥B{łĝ³«`dƐt¤ťiñÍUuºí`£^tƃĲc·ÛLO½sç¥Ts{ă\\_»kÏ±q©čiìĉ|ÍI¥ć¥]ª§D{ŝŖÉR_sÿc³ĪōƿÎ§p[ĉc¯bKmR¥{³Ze^wx¹dƽÅ½ôIg §Mĕ ƹĴ¿ǣÜÍ]Ý]snåA{eƭ`ǻŊĿ\\ĳŬűYÂÿ¬jĖqßb¸L«¸©@ěĀ©ê¶ìÀEH|´bRľÓ¶rÀQþvl®ÕETzÜdb hw¤{LRdcb¯ÙVgƜßzÃôì®^jUèXÎ|UäÌ»rK\\ªN¼pZCüVY¤ɃRi^rPŇTÖ}|br°qňbĚ°ªiƶGQ¾²x¦PmlŜ[Ĥ¡ΞsĦÔÏâ\\ªÚŒU\\f¢N²§x|¤§xĔsZPòʛ²SÐqF`ªVÞŜĶƨVZÌL`¢dŐIqr\\oäõFÎ·¤»Ŷ×h¹]ClÙ\\¦ďÌį¬řtTӺƙgQÇÓHţĒ´ÃbEÄlbʔC|CŮkƮ[ʼ¬ň´KŮÈΰÌĪ¶ƶlðļATUvdTGº̼ÔsÊDÔveMg'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [105308, 37219],
-              [95370, 40081]
-            ]
-          ]
-        },
-        properties: { cp: [101.778916, 36.623178], name: '青海', childNum: 2 }
-      },
-      {
-        id: '640000',
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            '@@KëÀęĞ«Oęȿȕı]ŉ¡åįÕÔ«ǴõƪĚQÐZhv K°öqÀÑS[ÃÖHƖčËnL]ûcÙß@ĝ¾}w»»oģF¹»kÌÏ·{zP§B­¢íyÅt@@á]Yv_ssģ¼ißĻL¾ġsKD£¡N_X¸}B~HaiÅf{«x»ge_bsKF¯¡IxmELcÿZ¤­ĢÝsuBLùtYdmVtNmtOPhRw~bd¾qÐ\\âÙH\\bImlNZ»loqlVmGā§~QCw¤{A\\PKNY¯bFkC¥sks_Ã\\ă«¢ħkJi¯rrAhĹûç£CUĕĊ_ÔBixÅÙĄnªÑaM~ħpOu¥sîeQ¥¤^dkKwlL~{L~hw^ófćKyE­K­zuÔ¡qQ¤xZÑ¢^ļöÜ¾Ep±âbÊÑÆ^fk¬NC¾YpxbK~¥eÖäBlt¿Đx½I[ĒǙWf»Ĭ}d§dµùEuj¨IÆ¢¥dXªƅx¿]mtÏwßRĶX¢͎vÆzƂZò®ǢÌʆCrâºMÞzÆMÒÊÓŊZÄ¾r°Î®Ȉmª²ĈUªĚîøºĮ¦ÌĘk^FłĬhĚiĀĖ¾iİbjË'
-          ],
-          encodeOffsets: [[109366, 40242]]
-        },
-        properties: { cp: [106.278179, 38.46637], name: '宁夏', childNum: 1 }
-      },
-      {
-        id: '650000',
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            '@@QØĔ²X¨~ǘBºjʐßØvKƔX¨vĊOÃ·¢i@~cĝe_«E}QxgɪëÏÃ@sÅyXoŖ{ô«ŸuXêÎf`C¹ÂÿÐGĮÕĞXŪōŸMźÈƺQèĽôe|¿ƸJR¤ĘEjcUóº¯Ĩ_ŘÁMª÷Ð¥OéÈ¿ÖğǤǷÂFÒzÉx[]­Ĥĝœ¦EP}ûƥé¿İƷTėƫœŕƅƱB»Đ±ēO¦E}`cȺrĦáŖuÒª«ĲπdƺÏØZƴwʄ¤ĖGĐǂZĶèH¶}ÚZצʥĪï|ÇĦMŔ»İĝǈì¥Βba­¯¥ǕǚkĆŵĦɑĺƯxūД̵nơʃĽá½M»òmqóŘĝčË¾ăCćāƿÝɽ©ǱŅ»ēėŊLrÁ®ɱĕģŉǻ̋ȥơŻǛȡVï¹Ň۩ûkɗġƁ§ʇė̕ĩũƽō^ƕUv£ƁQïƵkŏ½ΉÃŭÇ³LŇʻ«ƭ\\lŭD{ʓDkaFÃÄa³ŤđÔGRÈƚhSӹŚsİ«ĐË[¥ÚDkº^Øg¼ŵ¸£EÍöůŉT¡c_ËKYƧUśĵÝU_©rETÏʜ±OñtYwē¨{£¨uM³x½şL©Ùá[ÓÐĥ Νtģ¢\\śnkOw¥±T»ƷFɯàĩÞáB¹ÆÑUwŕĽw]kE½Èå~Æ÷QyěCFmĭZīŵVÁƿQƛûXS²b½KÏ½ĉS©ŷXĕ{ĕK·¥Ɨcqq©f¿]ßDõU³h­gËÇïģÉɋwk¯í}I·œbmÉřīJɥĻˁ×xoɹīlc¤³Xù]ǅA¿w͉ì¥wÇN·ÂËnƾƍdÇ§đ®ƝvUm©³G\\}µĿQyŹlăµEwǇQ½yƋBe¶ŋÀůo¥AÉw@{Gpm¿AĳŽKLh³`ñcËtW±»ÕSëüÿďDu\\wwwù³VLŕOMËGh£õP¡erÏd{ġWÁč|yšg^ğyÁzÙs`s|ÉåªÇ}m¢Ń¨`x¥ù^}Ì¥H«YªƅAÐ¹n~ź¯f¤áÀzgÇDIÔ´AňĀÒ¶ûEYospõD[{ù°]uJqU|Soċxţ[õÔĥkŋÞŭZËºóYËüċrw ÞkrťË¿XGÉbřaDü·Ē÷AÃª[ÄäIÂ®BÕĐÞ_¢āĠpÛÄȉĖġDKwbmÄNôfƫVÉviǳHQµâFù­Âœ³¦{YGd¢ĚÜO {Ö¦ÞÍÀP^bƾl[vt×ĈÍEË¨¡Đ~´î¸ùÎhuè`¸HÕŔVºwĠââWò@{ÙNÝ´ə²ȕn{¿¥{l÷eé^eďXj©î\\ªÑòÜìc\\üqÕ[Č¡xoÂċªbØ­ø|¶ȴZdÆÂońéG\\¼C°ÌÆn´nxÊOĨŪƴĸ¢¸òTxÊǪMīĞÖŲÃɎOvʦƢ~FRěò¿ġ~åŊúN¸qĘ[Ĕ¶ÂćnÒPĒÜvúĀÊbÖ{Äî¸~Ŕünp¤ÂH¾ĄYÒ©ÊfºmÔĘcDoĬMŬS¤s²ʘÚžȂVŦ èW°ªB|ĲXŔþÈJĦÆæFĚêYĂªĂ]øªŖNÞüAfɨJ¯ÎrDDĤ`mz\\§~D¬{vJÂ«lµĂb¤pŌŰNĄ¨ĊXW|ų ¿¾ɄĦƐMTòP÷fØĶK¢ȝ˔Sô¹òEð­`Ɩ½ǒÂň×äı§ĤƝ§C~¡hlåǺŦŞkâ~}FøàĲaĞfƠ¥Ŕd®U¸źXv¢aƆúŪtŠųƠjdƺƺÅìnrh\\ĺ¯äɝĦ]èpĄ¦´LƞĬ´ƤǬ˼Ēɸ¤rºǼ²¨zÌPðŀbþ¹ļD¢¹\\ĜÑŚ¶ZƄ³âjĦoâȴLÊȮĐ­ĚăÀêZǚŐ¤qȂ\\L¢ŌİfÆs|zºeªÙæ§΢{Ā´ƐÚ¬¨Ĵà²łhʺKÞºÖTiƢ¾ªì°`öøu®Ê¾ãÖ'
-          ],
-          encodeOffsets: [[88824, 50096]]
-        },
-        properties: { cp: [87.617733, 43.792818], name: '新疆', childNum: 1 }
-      },
-      {
-        id: '110000',
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            '@@RºaYÕQaúÍÔiþĩȨWĢü|Ėu[qb[swP@ÅğP¿{\\¯Y²·Ñ¨j¯X\\¯MSvU¯YIŕY{[fk­VÁûtŷmiÍt_H»Ĩ±d`¹­{bwYr³S]§§o¹qGtm_SŧoaFLgQN_dV@Zom_ć\\ßW´ÕiœRcfio§ËgToÛJíĔóu|wP¤XnO¢ÉŦ¯pNÄā¤zâŖÈRpŢZÚ{GrFt¦Òx§ø¹RóäV¤XdżâºWbwŚ¨Ud®bêņ¾jnŎGŃŶnzÚScîĚZen¬'
-          ],
-          encodeOffsets: [[119421, 42013]]
-        },
-        properties: { cp: [116.405285, 39.904989], name: '北京', childNum: 1 }
-      },
-      {
-        id: '120000',
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            '@@ŬgX§Ü«E¶FÌ¬O_ïlÁgz±AXeµÄĵ{¶]gitgIj·¥ì_iU¨ÐƎk}ĕ{gBqGf{¿aU^fIư³õ{YıëNĿk©ïËZukāAīlĕĥs¡bġ«@dekąI[nlPqCnp{ō³°`{PNdƗqSÄĻNNâyj]äÒD ĬH°Æ]~¡HO¾X}ÐxgpgWrDGpù^LrzWxZ^¨´T\\|~@IzbĤjeĊªz£®ĔvěLmV¾Ô_ÈNW~zbĬvG²ZmDM~~'
-          ],
-          encodeOffsets: [[120237, 41215]]
-        },
-        properties: { cp: [117.190182, 39.125596], name: '天津', childNum: 1 }
-      },
-      {
-        id: '310000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@ɧư¬EpƸÁx]',
-              '@@©²',
-              '@@MA',
-              '@@QpªKWT§¨',
-              '@@bŝÕÕEȣÚƥêImɇǦèÜĠÚÄÓŴ·ʌÇ',
-              '@@Sô¤r]ìƬįǜûȬɋŭ×^sYɍDŋŽąñCG²«ªč@h_p¯A{oloY¬j@Ĳ`gQÚpptǀ^MĲvtbe´Rh@oj¨',
-              '@@ÆLH{a}Eo¦'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [124702, 32062],
-              [124547, 32200],
-              [124808, 31991],
-              [124726, 32110],
-              [124903, 32376],
-              [124065, 32166],
-              [124870, 31965]
-            ]
-          ]
-        },
-        properties: { cp: [121.472644, 31.231706], name: '上海', childNum: 7 }
-      },
-      {
-        id: '500000',
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            '@@TÂÛ`Ùƅően½SêqDu[RåÍ¹÷eXÍy¸_ĺę}÷`M¯ċfCVµqŉ÷Zgg^d½pDOÎCn^uf²ènh¼WtƏxRGg¦pVFI±G^Ic´ecGĹÞ½sëÆNäÌ¤KÓe¯|R¸§LÜkPoïƭNï¶}Gywdiù©nkĈzj@Óc£»Wă¹Óf§c[µo·Ó|MvÛaq½«è\\ÂoVnÓØÍ²«bq¿ehCĜ^Q~ Évýş¤²ĮpEĶyhsŊwH½¿gÅ¡ýE¡ya£³t\\¨\\vú¹¼©·Ñr_oÒý¥et³]Et©uÖ¥±ă©KVeë]}wVPÀFA¨ąB}qTjgRemfFmQFÝMyùnÑAmÑCawu_p¯sfÛ_gI_pNysB¦zG¸rHeN\\CvEsÐñÚkcDÖĉsaQ¯}_UzÁē}^R Äd^ÍĸZ¾·¶`wećJE¹vÛ·HgéFXjÉê`|ypxkAwWĐpb¥eOsmzwqChóUQl¥F^lafanòsrEvfQdÁUVfÎvÜ^eftET¬ôA\\¢sJnQTjPØxøK|nBzĞ»LYFDxÓvr[ehľvN¢o¾NiÂxGpâ¬zbfZo~hGi]öF||NbtOMn eA±tPTLjpYQ|SHYĀxinzDJÌg¢và¥Pg_ÇzIIII£®S¬ØsÎ¼¥¨^LnGĲļĲƤjÎƀƾ¹¸ØÎezĆT¸}êÐqHðqĖä¥^CÆIj²p\\_ æüY|[YxƊæu°xb®Űb@~¢NQt°¶Sæ Ê~rǉĔëĚ¢~uf`faĔJåĊnÔ]jƎćÊ@£¾a®£Ű{ŶĕFègLk{Y|¡ĜWƔtƬJÑxq±ĢN´òKLÈÃ¼D|s`ŋć]Ã`đMùƱ¿~Y°ħ`ƏíW½eI½{aOIrÏ¡ĕŇapµÜƃġ²'
-          ],
-          encodeOffsets: [[111728, 31311]]
-        },
-        properties: { cp: [106.504962, 29.533155], name: '重庆', childNum: 1 }
-      },
-      {
-        id: '810000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@AlFi',
-              '@@mp',
-              '@@EpHo',
-              '@@rMUwAS¬]',
-              '@@ea¢pl¸Eõ¹hj[]ÔCÎ@lj¡uBX´AI¹[yDU]W`çwZkmcMpÅv}IoJlcafŃK°ä¬XJmÐ đhI®æÔtSHnEÒrÄc'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [117111, 23002],
-              [117072, 22876],
-              [117045, 22887],
-              [116882, 22747],
-              [116975, 23082]
-            ]
-          ]
-        },
-        properties: { cp: [114.173355, 22.320048], name: '香港', childNum: 5 }
-      },
-      {
-        id: '820000',
-        geometry: {
-          type: 'Polygon',
-          coordinates: ['@@áw{Îr'],
-          encodeOffsets: [[116285, 22746]]
-        },
-        properties: { cp: [112.54909, 22.198951], name: '澳门', childNum: 1 }
-      }
-    ],
-    UTF8Encoding: true
-  })
-  echarts.registerMap('china', {
-    type: 'FeatureCollection',
-    features: [
-      {
-        id: '710000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@°Ü¯Û',
-              '@@ƛĴÕƊÉɼģºðʀ\\ƎsÆNŌÔĚänÜƤɊĂǀĆĴĤǊŨxĚĮǂƺòƌâÔ®ĮXŦţƸZûÐƕƑGđ¨ĭMó·ęcëƝɉlÝƯֹÅŃ^Ó·śŃǋƏďíåɛGɉ¿IċããF¥ĘWǬÏĶñÄ',
-              '@@\\p|WoYG¿¥Ij@',
-              '@@¡@V^RqBbAnTXeQr©C',
-              '@@ÆEEkWqë I'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [122886, 24033],
-              [123335, 22980],
-              [122375, 24193],
-              [122518, 24117],
-              [124427, 22618]
-            ]
-          ]
-        },
-        properties: { cp: [121, 24], name: '台湾', childNum: 5 }
-      },
-      {
-        id: '130000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@\\aM`Ç½ÓnUKĜēs¤­©yrý§uģcJ»eIP]ªrºc_ħ²G¼s`jÎŸnüsÂľP',
-              '@@U`Ts¿mÄ',
-              '@@FOhđ©OiÃ`ww^ÌkÑH«ƇǤŗĺtFu{Z}Ö@U´ʚLg®¯Oı°Ãw ^VbÉsmAê]]w§RRl£ŭuwNÁ`ÇFēÝčȻuT¡Ĺ¯Õ¯sŗő£YªhVƍ£ƅnëYNgq¼ś¿µı²UºÝUąąŖóxV@tƯJ]eR¾fe|rHA|h~Ėƍl§ÏjVë` ØoÅbbx³^zÃĶ¶Sj®AyÂhðk`«PËµEFÛ¬Y¨Ļrõqi¼Wi°§Ð±²°`[À|ĠO@ÆxO\\ta\\p_Zõ^û{ġȧXýĪÓjùÎRb^Î»j{íděYfíÙTymńŵōHim½éŅ­aVcř§ax¹XŻácWU£ôãºQ¨÷Ñws¥qEHÙ|šYQoŕÇyáĂ£MÃ°oťÊP¡mWO¡v{ôvîēÜISpÌhp¨ jdeŔQÖjX³àĈ[n`Yp@UcM`RKhEbpŞlNut®EtqnsÁgAiúoHqCXhfgu~ÏWP½¢G^}¯ÅīGCÑ^ãziMáļMTÃƘrMc|O_¯Ŏ´|morDkO\\mĆJfl@cĢ¬¢aĦtRıÒXòë¬WP{ŵǫƝīÛ÷ąV×qƥV¿aȉd³BqPBmaËđŻģmÅ®V¹d^KKonYg¯XhqaLdu¥Ípǅ¡KąÅkĝęěhq}HyÃ]¹ǧ£Í÷¿qágPmoei¤o^á¾ZEY^Ný{nOl±Í@Mċèk§daNaÇį¿]øRiiñEūiǱàUtėGyl}ÓM}jpEC~¡FtoQiHkk{ILgĽxqÈƋÄdeVDJj£J|ÅdzÂFt~KŨ¸IÆv|¢r}èonb}`RÎÄn°ÒdÞ²^®lnÐèĄlðÓ×]ªÆ}LiĂ±Ö`^°Ç¶p®đDcŋ`ZÔ¶êqvFÆN®ĆTH®¦O¾IbÐã´BĐɢŴÆíȦpĐÞXR·nndO¤OÀĈƒ­QgµFo|gȒęSWb©osx|hYhgŃfmÖĩnºTÌSp¢dYĤ¶UĈjlǐpäðëx³kÛfw²Xjz~ÂqbTÑěŨ@|oMzv¢ZrÃVw¬ŧĖ¸f°ÐTªqs{S¯r æÝl¼ÖĞ ǆiGĘJ¼lr}~K¨ŸƐÌWö¼Þ°nÞoĦL|C~D©|q]SvKÑcwpÏÏĿćènĪWlĄkT}¬Tp~®Hgd˒ĺBVtEÀ¢ôPĎƗè@~kü\\rÊĔÖæW_§¼F´©òDòjYÈrbĞāøŀG{ƀ|¦ðrb|ÀH`pʞkvGpuARhÞÆǶgĘTǼƹS£¨¡ù³ŘÍ]¿ÂyôEP xX¶¹ÜO¡gÚ¡IwÃé¦ÅBÏ|Ç°N«úmH¯âbęU~xĈbȒ{^xÖlD¸dɂ~'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [120023, 41045],
-              [121616, 39981],
-              [122102, 42307]
-            ]
-          ]
-        },
-        properties: { cp: [115.5, 38.5], name: '河北', childNum: 3 }
-      },
-      {
-        id: '140000',
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            '@@ħÜ_ªlìwGkÛÃǏokćiµVZģ¡coTSË¹ĪmnÕńehZg{gtwªpXaĚThȑp{¶Eh®RćƑP¿£PmcªaJyý{ýȥoÅîɡųAďä³aÏJ½¥PG­ąSM­sWz½µÛYÓŖgxoOkĒCo­Èµ]¯_²ÕjāK~©ÅØ^ÔkïçămÏk]­±cÝ¯ÑÃmQÍ~_apm~ç¡qu{JÅŧ·Ls}EyÁÆcI{¤IiCfUcƌÃp§]ě«vD@¡SÀµMÅwuYY¡DbÑc¡h×]nkoQdaMç~eDÛtT©±@¥ù@É¡ZcW|WqOJmĩl«ħşvOÓ«IqăV¥D[mI~Ó¢cehiÍ]Ɠ~ĥqX·eƷn±}v[ěďŕ]_œ`¹§ÕōIo©b­s^}Ét±ū«³p£ÿ¥WÑxçÁ«h×u×¥ř¾dÒ{ºvĴÎêÌɊ²¶ü¨|ÞƸµȲLLúÉƎ¤ϊęĔV`_bªS^|dzY|dz¥pZbÆ£¶ÒK}tĦÔņƠPYznÍvX¶Ěn ĠÔzý¦ª÷ÑĸÙUȌ¸dòÜJð´ìúNM¬XZ´¤ŊǸ_tldI{¦ƀðĠȤ¥NehXnYGR° ƬDj¬¸|CĞKqºfƐiĺ©ª~ĆOQª ¤@ìǦɌ²æBÊTĞHƘÁĪËĖĴŞȀÆÿȄlŤĒötÎ½î¼ĨXh|ªM¤ÐzÞĩÒSrao³'
-          ],
-          encodeOffsets: [[117016, 41452]]
-        },
-        properties: { cp: [112.3, 37.5], name: '山西', childNum: 1 }
-      },
-      {
-        id: '150000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@ǪƫÌÛMĂ[`ÕCn}¶Vcês¯PqFB|S³C|kñHdiÄ¥sŉÅPóÑÑE^ÅPpy_YtShQ·aHwsOnŉÃs©iqjUSiº]ïW«gW¡ARëśĳĘů`çõh]y»ǃǛҤxÒm~zf}pf|ÜroÈzrKÈĵSƧż؜Ġu~è¬vîS¼ĂhĖMÈÄw\\fŦ°W ¢¾luŸDw\\Ŗĝ',
-              '@@GVu»Aylßí¹ãe]Eāò³C¹ð¾²iÒAdkò^P²CǜңǄ z¼g^èöŰ_Ĳĕê}gÁnUI«m]jvV¼euhwqAaW_µj»çjioQR¹ēÃßt@r³[ÛlćË^ÍÉáGOUÛOB±XkÅ¹£k|e]olkVÍ¼ÕqtaÏõjgÁ£§U^RLËnX°ÇBz^~wfvypV ¯ƫĉ˭ȫƗŷɿÿĿƑ˃ĝÿÃǃßËőó©ǐȍŒĖM×ÍEyxþp]ÉvïèvƀnÂĴÖ@V~Ĉ³MEĸÅĖtējyÄDXÄxGQuv_i¦aBçw˛wD©{tāmQ{EJ§KPśƘƿ¥@sCTÉ}ɃwƇy±gÑ}T[÷kÐç¦«SÒ¥¸ëBX½HáÅµÀğtSÝÂa[ƣ°¯¦Pï¡]£ġÒk®G²èQ°óMq}EóƐÇ\\@áügQÍu¥FTÕ¿Jû]|mvāÎYua^WoÀa·­ząÒot×¶CLƗi¯¤mƎHǊ¤îìɾŊìTdåwsRÖgĒųúÍġäÕ}Q¶¿A[¡{d×uQAMxVvMOmăl«ct[wº_ÇÊjbÂ£ĦS_éQZ_lwgOiýe`YYJq¥IÁǳ£ÙË[ÕªuƏ³ÍTs·bÁĽäė[b[ŗfãcn¥îC¿÷µ[ŏÀQ­ōĉm¿Á^£mJVmL[{Ï_£F¥Ö{ŹA}×Wu©ÅaųĳƳhB{·TQqÙIķËZđ©Yc|M¡LeVUóK_QWk_ĥ¿ãZ»X\\ĴuUèlG®ěłTĠğDŃGÆÍz]±ŭ©Å]ÅÐ}UË¥©TċïxgckfWgi\\ÏĒ¥HkµEë{»ÏetcG±ahUiñiWsɁ·cCÕk]wȑ|ća}wVaĚá G°ùnM¬¯{ÈÐÆA¥ÄêJxÙ¢hP¢ÛºµwWOóFÁz^ÀŗÎú´§¢T¤ǻƺSėǵhÝÅQgvBHouʝl_o¿Ga{ïq{¥|ſĿHĂ÷aĝÇqZñiñC³ª»E`¨åXēÕqÉû[l}ç@čƘóO¿¡FUsAʽīccocÇS}£IS~ălkĩXçmĈŀÐoÐdxÒuL^T{r@¢ÍĝKén£kQyÅõËXŷƏL§~}kq»IHėǅjĝ»ÑÞoå°qTt|r©ÏS¯·eŨĕx«È[eM¿yupN~¹ÏyN£{©għWí»Í¾səšǅ_ÃĀɗ±ąĳĉʍŌŷSÉA±åǥɋ@ë£R©ąP©}ĹªƏj¹erLDĝ·{i«ƫC½ÉshVzGS|úþXgp{ÁX¿ć{ƱȏñZáĔyoÁhA}ŅĆfdŉ_¹Y°ėǩÑ¡H¯¶oMQqð¡Ë|Ñ`ƭŁX½·óÛxğįÅcQs«tȋǅFù^it«Č¯[hAi©á¥ÇĚ×l|¹y¯Kȝqgů{ñǙµïċĹzŚȭ¶¡oŽäÕG\\ÄT¿Òõr¯LguÏYęRƩɷŌO\\İÐ¢æ^Ŋ ĲȶȆbÜGĝ¬¿ĚVĎgª^íu½jÿĕęjık@Ľ]ėl¥ËĭûÁėéV©±ćn©­ȇÍq¯½YÃÔŉÉNÑÅÝy¹NqáʅDǡËñ­ƁYÅy̱os§ȋµʽǘǏƬɱàưN¢ƔÊuľýľώȪƺɂļxZĈ}ÌŉŪĺœĭFЛĽ̅ȣͽÒŵìƩÇϋÿȮǡŏçƑůĕ~Ç¼ȳÐUfdIxÿ\\G zâɏÙOº·pqy£@qþ@Ǟ˽IBäƣzsÂZÁàĻdñ°ŕzéØűzșCìDȐĴĺf®Àľưø@ɜÖÞKĊŇƄ§͑těï͡VAġÑÑ»d³öǍÝXĉĕÖ{þĉu¸ËʅğU̎éhɹƆ̗̮ȘǊ֥ड़ࡰţાíϲäʮW¬®ҌeרūȠkɬɻ̼ãüfƠSצɩςåȈHϚÎKǳͲOðÏȆƘ¼CϚǚ࢚˼ФÔ¤ƌĞ̪Qʤ´¼mȠJˀƲÀɠmɆǄĜƠ´ǠN~ʢĜ¶ƌĆĘźʆȬ˪ĚĒ¸ĞGȖƴƀj`ĢçĶāàŃºēĢĖćYÀŎüôQÐÂŎŞǆŞêƖoˆDĤÕºÑǘÛˤ³̀gńƘĔÀ^ªƂ`ªt¾äƚêĦĀ¼ÐĔǎ¨Ȕ»͠^ˮÊȦƤøxRrŜH¤¸ÂxDÄ|ø˂˜ƮÐ¬ɚwɲFjĔ²Äw°ǆdÀÉ_ĸdîàŎjÊêTĞªŌŜWÈ|tqĢUB~´°ÎFCU¼pĀēƄN¦¾O¶łKĊOjĚj´ĜYp{¦SĚÍ\\T×ªV÷Ší¨ÅDK°ßtŇĔK¨ǵÂcḷ̌ĚǣȄĽFlġUĵŇȣFʉɁMğįʏƶɷØŭOǽ«ƽū¹Ʊő̝Ȩ§ȞʘĖiɜɶʦ}¨֪ࠜ̀ƇǬ¹ǨE˦ĥªÔêFxúQEr´Wrh¤Ɛ \\talĈDJÜ|[Pll̚¸ƎGú´P¬W¦^¦H]prRn|or¾wLVnÇIujkmon£cX^Bh`¥V¦U¤¸}xRj[^xN[~ªxQ[`ªHÆÂExx^wN¶Ê|¨ìMrdYpoRzNyÀDs~bcfÌ`L¾n|¾T°c¨È¢ar¤`[|òDŞĔöxElÖdHÀI`Ď\\Àì~ÆR¼tf¦^¢ķ¶eÐÚMptgjɡČÅyġLûŇV®ÄÈƀĎ°P|ªVVªj¬ĚÒêp¬E|ŬÂ_~¼rƐK f{ĘFĒƌXưăkÃĄ}nµo×q£ç­kX{uĩ«āíÓUŅÝVUŌ]Ť¥lyň[oi{¦LĸĦ^ôâJ¨^UZðÚĒL¿Ìf£K£ʺoqNwğc`uetOj×°KJ±qÆġmĚŗos¬qehqsuH{¸kH¡ÊRǪÇƌbȆ¢´äÜ¢NìÉʖ¦â©Ɨؗ'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [128500, 52752],
-              [127089, 51784]
-            ]
-          ]
-        },
-        properties: { cp: [110, 41], name: '内蒙古', childNum: 2 }
-      },
-      {
-        id: '210000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@L@@s]',
-              '@@MnNm',
-              '@@dc',
-              '@@eÀC@b',
-              '@@fXwkbrÄ`qg',
-              '@@^jtWQ',
-              '@@~ Y[c',
-              '@@I`ĖN^_¿ZÁM',
-              '@@Ïxǌ{q_×^Gigp',
-              '@@iX¶BY',
-              '@@YZ',
-              '@@L_yG`b',
-              '@@^WqCTZ',
-              '@@\\[§t|]',
-              '@@m`p[',
-              '@@@é^BntaÊU]x ¯ÄPĲ­°hʙK³VÕ@Y~|EvĹsÇ¦­L^pÃ²ŸÒG Ël]xxÄ_fT¤Ď¤cPC¨¸TVjbgH²sdÎdHt`B²¬GJję¶[ÐhjeXdlwhðSČ¦ªVÊÏÆZÆŶ®²^ÎyÅHńĚDMħĜŁH­kçvV[ĳ¼WYÀäĦ`XlR`ôLUVfK¢{NZdĒªYĸÌÚJRr¸SA|ƴgŴĴÆbvªØX~źB|¦ÕE¤Ð`\\|KUnnI]¤ÀÂĊnŎR®Ő¿¶\\ÀøíDm¦ÎbŨabaĘ\\ľãÂ¸atÎSƐ´©v\\ÖÚÌǴ¤Â¨JKrZ_ZfjþhPkx`YRIjJcVf~sCN¤ EhæmsHy¨SðÑÌ\\\\ĐRÊwS¥fqŒßýáĞÙÉÖ[^¯ǤŲê´\\¦¬ĆPM¯£»uïpùzExanµyoluqe¦W^£ÊL}ñrkqWňûPUP¡ôJoo·U}£[·¨@XĸDXm­ÛÝºGUCÁª½{íĂ^cjk¶Ã[q¤LÉö³cux«|Zd²BWÇ®Yß½ve±ÃCý£W{Ú^q^sÑ·¨ËMr¹·C¥GDrí@wÕKţÃ«V·i}xËÍ÷i©ĝɝǡ]{c±OW³Ya±_ç©HĕoƫŇqr³Lys[ñ³¯OSďOMisZ±ÅFC¥Pq{Ã[Pg}\\¿ghćOk^ĩÃXaĕËĥM­oEqqZûěŉ³F¦oĵhÕP{¯~TÍlªNßYÐ{Ps{ÃVUeĎwk±ŉVÓ½ŽJãÇÇ»Jm°dhcÀffdF~ĀeĖd`sx² ®EĦ¦dQÂd^~ăÔH¦\\LKpĄVez¤NP ǹÓRÆąJSh­a[¦´ÂghwmBÐ¨źhI|VV|p] Â¼èNä¶ÜBÖ¼L`¼bØæKVpoúNZÞÒKxpw|ÊEMnzEQIZZNBčÚFÜçmĩWĪñtÞĵÇñZ«uD±|ƏlǗw·±PmÍada CLǑkùó¡³Ï«QaċÏOÃ¥ÕđQȥċƭy³ÁA'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [123686, 41445],
-              [126019, 40435],
-              [124393, 40128],
-              [126117, 39963],
-              [125322, 40140],
-              [126686, 40700],
-              [126041, 40374],
-              [125584, 40168],
-              [125509, 40217],
-              [125453, 40165],
-              [125362, 40214],
-              [125280, 40291],
-              [125774, 39997],
-              [125976, 40496],
-              [125822, 39993],
-              [122731, 40949]
-            ]
-          ]
-        },
-        properties: { cp: [123.2, 41.3], name: '辽宁', childNum: 16 }
-      },
-      {
-        id: '220000',
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            '@@ñr½ÉKāGÁ¤ia ÉÈ¹`\\xs¬dĆkNnuNUwNx¶c¸|\\¢GªóĄ~RãÖÎĢùđŴÕhQxtcæëSɽŉíëǉ£ƍG£nj°KƘµDsØÑpyĆ¸®¿bXp]vbÍZuĂ{n^IüÀSÖ¦EvRÎûh@â[ƏÈô~FNr¯ôçR±­HÑlĢ^¤¢OðætxsŒ]ÞÁTĠs¶¿âÆGW¾ìA¦·TÑ¬è¥ÏÐJ¨¼ÒÖ¼ƦɄxÊ~StD@Ă¼Ŵ¡jlºWvÐzƦZÐ²CH AxiukdGgetqmcÛ£Ozy¥cE}|¾cZk¿uŐã[oxGikfeäT@SUwpiÚFM©£è^Ú`@v¶eňf heP¶täOlÃUgÞzŸU`l}ÔÆUvØ_Ō¬Öi^ĉi§²ÃB~¡ĈÚEgc|DC_Ȧm²rBx¼MÔ¦ŮdĨÃâYxƘDVÇĺĿg¿cwÅ\\¹¥Yĭl¤OvLjM_a W`zļMž·\\swqÝSAqŚĳ¯°kRē°wx^ĐkǂÒ\\]nrĂ}²ĊŲÒøãh·M{yMzysěnĒġV·°G³¼XÀ¤¹i´o¤ŃÈ`ÌǲÄUĞd\\iÖmÈBĤÜɲDEh LG¾ƀÄ¾{WaYÍÈĢĘÔRîĐj}ÇccjoUb½{h§Ǿ{KƖµÎ÷GĄØŜçưÌs«lyiē«`å§H¥Ae^§GK}iã\\c]v©ģZmÃ|[M}ģTɟĵÂÂ`ÀçmFK¥ÚíÁbX³ÌQÒHof{]ept·GŋĜYünĎųVY^ydõkÅZW«WUa~U·SbwGçǑiW^qFuNĝ·EwUtW·Ýďæ©PuqEzwAVXRãQ`­©GYYhcUGorBd}ģÉb¡·µMicF«Yƅ»é\\ɹ~ǙG³mØ©BšuT§Ĥ½¢Ã_Ã½L¡ûsT\\rke\\PnwAKy}ywdSefµ]UhĿD@mÿvaÙNSkCuncÿ`lWėVâ¦÷~^fÏ~vwHCį`xqT­­lW«ï¸skmßEGqd¯R©Ý¯¯S\\cZ¹iűƏCuƍÓXoR}M^o£R}oªU­FuuXHlEÅÏ©¤ßgXþ¤D²ÄufàÀ­XXÈ±Ac{Yw¬dvõ´KÊ£\\rµÄlidā]|î©¾DÂVH¹Þ®ÜWnCķ W§@\\¸~¤Vp¸póIO¢VOŇürXql~òÉK]¤¥Xrfkvzpm¶bwyFoúvð¼¤ N°ąO¥«³[éǣű]°Õ\\ÚÊĝôîŇÔaâBYlďQ[ Ë[ïÒ¥RI|`j]P'
-          ],
-          encodeOffsets: [[126831, 44503]]
-        },
-        properties: { cp: [126, 43.7], name: '吉林', childNum: 1 }
-      },
-      {
-        id: '230000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@UµNÿ¥īèçHÍøƕ¶Lǽ|g¨|a¾pVidd~ÈiíďÓQġėÇZÎXb½|ſÃH½KFgɱCģÛÇAnjÕc[VĝǱÃËÇ_ £ń³pj£º¿»WH´¯U¸đĢmtĜyzzNN|g¸÷äűÑ±ĉā~mq^[ǁÑďlw]¯xQĔ¯l°řĴrBÞTxr[tŽ¸ĻN_yX`biNKuP£kZĮ¦[ºxÆÀdhĹŀUÈƗCwáZħÄŭcÓ¥»NAw±qȥnD`{ChdÙFć}¢A±Äj¨]ĊÕjŋ«×`VuÓÅ~_kŷVÝyhVkÄãPsOµfgeŇµf@u_Ù ÙcªNªÙEojVxT@ãSefjlwH\\pŏäÀvlY½d{F~¦dyz¤PÜndsrhfHcvlwjF£G±DÏƥYyÏu¹XikĿ¦ÏqƗǀOŜ¨LI|FRĂn sª|C˜zxAè¥bfudTrFWÁ¹Am|ĔĕsķÆF´N}ćUÕ@Áĳſmuçuð^ÊýowFzØÎĕNőǏȎôªÌŒǄàĀÄ˄ĞŀƒʀĀƘŸˮȬƬĊ°Uzouxe]}AyÈW¯ÌmKQ]Īºif¸ÄX|sZt|½ÚUÎ lk^p{f¤lºlÆW A²PVÜPHÊâ]ÎĈÌÜk´\\@qàsĔÄQºpRij¼èi`¶bXrBgxfv»uUi^v~J¬mVp´£´VWrnP½ì¢BX¬hðX¹^TjVriªjtŊÄmtPGx¸bgRsT`ZozÆO]ÒFôÒOÆŊvÅpcGêsx´DR{AEOr°x|íb³Wm~DVjºéNNËÜ˛ɶ­GxŷCSt}]ûōSmtuÇÃĕNāg»íT«u}ç½BĵÞʣ¥ëÊ¡MÛ³ãȅ¡ƋaǩÈÉQG¢·lG|tvgrrf«ptęŘnÅĢrI²¯LiØsPf_vĠdxM prʹL¤¤eËÀđKïÙVY§]Ióáĥ]ķK¥j|pŇ\\kzţ¦šnņäÔVĂîĪ¬|vW®l¤èØrxm¶ă~lÄƯĄ̈́öȄEÔ¤ØQĄĄ»ƢjȦOǺ¨ìSŖÆƬyQv`cwZSÌ®ü±Ǆ]ŀç¬B¬©ńzƺŷɄeeOĨSfm ĊƀP̎ēz©ĊÄÕÊmgÇsJ¥ƔŊśæÎÑqv¿íUOµªÂnĦÁ_½ä@êí£P}Ġ[@gġ}gɊ×ûÏWXá¢užƻÌsNÍ½ƎÁ§čŐAēeL³àydl¦ĘVçŁpśǆĽĺſÊQíÜçÛġÔsĕ¬Ǹ¯YßċġHµ ¡eå`ļrĉŘóƢFìĎWøxÊkƈdƬv|I|·©NqńRŀ¤éeŊŀàŀU²ŕƀBQ£Ď}L¹Îk@©ĈuǰųǨÚ§ƈnTËÇéƟÊcfčŤ^XmHĊĕË«W·ċëx³ǔķÐċJāwİ_ĸȀ^ôWr­°oú¬ĦŨK~ȰCĐ´Ƕ£fNÎèâw¢XnŮeÂÆĶ¾¾xäLĴĘlļO¤ÒĨA¢Êɚ¨®ØCÔ ŬGƠƦYĜĘÜƬDJg_ͥœ@čŅĻA¶¯@wÎqC½Ĉ»NăëKďÍQÙƫ[«ÃígßÔÇOÝáWñuZ¯ĥŕā¡ÑķJu¤E å¯°WKÉ±_d_}}vyõu¬ï¹ÓU±½@gÏ¿rÃ½DgCdµ°MFYxw¿CG£Rƛ½Õ{]L§{qqą¿BÇƻğëܭǊË|c²}Fµ}ÙRsÓpg±QNqǫŋRwŕnéÑÉK«SeYRŋ@{¤SJ}D Ûǖ֍]gr¡µŷjqWÛham³~S«Ü[',
-              '@@ƨĶTLÇyqpÇÛqe{~oyen}s`qiXGù]Ëp½©lÉÁp]Þñ´FĂ^fäîºkàz¼BUv¬D'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [134456, 44547],
-              [127123, 51780]
-            ]
-          ]
-        },
-        properties: { cp: [127.8, 46.8], name: '黑龙江', childNum: 2 }
-      },
-      {
-        id: '320000',
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            '@@Õg^vÁbnÀ`Jnĝ¬òM¶ĘTÖŒbe¦¦{¸ZâćNp©Hp|`mjhSEb\\afv`sz^lkljÄtg¤D­¾X¿À|ĐiZȀåB·î}GL¢õcßjayBFµÏC^ĭcÙt¿sğH]j{s©HM¢QnDÀ©DaÜÞ·jgàiDbPufjDk`dPOîhw¡ĥ¥GP²ĐobºrYî¶aHŢ´ ]´rılw³r_{£DB_Ûdåuk|Ũ¯F Cºyr{XFye³Þċ¿ÂkĭB¿MvÛpm`rÚã@Ę¹hågËÖƿxnlč¶Åì½Ot¾dJlVJĂǀŞqvnO^JZż·Q}êÍÅmµÒ]ƍ¦Dq}¬R^èĂ´ŀĻĊIÔtĲyQŐĠMNtR®òLhĚs©»}OÓGZz¶A\\jĨFäOĤHYJvÞHNiÜaĎÉnFQlNM¤B´ĄNöɂtpŬdZÅglmuÇUšŞÚb¤uŃJŴu»¹ĄlȖħŴw̌ŵ²ǹǠ͛hĭłƕrçü±Yrřl¥i`ã__¢ćSÅr[Çq^ùzWmOĈaŐÝɞï²ʯʊáĘĳĒǭPħ͍ôƋÄÄÍīçÛɈǥ£­ÛmY`ó£Z«§°Ó³QafusNıǅ_k}¢m[ÝóDµ¡RLčiXyÅNïă¡¸iĔÏNÌķoıdōîåŤûHcs}~Ûwbù¹£¦ÓCtOPrE^ÒogĉIµÛÅʹK¤½phMú`mR¸¦PƚgÉLRs`£¯ãhD¨|³¤C'
-          ],
-          encodeOffsets: [[121451, 32518]]
-        },
-        properties: { cp: [120, 32.4], name: '江苏', childNum: 1 }
-      },
-      {
-        id: '330000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@jX^n',
-              '@@sfdM',
-              '@@qP\\xz[_i',
-              '@@o\\VzRZ}mECy',
-              '@@R¢FX}°[m]',
-              '@@Cb\\}',
-              '@@e|v\\laus',
-              '@@v~s{',
-              '@@QxÂF©}',
-              '@@¹nvÞs©m',
-              '@@rQgYIh',
-              '@@bi«ZX',
-              '@@p[}ILd',
-              '@@À¿|',
-              '@@¹dnb',
-              '@@rS}[Kl',
-              '@@g~h}',
-              '@@FlCk',
-              '@@ůTG°ĄLHm°UF',
-              '@@OdRe',
-              '@@v[u\\',
-              '@@FjâL~wyoo~sµLZ',
-              '@@¬e¹aH',
-              '@@\\nÔ¡q]L³ë\\ÿ®QÌ',
-              '@@ÊA­©]ª',
-              '@@Kxv{­',
-              '@@@hlIk_',
-              '@@pWcrxp',
-              '@@Md|_iA',
-              '@@¢X£½z\\ðpN',
-              '@@hlÜ[LykAvyfw^E ',
-              '@@fp¤MusH',
-              '@@®_ma~LÁ¬`',
-              '@@@°¡mÛGĕ¨§Ianá[ýƤjfæÐNäGp',
-              '@@iMt\\',
-              '@@Zc[b',
-              '@@X®±GrÆ°Zæĉm',
-              '@@Z~dOSo|A¿qZv',
-              '@@@`EN£p',
-              '@@|s',
-              '@@@nDi',
-              '@@na£¾uYL¯QªmĉÅdMgÇjcº«ę¬­K­´B«Âącoċ\\xK`cįŧ«®á[~ıxu·ÅKsËÉc¢Ù\\ĭƛëbf¹­ģSĜkáƉÔ­ĈZB{aMµfzŉfÓÔŹŁƋǝÊĉ{ğč±g³ne{ç­ií´S¬\\ßðK¦w\\iqªĭiAuA­µ_W¥ƣO\\lċĢttC¨£t`PZäuXßBsĻyekOđġĵHuXBµ]×­­\\°®¬F¢¾pµ¼kŘó¬Wät¸|@L¨¸µrºù³Ù~§WIZW®±Ð¨ÒÉx`²pĜrOògtÁZ{üÙ[|ûKwsPlU[}¦Rvn`hsª^nQ´ĘRWb_ rtČFIÖkĦPJ¶ÖÀÖJĈĄTĚòC ²@PúØz©Pî¢£CÈÚĒ±hŖl¬â~nm¨f©iļ«mntqÒTÜÄjL®EÌFª²iÊxØ¨IÈhhst[Ôx}dtüGæţŔïĬaĸpMËÐjē¢·ðĄÆMzjWKĎ¢Q¶À_ê_@ıi«pZgf¤Nrq]§ĂN®«H±yƳí¾×ŊďŀĐÏŴǝĂíÀBŖÕªÁŐTFqĉ¯³ËCĕģi¨hÜ·ñt»¯Ï',
-              '@@ºwZRkĕWK '
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [125785, 31436],
-              [125729, 31431],
-              [125513, 31380],
-              [125329, 30690],
-              [125223, 30438],
-              [125115, 30114],
-              [124815, 29155],
-              [124419, 28746],
-              [124095, 28635],
-              [124005, 28609],
-              [125000, 30713],
-              [125111, 30698],
-              [125078, 30682],
-              [125150, 30684],
-              [124014, 28103],
-              [125008, 31331],
-              [125411, 31468],
-              [125329, 31479],
-              [125369, 31139],
-              [125626, 30916],
-              [125417, 30956],
-              [125254, 30976],
-              [125199, 30997],
-              [125095, 31058],
-              [125083, 30915],
-              [124885, 31015],
-              [125218, 30798],
-              [124867, 30838],
-              [124755, 30788],
-              [124802, 30809],
-              [125267, 30657],
-              [125218, 30578],
-              [125200, 30562],
-              [125192, 30787],
-              [124968, 30474],
-              [125167, 30396],
-              [125115, 30363],
-              [124955, 29879],
-              [124714, 29781],
-              [124762, 29462],
-              [124325, 28754],
-              [124863, 30077],
-              [125366, 31477]
-            ]
-          ]
-        },
-        properties: { cp: [120, 29.2], name: '浙江', childNum: 43 }
-      },
-      {
-        id: '340000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@^iuLV\\',
-              '@@e©Edh',
-              '@@´CE¶zAXêeödK¡~H¸íæAȽd{ďÅÀ½W®£ChÃsikkly]_teu[bFaTign{]GqªoĈMYá|·¥f¥őaSÕėNµñĞ«Im_m¿Âa]uĜp Z_§{Cäg¤°r[_YjÆOdý[I[á·¥Q_nùgL¾mzˆDÜÆ¶ĊJhpc¹O]iŠ]¥ jtsggDÑ¡w×jÉ©±EFË­KiÛÃÕYvsm¬njĻª§emná}k«ŕgđ²ÙDÇ¤í¡ªOy×Où±@DñSęćăÕIÕ¿IµĥOlJÕÍRÍ|JìĻÒåyķrĕq§ÄĩsWÆßF¶X®¿mwRIÞfßoG³¾©uyHį{Ɓħ¯AFnuPÍÔzVdàôº^Ðæd´oG¤{S¬ćxã}ŧ×Kǥĩ«ÕOEÐ·ÖdÖsƘÑ¨[Û^Xr¢¼§xvÄÆµ`K§ tÒ´Cvlo¸fzŨð¾NY´ı~ÉĔēßúLÃÃ_ÈÏ|]ÂÏHlg`ben¾¢pUh~ƴĖ¶_r sĄ~cƈ]|r c~`¼{À{ȒiJjz`îÀT¥Û³]u}fïQl{skloNdjäËzDvčoQďHI¦rbrHĖ~BmlNRaĥTX\\{fÁKÁ®TLÂÄMtÊgĀDĄXƔvDcÎJbt[¤D@®hh~kt°ǾzÖ@¾ªdbYhüóV´ŮŒ¨Üc±r@J|àuYÇÔG·ĚąĐlŪÚpSJ¨ĸLvÞcPæķŨ®mÐálsgd×mQ¨ųÆ©Þ¤IÎs°KZpĄ|XwWdĎµmkǀwÌÕæhºgBĝâqÙĊzÖgņtÀÁĂÆáhEz|WzqD¹°Eŧl{ævÜcA`¤C`|´qxĲkq^³³GšµbíZ¹qpa±ď OH¦Ħx¢gPícOl_iCveaOjChß¸iÝbÛªCC¿mRV§¢A|tbkĜEÀtîm^g´fÄ'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [121722, 32278],
-              [119475, 30423],
-              [121606, 33646]
-            ]
-          ]
-        },
-        properties: { cp: [117.2, 31.5], name: '安徽', childNum: 3 }
-      },
-      {
-        id: '350000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@zht´}[',
-              '@@aj^~ĆGå',
-              '@@edHse',
-              '@@@vPGsyQ',
-              '@@sBzddW[O',
-              '@@S¨Qy',
-              '@@NVucW',
-              '@@qptB@q',
-              '@@¸[iu',
-              '@@Q\\pD[_',
-              '@@jSwUappI',
-              '@@eXª~',
-              '@@AjvFoo',
-              '@@fT_Çí\\v|ba¦jZÆy|®',
-              '@@IjLg',
-              '@@wJIx«¼AoNe{M¥',
-              '@@K±¡ÓČ~N¾',
-              '@@k¡¹Eh~c®uDqZì¡I~Māe£bN¨gZý¡a±Öcp©PhI¢QqÇGj|¥U g[Ky¬ŏv@OptÉEF\\@ åA¬V{XģĐBycpě¼³Ăp·¤¥ohqqÚ¡ŅLs^Ã¡§qlÀhH¨MCe»åÇGD¥zPO£čÙkJA¼ßėuĕeûÒiÁŧS[¡Uûŗ½ùěcÝ§SùĩąSWó«íęACµeRåǃRCÒÇZÍ¢ź±^dlstjD¸ZpuÔâÃH¾oLUêÃÔjjēò´ĄWƛ^Ñ¥Ħ@ÇòmOw¡õyJyD}¢ďÑÈġfZda©º²z£NjD°Ötj¶¬ZSÎ~¾c°¶ÐmxO¸¢Pl´SL|¥AȪĖMņĲg®áIJČĒü` QF¬h|ĂJ@zµ |ê³È ¸UÖŬŬÀCtrĸr]ðM¤ĶĲHtÏ AĬkvsq^aÎbvdfÊòSD´Z^xPsĂrvƞŀjJd×ŘÉ ®AÎ¦ĤdxĆqAZRÀMźnĊ»İÐZ YXæJyĊ²·¶q§·K@·{sXãô«lŗ¶»o½E¡­«¢±¨Y®Ø¶^AvWĶGĒĢPlzfļtàAvWYãO_¤sD§ssČġ[kƤPX¦`¶®BBvĪjv©jx[L¥àï[F¼ÍË»ğV`«Ip}ccÅĥZEãoP´B@D¸m±z«Ƴ¿å³BRØ¶Wlâþäą`]Z£Tc ĹGµ¶Hm@_©k¾xĨôȉðX«½đCIbćqK³ÁÄš¬OAwã»aLŉËĥW[ÂGIÂNxĳ¤D¢îĎÎB§°_JGs¥E@¤ućPåcuMuw¢BI¿]zG¹guĮI'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [123250, 27563],
-              [122541, 27268],
-              [123020, 27189],
-              [122916, 27125],
-              [122887, 26845],
-              [122808, 26762],
-              [122568, 25912],
-              [122778, 26197],
-              [122515, 26757],
-              [122816, 26587],
-              [123388, 27005],
-              [122450, 26243],
-              [122578, 25962],
-              [121255, 25103],
-              [120987, 24903],
-              [122339, 25802],
-              [121042, 25093],
-              [122439, 26024]
-            ]
-          ]
-        },
-        properties: { cp: [118.2, 26], name: '福建', childNum: 18 }
-      },
-      {
-        id: '360000',
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            '@@ÖP¬ǦĪØLŨä~Ĉw«|TH£pc³Ïå¹]ĉđxe{ÎÓvOEm°BƂĨİ|Gvz½ª´HàpeJÝQxnÀW­EµàXÅĪt¨ÃĖrÄwÀFÎ|Ă¡WÕ¸cf¥XaęST±m[r«_gmQu~¥V\\OkxtL E¢Ú^~ýØkbēqoě±_Êw§Ñ²ÏƟė¼mĉŹ¿NQYBąrwģcÍ¥B­ŗÊcØiIƝĿuqtāwO]³YCñTeÉcaubÍ]trluīBÐGsĵıN£ï^ķqsq¿DūūVÕ·´Ç{éĈýÿOER_đûIċâJh­ŅıNȩĕB¦K{Tk³¡OP·wnµÏd¯}½TÍ«YiµÕsC¯iM¤­¦¯P|ÿUHvhe¥oFTuõ\\OSsMòđƇiaºćXĊĵà·çhƃ÷Ç{ígu^đgm[ÙxiIN¶Õ»lđÕwZSÆv©_ÈëJbVkĔVÀ¤P¾ºÈMÖxlò~ªÚàGĂ¢B±ÌKyñ`w²¹·`gsÙfIěxŕeykpudjuTfb·hh¿Jd[\\LáƔĨƐAĈepÀÂMD~ņªe^\\^§ý©j×cZØ¨zdÒa¶lÒJìõ`oz÷@¤uŞ¸´ôęöY¼HČƶajlÞƩ¥éZ[|h}^U  ¥pĄžƦO lt¸Æ Q\\aÆ|CnÂOjt­ĚĤdÈF`¶@Ðë ¦ōÒ¨SêvHĢÛ@[ÆQoxHW[ŰîÀt¦Ǆ~NĠ¢lĄtZoCƞÔºCxrpČNpj¢{f_Y`_eq®Aot`@oDXfkp¨|s¬\\DÄSfè©Hn¬^DhÆyøJhØxĢĀLÊƠPżċĄwĮ¶'
-          ],
-          encodeOffsets: [[118923, 30536]]
-        },
-        properties: { cp: [115.7, 28], name: '江西', childNum: 1 }
-      },
-      {
-        id: '370000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@Xjd]mE',
-              '@@itnq',
-              '@@Dl@k',
-              '@@TGw',
-              '@@K¬U',
-              '@@Wd`c',
-              '@@PtMs',
-              '@@LnXlc',
-              '@@ppVu]Qn',
-              '@@cdzAU_',
-              '@@udRhnCE',
-              '@@oIpP',
-              '@@M{ĿčwbxƨîKÎMĮ]ZF½Y]â£ph¶¨râøÀÎǨ¤^ºÄGz~grĚĜlĞÆLĆǆ¢Îo¦cvKbgr°WhmZp L]LºcUÆ­nżĤÌĒbAnrOA´ȊcÀbƦUØrĆUÜøĬƞŶǬĴóò_A̈«ªdÎÉnb²ĦhņBĖįĦåXćì@L¯´ywƕCéÃµė ƿ¸lµZæyj|BíÂKNNnoƈfÈMZwnŐNàúÄsTJULîVjǎ¾ĒØDz²XPn±ŴPè¸ŔLƔÜƺ_TüÃĤBBċÈöA´faM¨{«M`¶d¡ôÖ°mȰBÔjj´PM|c^d¤u¤Û´ä«ƢfPk¶Môl]Lb}su^ke{lCMrDÇ­]NÑFsmoõľHyGă{{çrnÓEƕZGª¹Fj¢ÿ©}ÌCǷë¡ąuhÛ¡^KxC`C\\bÅxì²ĝÝ¿_NīCȽĿåB¥¢·IŖÕy\\¹kxÃ£ČáKµË¤ÁçFQ¡KtŵƋ]CgÏAùSedcÚźuYfyMmhUWpSyGwMPqŀÁ¼zK¶G­Y§Ë@´śÇµƕBm@IogZ¯uTMx}CVKï{éƵP_K«pÛÙqċtkkù]gTğwoɁsMõ³ăAN£MRkmEÊčÛbMjÝGuIZGPģãħE[iµBEuDPÔ~ª¼ęt]ûG§¡QMsğNPŏįzs£Ug{đJĿļā³]ç«Qr~¥CƎÑ^n¶ÆéÎR~Ż¸YI] PumŝrƿIā[xeÇ³L¯v¯s¬ÁY~}ťuŁgƋpÝĄ_ņī¶ÏSR´ÁP~¿Cyċßdwk´SsX|t`Ä ÈðAªìÎT°¦Dda^lĎDĶÚY°`ĪŴǒàŠv\\ebZHŖR¬ŢƱùęOÑM­³FÛaj'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [123806, 39303],
-              [123821, 39266],
-              [123742, 39256],
-              [123702, 39203],
-              [123649, 39066],
-              [123847, 38933],
-              [123580, 38839],
-              [123894, 37288],
-              [123043, 36624],
-              [123344, 38676],
-              [123522, 38857],
-              [123628, 38858],
-              [118267, 36772]
-            ]
-          ]
-        },
-        properties: { cp: [117.5, 36.3], name: '山东', childNum: 13 }
-      },
-      {
-        id: '410000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@dXD}~Hgq~ÔN~zkĘHVsǲßjŬŢ`Pûàl¢\\ÀEhİgÞē X¼`khÍLùµP³swIÓzeŠĠð´E®ÚPtºIŊÊºL«šŕQGYfa[şußǑĩų_Z¯ĵÙčC]kbc¥CS¯ëÍB©ïÇÃ_{sWTt³xlàcČzÀD}ÂOQ³ÐTĬµƑÐ¿ŸghłŦv~}ÂZ«¤lPÇ£ªÝŴÅR§ØnhctâknÏ­ľŹUÓÝdKuķI§oTũÙďkęĆH¸Ó\\Ä¿PcnS{wBIvÉĽ[GqµuŇôYgûZca©@½Õǽys¯}lgg@­C\\£asIdÍuCQñ[L±ęk·ţb¨©kK»KC²òGKmĨS`UQnk}AGēsqaJ¥ĐGRĎpCuÌy ã iMcplk|tRkðev~^´¦ÜSí¿_iyjI|ȑ|¿_»d}q^{Ƈdă}tqµ`ŷé£©V¡om½ZÙÏÁRD|JOÈpÀRsI{ùÓjuµ{t}uËRivGçJFjµåkWê´MÂHewixGw½Yŷpµú³XU½ġyłåkÚwZX·l¢Á¢KzOÎÎjc¼htoDHr|­J½}JZ_¯iPq{tę½ĕ¦Zpĵø«kQĹ¤]MÛfaQpě±ǽ¾]u­Fu÷nčÄ¯ADp}AjmcEÇaª³o³ÆÍSƇĈÙDIzçñİ^KNiÞñ[aA²zzÌ÷D|[íÄ³gfÕÞd®|`Ć~oĠƑô³ŊD×°¯CsøÂ«ìUMhTº¨¸ǝêWÔDruÂÇZ£ĆPZW~ØØv¬gèÂÒw¦X¤Ā´oŬ¬²Ês~]®tªapŎJ¨Öº_ŔfŐ\\Đ\\Ĝu~m²Ƹ¸fWĦrƔ}Î^gjdfÔ¡J}\\n C¦þWxªJRÔŠu¬ĨĨmFdM{\\d\\YÊ¢ú@@¦ª²SÜsC}fNècbpRmlØ^gd¢aÒ¢CZZxvÆ¶N¿¢T@uC¬^ĊðÄn|lIlXhun[',
-              '@@hzUq'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [116744, 37216],
-              [116480, 33048]
-            ]
-          ]
-        },
-        properties: { cp: [113.6, 34], name: '河南', childNum: 2 }
-      },
-      {
-        id: '420000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@ASd',
-              '@@ls{d',
-              '@@¾«}{ra®pîÃ\\{øCËyyB±b\\òÝjKL ]ĎĽÌJyÚCƈćÎT´Å´pb©ÈdFin~BCo°BĎÃømv®E^vǾ½Ĝ²RobÜeN^ĺ£R¬lĶ÷YoĖ¥Ě¾|sOr°jY`~I¾®I{GqpCgyl{£ÍÍyPLÂ¡¡¸kWxYlÙæŁĢz¾V´W¶ùŸo¾ZHxjwfxGNÁ³Xéæl¶EièIH ujÌQ~v|sv¶Ôi|ú¢FhQsğ¦SiŠBgÐE^ÁÐ{čnOÂÈUÎóĔÊēĲ}Z³½Mŧïeyp·uk³DsÑ¨L¶_ÅuÃ¨w»¡WqÜ]\\Ò§tƗcÕ¸ÕFÏǝĉăxŻČƟOKÉġÿ×wg÷IÅzCg]m«ªGeçÃTC«[t§{loWeC@ps_Bp­rf_``Z|ei¡oċMqow¹DƝÓDYpûsYkıǃ}s¥ç³[§cY§HK«Qy]¢wwö¸ïx¼ņ¾Xv®ÇÀµRĠÐHM±cÏdƒǍũȅȷ±DSyúĝ£ŤĀàtÖÿï[îb\\}pĭÉI±Ñy¿³x¯No|¹HÏÛmjúË~TuęjCöAwě¬Rđl¯ Ñb­ŇTĿ_[IčĄʿnM¦ğ\\É[T·k¹©oĕ@A¾wya¥Y\\¥Âaz¯ãÁ¡k¥ne£ÛwE©Êō¶˓uoj_U¡cF¹­[WvP©whuÕyBF`RqJUw\\i¡{jEPïÿ½fćQÑÀQ{°fLÔ~wXgītêÝ¾ĺHd³fJd]HJ²EoU¥HhwQsƐ»Xmg±çve]DmÍPoCc¾_hhøYrŊU¶eD°Č_N~øĹĚ·`z]Äþp¼äÌQv\\rCé¾TnkžŐÚÜa¼ÝƆĢ¶ÛodĔňÐ¢JqPb ¾|J¾fXƐîĨ_Z¯À}úƲN_ĒÄ^ĈaŐyp»CÇÄKñL³ġM²wrIÒŭxjb[n«øæà ^²­h¯ÚŐªÞ¸Y²ĒVø}Ā^İ´LÚm¥ÀJÞ{JVųÞŃx×sxxƈē ģMřÚðòIfĊŒ\\Ʈ±ŒdÊ§ĘDvČ_Àæ~Dċ´A®µ¨ØLV¦êHÒ¤'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [113712, 34000],
-              [115612, 30507],
-              [113649, 34054]
-            ]
-          ]
-        },
-        properties: { cp: [113, 31], name: '湖北', childNum: 3 }
-      },
-      {
-        id: '430000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@nFZw',
-              '@@ãÆá½ÔXrCOËRïÿĩ­TooQyÓ[ŅBE¬ÎÓXaį§Ã¸G °ITxpúxÚĳ¥ÏĢ¾edÄ©ĸGàGhM¤Â_U}Ċ}¢pczfþg¤ÇôAV',
-              '@@ȴÚĖÁĐiOĜ«BxDõĚivSÌ}iùÜnÐºG{p°M°yÂÒzJ²Ì ÂcXëöüiáÿñőĞ¤ùTz²CȆȸǎŪƑÐc°dPÎğË¶[È½u¯½WM¡­ÉB·rínZÒ `¨GA¾\\pēXhÃRC­üWGġuTé§ŎÑ©êLM³}_EÇģc®ęisÁPDmÅ{b[RÅs·kPŽƥóRoOV~]{g\\êYƪ¦kÝbiċƵGZ»Ěõó·³vŝ£ø@pyö_ëIkÑµbcÑ§y×dYØªiþUjŅ³C}ÁN»hĻħƏâƓKA·³CQ±µ§¿AUƑ¹AtćOwD]JUÖgk¯b£ylZFËÑ±H­}EbóľA¡»Ku¦·³åş¥ùBD^{ÌC´­¦ŷJ£^[ª¿ğ|ƅN skóā¹¿ï]ă~÷O§­@Vm¡Qđ¦¢Ĥ{ºjÔª¥nf´~Õo×ÛąGû¥cÑ[Z¶ŨĪ²SÊǔƐƀAÚŌ¦QØ¼rŭ­«}NÏürÊ¬mjr@ĘrTW ­SsdHzƓ^ÇÂyUi¯DÅYlŹu{hT}mĉ¹¥ěDÿë©ıÓ[Oº£¥ótł¹MÕƪ`PDiÛU¾ÅâìUñBÈ£ýhedy¡oċ`pfmjP~kZaZsÐd°wj§@Ĵ®w~^kÀÅKvNmX\\¨aŃqvíó¿F¤¡@ũÑVw}S@j}¾«pĂrªg àÀ²NJ¶¶DôK|^ª°LX¾ŴäPĪ±£EXd^¶ĲÞÜ~u¸ǔMRhsRe`ÄofIÔ\\Ø  ićymnú¨cj ¢»GČìƊÿÐ¨XeĈĀ¾Oð Fi ¢|[jVxrIQ_EzAN¦zLU`cªxOTu RLÄªpUĪȴ^ŎµªÉFxÜf¤ºgĲèy°Áb[¦Zb¦z½xBĖ@ªpºjS´rVźOd©ʪiĎăJP`'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [115640, 30489],
-              [112577, 27316],
-              [114113, 30649]
-            ]
-          ]
-        },
-        properties: { cp: [112, 28], name: '湖南', childNum: 3 }
-      },
-      {
-        id: '440000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@QdAsa',
-              '@@lxDRm',
-              '@@sbhNLo',
-              '@@Ă ý',
-              '@@WltOY[',
-              '@@Kr]S',
-              '@@e~AS}',
-              '@@I|Mym',
-              '@@Û³LS²Q',
-              '@@nvºBë¥cÕº',
-              '@@zdÛJm',
-              '@@°³',
-              '@@a yAª¸ËJIxØ@ĀHÉÕZofoo',
-              '@@sŗÃÔėAƁZÄ ~°ČPºb',
-              '@@¶ÝÌvmĞh¹Ĺ',
-              '@@HdSjĒ¢D}waru«ZqadY{K',
-              '@@el\\LqqO',
-              '@@~rMmX',
-              '@@f^E',
-              '@@øPªoj÷ÍÝħXČx°Q¨ıXJp',
-              '@@gÇƳmxatfu',
-              '@@EÆC½',
-              '@@¸B_¶ekWvSivc}p}Ăº¾NĎyj¦Èm th_®Ä}»âUzLË²Aā¡ßH©Ùñ}wkNÕ¹ÇO½¿£ēUlaUìIÇª`uTÅxYĒÖ¼kÖµMjJÚwn\\hĒv]îh|ÈƄøèg¸Ķß ĉĈWb¹ƀdéĘNTtP[öSvrCZaGubo´ŖÒÇĐ~¡zCIözx¢PnÈñ @ĥÒ¦]ƜX³ăĔñiiÄÓVépKG½ÄÓávYoC·sitiaÀyŧÎ¡ÈYDÑům}ý|m[węõĉZÅxUO}÷N¹³ĉo_qtăqwµŁYÙǝŕ¹tïÛUÃ¯mRCºĭ|µÕÊK½Rē ó]GªęAxNqSF|ām¡diď×YïYWªŉOeÚtĐ«zđ¹TāúEáÎÁWwíHcòßÎſ¿Çdğ·ùT×Çūʄ¡XgWÀǇğ·¿ÃOj YÇ÷Sğ³kzőõmĝ[³¡VÙæÅöMÌ³¹pÁaËýý©D©ÜJŹƕģGą¤{ÙūÇO²«BƱéAÒĥ¡«BhlmtÃPµyU¯ucd·w_bŝcīímGOGBȅŹãĻFŷŽŕ@Óoo¿ē±ß}}ÓF÷tĲWÈCőâUâǙIğŉ©IĳE×Á³AĥDĈ±ÌÜÓĨ£L]ĈÙƺZǾĆĖMĸĤfÎĵlŨnÈĐtFFĤêk¶^k°f¶g}®Faf`vXŲxl¦ÔÁ²¬Ð¦pqÊÌ²iXØRDÎ}Ä@ZĠsx®AR~®ETtĄZƈfŠŠHâÒÐAµ\\S¸^wĖkRzalŜ|E¨ÈNĀňZTpBh£\\ĎƀuXĖtKL¶G|»ĺEļĞ~ÜĢÛĊrOÙîvd]n¬VÊĜ°RÖpMƀ¬HbwEÀ©\\¤]ŸI®¥D³|Ë]CúAŠ¦æ´¥¸Lv¼¢ĽBaôF~®²GÌÒEYzk¤°ahlVÕI^CxĈPsBƒºVÀB¶¨R²´D',
-              '@@OR'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [117381, 22988],
-              [116552, 22934],
-              [116790, 22617],
-              [116973, 22545],
-              [116444, 22536],
-              [116931, 22515],
-              [116496, 22490],
-              [116453, 22449],
-              [113301, 21439],
-              [118726, 21604],
-              [118709, 21486],
-              [113210, 20816],
-              [115482, 22082],
-              [113171, 21585],
-              [113199, 21590],
-              [115232, 22102],
-              [115739, 22373],
-              [115134, 22184],
-              [113056, 21175],
-              [119573, 21271],
-              [119957, 24020],
-              [115859, 22356],
-              [116680, 26053],
-              [116561, 22649]
-            ]
-          ]
-        },
-        properties: { cp: [113.5, 23], name: '广东', childNum: 24 }
-      },
-      {
-        id: '450000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@H TI¡U',
-              '@@Ɣ_LÊFZgčP­kini«qÇczÍY®¬Ů»qR×ō©DÕ§ƙǃŵTÉĩ±ıdÑnYYĲvNĆĆØÜ Öp}e³¦m©iÓ|¹ħņ|ª¦QF¢Â¬ʖovg¿em^ucäāmÇÖåB¡Õçĝ}FĻ¼Ĺ{µHKsLSđƃrč¤[AgoSŇYMÿ§Ç{FśbkylQxĕ]T·¶[BÑÏGáşşƇeăYSs­FQ}­BwtYğÃ@~CÍQ ×WjË±rÉ¥oÏ ±«ÓÂ¥kwWűue_b­E~µh¯ecl¯Ïr¯EģJğ}w³Ƈē`ãògK_ÛsUʝćğ¶höO¤Ǜn³c`¡yię[ďĵűMę§]XÎ_íÛ]éÛUćİÕBƣ±dy¹T^dûÅÑŦ·PĻþÙ`K¦¢ÍeĥR¿³£[~äu¼dltW¸oRM¢ď\\z}Æzdvň{ÎXF¶°Â_ÒÂÏL©ÖTmu¼ãlīkiqéfA·Êµ\\őDc¥ÝFyÔćcűH_hLÜêĺĐ¨c}rn`½Ì@¸¶ªVLhŒ\\Ţĺk~Ġið°|gtTĭĸ^xvKVGréAébUuMJVÃO¡qĂXËSģãlýà_juYÛÒBG^éÖ¶§EGÅzěƯ¤EkN[kdåucé¬dnYpAyČ{`]þ±X\\ÞÈk¡ĬjàhÂƄ¢Hè ŔâªLĒ^Öm¶ħĊAǦė¸zÚGn£¾rªŀÜt¬@ÖÚSx~øOŒŶÐÂæȠ\\ÈÜObĖw^oÞLf¬°bI lTØBÌF£Ć¹gñĤaYt¿¤VSñK¸¤nM¼JE±½¸ñoÜCƆæĪ^ĚQÖ¦^f´QüÜÊz¯lzUĺš@ìp¶n]sxtx¶@~ÒĂJb©gk{°~c°`Ô¬rV\\la¼¤ôá`¯¹LCÆbxEræOv[H­[~|aB£ÖsºdAĐzNÂðsÞÆĤªbab`ho¡³F«èVZs\\\\ÔRzpp®SĪº¨ÖºNĳd`a¦¤F³¢@`¢ĨĀìhYvlĆº¦Ċ~nS|gźv^kGÆÀè·'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [111707, 21520],
-              [113706, 26955]
-            ]
-          ]
-        },
-        properties: { cp: [108.5, 23.5], name: '广西', childNum: 2 }
-      },
-      {
-        id: '460000',
-        geometry: {
-          type: 'Polygon',
-          coordinates: ['@@¦Ŝil¢XƦƞòïè§ŞCêɕrŧůÇąĻõ·ĉ³œ̅kÇm@ċȧŧĥĽʉ­ƅſȓÒË¦ŝE}ºƑ[ÍĜȋ gÎfǐÏĤ¨êƺ\\Ɔ¸ĠĎvʄȀÐ¾jNðĀÒRZǆzÐĊ¢DÀɘZ'],
-          encodeOffsets: [[112750, 20508]]
-        },
-        properties: { cp: [110, 19.5], name: '海南', childNum: 1 }
-      },
-      {
-        id: '510000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@LqSn',
-              '@@ĆOìÛÐ@ĞǔNY{¤Á§di´ezÝúØãwIþËQÇ¦ÃqÉSJ»ĂéʔõÔƁİlƞ¹§ĬqtÀƄmÀêErĒtD®ċæcQE®³^ĭ¥©l}äQtoŖÜqÆkµªÔĻĴ¡@Ċ°B²Èw^^RsºTĀ£ŚæQPJvÄz^Đ¹Æ¯fLà´GC²dt­ĀRt¼¤ĦOðğfÔðDŨŁĞƘïPÈ®âbMüÀXZ ¸£@Å»»QÉ­]dsÖ×_Í_ÌêŮPrĔĐÕGĂeZÜîĘqBhtO ¤tE[h|YÔZśÎs´xº±Uñt|OĩĠºNbgþJy^dÂY Į]Řz¦gC³R`Āz¢Aj¸CL¤RÆ»@­Ŏk\\Ç´£YW}z@Z}Ã¶oû¶]´^NÒ}èNªPÍy¹`S°´ATeVamdUĐwʄvĮÕ\\uÆŗ¨Yp¹àZÂmWh{á}WØǍÉüwga§ßAYrÅÂQĀÕ¬LŐý®Xøxª½Ű¦¦[þ`ÜUÖ´òrÙŠ°²ÄkĳnDX{U~ET{ļº¦PZcjF²Ė@pg¨B{u¨ŦyhoÚD®¯¢ WòàFÎ¤¨GDäz¦kŮPġqË¥À]eâÚ´ªKxīPÖ|æ[xÃ¤JÞĥsNÖ½I¬nĨY´®ÐƐmDŝuäđđEbee_v¡}ìęǊē}qÉåT¯µRs¡M@}ůaa­¯wvƉåZw\\Z{åû`[±oiJDÅ¦]ĕãïrG réÏ·~ąSfy×Í·ºſƽĵȁŗūmHQ¡Y¡®ÁÃ×t«­T¤JJJyJÈ`Ohß¦¡uËhIyCjmÿwZGTiSsOB²fNmsPa{M{õE^Hj}gYpaeu¯oáwHjÁ½M¡pMuåmni{fk\\oÎqCwEZ¼KĝAy{m÷LwO×SimRI¯rKõBS«sFe]fµ¢óY_ÆPRcue°Cbo×bd£ŌIHgtrnyPt¦foaXďxlBowz_{ÊéWiêEGhÜ¸ºuFĈIxf®Y½ĀǙ]¤EyF²ċw¸¿@g¢§RGv»áW`ÃĵJwi]t¥wO­½a[×]`Ãi­üL¦LabbTÀåc}ÍhÆh®BHî|îºÉk­¤Sy£ia©taį·Ɖ`ō¥UhOĝLk}©Fos´JmµlŁuønÑJWÎªYÀïAetTŅÓGË«bo{ıwodƟ½OġÜÂµxàNÖ¾P²§HKv¾]|BÆåoZ`¡Ø`ÀmºĠ~ÌÐ§nÇ¿¤]wğ@srğu~Io[é±¹ ¿ſđÓ@qg¹zƱřaí°KtÇ¤V»Ã[ĩǭƑ^ÇÓ@áťsZÏÅĭƋěpwDóÖáŻneQËq·GCœýS]x·ýq³OÕ¶Qzßti{řáÍÇWŝŭñzÇWpç¿JXĩè½cFÂLiVjx}\\NŇĖ¥GeJA¼ÄHfÈu~¸Æ«dE³ÉMA|bÒćhG¬CMõƤąAvüVéŀ_VÌ³ĐwQj´·ZeÈÁ¨X´Æ¡Qu·»ÕZ³ġqDoy`L¬gdp°şp¦ėìÅĮZ°Iähzĵf²å ĚÑKpIN|Ñz]ń·FU×é»R³MÉ»GM«kiér}Ã`¹ăÞmÈnÁîRǀ³ĜoİzŔwǶVÚ£À]ɜ»ĆlƂ²ĠþTº·àUȞÏʦ¶I«dĽĢdĬ¿»Ĕ×h\\c¬ä²GêëĤł¥ÀǿżÃÆMº}BÕĢyFVvwxBèĻĒ©Ĉt@Ğû¸£B¯¨ˋäßkķ½ªôNÔ~t¼Ŵu^s¼{TA¼ø°¢İªDè¾Ň¶ÝJ®Z´ğ~Sn|ªWÚ©òzPOȸbð¢|øĞA'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [108815, 30935],
-              [100197, 35028]
-            ]
-          ]
-        },
-        properties: { cp: [103.5, 30.6], name: '四川', childNum: 2 }
-      },
-      {
-        id: '520000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@G\\lY£cj',
-              '@@q|mc¯vÏV',
-              '@@hÑ£IsNgßHHªķÃh_¹¡ĝÄ§ń¦uÙùgS¯JH|sÝÅtÁïyMDč»eÕtA¤{b\\}G®u\\åPFqwÅaDK°ºâ_£ùbµmÁÛĹM[q|hlaªāI}Ñµ@swtwm^oµDéĽŠyVky°ÉûÛR³e¥]RÕěħ[ƅåÛDpJiVÂF²I»mN·£LbÒYbWsÀbpkiTZĄă¶Hq`ĥ_J¯ae«KpÝx]aĕÛPÇȟ[ÁåŵÏő÷Pw}TÙ@Õs«ĿÛq©½m¤ÙH·yǥĘĉBµĨÕnđ]K©œáGçş§ÕßgǗĦTèƤƺ{¶ÉHÎd¾ŚÊ·OÐjXWrãLyzÉAL¾ę¢bĶėy_qMĔąro¼hĊw¶øV¤w²Ĉ]ÊKx|`ź¦ÂÈdrcÈbe¸`I¼čTF´¼Óýȃr¹ÍJ©k_șl³´_pĐ`oÒh¶pa^ÓĔ}D»^Xy`d[KvJPhèhCrĂĚÂ^Êƌ wZL­Ġ£ÁbrzOIlMMĪŐžËr×ÎeŦtw|¢mKjSǘňĂStÎŦEtqFT¾Eì¬¬ôxÌO¢ K³ŀºäYPVgŎ¦ŊmŞ¼VZwVlz¤£Tl®ctĽÚó{G­AÇge~Îd¿æaSba¥KKûj®_Ä^\\Ø¾bP®¦x^sxjĶI_Ä Xâ¼Hu¨Qh¡À@Ëô}±GNìĎlT¸`V~R°tbÕĊ`¸úÛtÏFDu[MfqGH·¥yAztMFe|R_GkChZeÚ°tov`xbDnÐ{E}ZèxNEÞREn[Pv@{~rĆAB§EO¿|UZ~ìUf¨J²ĂÝÆsªB`s¶fvö¦Õ~dÔq¨¸º»uù[[§´sb¤¢zþF¢ÆÀhÂW\\ıËIÝo±ĭŠ£þÊs}¡R]ěDg´VG¢j±®èºÃmpU[Áëº°rÜbNu¸}º¼`niºÔXĄ¤¼ÔdaµÁ_ÃftQQgR·Ǔv}Ý×ĵ]µWc¤F²OĩųãW½¯K©]{LóµCIµ±Mß¿h©āq¬o½~@i~TUxð´Đhw­ÀEîôuĶb[§nWuMÆJl½]vuıµb'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [112158, 27383],
-              [112105, 27474],
-              [112095, 27476]
-            ]
-          ]
-        },
-        properties: { cp: [106.7, 26.6], name: '贵州', childNum: 3 }
-      },
-      {
-        id: '530000',
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            '@@[ùx½}ÑRHYīĺûsÍniEoã½Ya²ė{c¬ĝgĂsAØÅwďõzFjw}«Dx¿}Uũlê@HÅ­F¨ÇoJ´Ónũuą¡Ã¢pÒÅØ TF²xa²ËXcÊlHîAßËŁkŻƑŷÉ©hW­æßUËs¡¦}teèÆ¶StÇÇ}Fd£jĈZĆÆ¤Tč\\D}O÷£U§~ŃGåŃDĝ¸Tsd¶¶Bª¤u¢ŌĎo~t¾ÍŶÒtD¦ÚiôözØX²ghįh½Û±¯ÿm·zR¦Ɵ`ªŊÃh¢rOÔ´£Ym¼èêf¯ŪĽncÚbw\\zlvWªâ ¦gmĿBĹ£¢ƹřbĥkǫßeeZkÙIKueT»sVesbaĕ  ¶®dNĄÄpªy¼³BE®lGŭCǶwêżĔÂepÍÀQƞpC¼ŲÈ­AÎô¶RäQ^Øu¬°_Èôc´¹ò¨PÎ¢hlĎ¦´ĦÆ´sâÇŲPnÊD^¯°Upv}®BPÌªjǬxSöwlfòªvqĸ|`H­viļndĜ­Ćhňem·FyÞqóSį¯³X_ĞçêtryvL¤§z¦c¦¥jnŞklD¤øz½ĜàĂŧMÅ|áƆàÊcðÂFÜáŢ¥\\\\ºİøÒÐJĴîD¦zK²ǏÎEh~CD­hMn^ÌöÄ©ČZÀaüfɭyœpį´ěFűk]Ôě¢qlÅĆÙa¶~ÄqêljN¬¼HÊNQ´ê¼VØ¸E^ŃÒyM{JLoÒęæe±Ķygã¯JYÆĭĘëo¥Šo¯hcK«z_prC´ĢÖY¼ v¸¢RÅW³Â§fÇ¸Yi³xR´ďUË`êĿUûuĆBƣöNDH«ĈgÑaB{ÊNF´¬c·Åv}eÇÃGB»If¦HňĕM~[iwjUÁKE¾dĪçWIèÀoÈXòyŞŮÈXâÎŚj|àsRyµÖPr´þ ¸^wþTDŔHr¸RÌmfżÕâCôoxĜƌÆĮÐYtâŦÔ@]ÈǮƒ\\Ī¼Ä£UsÈ¯LbîƲŚºyhr@ĒÔƀÀ²º\\êpJ}ĠvqtĠ@^xÀ£È¨mËÏğ}n¹_¿¢×Y_æpÅA^{½Lu¨GO±Õ½ßM¶wÁĢÛPƢ¼pcĲx|apÌ¬HÐŊSfsðBZ¿©XÏÒKk÷Eû¿SrEFsÕūkóVǥŉiTL¡n{uxţÏhôŝ¬ğōNNJkyPaqÂğ¤K®YxÉƋÁ]āęDqçgOgILu\\_gz]W¼~CÔē]bµogpÑ_oď`´³Țkl`IªºÎȄqÔþ»E³ĎSJ»_f·adÇqÇc¥Á_Źw{L^É±ćxU£µ÷xgĉp»ĆqNē`rĘzaĵĚ¡K½ÊBzyäKXqiWPÏÉ¸½řÍcÊG|µƕƣGË÷k°_^ý|_zċBZocmø¯hhcæ\\lMFlư£ĜÆyHF¨µêÕ]HAàÓ^it `þßäkĤÎT~Wlÿ¨ÔPzUCNVv [jâôDôď[}z¿msSh¯{jïğl}šĹ[őgK©U·µË@¾m_~q¡f¹ÅË^»f³ø}Q¡ÖË³gÍ±^Ç\\ëÃA_¿bWÏ[¶ƛé£F{īZgm@|kHǭƁć¦UĔť×ëǟeċ¼ȡȘÏíBÉ£āĘPªĳ¶ŉÿy©nď£G¹¡I±LÉĺÑdĉÜW¥}gÁ{aqÃ¥aıęÏZÁ`'
-          ],
-          encodeOffsets: [[104636, 22969]]
-        },
-        properties: { cp: [102, 24.7], name: '云南', childNum: 1 }
-      },
-      {
-        id: '540000',
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            '@@ÂhľxŖxÒVºÅâAĪÝȆµę¯Ňa±r_w~uSÕňqOj]ɄQ£ZUDûoY»©M[L¼qãË{VÍçWVi]ë©Ä÷àyƛhÚU°adcQ~Mx¥caÛcSyFÖk­uRýq¿ÔµQĽ³aG{¿FµëªéĜÿª@¬·K·àariĕĀ«V»ŶĴūgèLǴŇƶaftèBŚ£^âǐÝ®M¦ÁǞÿ¬LhJ¾óƾÆºcxwf]Y´¦|QLn°adĊ\\¨oǀÍŎ´ĩĀd`tÊQŞŕ|¨C^©Ĉ¦¦ÎJĊ{ëĎjª²rÐl`¼Ą[t|¦Stè¾PÜK¸dƄı]s¤î_v¹ÎVòŦj£Əsc¬_Ğ´|Ł¦Av¦w`ăaÝaa­¢e¤ı²©ªSªÈMĄwÉØŔì@T¤Ę\\õª@þo´­xA sÂtŎKzó²ÇČµ¢r^nĊ­Æ¬×üG¢³ {âĊ]G~bÀgVjzlhǶfOfdªB]pjTOtĊn¤}®¦Č¥d¢¼»ddY¼t¢eȤJ¤}Ǿ¡°§¤AÐlc@ĝsªćļđAçwxUuzEÖġ~AN¹ÄÅȀŻ¦¿ģŁéì±Hãd«g[Ø¼ēÀcīľġ¬cJµÐʥVȝ¸ßS¹ý±ğkƁ¼ą^ɛ¤Ûÿb[}¬ōõÃ]ËNm®g@Bg}ÍF±ǐyL¥íCIĳÏ÷Ñį[¹¦[âšEÛïÁÉdƅß{âNÆāŨß¾ě÷yC£k­´ÓH@Â¹TZ¥¢į·ÌAÐ§®Zcv½Z­¹|ÅWZqgW|ieZÅYVÓqdqbc²R@c¥Rã»GeeƃīQ}J[ÒK¬Ə|oėjġĠÑN¡ð¯EBčnwôɍėª²CλŹġǝʅįĭạ̃ūȹ]ΓͧgšsgȽóϧµǛęgſ¶ҍć`ĘąŌJÞä¤rÅň¥ÖÁUětęuůÞiĊÄÀ\\Æs¦ÓRb|Â^řÌkÄŷ¶½÷f±iMÝ@ĥ°G¬ÃM¥n£Øąğ¯ß§aëbéüÑOčk£{\\eµª×MÉfm«Ƒ{Å×Gŏǩãy³©WÑăû··Qòı}¯ãIéÕÂZ¨īès¶ZÈsæĔTŘvgÌsN@îá¾ó@ÙwU±ÉTå»£TđWxq¹Zobs[×¯cĩvėŧ³BM|¹kªħ¥TzNYnÝßpęrñĠĉRS~½ěVVµõ«M££µBĉ¥áºae~³AuĐh`Ü³ç@BÛïĿa©|z²Ý¼D£àč²ŸIûI āóK¥}rÝ_Á´éMaň¨~ªSĈ½½KÙóĿeƃÆB·¬ën×W|Uº}LJrƳlŒµ`bÔ`QÐÓ@s¬ñIÍ@ûws¡åQÑßÁ`ŋĴ{ĪTÚÅTSÄ³Yo|Ç[Ç¾µMW¢ĭiÕØ¿@MhpÕ]jéò¿OƇĆƇpêĉâlØwěsǩĵ¸cbU¹ř¨WavquSMzeo_^gsÏ·¥Ó@~¯¿RiīB\\qTGªÇĜçPoÿfñòą¦óQīÈáPābß{ZŗĸIæÅhnszÁCËìñÏ·ąĚÝUm®ó­L·ăUÈíoù´Êj°ŁŤ_uµ^°ìÇ@tĶĒ¡ÆM³Ģ«İĨÅ®ğRāðggheÆ¢zÊ©Ô\\°ÝĎz~ź¤PnMĪÖB£kné§żćĆKĒ°¼L¶èâz¨u¦¥LDĘz¬ýÎmĘd¾ßFzhg²Fy¦ĝ¤ċņbÎ@yĄæm°NĮZRÖíJ²öLĸÒ¨Y®ƌÐVàtt_ÚÂyĠz]ŢhzĎ{ÂĢXc|ÐqfO¢¤ögÌHNPKŖUú´xx[xvĐCûĀìÖT¬¸^}Ìsòd´_KgžLĴÀBon|H@Êx¦BpŰŌ¿fµƌA¾zǈRx¶FkĄźRzŀ~¶[´HnªVƞuĒ­È¨ƎcƽÌm¸ÁÈM¦x͊ëÀxǆBú^´W£dkɾĬpw˂ØɦļĬIŚÊnŔa¸~J°îlɌxĤÊÈðhÌ®gT´øàCÀ^ªerrƘd¢İP|Ė ŸWªĦ^¶´ÂLaT±üWƜǀRÂŶUńĖ[QhlLüAÜ\\qRĄ©'
-          ],
-          encodeOffsets: [[90849, 37210]]
-        },
-        properties: { cp: [91, 30.5], name: '西藏', childNum: 1 }
-      },
-      {
-        id: '610000',
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            '@@¸ÂW¢xR­Fq§uF@N¢XLRMº[ğȣſï|¥Jkc`sŉǷ£Y³WN«ùMëï³ÛIg÷±mTșÚÒķø©þ¥yÓğęmWµÎumZyOŅƟĥÓ~sÑL¤µaÅY¦ocyZ{y c]{Ta©`U_Ěē£ωÊƍKùK¶ȱÝƷ§{û»ÅÁȹÍéuĳ|¹cÑdìUYOuFÕÈYvÁCqÓTǢí§·S¹NgV¬ë÷Át°DØ¯C´ŉƒópģ}ąiEËFéGU¥×K§­¶³BČ}C¿åċ`wġB·¤őcƭ²ő[Å^axwQOñJÙïŚĤNĔwƇÄńwĪ­o[_KÓª³ÙnKÇěÿ]ďă_d©·©Ýŏ°Ù®g]±ß×¥¬÷m\\iaǑkěX{¢|ZKlçhLtŇîŵœè[É@ƉĄEtƇÏ³­ħZ«mJ×¾MtÝĦ£IwÄå\\Õ{OwĬ©LÙ³ÙTª¿^¦rÌĢŭO¥lãyC§HÍ£ßEñX¡­°ÙCgpťzb`wIvA|¥hoĕ@E±iYd¥OÿµÇvPW|mCĴŜǂÒW¶¸AĜh^Wx{@¬­F¸¡ķn£P|ªĴ@^ĠĈæbÔc¶lYi^MicĎ°Â[ävï¶gv@ÀĬ·lJ¸sn|¼u~a]ÆÈtŌºJpþ£KKf~¦UbyäIĺãnÔ¿^­ŵMThĠÜ¤ko¼Ŏìąǜh`[tRd²Ĳ_XPrɲlXiL§à¹H°Ȧqº®QCbAŌJ¸ĕÚ³ĺ§ `d¨YjiZvRĺ±öVKkjGȊÄePĞZmļKÀ[`ösìhïÎoĬdtKÞ{¬èÒÒBÔpĲÇĬJŊ¦±J«[©ārHµàåVKe§|P²ÇÓ·vUzgnN¾yI@oHĆÛķhxen¡QQ±ƝJǖRbzy¸ËÐl¼EºpĤ¼x¼½~Ğà@ÚüdK^mÌSjp²ȮµûGĦ}Ħðǚ¶òƄjɂz°{ºØkÈęâ¦jªBg\\ċ°s¬]jú EȌǆ¬stRÆdĠİwÜ¸ôW¾ƮłÒ_{Ìû¼jº¹¢GǪÒ¯ĘZ`ºŊecņą~BÂgzpâēòYƲȐĎ'
-          ],
-          encodeOffsets: [[113634, 40474]]
-        },
-        properties: { cp: [108.9, 34.26], name: '陕西', childNum: 1 }
-      },
-      {
-        id: '620000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@Vu_^',
-              '@@ųEĠtt~nkh`Q¦ÅÄÜdwAb×ĠąJ¤DüègĺqBqj°lI¡Ĩ¶ĖIHdjÎB°aZ¢KJO[|A£Dx}NĂ¬HUnrk kp¼Y kMJn[aGáÚÏ[½rc}aQxOgsPMnUsncZsKúvAtÞġ£®ĀYKdnFw¢JE°Latf`¼h¬we|Æbj}GA·~W`¢MC¤tL©Ĳ°qdfObÞĬ¹ttu`^ZúE`[@Æsîz®¡CƳƜG²R¢RmfwĸgÜą G@pzJM½mhVy¸uÈÔO±¨{LfæU¶ßGĂq\\ª¬²I¥IŉÈīoıÓÑAçÑ|«LÝcspīðÍgtë_õ\\ĉñLYnĝgRǡÁiHLlõUĹ²uQjYi§Z_c¨´ĹĖÙ·ŋIaBD­R¹ȥr¯GºßK¨jWkɱOqWĳ\\a­Q\\sg_ĆǛōëp»£lğÛgSŶN®À]ÓämĹãJaz¥V}Le¤Lýo¹IsŋÅÇ^bz³tmEÁ´a¹cčecÇNĊãÁ\\č¯dNj]jZµkÓdaćå]ğĳ@ ©O{¤ĸm¢E·®«|@Xwg]Aģ±¯XǁÑǳªcwQÚŝñsÕ³ÛV_ý¥\\ů¥©¾÷w©WÕÊĩhÿÖÁRo¸V¬âDb¨hûxÊ×ǌ~Zâg|XÁnßYoº§ZÅŘv[ĭÖʃuďxcVbnUSfB¯³_TzºÎO©çMÑ~M³]µ^püµÄY~y@X~¤Z³[Èōl@®Å¼£QK·Di¡ByÿQ_´D¥hŗy^ĭÁZ]cIzýah¹MĪğPs{ò²Vw¹t³ŜË[Ñ}X\\gsF£sPAgěp×ëfYHāďÖqēŭOÏëdLü\\it^c®RÊº¶¢H°mrY£B¹čIoľu¶uI]vģSQ{UŻÅ}QÂ|Ì°ƅ¤ĩŪU ęĄÌZÒ\\v²PĔ»ƢNHĂyAmƂwVm`]ÈbH`Ì¢²ILvĜH®¤Dlt_¢JJÄämèÔDëþgºƫaʎÌrêYi~ Îİ¤NpÀA¾Ĕ¼bð÷®üszMzÖĖQdȨýv§Tè|ªHÃ¾a¸|Ð ƒwKĢx¦ivr^ÿ ¸l öæfƟĴ·PJv}n\\h¹¶v·À|\\ƁĚN´ĜçèÁz]ġ¤²¨QÒŨTIlªťØ}¼˗ƦvÄùØEÂ«FïËIqōTvāÜŏíÛßÛVj³âwGăÂíNOPìyV³ŉĖýZso§HÑiYw[ß\\X¦¥c]ÔƩÜ·«jÐqvÁ¦m^ċ±R¦΋ƈťĚgÀ»IïĨʗƮ°ƝĻþÍAƉſ±tÍEÕÞāNUÍ¡\\ſčåÒʻĘm ƭÌŹöʥëQ¤µ­ÇcƕªoIýIÉ_mkl³ăƓ¦j¡YzŇi}Msßõīʋ }ÁVm_[n}eı­Uĥ¼ªI{Î§DÓƻėojqYhĹT©oūĶ£]ďxĩǑMĝq`B´ƃ˺Чç~²ņj@¥@đ´ί}ĥtPńÇ¾V¬ufÓÉCtÓ̻¹£G³]ƖƾŎĪŪĘ̖¨ʈĢƂlɘ۪üºňUðǜȢƢż̌ȦǼĤŊɲĖÂ­KqĘŉ¼ĔǲņɾªǀÞĈĂD½ĄĎÌŗĞrôñnN¼â¾ʄľԆ|Ǆ֦ज़ȗǉ̘̭ɺƅêgV̍ʆĠ·ÌĊv|ýĖÕWĊǎÞ´õ¼cÒÒBĢ͢UĜð͒s¨ňƃLĉÕÝ@ɛƯ÷¿Ľ­ĹeȏĳëCȚDŲyê×Ŗyò¯ļcÂßYtÁƤyAã˾J@ǝrý@¤rz¸oP¹ɐÚyáHĀ[JwcVeȴÏ»ÈĖ}ƒŰŐèȭǢόĀƪÈŶë;Ñ̆ȤМľĮEŔĹŊũ~ËUă{ĻƹɁύȩþĽvĽƓÉ@ēĽɲßǐƫʾǗĒpäWÐxnsÀ^ƆwW©¦cÅ¡Ji§vúF¶¨c~c¼īeXǚ\\đ¾JwÀďksãAfÕ¦L}waoZD½Ml«]eÒÅaÉ²áo½FõÛ]ĻÒ¡wYR£¢rvÓ®y®LFLzĈôe]gx}|KK}xklL]c¦£fRtív¦PŨ£',
-              '@@M T¥'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [108619, 36299],
-              [108594, 36341],
-              [108600, 36306]
-            ]
-          ]
-        },
-        properties: { cp: [104, 35.5], name: '甘肃', childNum: 3 }
-      },
-      {
-        id: '630000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@InJo',
-              '@@CÆ½OŃĦsΰ~Ē³¦@@Ņi±è}ШƄ˹A³r_ĞǒNĪĐw¤^ŬĵªpĺSZgrpiƼĘÔ¨C|ÍJ©Ħ»®VĲ~f\\m `UnÂ~ʌĬàöNt~ňjy¢ZiƔ¥Ąk´nl`JÊJþ©pdƖ®È£¶ìRʦźõƮËnʼėæÑƀĎ[¢VÎĂMÖÝÎF²sƊƀÎBļýƞ¯ʘƭðħ¼Jh¿ŦęΌƇ¥²Q]Č¥nuÂÏri¸¬ƪÛ^Ó¦d¥[Wàx\\ZjÒ¨GtpþYŊĕ´zUOëPîMĄÁxH´áiÜUàîÜŐĂÛSuŎrJðÌ¬EFÁú×uÃÎkrĒ{V}İ«O_ÌËĬ©ÓŧSRÑ±§Ģ£^ÂyèçěM³Ƃę{[¸¿uºµ[gt£¸OƤĿéYõ·kĀq]juw¥DĩƍõÇPéÄ½G©ã¤GuȧþRcÕĕNyyût­øï»a½ē¿BMoį£Íj}éZËqbʍƬh¹ìÿÓAçãnIÃ¡I`ks£CG­ěUy×Cy@¶ʡÊBnāzGơMē¼±O÷õJËĚăVĪũƆ£¯{ËL½ÌzżVR|ĠTbuvJvµhĻĖHAëáa­OÇðñęNwœľ·LmI±íĠĩPÉ×®ÿscB³±JKßĊ«`ađ»·QAmOVţéÿ¤¹SQt]]Çx±¯A@ĉĳ¢Óļ©l¶ÅÛrŕspãRk~¦ª]Į­´FRåd­ČsCqđéFn¿ÅƃmÉx{W©ºƝºįkÕƂƑ¸wWūÐ©ÈF£\\tÈ¥ÄRÈýÌJ lGr^×äùyÞ³fjc¨£ÂZ|ǓMĝÏ@ëÜőRĝ÷¡{aïȷPu°ËXÙ{©TmĠ}Y³­ÞIňµç½©C¡į÷¯B»|St»]vųs»}MÓ ÿʪƟǭA¡fs»PY¼c¡»¦cċ­¥£~msĉPSi^o©AecPeǵkgyUi¿h}aHĉ^|á´¡HØûÅ«ĉ®]m¡qċ¶±ÈyôōLÁstB®wn±ă¥HSòė£Së@×œÊăxÇN©©T±ª£Ĳ¡fb®Þbb_Ą¥xu¥B{łĝ³«`dƐt¤ťiñÍUuºí`£^tƃĲc·ÛLO½sç¥Ts{ă\\_»kÏ±q©čiìĉ|ÍI¥ć¥]ª§D{ŝŖÉR_sÿc³ĪōƿÎ§p[ĉc¯bKmR¥{³Ze^wx¹dƽÅ½ôIg §Mĕ ƹĴ¿ǣÜÍ]Ý]snåA{eƭ`ǻŊĿ\\ĳŬűYÂÿ¬jĖqßb¸L«¸©@ěĀ©ê¶ìÀEH|´bRľÓ¶rÀQþvl®ÕETzÜdb hw¤{LRdcb¯ÙVgƜßzÃôì®^jUèXÎ|UäÌ»rK\\ªN¼pZCüVY¤ɃRi^rPŇTÖ}|br°qňbĚ°ªiƶGQ¾²x¦PmlŜ[Ĥ¡ΞsĦÔÏâ\\ªÚŒU\\f¢N²§x|¤§xĔsZPòʛ²SÐqF`ªVÞŜĶƨVZÌL`¢dŐIqr\\oäõFÎ·¤»Ŷ×h¹]ClÙ\\¦ďÌį¬řtTӺƙgQÇÓHţĒ´ÃbEÄlbʔC|CŮkƮ[ʼ¬ň´KŮÈΰÌĪ¶ƶlðļATUvdTGº̼ÔsÊDÔveMg'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [105308, 37219],
-              [95370, 40081]
-            ]
-          ]
-        },
-        properties: { cp: [97, 36], name: '青海', childNum: 2 }
-      },
-      {
-        id: '640000',
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            '@@KëÀęĞ«Oęȿȕı]ŉ¡åįÕÔ«ǴõƪĚQÐZhv K°öqÀÑS[ÃÖHƖčËnL]ûcÙß@ĝ¾}w»»oģF¹»kÌÏ·{zP§B­¢íyÅt@@á]Yv_ssģ¼ißĻL¾ġsKD£¡N_X¸}B~HaiÅf{«x»ge_bsKF¯¡IxmELcÿZ¤­ĢÝsuBLùtYdmVtNmtOPhRw~bd¾qÐ\\âÙH\\bImlNZ»loqlVmGā§~QCw¤{A\\PKNY¯bFkC¥sks_Ã\\ă«¢ħkJi¯rrAhĹûç£CUĕĊ_ÔBixÅÙĄnªÑaM~ħpOu¥sîeQ¥¤^dkKwlL~{L~hw^ófćKyE­K­zuÔ¡qQ¤xZÑ¢^ļöÜ¾Ep±âbÊÑÆ^fk¬NC¾YpxbK~¥eÖäBlt¿Đx½I[ĒǙWf»Ĭ}d§dµùEuj¨IÆ¢¥dXªƅx¿]mtÏwßRĶX¢͎vÆzƂZò®ǢÌʆCrâºMÞzÆMÒÊÓŊZÄ¾r°Î®Ȉmª²ĈUªĚîøºĮ¦ÌĘk^FłĬhĚiĀĖ¾iİbjË'
-          ],
-          encodeOffsets: [[109366, 40242]]
-        },
-        properties: { cp: [106.1, 37.5], name: '宁夏', childNum: 1 }
-      },
-      {
-        id: '650000',
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            '@@QØĔ²X¨~ǘBºjʐßØvKƔX¨vĊOÃ·¢i@~cĝe_«E}QxgɪëÏÃ@sÅyXoŖ{ô«ŸuXêÎf`C¹ÂÿÐGĮÕĞXŪōŸMźÈƺQèĽôe|¿ƸJR¤ĘEjcUóº¯Ĩ_ŘÁMª÷Ð¥OéÈ¿ÖğǤǷÂFÒzÉx[]­Ĥĝœ¦EP}ûƥé¿İƷTėƫœŕƅƱB»Đ±ēO¦E}`cȺrĦáŖuÒª«ĲπdƺÏØZƴwʄ¤ĖGĐǂZĶèH¶}ÚZצʥĪï|ÇĦMŔ»İĝǈì¥Βba­¯¥ǕǚkĆŵĦɑĺƯxūД̵nơʃĽá½M»òmqóŘĝčË¾ăCćāƿÝɽ©ǱŅ»ēėŊLrÁ®ɱĕģŉǻ̋ȥơŻǛȡVï¹Ň۩ûkɗġƁ§ʇė̕ĩũƽō^ƕUv£ƁQïƵkŏ½ΉÃŭÇ³LŇʻ«ƭ\\lŭD{ʓDkaFÃÄa³ŤđÔGRÈƚhSӹŚsİ«ĐË[¥ÚDkº^Øg¼ŵ¸£EÍöůŉT¡c_ËKYƧUśĵÝU_©rETÏʜ±OñtYwē¨{£¨uM³x½şL©Ùá[ÓÐĥ Νtģ¢\\śnkOw¥±T»ƷFɯàĩÞáB¹ÆÑUwŕĽw]kE½Èå~Æ÷QyěCFmĭZīŵVÁƿQƛûXS²b½KÏ½ĉS©ŷXĕ{ĕK·¥Ɨcqq©f¿]ßDõU³h­gËÇïģÉɋwk¯í}I·œbmÉřīJɥĻˁ×xoɹīlc¤³Xù]ǅA¿w͉ì¥wÇN·ÂËnƾƍdÇ§đ®ƝvUm©³G\\}µĿQyŹlăµEwǇQ½yƋBe¶ŋÀůo¥AÉw@{Gpm¿AĳŽKLh³`ñcËtW±»ÕSëüÿďDu\\wwwù³VLŕOMËGh£õP¡erÏd{ġWÁč|yšg^ğyÁzÙs`s|ÉåªÇ}m¢Ń¨`x¥ù^}Ì¥H«YªƅAÐ¹n~ź¯f¤áÀzgÇDIÔ´AňĀÒ¶ûEYospõD[{ù°]uJqU|Soċxţ[õÔĥkŋÞŭZËºóYËüċrw ÞkrťË¿XGÉbřaDü·Ē÷AÃª[ÄäIÂ®BÕĐÞ_¢āĠpÛÄȉĖġDKwbmÄNôfƫVÉviǳHQµâFù­Âœ³¦{YGd¢ĚÜO {Ö¦ÞÍÀP^bƾl[vt×ĈÍEË¨¡Đ~´î¸ùÎhuè`¸HÕŔVºwĠââWò@{ÙNÝ´ə²ȕn{¿¥{l÷eé^eďXj©î\\ªÑòÜìc\\üqÕ[Č¡xoÂċªbØ­ø|¶ȴZdÆÂońéG\\¼C°ÌÆn´nxÊOĨŪƴĸ¢¸òTxÊǪMīĞÖŲÃɎOvʦƢ~FRěò¿ġ~åŊúN¸qĘ[Ĕ¶ÂćnÒPĒÜvúĀÊbÖ{Äî¸~Ŕünp¤ÂH¾ĄYÒ©ÊfºmÔĘcDoĬMŬS¤s²ʘÚžȂVŦ èW°ªB|ĲXŔþÈJĦÆæFĚêYĂªĂ]øªŖNÞüAfɨJ¯ÎrDDĤ`mz\\§~D¬{vJÂ«lµĂb¤pŌŰNĄ¨ĊXW|ų ¿¾ɄĦƐMTòP÷fØĶK¢ȝ˔Sô¹òEð­`Ɩ½ǒÂň×äı§ĤƝ§C~¡hlåǺŦŞkâ~}FøàĲaĞfƠ¥Ŕd®U¸źXv¢aƆúŪtŠųƠjdƺƺÅìnrh\\ĺ¯äɝĦ]èpĄ¦´LƞĬ´ƤǬ˼Ēɸ¤rºǼ²¨zÌPðŀbþ¹ļD¢¹\\ĜÑŚ¶ZƄ³âjĦoâȴLÊȮĐ­ĚăÀêZǚŐ¤qȂ\\L¢ŌİfÆs|zºeªÙæ§΢{Ā´ƐÚ¬¨Ĵà²łhʺKÞºÖTiƢ¾ªì°`öøu®Ê¾ãÖ'
-          ],
-          encodeOffsets: [[88824, 50096]]
-        },
-        properties: { cp: [87, 41], name: '新疆', childNum: 1 }
-      },
-      {
-        id: '110000',
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            '@@RºaYÕQaúÍÔiþĩȨWĢü|Ėu[qb[swP@ÅğP¿{\\¯Y²·Ñ¨j¯X\\¯MSvU¯YIŕY{[fk­VÁûtŷmiÍt_H»Ĩ±d`¹­{bwYr³S]§§o¹qGtm_SŧoaFLgQN_dV@Zom_ć\\ßW´ÕiœRcfio§ËgToÛJíĔóu|wP¤XnO¢ÉŦ¯pNÄā¤zâŖÈRpŢZÚ{GrFt¦Òx§ø¹RóäV¤XdżâºWbwŚ¨Ud®bêņ¾jnŎGŃŶnzÚScîĚZen¬'
-          ],
-          encodeOffsets: [[119421, 42013]]
-        },
-        properties: { cp: [116.4, 40.24], name: '北京', childNum: 1 }
-      },
-      {
-        id: '120000',
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            '@@ŬgX§Ü«E¶FÌ¬O_ïlÁgz±AXeµÄĵ{¶]gitgIj·¥ì_iU¨ÐƎk}ĕ{gBqGf{¿aU^fIư³õ{YıëNĿk©ïËZukāAīlĕĥs¡bġ«@dekąI[nlPqCnp{ō³°`{PNdƗqSÄĻNNâyj]äÒD ĬH°Æ]~¡HO¾X}ÐxgpgWrDGpù^LrzWxZ^¨´T\\|~@IzbĤjeĊªz£®ĔvěLmV¾Ô_ÈNW~zbĬvG²ZmDM~~'
-          ],
-          encodeOffsets: [[120237, 41215]]
-        },
-        properties: { cp: [116.87, 39.5], name: '天津', childNum: 1 }
-      },
-      {
-        id: '310000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@ɧư¬EpƸÁx]',
-              '@@©²',
-              '@@MA',
-              '@@QpªKWT§¨',
-              '@@bŝÕÕEȣÚƥêImɇǦèÜĠÚÄÓŴ·ʌÇ',
-              '@@Sô¤r]ìƬįǜûȬɋŭ×^sYɍDŋŽąñCG²«ªč@h_p¯A{oloY¬j@Ĳ`gQÚpptǀ^MĲvtbe´Rh@oj¨',
-              '@@ÆLH{a}Eo¦'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [124702, 32062],
-              [124547, 32200],
-              [124808, 31991],
-              [124726, 32110],
-              [124903, 32376],
-              [124065, 32166],
-              [124870, 31965]
-            ]
-          ]
-        },
-        properties: { cp: [121.4, 31.1], name: '上海', childNum: 7 }
-      },
-      {
-        id: '500000',
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            '@@TÂÛ`Ùƅően½SêqDu[RåÍ¹÷eXÍy¸_ĺę}÷`M¯ċfCVµqŉ÷Zgg^d½pDOÎCn^uf²ènh¼WtƏxRGg¦pVFI±G^Ic´ecGĹÞ½sëÆNäÌ¤KÓe¯|R¸§LÜkPoïƭNï¶}Gywdiù©nkĈzj@Óc£»Wă¹Óf§c[µo·Ó|MvÛaq½«è\\ÂoVnÓØÍ²«bq¿ehCĜ^Q~ Évýş¤²ĮpEĶyhsŊwH½¿gÅ¡ýE¡ya£³t\\¨\\vú¹¼©·Ñr_oÒý¥et³]Et©uÖ¥±ă©KVeë]}wVPÀFA¨ąB}qTjgRemfFmQFÝMyùnÑAmÑCawu_p¯sfÛ_gI_pNysB¦zG¸rHeN\\CvEsÐñÚkcDÖĉsaQ¯}_UzÁē}^R Äd^ÍĸZ¾·¶`wećJE¹vÛ·HgéFXjÉê`|ypxkAwWĐpb¥eOsmzwqChóUQl¥F^lafanòsrEvfQdÁUVfÎvÜ^eftET¬ôA\\¢sJnQTjPØxøK|nBzĞ»LYFDxÓvr[ehľvN¢o¾NiÂxGpâ¬zbfZo~hGi]öF||NbtOMn eA±tPTLjpYQ|SHYĀxinzDJÌg¢và¥Pg_ÇzIIII£®S¬ØsÎ¼¥¨^LnGĲļĲƤjÎƀƾ¹¸ØÎezĆT¸}êÐqHðqĖä¥^CÆIj²p\\_ æüY|[YxƊæu°xb®Űb@~¢NQt°¶Sæ Ê~rǉĔëĚ¢~uf`faĔJåĊnÔ]jƎćÊ@£¾a®£Ű{ŶĕFègLk{Y|¡ĜWƔtƬJÑxq±ĢN´òKLÈÃ¼D|s`ŋć]Ã`đMùƱ¿~Y°ħ`ƏíW½eI½{aOIrÏ¡ĕŇapµÜƃġ²'
-          ],
-          encodeOffsets: [[111728, 31311]]
-        },
-        properties: { cp: [107.5, 29.7], name: '重庆', childNum: 1 }
-      },
-      {
-        id: '810000',
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              '@@AlFi',
-              '@@mp',
-              '@@EpHo',
-              '@@rMUwAS¬]',
-              '@@ea¢pl¸Eõ¹hj[]ÔCÎ@lj¡uBX´AI¹[yDU]W`çwZkmcMpÅv}IoJlcafŃK°ä¬XJmÐ đhI®æÔtSHnEÒrÄc'
-            ]
-          ],
-          encodeOffsets: [
-            [
-              [117111, 23002],
-              [117072, 22876],
-              [117045, 22887],
-              [116882, 22747],
-              [116975, 23082]
-            ]
-          ]
-        },
-        properties: { cp: [115.2, 22.75], name: '香港', childNum: 5 }
-      },
-      {
-        id: '820000',
-        geometry: {
-          type: 'Polygon',
-          coordinates: ['@@áw{Îr'],
-          encodeOffsets: [[116285, 22746]]
-        },
-        properties: { cp: [114.52, 22.86], name: '澳门', childNum: 1 }
-      }
-    ],
-    UTF8Encoding: true
-  })
-}
-
-export const chinaMap = {
-  type: 'FeatureCollection',
-  features: [
-    {
-      id: '710000',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
-          [
-            '@@°Ü¯Û',
-            '@@ƛĴÕƊÉɼģºðʀ\\ƎsÆNŌÔĚänÜƤɊĂǀĆĴĤǊŨxĚĮǂƺòƌâÔ®ĮXŦţƸZûÐƕƑGđ¨ĭMó·ęcëƝɉlÝƯֹÅŃ^Ó·śŃǋƏďíåɛGɉ¿IċããF¥ĘWǬÏĶñÄ',
-            '@@\\p|WoYG¿¥Ij@',
-            '@@¡@V^RqBbAnTXeQr©C',
-            '@@ÆEEkWqë I'
-          ]
-        ],
-        encodeOffsets: [
-          [
-            [122886, 24033],
-            [123335, 22980],
-            [122375, 24193],
-            [122518, 24117],
-            [124427, 22618]
-          ]
-        ]
-      },
-      properties: { cp: [121, 24], name: '台湾', childNum: 5 }
-    },
-    {
-      id: '130000',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
-          [
-            '@@\\aM`Ç½ÓnUKĜēs¤­©yrý§uģcJ»eIP]ªrºc_ħ²G¼s`jÎŸnüsÂľP',
-            '@@U`Ts¿mÄ',
-            '@@FOhđ©OiÃ`ww^ÌkÑH«ƇǤŗĺtFu{Z}Ö@U´ʚLg®¯Oı°Ãw ^VbÉsmAê]]w§RRl£ŭuwNÁ`ÇFēÝčȻuT¡Ĺ¯Õ¯sŗő£YªhVƍ£ƅnëYNgq¼ś¿µı²UºÝUąąŖóxV@tƯJ]eR¾fe|rHA|h~Ėƍl§ÏjVë` ØoÅbbx³^zÃĶ¶Sj®AyÂhðk`«PËµEFÛ¬Y¨Ļrõqi¼Wi°§Ð±²°`[À|ĠO@ÆxO\\ta\\p_Zõ^û{ġȧXýĪÓjùÎRb^Î»j{íděYfíÙTymńŵōHim½éŅ­aVcř§ax¹XŻácWU£ôãºQ¨÷Ñws¥qEHÙ|šYQoŕÇyáĂ£MÃ°oťÊP¡mWO¡v{ôvîēÜISpÌhp¨ jdeŔQÖjX³àĈ[n`Yp@UcM`RKhEbpŞlNut®EtqnsÁgAiúoHqCXhfgu~ÏWP½¢G^}¯ÅīGCÑ^ãziMáļMTÃƘrMc|O_¯Ŏ´|morDkO\\mĆJfl@cĢ¬¢aĦtRıÒXòë¬WP{ŵǫƝīÛ÷ąV×qƥV¿aȉd³BqPBmaËđŻģmÅ®V¹d^KKonYg¯XhqaLdu¥Ípǅ¡KąÅkĝęěhq}HyÃ]¹ǧ£Í÷¿qágPmoei¤o^á¾ZEY^Ný{nOl±Í@Mċèk§daNaÇį¿]øRiiñEūiǱàUtėGyl}ÓM}jpEC~¡FtoQiHkk{ILgĽxqÈƋÄdeVDJj£J|ÅdzÂFt~KŨ¸IÆv|¢r}èonb}`RÎÄn°ÒdÞ²^®lnÐèĄlðÓ×]ªÆ}LiĂ±Ö`^°Ç¶p®đDcŋ`ZÔ¶êqvFÆN®ĆTH®¦O¾IbÐã´BĐɢŴÆíȦpĐÞXR·nndO¤OÀĈƒ­QgµFo|gȒęSWb©osx|hYhgŃfmÖĩnºTÌSp¢dYĤ¶UĈjlǐpäðëx³kÛfw²Xjz~ÂqbTÑěŨ@|oMzv¢ZrÃVw¬ŧĖ¸f°ÐTªqs{S¯r æÝl¼ÖĞ ǆiGĘJ¼lr}~K¨ŸƐÌWö¼Þ°nÞoĦL|C~D©|q]SvKÑcwpÏÏĿćènĪWlĄkT}¬Tp~®Hgd˒ĺBVtEÀ¢ôPĎƗè@~kü\\rÊĔÖæW_§¼F´©òDòjYÈrbĞāøŀG{ƀ|¦ðrb|ÀH`pʞkvGpuARhÞÆǶgĘTǼƹS£¨¡ù³ŘÍ]¿ÂyôEP xX¶¹ÜO¡gÚ¡IwÃé¦ÅBÏ|Ç°N«úmH¯âbęU~xĈbȒ{^xÖlD¸dɂ~'
-          ]
-        ],
-        encodeOffsets: [
-          [
-            [120023, 41045],
-            [121616, 39981],
-            [122102, 42307]
-          ]
-        ]
-      },
-      properties: { cp: [115.5, 38.5], name: '河北', childNum: 3 }
-    },
-    {
-      id: '140000',
-      geometry: {
-        type: 'Polygon',
-        coordinates: [
-          '@@ħÜ_ªlìwGkÛÃǏokćiµVZģ¡coTSË¹ĪmnÕńehZg{gtwªpXaĚThȑp{¶Eh®RćƑP¿£PmcªaJyý{ýȥoÅîɡųAďä³aÏJ½¥PG­ąSM­sWz½µÛYÓŖgxoOkĒCo­Èµ]¯_²ÕjāK~©ÅØ^ÔkïçămÏk]­±cÝ¯ÑÃmQÍ~_apm~ç¡qu{JÅŧ·Ls}EyÁÆcI{¤IiCfUcƌÃp§]ě«vD@¡SÀµMÅwuYY¡DbÑc¡h×]nkoQdaMç~eDÛtT©±@¥ù@É¡ZcW|WqOJmĩl«ħşvOÓ«IqăV¥D[mI~Ó¢cehiÍ]Ɠ~ĥqX·eƷn±}v[ěďŕ]_œ`¹§ÕōIo©b­s^}Ét±ū«³p£ÿ¥WÑxçÁ«h×u×¥ř¾dÒ{ºvĴÎêÌɊ²¶ü¨|ÞƸµȲLLúÉƎ¤ϊęĔV`_bªS^|dzY|dz¥pZbÆ£¶ÒK}tĦÔņƠPYznÍvX¶Ěn ĠÔzý¦ª÷ÑĸÙUȌ¸dòÜJð´ìúNM¬XZ´¤ŊǸ_tldI{¦ƀðĠȤ¥NehXnYGR° ƬDj¬¸|CĞKqºfƐiĺ©ª~ĆOQª ¤@ìǦɌ²æBÊTĞHƘÁĪËĖĴŞȀÆÿȄlŤĒötÎ½î¼ĨXh|ªM¤ÐzÞĩÒSrao³'
-        ],
-        encodeOffsets: [[117016, 41452]]
-      },
-      properties: { cp: [112.3, 37.5], name: '山西', childNum: 1 }
-    },
-    {
-      id: '150000',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
-          [
-            '@@ǪƫÌÛMĂ[`ÕCn}¶Vcês¯PqFB|S³C|kñHdiÄ¥sŉÅPóÑÑE^ÅPpy_YtShQ·aHwsOnŉÃs©iqjUSiº]ïW«gW¡ARëśĳĘů`çõh]y»ǃǛҤxÒm~zf}pf|ÜroÈzrKÈĵSƧż؜Ġu~è¬vîS¼ĂhĖMÈÄw\\fŦ°W ¢¾luŸDw\\Ŗĝ',
-            '@@GVu»Aylßí¹ãe]Eāò³C¹ð¾²iÒAdkò^P²CǜңǄ z¼g^èöŰ_Ĳĕê}gÁnUI«m]jvV¼euhwqAaW_µj»çjioQR¹ēÃßt@r³[ÛlćË^ÍÉáGOUÛOB±XkÅ¹£k|e]olkVÍ¼ÕqtaÏõjgÁ£§U^RLËnX°ÇBz^~wfvypV ¯ƫĉ˭ȫƗŷɿÿĿƑ˃ĝÿÃǃßËőó©ǐȍŒĖM×ÍEyxþp]ÉvïèvƀnÂĴÖ@V~Ĉ³MEĸÅĖtējyÄDXÄxGQuv_i¦aBçw˛wD©{tāmQ{EJ§KPśƘƿ¥@sCTÉ}ɃwƇy±gÑ}T[÷kÐç¦«SÒ¥¸ëBX½HáÅµÀğtSÝÂa[ƣ°¯¦Pï¡]£ġÒk®G²èQ°óMq}EóƐÇ\\@áügQÍu¥FTÕ¿Jû]|mvāÎYua^WoÀa·­ząÒot×¶CLƗi¯¤mƎHǊ¤îìɾŊìTdåwsRÖgĒųúÍġäÕ}Q¶¿A[¡{d×uQAMxVvMOmăl«ct[wº_ÇÊjbÂ£ĦS_éQZ_lwgOiýe`YYJq¥IÁǳ£ÙË[ÕªuƏ³ÍTs·bÁĽäė[b[ŗfãcn¥îC¿÷µ[ŏÀQ­ōĉm¿Á^£mJVmL[{Ï_£F¥Ö{ŹA}×Wu©ÅaųĳƳhB{·TQqÙIķËZđ©Yc|M¡LeVUóK_QWk_ĥ¿ãZ»X\\ĴuUèlG®ěłTĠğDŃGÆÍz]±ŭ©Å]ÅÐ}UË¥©TċïxgckfWgi\\ÏĒ¥HkµEë{»ÏetcG±ahUiñiWsɁ·cCÕk]wȑ|ća}wVaĚá G°ùnM¬¯{ÈÐÆA¥ÄêJxÙ¢hP¢ÛºµwWOóFÁz^ÀŗÎú´§¢T¤ǻƺSėǵhÝÅQgvBHouʝl_o¿Ga{ïq{¥|ſĿHĂ÷aĝÇqZñiñC³ª»E`¨åXēÕqÉû[l}ç@čƘóO¿¡FUsAʽīccocÇS}£IS~ălkĩXçmĈŀÐoÐdxÒuL^T{r@¢ÍĝKén£kQyÅõËXŷƏL§~}kq»IHėǅjĝ»ÑÞoå°qTt|r©ÏS¯·eŨĕx«È[eM¿yupN~¹ÏyN£{©għWí»Í¾səšǅ_ÃĀɗ±ąĳĉʍŌŷSÉA±åǥɋ@ë£R©ąP©}ĹªƏj¹erLDĝ·{i«ƫC½ÉshVzGS|úþXgp{ÁX¿ć{ƱȏñZáĔyoÁhA}ŅĆfdŉ_¹Y°ėǩÑ¡H¯¶oMQqð¡Ë|Ñ`ƭŁX½·óÛxğįÅcQs«tȋǅFù^it«Č¯[hAi©á¥ÇĚ×l|¹y¯Kȝqgů{ñǙµïċĹzŚȭ¶¡oŽäÕG\\ÄT¿Òõr¯LguÏYęRƩɷŌO\\İÐ¢æ^Ŋ ĲȶȆbÜGĝ¬¿ĚVĎgª^íu½jÿĕęjık@Ľ]ėl¥ËĭûÁėéV©±ćn©­ȇÍq¯½YÃÔŉÉNÑÅÝy¹NqáʅDǡËñ­ƁYÅy̱os§ȋµʽǘǏƬɱàưN¢ƔÊuľýľώȪƺɂļxZĈ}ÌŉŪĺœĭFЛĽ̅ȣͽÒŵìƩÇϋÿȮǡŏçƑůĕ~Ç¼ȳÐUfdIxÿ\\G zâɏÙOº·pqy£@qþ@Ǟ˽IBäƣzsÂZÁàĻdñ°ŕzéØűzșCìDȐĴĺf®Àľưø@ɜÖÞKĊŇƄ§͑těï͡VAġÑÑ»d³öǍÝXĉĕÖ{þĉu¸ËʅğU̎éhɹƆ̗̮ȘǊ֥ड़ࡰţાíϲäʮW¬®ҌeרūȠkɬɻ̼ãüfƠSצɩςåȈHϚÎKǳͲOðÏȆƘ¼CϚǚ࢚˼ФÔ¤ƌĞ̪Qʤ´¼mȠJˀƲÀɠmɆǄĜƠ´ǠN~ʢĜ¶ƌĆĘźʆȬ˪ĚĒ¸ĞGȖƴƀj`ĢçĶāàŃºēĢĖćYÀŎüôQÐÂŎŞǆŞêƖoˆDĤÕºÑǘÛˤ³̀gńƘĔÀ^ªƂ`ªt¾äƚêĦĀ¼ÐĔǎ¨Ȕ»͠^ˮÊȦƤøxRrŜH¤¸ÂxDÄ|ø˂˜ƮÐ¬ɚwɲFjĔ²Äw°ǆdÀÉ_ĸdîàŎjÊêTĞªŌŜWÈ|tqĢUB~´°ÎFCU¼pĀēƄN¦¾O¶łKĊOjĚj´ĜYp{¦SĚÍ\\T×ªV÷Ší¨ÅDK°ßtŇĔK¨ǵÂcḷ̌ĚǣȄĽFlġUĵŇȣFʉɁMğįʏƶɷØŭOǽ«ƽū¹Ʊő̝Ȩ§ȞʘĖiɜɶʦ}¨֪ࠜ̀ƇǬ¹ǨE˦ĥªÔêFxúQEr´Wrh¤Ɛ \\talĈDJÜ|[Pll̚¸ƎGú´P¬W¦^¦H]prRn|or¾wLVnÇIujkmon£cX^Bh`¥V¦U¤¸}xRj[^xN[~ªxQ[`ªHÆÂExx^wN¶Ê|¨ìMrdYpoRzNyÀDs~bcfÌ`L¾n|¾T°c¨È¢ar¤`[|òDŞĔöxElÖdHÀI`Ď\\Àì~ÆR¼tf¦^¢ķ¶eÐÚMptgjɡČÅyġLûŇV®ÄÈƀĎ°P|ªVVªj¬ĚÒêp¬E|ŬÂ_~¼rƐK f{ĘFĒƌXưăkÃĄ}nµo×q£ç­kX{uĩ«āíÓUŅÝVUŌ]Ť¥lyň[oi{¦LĸĦ^ôâJ¨^UZðÚĒL¿Ìf£K£ʺoqNwğc`uetOj×°KJ±qÆġmĚŗos¬qehqsuH{¸kH¡ÊRǪÇƌbȆ¢´äÜ¢NìÉʖ¦â©Ɨؗ'
-          ]
-        ],
-        encodeOffsets: [
-          [
-            [128500, 52752],
-            [127089, 51784]
-          ]
-        ]
-      },
-      properties: { cp: [110, 41], name: '内蒙古', childNum: 2 }
-    },
-    {
-      id: '210000',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
-          [
-            '@@L@@s]',
-            '@@MnNm',
-            '@@dc',
-            '@@eÀC@b',
-            '@@fXwkbrÄ`qg',
-            '@@^jtWQ',
-            '@@~ Y[c',
-            '@@I`ĖN^_¿ZÁM',
-            '@@Ïxǌ{q_×^Gigp',
-            '@@iX¶BY',
-            '@@YZ',
-            '@@L_yG`b',
-            '@@^WqCTZ',
-            '@@\\[§t|]',
-            '@@m`p[',
-            '@@@é^BntaÊU]x ¯ÄPĲ­°hʙK³VÕ@Y~|EvĹsÇ¦­L^pÃ²ŸÒG Ël]xxÄ_fT¤Ď¤cPC¨¸TVjbgH²sdÎdHt`B²¬GJję¶[ÐhjeXdlwhðSČ¦ªVÊÏÆZÆŶ®²^ÎyÅHńĚDMħĜŁH­kçvV[ĳ¼WYÀäĦ`XlR`ôLUVfK¢{NZdĒªYĸÌÚJRr¸SA|ƴgŴĴÆbvªØX~źB|¦ÕE¤Ð`\\|KUnnI]¤ÀÂĊnŎR®Ő¿¶\\ÀøíDm¦ÎbŨabaĘ\\ľãÂ¸atÎSƐ´©v\\ÖÚÌǴ¤Â¨JKrZ_ZfjþhPkx`YRIjJcVf~sCN¤ EhæmsHy¨SðÑÌ\\\\ĐRÊwS¥fqŒßýáĞÙÉÖ[^¯ǤŲê´\\¦¬ĆPM¯£»uïpùzExanµyoluqe¦W^£ÊL}ñrkqWňûPUP¡ôJoo·U}£[·¨@XĸDXm­ÛÝºGUCÁª½{íĂ^cjk¶Ã[q¤LÉö³cux«|Zd²BWÇ®Yß½ve±ÃCý£W{Ú^q^sÑ·¨ËMr¹·C¥GDrí@wÕKţÃ«V·i}xËÍ÷i©ĝɝǡ]{c±OW³Ya±_ç©HĕoƫŇqr³Lys[ñ³¯OSďOMisZ±ÅFC¥Pq{Ã[Pg}\\¿ghćOk^ĩÃXaĕËĥM­oEqqZûěŉ³F¦oĵhÕP{¯~TÍlªNßYÐ{Ps{ÃVUeĎwk±ŉVÓ½ŽJãÇÇ»Jm°dhcÀffdF~ĀeĖd`sx² ®EĦ¦dQÂd^~ăÔH¦\\LKpĄVez¤NP ǹÓRÆąJSh­a[¦´ÂghwmBÐ¨źhI|VV|p] Â¼èNä¶ÜBÖ¼L`¼bØæKVpoúNZÞÒKxpw|ÊEMnzEQIZZNBčÚFÜçmĩWĪñtÞĵÇñZ«uD±|ƏlǗw·±PmÍada CLǑkùó¡³Ï«QaċÏOÃ¥ÕđQȥċƭy³ÁA'
-          ]
-        ],
-        encodeOffsets: [
-          [
-            [123686, 41445],
-            [126019, 40435],
-            [124393, 40128],
-            [126117, 39963],
-            [125322, 40140],
-            [126686, 40700],
-            [126041, 40374],
-            [125584, 40168],
-            [125509, 40217],
-            [125453, 40165],
-            [125362, 40214],
-            [125280, 40291],
-            [125774, 39997],
-            [125976, 40496],
-            [125822, 39993],
-            [122731, 40949]
-          ]
-        ]
-      },
-      properties: { cp: [123.2, 41.3], name: '辽宁', childNum: 16 }
-    },
-    {
-      id: '220000',
-      geometry: {
-        type: 'Polygon',
-        coordinates: [
-          '@@ñr½ÉKāGÁ¤ia ÉÈ¹`\\xs¬dĆkNnuNUwNx¶c¸|\\¢GªóĄ~RãÖÎĢùđŴÕhQxtcæëSɽŉíëǉ£ƍG£nj°KƘµDsØÑpyĆ¸®¿bXp]vbÍZuĂ{n^IüÀSÖ¦EvRÎûh@â[ƏÈô~FNr¯ôçR±­HÑlĢ^¤¢OðætxsŒ]ÞÁTĠs¶¿âÆGW¾ìA¦·TÑ¬è¥ÏÐJ¨¼ÒÖ¼ƦɄxÊ~StD@Ă¼Ŵ¡jlºWvÐzƦZÐ²CH AxiukdGgetqmcÛ£Ozy¥cE}|¾cZk¿uŐã[oxGikfeäT@SUwpiÚFM©£è^Ú`@v¶eňf heP¶täOlÃUgÞzŸU`l}ÔÆUvØ_Ō¬Öi^ĉi§²ÃB~¡ĈÚEgc|DC_Ȧm²rBx¼MÔ¦ŮdĨÃâYxƘDVÇĺĿg¿cwÅ\\¹¥Yĭl¤OvLjM_a W`zļMž·\\swqÝSAqŚĳ¯°kRē°wx^ĐkǂÒ\\]nrĂ}²ĊŲÒøãh·M{yMzysěnĒġV·°G³¼XÀ¤¹i´o¤ŃÈ`ÌǲÄUĞd\\iÖmÈBĤÜɲDEh LG¾ƀÄ¾{WaYÍÈĢĘÔRîĐj}ÇccjoUb½{h§Ǿ{KƖµÎ÷GĄØŜçưÌs«lyiē«`å§H¥Ae^§GK}iã\\c]v©ģZmÃ|[M}ģTɟĵÂÂ`ÀçmFK¥ÚíÁbX³ÌQÒHof{]ept·GŋĜYünĎųVY^ydõkÅZW«WUa~U·SbwGçǑiW^qFuNĝ·EwUtW·Ýďæ©PuqEzwAVXRãQ`­©GYYhcUGorBd}ģÉb¡·µMicF«Yƅ»é\\ɹ~ǙG³mØ©BšuT§Ĥ½¢Ã_Ã½L¡ûsT\\rke\\PnwAKy}ywdSefµ]UhĿD@mÿvaÙNSkCuncÿ`lWėVâ¦÷~^fÏ~vwHCį`xqT­­lW«ï¸skmßEGqd¯R©Ý¯¯S\\cZ¹iűƏCuƍÓXoR}M^o£R}oªU­FuuXHlEÅÏ©¤ßgXþ¤D²ÄufàÀ­XXÈ±Ac{Yw¬dvõ´KÊ£\\rµÄlidā]|î©¾DÂVH¹Þ®ÜWnCķ W§@\\¸~¤Vp¸póIO¢VOŇürXql~òÉK]¤¥Xrfkvzpm¶bwyFoúvð¼¤ N°ąO¥«³[éǣű]°Õ\\ÚÊĝôîŇÔaâBYlďQ[ Ë[ïÒ¥RI|`j]P'
-        ],
-        encodeOffsets: [[126831, 44503]]
-      },
-      properties: { cp: [126, 43.7], name: '吉林', childNum: 1 }
-    },
-    {
-      id: '230000',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
-          [
-            '@@UµNÿ¥īèçHÍøƕ¶Lǽ|g¨|a¾pVidd~ÈiíďÓQġėÇZÎXb½|ſÃH½KFgɱCģÛÇAnjÕc[VĝǱÃËÇ_ £ń³pj£º¿»WH´¯U¸đĢmtĜyzzNN|g¸÷äűÑ±ĉā~mq^[ǁÑďlw]¯xQĔ¯l°řĴrBÞTxr[tŽ¸ĻN_yX`biNKuP£kZĮ¦[ºxÆÀdhĹŀUÈƗCwáZħÄŭcÓ¥»NAw±qȥnD`{ChdÙFć}¢A±Äj¨]ĊÕjŋ«×`VuÓÅ~_kŷVÝyhVkÄãPsOµfgeŇµf@u_Ù ÙcªNªÙEojVxT@ãSefjlwH\\pŏäÀvlY½d{F~¦dyz¤PÜndsrhfHcvlwjF£G±DÏƥYyÏu¹XikĿ¦ÏqƗǀOŜ¨LI|FRĂn sª|C˜zxAè¥bfudTrFWÁ¹Am|ĔĕsķÆF´N}ćUÕ@Áĳſmuçuð^ÊýowFzØÎĕNőǏȎôªÌŒǄàĀÄ˄ĞŀƒʀĀƘŸˮȬƬĊ°Uzouxe]}AyÈW¯ÌmKQ]Īºif¸ÄX|sZt|½ÚUÎ lk^p{f¤lºlÆW A²PVÜPHÊâ]ÎĈÌÜk´\\@qàsĔÄQºpRij¼èi`¶bXrBgxfv»uUi^v~J¬mVp´£´VWrnP½ì¢BX¬hðX¹^TjVriªjtŊÄmtPGx¸bgRsT`ZozÆO]ÒFôÒOÆŊvÅpcGêsx´DR{AEOr°x|íb³Wm~DVjºéNNËÜ˛ɶ­GxŷCSt}]ûōSmtuÇÃĕNāg»íT«u}ç½BĵÞʣ¥ëÊ¡MÛ³ãȅ¡ƋaǩÈÉQG¢·lG|tvgrrf«ptęŘnÅĢrI²¯LiØsPf_vĠdxM prʹL¤¤eËÀđKïÙVY§]Ióáĥ]ķK¥j|pŇ\\kzţ¦šnņäÔVĂîĪ¬|vW®l¤èØrxm¶ă~lÄƯĄ̈́öȄEÔ¤ØQĄĄ»ƢjȦOǺ¨ìSŖÆƬyQv`cwZSÌ®ü±Ǆ]ŀç¬B¬©ńzƺŷɄeeOĨSfm ĊƀP̎ēz©ĊÄÕÊmgÇsJ¥ƔŊśæÎÑqv¿íUOµªÂnĦÁ_½ä@êí£P}Ġ[@gġ}gɊ×ûÏWXá¢užƻÌsNÍ½ƎÁ§čŐAēeL³àydl¦ĘVçŁpśǆĽĺſÊQíÜçÛġÔsĕ¬Ǹ¯YßċġHµ ¡eå`ļrĉŘóƢFìĎWøxÊkƈdƬv|I|·©NqńRŀ¤éeŊŀàŀU²ŕƀBQ£Ď}L¹Îk@©ĈuǰųǨÚ§ƈnTËÇéƟÊcfčŤ^XmHĊĕË«W·ċëx³ǔķÐċJāwİ_ĸȀ^ôWr­°oú¬ĦŨK~ȰCĐ´Ƕ£fNÎèâw¢XnŮeÂÆĶ¾¾xäLĴĘlļO¤ÒĨA¢Êɚ¨®ØCÔ ŬGƠƦYĜĘÜƬDJg_ͥœ@čŅĻA¶¯@wÎqC½Ĉ»NăëKďÍQÙƫ[«ÃígßÔÇOÝáWñuZ¯ĥŕā¡ÑķJu¤E å¯°WKÉ±_d_}}vyõu¬ï¹ÓU±½@gÏ¿rÃ½DgCdµ°MFYxw¿CG£Rƛ½Õ{]L§{qqą¿BÇƻğëܭǊË|c²}Fµ}ÙRsÓpg±QNqǫŋRwŕnéÑÉK«SeYRŋ@{¤SJ}D Ûǖ֍]gr¡µŷjqWÛham³~S«Ü[',
-            '@@ƨĶTLÇyqpÇÛqe{~oyen}s`qiXGù]Ëp½©lÉÁp]Þñ´FĂ^fäîºkàz¼BUv¬D'
-          ]
-        ],
-        encodeOffsets: [
-          [
-            [134456, 44547],
-            [127123, 51780]
-          ]
-        ]
-      },
-      properties: { cp: [127.8, 46.8], name: '黑龙江', childNum: 2 }
-    },
-    {
-      id: '320000',
-      geometry: {
-        type: 'Polygon',
-        coordinates: [
-          '@@Õg^vÁbnÀ`Jnĝ¬òM¶ĘTÖŒbe¦¦{¸ZâćNp©Hp|`mjhSEb\\afv`sz^lkljÄtg¤D­¾X¿À|ĐiZȀåB·î}GL¢õcßjayBFµÏC^ĭcÙt¿sğH]j{s©HM¢QnDÀ©DaÜÞ·jgàiDbPufjDk`dPOîhw¡ĥ¥GP²ĐobºrYî¶aHŢ´ ]´rılw³r_{£DB_Ûdåuk|Ũ¯F Cºyr{XFye³Þċ¿ÂkĭB¿MvÛpm`rÚã@Ę¹hågËÖƿxnlč¶Åì½Ot¾dJlVJĂǀŞqvnO^JZż·Q}êÍÅmµÒ]ƍ¦Dq}¬R^èĂ´ŀĻĊIÔtĲyQŐĠMNtR®òLhĚs©»}OÓGZz¶A\\jĨFäOĤHYJvÞHNiÜaĎÉnFQlNM¤B´ĄNöɂtpŬdZÅglmuÇUšŞÚb¤uŃJŴu»¹ĄlȖħŴw̌ŵ²ǹǠ͛hĭłƕrçü±Yrřl¥i`ã__¢ćSÅr[Çq^ùzWmOĈaŐÝɞï²ʯʊáĘĳĒǭPħ͍ôƋÄÄÍīçÛɈǥ£­ÛmY`ó£Z«§°Ó³QafusNıǅ_k}¢m[ÝóDµ¡RLčiXyÅNïă¡¸iĔÏNÌķoıdōîåŤûHcs}~Ûwbù¹£¦ÓCtOPrE^ÒogĉIµÛÅʹK¤½phMú`mR¸¦PƚgÉLRs`£¯ãhD¨|³¤C'
-        ],
-        encodeOffsets: [[121451, 32518]]
-      },
-      properties: { cp: [120, 32.4], name: '江苏', childNum: 1 }
-    },
-    {
-      id: '330000',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
-          [
-            '@@jX^n',
-            '@@sfdM',
-            '@@qP\\xz[_i',
-            '@@o\\VzRZ}mECy',
-            '@@R¢FX}°[m]',
-            '@@Cb\\}',
-            '@@e|v\\laus',
-            '@@v~s{',
-            '@@QxÂF©}',
-            '@@¹nvÞs©m',
-            '@@rQgYIh',
-            '@@bi«ZX',
-            '@@p[}ILd',
-            '@@À¿|',
-            '@@¹dnb',
-            '@@rS}[Kl',
-            '@@g~h}',
-            '@@FlCk',
-            '@@ůTG°ĄLHm°UF',
-            '@@OdRe',
-            '@@v[u\\',
-            '@@FjâL~wyoo~sµLZ',
-            '@@¬e¹aH',
-            '@@\\nÔ¡q]L³ë\\ÿ®QÌ',
-            '@@ÊA­©]ª',
-            '@@Kxv{­',
-            '@@@hlIk_',
-            '@@pWcrxp',
-            '@@Md|_iA',
-            '@@¢X£½z\\ðpN',
-            '@@hlÜ[LykAvyfw^E ',
-            '@@fp¤MusH',
-            '@@®_ma~LÁ¬`',
-            '@@@°¡mÛGĕ¨§Ianá[ýƤjfæÐNäGp',
-            '@@iMt\\',
-            '@@Zc[b',
-            '@@X®±GrÆ°Zæĉm',
-            '@@Z~dOSo|A¿qZv',
-            '@@@`EN£p',
-            '@@|s',
-            '@@@nDi',
-            '@@na£¾uYL¯QªmĉÅdMgÇjcº«ę¬­K­´B«Âącoċ\\xK`cįŧ«®á[~ıxu·ÅKsËÉc¢Ù\\ĭƛëbf¹­ģSĜkáƉÔ­ĈZB{aMµfzŉfÓÔŹŁƋǝÊĉ{ğč±g³ne{ç­ií´S¬\\ßðK¦w\\iqªĭiAuA­µ_W¥ƣO\\lċĢttC¨£t`PZäuXßBsĻyekOđġĵHuXBµ]×­­\\°®¬F¢¾pµ¼kŘó¬Wät¸|@L¨¸µrºù³Ù~§WIZW®±Ð¨ÒÉx`²pĜrOògtÁZ{üÙ[|ûKwsPlU[}¦Rvn`hsª^nQ´ĘRWb_ rtČFIÖkĦPJ¶ÖÀÖJĈĄTĚòC ²@PúØz©Pî¢£CÈÚĒ±hŖl¬â~nm¨f©iļ«mntqÒTÜÄjL®EÌFª²iÊxØ¨IÈhhst[Ôx}dtüGæţŔïĬaĸpMËÐjē¢·ðĄÆMzjWKĎ¢Q¶À_ê_@ıi«pZgf¤Nrq]§ĂN®«H±yƳí¾×ŊďŀĐÏŴǝĂíÀBŖÕªÁŐTFqĉ¯³ËCĕģi¨hÜ·ñt»¯Ï',
-            '@@ºwZRkĕWK '
-          ]
-        ],
-        encodeOffsets: [
-          [
-            [125785, 31436],
-            [125729, 31431],
-            [125513, 31380],
-            [125329, 30690],
-            [125223, 30438],
-            [125115, 30114],
-            [124815, 29155],
-            [124419, 28746],
-            [124095, 28635],
-            [124005, 28609],
-            [125000, 30713],
-            [125111, 30698],
-            [125078, 30682],
-            [125150, 30684],
-            [124014, 28103],
-            [125008, 31331],
-            [125411, 31468],
-            [125329, 31479],
-            [125369, 31139],
-            [125626, 30916],
-            [125417, 30956],
-            [125254, 30976],
-            [125199, 30997],
-            [125095, 31058],
-            [125083, 30915],
-            [124885, 31015],
-            [125218, 30798],
-            [124867, 30838],
-            [124755, 30788],
-            [124802, 30809],
-            [125267, 30657],
-            [125218, 30578],
-            [125200, 30562],
-            [125192, 30787],
-            [124968, 30474],
-            [125167, 30396],
-            [125115, 30363],
-            [124955, 29879],
-            [124714, 29781],
-            [124762, 29462],
-            [124325, 28754],
-            [124863, 30077],
-            [125366, 31477]
-          ]
-        ]
-      },
-      properties: { cp: [120, 29.2], name: '浙江', childNum: 43 }
-    },
-    {
-      id: '340000',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
-          [
-            '@@^iuLV\\',
-            '@@e©Edh',
-            '@@´CE¶zAXêeödK¡~H¸íæAȽd{ďÅÀ½W®£ChÃsikkly]_teu[bFaTign{]GqªoĈMYá|·¥f¥őaSÕėNµñĞ«Im_m¿Âa]uĜp Z_§{Cäg¤°r[_YjÆOdý[I[á·¥Q_nùgL¾mzˆDÜÆ¶ĊJhpc¹O]iŠ]¥ jtsggDÑ¡w×jÉ©±EFË­KiÛÃÕYvsm¬njĻª§emná}k«ŕgđ²ÙDÇ¤í¡ªOy×Où±@DñSęćăÕIÕ¿IµĥOlJÕÍRÍ|JìĻÒåyķrĕq§ÄĩsWÆßF¶X®¿mwRIÞfßoG³¾©uyHį{Ɓħ¯AFnuPÍÔzVdàôº^Ðæd´oG¤{S¬ćxã}ŧ×Kǥĩ«ÕOEÐ·ÖdÖsƘÑ¨[Û^Xr¢¼§xvÄÆµ`K§ tÒ´Cvlo¸fzŨð¾NY´ı~ÉĔēßúLÃÃ_ÈÏ|]ÂÏHlg`ben¾¢pUh~ƴĖ¶_r sĄ~cƈ]|r c~`¼{À{ȒiJjz`îÀT¥Û³]u}fïQl{skloNdjäËzDvčoQďHI¦rbrHĖ~BmlNRaĥTX\\{fÁKÁ®TLÂÄMtÊgĀDĄXƔvDcÎJbt[¤D@®hh~kt°ǾzÖ@¾ªdbYhüóV´ŮŒ¨Üc±r@J|àuYÇÔG·ĚąĐlŪÚpSJ¨ĸLvÞcPæķŨ®mÐálsgd×mQ¨ųÆ©Þ¤IÎs°KZpĄ|XwWdĎµmkǀwÌÕæhºgBĝâqÙĊzÖgņtÀÁĂÆáhEz|WzqD¹°Eŧl{ævÜcA`¤C`|´qxĲkq^³³GšµbíZ¹qpa±ď OH¦Ħx¢gPícOl_iCveaOjChß¸iÝbÛªCC¿mRV§¢A|tbkĜEÀtîm^g´fÄ'
-          ]
-        ],
-        encodeOffsets: [
-          [
-            [121722, 32278],
-            [119475, 30423],
-            [121606, 33646]
-          ]
-        ]
-      },
-      properties: { cp: [117.2, 31.5], name: '安徽', childNum: 3 }
-    },
-    {
-      id: '350000',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
-          [
-            '@@zht´}[',
-            '@@aj^~ĆGå',
-            '@@edHse',
-            '@@@vPGsyQ',
-            '@@sBzddW[O',
-            '@@S¨Qy',
-            '@@NVucW',
-            '@@qptB@q',
-            '@@¸[iu',
-            '@@Q\\pD[_',
-            '@@jSwUappI',
-            '@@eXª~',
-            '@@AjvFoo',
-            '@@fT_Çí\\v|ba¦jZÆy|®',
-            '@@IjLg',
-            '@@wJIx«¼AoNe{M¥',
-            '@@K±¡ÓČ~N¾',
-            '@@k¡¹Eh~c®uDqZì¡I~Māe£bN¨gZý¡a±Öcp©PhI¢QqÇGj|¥U g[Ky¬ŏv@OptÉEF\\@ åA¬V{XģĐBycpě¼³Ăp·¤¥ohqqÚ¡ŅLs^Ã¡§qlÀhH¨MCe»åÇGD¥zPO£čÙkJA¼ßėuĕeûÒiÁŧS[¡Uûŗ½ùěcÝ§SùĩąSWó«íęACµeRåǃRCÒÇZÍ¢ź±^dlstjD¸ZpuÔâÃH¾oLUêÃÔjjēò´ĄWƛ^Ñ¥Ħ@ÇòmOw¡õyJyD}¢ďÑÈġfZda©º²z£NjD°Ötj¶¬ZSÎ~¾c°¶ÐmxO¸¢Pl´SL|¥AȪĖMņĲg®áIJČĒü` QF¬h|ĂJ@zµ |ê³È ¸UÖŬŬÀCtrĸr]ðM¤ĶĲHtÏ AĬkvsq^aÎbvdfÊòSD´Z^xPsĂrvƞŀjJd×ŘÉ ®AÎ¦ĤdxĆqAZRÀMźnĊ»İÐZ YXæJyĊ²·¶q§·K@·{sXãô«lŗ¶»o½E¡­«¢±¨Y®Ø¶^AvWĶGĒĢPlzfļtàAvWYãO_¤sD§ssČġ[kƤPX¦`¶®BBvĪjv©jx[L¥àï[F¼ÍË»ğV`«Ip}ccÅĥZEãoP´B@D¸m±z«Ƴ¿å³BRØ¶Wlâþäą`]Z£Tc ĹGµ¶Hm@_©k¾xĨôȉðX«½đCIbćqK³ÁÄš¬OAwã»aLŉËĥW[ÂGIÂNxĳ¤D¢îĎÎB§°_JGs¥E@¤ućPåcuMuw¢BI¿]zG¹guĮI'
-          ]
-        ],
-        encodeOffsets: [
-          [
-            [123250, 27563],
-            [122541, 27268],
-            [123020, 27189],
-            [122916, 27125],
-            [122887, 26845],
-            [122808, 26762],
-            [122568, 25912],
-            [122778, 26197],
-            [122515, 26757],
-            [122816, 26587],
-            [123388, 27005],
-            [122450, 26243],
-            [122578, 25962],
-            [121255, 25103],
-            [120987, 24903],
-            [122339, 25802],
-            [121042, 25093],
-            [122439, 26024]
-          ]
-        ]
-      },
-      properties: { cp: [118.2, 26], name: '福建', childNum: 18 }
-    },
-    {
-      id: '360000',
-      geometry: {
-        type: 'Polygon',
-        coordinates: [
-          '@@ÖP¬ǦĪØLŨä~Ĉw«|TH£pc³Ïå¹]ĉđxe{ÎÓvOEm°BƂĨİ|Gvz½ª´HàpeJÝQxnÀW­EµàXÅĪt¨ÃĖrÄwÀFÎ|Ă¡WÕ¸cf¥XaęST±m[r«_gmQu~¥V\\OkxtL E¢Ú^~ýØkbēqoě±_Êw§Ñ²ÏƟė¼mĉŹ¿NQYBąrwģcÍ¥B­ŗÊcØiIƝĿuqtāwO]³YCñTeÉcaubÍ]trluīBÐGsĵıN£ï^ķqsq¿DūūVÕ·´Ç{éĈýÿOER_đûIċâJh­ŅıNȩĕB¦K{Tk³¡OP·wnµÏd¯}½TÍ«YiµÕsC¯iM¤­¦¯P|ÿUHvhe¥oFTuõ\\OSsMòđƇiaºćXĊĵà·çhƃ÷Ç{ígu^đgm[ÙxiIN¶Õ»lđÕwZSÆv©_ÈëJbVkĔVÀ¤P¾ºÈMÖxlò~ªÚàGĂ¢B±ÌKyñ`w²¹·`gsÙfIěxŕeykpudjuTfb·hh¿Jd[\\LáƔĨƐAĈepÀÂMD~ņªe^\\^§ý©j×cZØ¨zdÒa¶lÒJìõ`oz÷@¤uŞ¸´ôęöY¼HČƶajlÞƩ¥éZ[|h}^U  ¥pĄžƦO lt¸Æ Q\\aÆ|CnÂOjt­ĚĤdÈF`¶@Ðë ¦ōÒ¨SêvHĢÛ@[ÆQoxHW[ŰîÀt¦Ǆ~NĠ¢lĄtZoCƞÔºCxrpČNpj¢{f_Y`_eq®Aot`@oDXfkp¨|s¬\\DÄSfè©Hn¬^DhÆyøJhØxĢĀLÊƠPżċĄwĮ¶'
-        ],
-        encodeOffsets: [[118923, 30536]]
-      },
-      properties: { cp: [115.7, 28], name: '江西', childNum: 1 }
-    },
-    {
-      id: '370000',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
-          [
-            '@@Xjd]mE',
-            '@@itnq',
-            '@@Dl@k',
-            '@@TGw',
-            '@@K¬U',
-            '@@Wd`c',
-            '@@PtMs',
-            '@@LnXlc',
-            '@@ppVu]Qn',
-            '@@cdzAU_',
-            '@@udRhnCE',
-            '@@oIpP',
-            '@@M{ĿčwbxƨîKÎMĮ]ZF½Y]â£ph¶¨râøÀÎǨ¤^ºÄGz~grĚĜlĞÆLĆǆ¢Îo¦cvKbgr°WhmZp L]LºcUÆ­nżĤÌĒbAnrOA´ȊcÀbƦUØrĆUÜøĬƞŶǬĴóò_A̈«ªdÎÉnb²ĦhņBĖįĦåXćì@L¯´ywƕCéÃµė ƿ¸lµZæyj|BíÂKNNnoƈfÈMZwnŐNàúÄsTJULîVjǎ¾ĒØDz²XPn±ŴPè¸ŔLƔÜƺ_TüÃĤBBċÈöA´faM¨{«M`¶d¡ôÖ°mȰBÔjj´PM|c^d¤u¤Û´ä«ƢfPk¶Môl]Lb}su^ke{lCMrDÇ­]NÑFsmoõľHyGă{{çrnÓEƕZGª¹Fj¢ÿ©}ÌCǷë¡ąuhÛ¡^KxC`C\\bÅxì²ĝÝ¿_NīCȽĿåB¥¢·IŖÕy\\¹kxÃ£ČáKµË¤ÁçFQ¡KtŵƋ]CgÏAùSedcÚźuYfyMmhUWpSyGwMPqŀÁ¼zK¶G­Y§Ë@´śÇµƕBm@IogZ¯uTMx}CVKï{éƵP_K«pÛÙqċtkkù]gTğwoɁsMõ³ăAN£MRkmEÊčÛbMjÝGuIZGPģãħE[iµBEuDPÔ~ª¼ęt]ûG§¡QMsğNPŏįzs£Ug{đJĿļā³]ç«Qr~¥CƎÑ^n¶ÆéÎR~Ż¸YI] PumŝrƿIā[xeÇ³L¯v¯s¬ÁY~}ťuŁgƋpÝĄ_ņī¶ÏSR´ÁP~¿Cyċßdwk´SsX|t`Ä ÈðAªìÎT°¦Dda^lĎDĶÚY°`ĪŴǒàŠv\\ebZHŖR¬ŢƱùęOÑM­³FÛaj'
-          ]
-        ],
-        encodeOffsets: [
-          [
-            [123806, 39303],
-            [123821, 39266],
-            [123742, 39256],
-            [123702, 39203],
-            [123649, 39066],
-            [123847, 38933],
-            [123580, 38839],
-            [123894, 37288],
-            [123043, 36624],
-            [123344, 38676],
-            [123522, 38857],
-            [123628, 38858],
-            [118267, 36772]
-          ]
-        ]
-      },
-      properties: { cp: [117.5, 36.3], name: '山东', childNum: 13 }
-    },
-    {
-      id: '410000',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
-          [
-            '@@dXD}~Hgq~ÔN~zkĘHVsǲßjŬŢ`Pûàl¢\\ÀEhİgÞē X¼`khÍLùµP³swIÓzeŠĠð´E®ÚPtºIŊÊºL«šŕQGYfa[şußǑĩų_Z¯ĵÙčC]kbc¥CS¯ëÍB©ïÇÃ_{sWTt³xlàcČzÀD}ÂOQ³ÐTĬµƑÐ¿ŸghłŦv~}ÂZ«¤lPÇ£ªÝŴÅR§ØnhctâknÏ­ľŹUÓÝdKuķI§oTũÙďkęĆH¸Ó\\Ä¿PcnS{wBIvÉĽ[GqµuŇôYgûZca©@½Õǽys¯}lgg@­C\\£asIdÍuCQñ[L±ęk·ţb¨©kK»KC²òGKmĨS`UQnk}AGēsqaJ¥ĐGRĎpCuÌy ã iMcplk|tRkðev~^´¦ÜSí¿_iyjI|ȑ|¿_»d}q^{Ƈdă}tqµ`ŷé£©V¡om½ZÙÏÁRD|JOÈpÀRsI{ùÓjuµ{t}uËRivGçJFjµåkWê´MÂHewixGw½Yŷpµú³XU½ġyłåkÚwZX·l¢Á¢KzOÎÎjc¼htoDHr|­J½}JZ_¯iPq{tę½ĕ¦Zpĵø«kQĹ¤]MÛfaQpě±ǽ¾]u­Fu÷nčÄ¯ADp}AjmcEÇaª³o³ÆÍSƇĈÙDIzçñİ^KNiÞñ[aA²zzÌ÷D|[íÄ³gfÕÞd®|`Ć~oĠƑô³ŊD×°¯CsøÂ«ìUMhTº¨¸ǝêWÔDruÂÇZ£ĆPZW~ØØv¬gèÂÒw¦X¤Ā´oŬ¬²Ês~]®tªapŎJ¨Öº_ŔfŐ\\Đ\\Ĝu~m²Ƹ¸fWĦrƔ}Î^gjdfÔ¡J}\\n C¦þWxªJRÔŠu¬ĨĨmFdM{\\d\\YÊ¢ú@@¦ª²SÜsC}fNècbpRmlØ^gd¢aÒ¢CZZxvÆ¶N¿¢T@uC¬^ĊðÄn|lIlXhun[',
-            '@@hzUq'
-          ]
-        ],
-        encodeOffsets: [
-          [
-            [116744, 37216],
-            [116480, 33048]
-          ]
-        ]
-      },
-      properties: { cp: [113.6, 34], name: '河南', childNum: 2 }
-    },
-    {
-      id: '420000',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
-          [
-            '@@ASd',
-            '@@ls{d',
-            '@@¾«}{ra®pîÃ\\{øCËyyB±b\\òÝjKL ]ĎĽÌJyÚCƈćÎT´Å´pb©ÈdFin~BCo°BĎÃømv®E^vǾ½Ĝ²RobÜeN^ĺ£R¬lĶ÷YoĖ¥Ě¾|sOr°jY`~I¾®I{GqpCgyl{£ÍÍyPLÂ¡¡¸kWxYlÙæŁĢz¾V´W¶ùŸo¾ZHxjwfxGNÁ³Xéæl¶EièIH ujÌQ~v|sv¶Ôi|ú¢FhQsğ¦SiŠBgÐE^ÁÐ{čnOÂÈUÎóĔÊēĲ}Z³½Mŧïeyp·uk³DsÑ¨L¶_ÅuÃ¨w»¡WqÜ]\\Ò§tƗcÕ¸ÕFÏǝĉăxŻČƟOKÉġÿ×wg÷IÅzCg]m«ªGeçÃTC«[t§{loWeC@ps_Bp­rf_``Z|ei¡oċMqow¹DƝÓDYpûsYkıǃ}s¥ç³[§cY§HK«Qy]¢wwö¸ïx¼ņ¾Xv®ÇÀµRĠÐHM±cÏdƒǍũȅȷ±DSyúĝ£ŤĀàtÖÿï[îb\\}pĭÉI±Ñy¿³x¯No|¹HÏÛmjúË~TuęjCöAwě¬Rđl¯ Ñb­ŇTĿ_[IčĄʿnM¦ğ\\É[T·k¹©oĕ@A¾wya¥Y\\¥Âaz¯ãÁ¡k¥ne£ÛwE©Êō¶˓uoj_U¡cF¹­[WvP©whuÕyBF`RqJUw\\i¡{jEPïÿ½fćQÑÀQ{°fLÔ~wXgītêÝ¾ĺHd³fJd]HJ²EoU¥HhwQsƐ»Xmg±çve]DmÍPoCc¾_hhøYrŊU¶eD°Č_N~øĹĚ·`z]Äþp¼äÌQv\\rCé¾TnkžŐÚÜa¼ÝƆĢ¶ÛodĔňÐ¢JqPb ¾|J¾fXƐîĨ_Z¯À}úƲN_ĒÄ^ĈaŐyp»CÇÄKñL³ġM²wrIÒŭxjb[n«øæà ^²­h¯ÚŐªÞ¸Y²ĒVø}Ā^İ´LÚm¥ÀJÞ{JVųÞŃx×sxxƈē ģMřÚðòIfĊŒ\\Ʈ±ŒdÊ§ĘDvČ_Àæ~Dċ´A®µ¨ØLV¦êHÒ¤'
-          ]
-        ],
-        encodeOffsets: [
-          [
-            [113712, 34000],
-            [115612, 30507],
-            [113649, 34054]
-          ]
-        ]
-      },
-      properties: { cp: [113, 31], name: '湖北', childNum: 3 }
-    },
-    {
-      id: '430000',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
-          [
-            '@@nFZw',
-            '@@ãÆá½ÔXrCOËRïÿĩ­TooQyÓ[ŅBE¬ÎÓXaį§Ã¸G °ITxpúxÚĳ¥ÏĢ¾edÄ©ĸGàGhM¤Â_U}Ċ}¢pczfþg¤ÇôAV',
-            '@@ȴÚĖÁĐiOĜ«BxDõĚivSÌ}iùÜnÐºG{p°M°yÂÒzJ²Ì ÂcXëöüiáÿñőĞ¤ùTz²CȆȸǎŪƑÐc°dPÎğË¶[È½u¯½WM¡­ÉB·rínZÒ `¨GA¾\\pēXhÃRC­üWGġuTé§ŎÑ©êLM³}_EÇģc®ęisÁPDmÅ{b[RÅs·kPŽƥóRoOV~]{g\\êYƪ¦kÝbiċƵGZ»Ěõó·³vŝ£ø@pyö_ëIkÑµbcÑ§y×dYØªiþUjŅ³C}ÁN»hĻħƏâƓKA·³CQ±µ§¿AUƑ¹AtćOwD]JUÖgk¯b£ylZFËÑ±H­}EbóľA¡»Ku¦·³åş¥ùBD^{ÌC´­¦ŷJ£^[ª¿ğ|ƅN skóā¹¿ï]ă~÷O§­@Vm¡Qđ¦¢Ĥ{ºjÔª¥nf´~Õo×ÛąGû¥cÑ[Z¶ŨĪ²SÊǔƐƀAÚŌ¦QØ¼rŭ­«}NÏürÊ¬mjr@ĘrTW ­SsdHzƓ^ÇÂyUi¯DÅYlŹu{hT}mĉ¹¥ěDÿë©ıÓ[Oº£¥ótł¹MÕƪ`PDiÛU¾ÅâìUñBÈ£ýhedy¡oċ`pfmjP~kZaZsÐd°wj§@Ĵ®w~^kÀÅKvNmX\\¨aŃqvíó¿F¤¡@ũÑVw}S@j}¾«pĂrªg àÀ²NJ¶¶DôK|^ª°LX¾ŴäPĪ±£EXd^¶ĲÞÜ~u¸ǔMRhsRe`ÄofIÔ\\Ø  ićymnú¨cj ¢»GČìƊÿÐ¨XeĈĀ¾Oð Fi ¢|[jVxrIQ_EzAN¦zLU`cªxOTu RLÄªpUĪȴ^ŎµªÉFxÜf¤ºgĲèy°Áb[¦Zb¦z½xBĖ@ªpºjS´rVźOd©ʪiĎăJP`'
-          ]
-        ],
-        encodeOffsets: [
-          [
-            [115640, 30489],
-            [112577, 27316],
-            [114113, 30649]
-          ]
-        ]
-      },
-      properties: { cp: [112, 28], name: '湖南', childNum: 3 }
-    },
-    {
-      id: '440000',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
-          [
-            '@@QdAsa',
-            '@@lxDRm',
-            '@@sbhNLo',
-            '@@Ă ý',
-            '@@WltOY[',
-            '@@Kr]S',
-            '@@e~AS}',
-            '@@I|Mym',
-            '@@Û³LS²Q',
-            '@@nvºBë¥cÕº',
-            '@@zdÛJm',
-            '@@°³',
-            '@@a yAª¸ËJIxØ@ĀHÉÕZofoo',
-            '@@sŗÃÔėAƁZÄ ~°ČPºb',
-            '@@¶ÝÌvmĞh¹Ĺ',
-            '@@HdSjĒ¢D}waru«ZqadY{K',
-            '@@el\\LqqO',
-            '@@~rMmX',
-            '@@f^E',
-            '@@øPªoj÷ÍÝħXČx°Q¨ıXJp',
-            '@@gÇƳmxatfu',
-            '@@EÆC½',
-            '@@¸B_¶ekWvSivc}p}Ăº¾NĎyj¦Èm th_®Ä}»âUzLË²Aā¡ßH©Ùñ}wkNÕ¹ÇO½¿£ēUlaUìIÇª`uTÅxYĒÖ¼kÖµMjJÚwn\\hĒv]îh|ÈƄøèg¸Ķß ĉĈWb¹ƀdéĘNTtP[öSvrCZaGubo´ŖÒÇĐ~¡zCIözx¢PnÈñ @ĥÒ¦]ƜX³ăĔñiiÄÓVépKG½ÄÓávYoC·sitiaÀyŧÎ¡ÈYDÑům}ý|m[węõĉZÅxUO}÷N¹³ĉo_qtăqwµŁYÙǝŕ¹tïÛUÃ¯mRCºĭ|µÕÊK½Rē ó]GªęAxNqSF|ām¡diď×YïYWªŉOeÚtĐ«zđ¹TāúEáÎÁWwíHcòßÎſ¿Çdğ·ùT×Çūʄ¡XgWÀǇğ·¿ÃOj YÇ÷Sğ³kzőõmĝ[³¡VÙæÅöMÌ³¹pÁaËýý©D©ÜJŹƕģGą¤{ÙūÇO²«BƱéAÒĥ¡«BhlmtÃPµyU¯ucd·w_bŝcīímGOGBȅŹãĻFŷŽŕ@Óoo¿ē±ß}}ÓF÷tĲWÈCőâUâǙIğŉ©IĳE×Á³AĥDĈ±ÌÜÓĨ£L]ĈÙƺZǾĆĖMĸĤfÎĵlŨnÈĐtFFĤêk¶^k°f¶g}®Faf`vXŲxl¦ÔÁ²¬Ð¦pqÊÌ²iXØRDÎ}Ä@ZĠsx®AR~®ETtĄZƈfŠŠHâÒÐAµ\\S¸^wĖkRzalŜ|E¨ÈNĀňZTpBh£\\ĎƀuXĖtKL¶G|»ĺEļĞ~ÜĢÛĊrOÙîvd]n¬VÊĜ°RÖpMƀ¬HbwEÀ©\\¤]ŸI®¥D³|Ë]CúAŠ¦æ´¥¸Lv¼¢ĽBaôF~®²GÌÒEYzk¤°ahlVÕI^CxĈPsBƒºVÀB¶¨R²´D',
-            '@@OR'
-          ]
-        ],
-        encodeOffsets: [
-          [
-            [117381, 22988],
-            [116552, 22934],
-            [116790, 22617],
-            [116973, 22545],
-            [116444, 22536],
-            [116931, 22515],
-            [116496, 22490],
-            [116453, 22449],
-            [113301, 21439],
-            [118726, 21604],
-            [118709, 21486],
-            [113210, 20816],
-            [115482, 22082],
-            [113171, 21585],
-            [113199, 21590],
-            [115232, 22102],
-            [115739, 22373],
-            [115134, 22184],
-            [113056, 21175],
-            [119573, 21271],
-            [119957, 24020],
-            [115859, 22356],
-            [116680, 26053],
-            [116561, 22649]
-          ]
-        ]
-      },
-      properties: { cp: [113.5, 23], name: '广东', childNum: 24 }
-    },
-    {
-      id: '450000',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
-          [
-            '@@H TI¡U',
-            '@@Ɣ_LÊFZgčP­kini«qÇczÍY®¬Ů»qR×ō©DÕ§ƙǃŵTÉĩ±ıdÑnYYĲvNĆĆØÜ Öp}e³¦m©iÓ|¹ħņ|ª¦QF¢Â¬ʖovg¿em^ucäāmÇÖåB¡Õçĝ}FĻ¼Ĺ{µHKsLSđƃrč¤[AgoSŇYMÿ§Ç{FśbkylQxĕ]T·¶[BÑÏGáşşƇeăYSs­FQ}­BwtYğÃ@~CÍQ ×WjË±rÉ¥oÏ ±«ÓÂ¥kwWűue_b­E~µh¯ecl¯Ïr¯EģJğ}w³Ƈē`ãògK_ÛsUʝćğ¶höO¤Ǜn³c`¡yię[ďĵűMę§]XÎ_íÛ]éÛUćİÕBƣ±dy¹T^dûÅÑŦ·PĻþÙ`K¦¢ÍeĥR¿³£[~äu¼dltW¸oRM¢ď\\z}Æzdvň{ÎXF¶°Â_ÒÂÏL©ÖTmu¼ãlīkiqéfA·Êµ\\őDc¥ÝFyÔćcűH_hLÜêĺĐ¨c}rn`½Ì@¸¶ªVLhŒ\\Ţĺk~Ġið°|gtTĭĸ^xvKVGréAébUuMJVÃO¡qĂXËSģãlýà_juYÛÒBG^éÖ¶§EGÅzěƯ¤EkN[kdåucé¬dnYpAyČ{`]þ±X\\ÞÈk¡ĬjàhÂƄ¢Hè ŔâªLĒ^Öm¶ħĊAǦė¸zÚGn£¾rªŀÜt¬@ÖÚSx~øOŒŶÐÂæȠ\\ÈÜObĖw^oÞLf¬°bI lTØBÌF£Ć¹gñĤaYt¿¤VSñK¸¤nM¼JE±½¸ñoÜCƆæĪ^ĚQÖ¦^f´QüÜÊz¯lzUĺš@ìp¶n]sxtx¶@~ÒĂJb©gk{°~c°`Ô¬rV\\la¼¤ôá`¯¹LCÆbxEræOv[H­[~|aB£ÖsºdAĐzNÂðsÞÆĤªbab`ho¡³F«èVZs\\\\ÔRzpp®SĪº¨ÖºNĳd`a¦¤F³¢@`¢ĨĀìhYvlĆº¦Ċ~nS|gźv^kGÆÀè·'
-          ]
-        ],
-        encodeOffsets: [
-          [
-            [111707, 21520],
-            [113706, 26955]
-          ]
-        ]
-      },
-      properties: { cp: [108.5, 23.5], name: '广西', childNum: 2 }
-    },
-    {
-      id: '460000',
-      geometry: {
-        type: 'Polygon',
-        coordinates: ['@@¦Ŝil¢XƦƞòïè§ŞCêɕrŧůÇąĻõ·ĉ³œ̅kÇm@ċȧŧĥĽʉ­ƅſȓÒË¦ŝE}ºƑ[ÍĜȋ gÎfǐÏĤ¨êƺ\\Ɔ¸ĠĎvʄȀÐ¾jNðĀÒRZǆzÐĊ¢DÀɘZ'],
-        encodeOffsets: [[112750, 20508]]
-      },
-      properties: { cp: [110, 19.5], name: '海南', childNum: 1 }
-    },
-    {
-      id: '510000',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
-          [
-            '@@LqSn',
-            '@@ĆOìÛÐ@ĞǔNY{¤Á§di´ezÝúØãwIþËQÇ¦ÃqÉSJ»ĂéʔõÔƁİlƞ¹§ĬqtÀƄmÀêErĒtD®ċæcQE®³^ĭ¥©l}äQtoŖÜqÆkµªÔĻĴ¡@Ċ°B²Èw^^RsºTĀ£ŚæQPJvÄz^Đ¹Æ¯fLà´GC²dt­ĀRt¼¤ĦOðğfÔðDŨŁĞƘïPÈ®âbMüÀXZ ¸£@Å»»QÉ­]dsÖ×_Í_ÌêŮPrĔĐÕGĂeZÜîĘqBhtO ¤tE[h|YÔZśÎs´xº±Uñt|OĩĠºNbgþJy^dÂY Į]Řz¦gC³R`Āz¢Aj¸CL¤RÆ»@­Ŏk\\Ç´£YW}z@Z}Ã¶oû¶]´^NÒ}èNªPÍy¹`S°´ATeVamdUĐwʄvĮÕ\\uÆŗ¨Yp¹àZÂmWh{á}WØǍÉüwga§ßAYrÅÂQĀÕ¬LŐý®Xøxª½Ű¦¦[þ`ÜUÖ´òrÙŠ°²ÄkĳnDX{U~ET{ļº¦PZcjF²Ė@pg¨B{u¨ŦyhoÚD®¯¢ WòàFÎ¤¨GDäz¦kŮPġqË¥À]eâÚ´ªKxīPÖ|æ[xÃ¤JÞĥsNÖ½I¬nĨY´®ÐƐmDŝuäđđEbee_v¡}ìęǊē}qÉåT¯µRs¡M@}ůaa­¯wvƉåZw\\Z{åû`[±oiJDÅ¦]ĕãïrG réÏ·~ąSfy×Í·ºſƽĵȁŗūmHQ¡Y¡®ÁÃ×t«­T¤JJJyJÈ`Ohß¦¡uËhIyCjmÿwZGTiSsOB²fNmsPa{M{õE^Hj}gYpaeu¯oáwHjÁ½M¡pMuåmni{fk\\oÎqCwEZ¼KĝAy{m÷LwO×SimRI¯rKõBS«sFe]fµ¢óY_ÆPRcue°Cbo×bd£ŌIHgtrnyPt¦foaXďxlBowz_{ÊéWiêEGhÜ¸ºuFĈIxf®Y½ĀǙ]¤EyF²ċw¸¿@g¢§RGv»áW`ÃĵJwi]t¥wO­½a[×]`Ãi­üL¦LabbTÀåc}ÍhÆh®BHî|îºÉk­¤Sy£ia©taį·Ɖ`ō¥UhOĝLk}©Fos´JmµlŁuønÑJWÎªYÀïAetTŅÓGË«bo{ıwodƟ½OġÜÂµxàNÖ¾P²§HKv¾]|BÆåoZ`¡Ø`ÀmºĠ~ÌÐ§nÇ¿¤]wğ@srğu~Io[é±¹ ¿ſđÓ@qg¹zƱřaí°KtÇ¤V»Ã[ĩǭƑ^ÇÓ@áťsZÏÅĭƋěpwDóÖáŻneQËq·GCœýS]x·ýq³OÕ¶Qzßti{řáÍÇWŝŭñzÇWpç¿JXĩè½cFÂLiVjx}\\NŇĖ¥GeJA¼ÄHfÈu~¸Æ«dE³ÉMA|bÒćhG¬CMõƤąAvüVéŀ_VÌ³ĐwQj´·ZeÈÁ¨X´Æ¡Qu·»ÕZ³ġqDoy`L¬gdp°şp¦ėìÅĮZ°Iähzĵf²å ĚÑKpIN|Ñz]ń·FU×é»R³MÉ»GM«kiér}Ã`¹ăÞmÈnÁîRǀ³ĜoİzŔwǶVÚ£À]ɜ»ĆlƂ²ĠþTº·àUȞÏʦ¶I«dĽĢdĬ¿»Ĕ×h\\c¬ä²GêëĤł¥ÀǿżÃÆMº}BÕĢyFVvwxBèĻĒ©Ĉt@Ğû¸£B¯¨ˋäßkķ½ªôNÔ~t¼Ŵu^s¼{TA¼ø°¢İªDè¾Ň¶ÝJ®Z´ğ~Sn|ªWÚ©òzPOȸbð¢|øĞA'
-          ]
-        ],
-        encodeOffsets: [
-          [
-            [108815, 30935],
-            [100197, 35028]
-          ]
-        ]
-      },
-      properties: { cp: [103.5, 30.6], name: '四川', childNum: 2 }
-    },
-    {
-      id: '520000',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
-          [
-            '@@G\\lY£cj',
-            '@@q|mc¯vÏV',
-            '@@hÑ£IsNgßHHªķÃh_¹¡ĝÄ§ń¦uÙùgS¯JH|sÝÅtÁïyMDč»eÕtA¤{b\\}G®u\\åPFqwÅaDK°ºâ_£ùbµmÁÛĹM[q|hlaªāI}Ñµ@swtwm^oµDéĽŠyVky°ÉûÛR³e¥]RÕěħ[ƅåÛDpJiVÂF²I»mN·£LbÒYbWsÀbpkiTZĄă¶Hq`ĥ_J¯ae«KpÝx]aĕÛPÇȟ[ÁåŵÏő÷Pw}TÙ@Õs«ĿÛq©½m¤ÙH·yǥĘĉBµĨÕnđ]K©œáGçş§ÕßgǗĦTèƤƺ{¶ÉHÎd¾ŚÊ·OÐjXWrãLyzÉAL¾ę¢bĶėy_qMĔąro¼hĊw¶øV¤w²Ĉ]ÊKx|`ź¦ÂÈdrcÈbe¸`I¼čTF´¼Óýȃr¹ÍJ©k_șl³´_pĐ`oÒh¶pa^ÓĔ}D»^Xy`d[KvJPhèhCrĂĚÂ^Êƌ wZL­Ġ£ÁbrzOIlMMĪŐžËr×ÎeŦtw|¢mKjSǘňĂStÎŦEtqFT¾Eì¬¬ôxÌO¢ K³ŀºäYPVgŎ¦ŊmŞ¼VZwVlz¤£Tl®ctĽÚó{G­AÇge~Îd¿æaSba¥KKûj®_Ä^\\Ø¾bP®¦x^sxjĶI_Ä Xâ¼Hu¨Qh¡À@Ëô}±GNìĎlT¸`V~R°tbÕĊ`¸úÛtÏFDu[MfqGH·¥yAztMFe|R_GkChZeÚ°tov`xbDnÐ{E}ZèxNEÞREn[Pv@{~rĆAB§EO¿|UZ~ìUf¨J²ĂÝÆsªB`s¶fvö¦Õ~dÔq¨¸º»uù[[§´sb¤¢zþF¢ÆÀhÂW\\ıËIÝo±ĭŠ£þÊs}¡R]ěDg´VG¢j±®èºÃmpU[Áëº°rÜbNu¸}º¼`niºÔXĄ¤¼ÔdaµÁ_ÃftQQgR·Ǔv}Ý×ĵ]µWc¤F²OĩųãW½¯K©]{LóµCIµ±Mß¿h©āq¬o½~@i~TUxð´Đhw­ÀEîôuĶb[§nWuMÆJl½]vuıµb'
-          ]
-        ],
-        encodeOffsets: [
-          [
-            [112158, 27383],
-            [112105, 27474],
-            [112095, 27476]
-          ]
-        ]
-      },
-      properties: { cp: [106.7, 26.6], name: '贵州', childNum: 3 }
-    },
-    {
-      id: '530000',
-      geometry: {
-        type: 'Polygon',
-        coordinates: [
-          '@@[ùx½}ÑRHYīĺûsÍniEoã½Ya²ė{c¬ĝgĂsAØÅwďõzFjw}«Dx¿}Uũlê@HÅ­F¨ÇoJ´Ónũuą¡Ã¢pÒÅØ TF²xa²ËXcÊlHîAßËŁkŻƑŷÉ©hW­æßUËs¡¦}teèÆ¶StÇÇ}Fd£jĈZĆÆ¤Tč\\D}O÷£U§~ŃGåŃDĝ¸Tsd¶¶Bª¤u¢ŌĎo~t¾ÍŶÒtD¦ÚiôözØX²ghįh½Û±¯ÿm·zR¦Ɵ`ªŊÃh¢rOÔ´£Ym¼èêf¯ŪĽncÚbw\\zlvWªâ ¦gmĿBĹ£¢ƹřbĥkǫßeeZkÙIKueT»sVesbaĕ  ¶®dNĄÄpªy¼³BE®lGŭCǶwêżĔÂepÍÀQƞpC¼ŲÈ­AÎô¶RäQ^Øu¬°_Èôc´¹ò¨PÎ¢hlĎ¦´ĦÆ´sâÇŲPnÊD^¯°Upv}®BPÌªjǬxSöwlfòªvqĸ|`H­viļndĜ­Ćhňem·FyÞqóSį¯³X_ĞçêtryvL¤§z¦c¦¥jnŞklD¤øz½ĜàĂŧMÅ|áƆàÊcðÂFÜáŢ¥\\\\ºİøÒÐJĴîD¦zK²ǏÎEh~CD­hMn^ÌöÄ©ČZÀaüfɭyœpį´ěFűk]Ôě¢qlÅĆÙa¶~ÄqêljN¬¼HÊNQ´ê¼VØ¸E^ŃÒyM{JLoÒęæe±Ķygã¯JYÆĭĘëo¥Šo¯hcK«z_prC´ĢÖY¼ v¸¢RÅW³Â§fÇ¸Yi³xR´ďUË`êĿUûuĆBƣöNDH«ĈgÑaB{ÊNF´¬c·Åv}eÇÃGB»If¦HňĕM~[iwjUÁKE¾dĪçWIèÀoÈXòyŞŮÈXâÎŚj|àsRyµÖPr´þ ¸^wþTDŔHr¸RÌmfżÕâCôoxĜƌÆĮÐYtâŦÔ@]ÈǮƒ\\Ī¼Ä£UsÈ¯LbîƲŚºyhr@ĒÔƀÀ²º\\êpJ}ĠvqtĠ@^xÀ£È¨mËÏğ}n¹_¿¢×Y_æpÅA^{½Lu¨GO±Õ½ßM¶wÁĢÛPƢ¼pcĲx|apÌ¬HÐŊSfsðBZ¿©XÏÒKk÷Eû¿SrEFsÕūkóVǥŉiTL¡n{uxţÏhôŝ¬ğōNNJkyPaqÂğ¤K®YxÉƋÁ]āęDqçgOgILu\\_gz]W¼~CÔē]bµogpÑ_oď`´³Țkl`IªºÎȄqÔþ»E³ĎSJ»_f·adÇqÇc¥Á_Źw{L^É±ćxU£µ÷xgĉp»ĆqNē`rĘzaĵĚ¡K½ÊBzyäKXqiWPÏÉ¸½řÍcÊG|µƕƣGË÷k°_^ý|_zċBZocmø¯hhcæ\\lMFlư£ĜÆyHF¨µêÕ]HAàÓ^it `þßäkĤÎT~Wlÿ¨ÔPzUCNVv [jâôDôď[}z¿msSh¯{jïğl}šĹ[őgK©U·µË@¾m_~q¡f¹ÅË^»f³ø}Q¡ÖË³gÍ±^Ç\\ëÃA_¿bWÏ[¶ƛé£F{īZgm@|kHǭƁć¦UĔť×ëǟeċ¼ȡȘÏíBÉ£āĘPªĳ¶ŉÿy©nď£G¹¡I±LÉĺÑdĉÜW¥}gÁ{aqÃ¥aıęÏZÁ`'
-        ],
-        encodeOffsets: [[104636, 22969]]
-      },
-      properties: { cp: [102, 24.7], name: '云南', childNum: 1 }
-    },
-    {
-      id: '540000',
-      geometry: {
-        type: 'Polygon',
-        coordinates: [
-          '@@ÂhľxŖxÒVºÅâAĪÝȆµę¯Ňa±r_w~uSÕňqOj]ɄQ£ZUDûoY»©M[L¼qãË{VÍçWVi]ë©Ä÷àyƛhÚU°adcQ~Mx¥caÛcSyFÖk­uRýq¿ÔµQĽ³aG{¿FµëªéĜÿª@¬·K·àariĕĀ«V»ŶĴūgèLǴŇƶaftèBŚ£^âǐÝ®M¦ÁǞÿ¬LhJ¾óƾÆºcxwf]Y´¦|QLn°adĊ\\¨oǀÍŎ´ĩĀd`tÊQŞŕ|¨C^©Ĉ¦¦ÎJĊ{ëĎjª²rÐl`¼Ą[t|¦Stè¾PÜK¸dƄı]s¤î_v¹ÎVòŦj£Əsc¬_Ğ´|Ł¦Av¦w`ăaÝaa­¢e¤ı²©ªSªÈMĄwÉØŔì@T¤Ę\\õª@þo´­xA sÂtŎKzó²ÇČµ¢r^nĊ­Æ¬×üG¢³ {âĊ]G~bÀgVjzlhǶfOfdªB]pjTOtĊn¤}®¦Č¥d¢¼»ddY¼t¢eȤJ¤}Ǿ¡°§¤AÐlc@ĝsªćļđAçwxUuzEÖġ~AN¹ÄÅȀŻ¦¿ģŁéì±Hãd«g[Ø¼ēÀcīľġ¬cJµÐʥVȝ¸ßS¹ý±ğkƁ¼ą^ɛ¤Ûÿb[}¬ōõÃ]ËNm®g@Bg}ÍF±ǐyL¥íCIĳÏ÷Ñį[¹¦[âšEÛïÁÉdƅß{âNÆāŨß¾ě÷yC£k­´ÓH@Â¹TZ¥¢į·ÌAÐ§®Zcv½Z­¹|ÅWZqgW|ieZÅYVÓqdqbc²R@c¥Rã»GeeƃīQ}J[ÒK¬Ə|oėjġĠÑN¡ð¯EBčnwôɍėª²CλŹġǝʅįĭạ̃ūȹ]ΓͧgšsgȽóϧµǛęgſ¶ҍć`ĘąŌJÞä¤rÅň¥ÖÁUětęuůÞiĊÄÀ\\Æs¦ÓRb|Â^řÌkÄŷ¶½÷f±iMÝ@ĥ°G¬ÃM¥n£Øąğ¯ß§aëbéüÑOčk£{\\eµª×MÉfm«Ƒ{Å×Gŏǩãy³©WÑăû··Qòı}¯ãIéÕÂZ¨īès¶ZÈsæĔTŘvgÌsN@îá¾ó@ÙwU±ÉTå»£TđWxq¹Zobs[×¯cĩvėŧ³BM|¹kªħ¥TzNYnÝßpęrñĠĉRS~½ěVVµõ«M££µBĉ¥áºae~³AuĐh`Ü³ç@BÛïĿa©|z²Ý¼D£àč²ŸIûI āóK¥}rÝ_Á´éMaň¨~ªSĈ½½KÙóĿeƃÆB·¬ën×W|Uº}LJrƳlŒµ`bÔ`QÐÓ@s¬ñIÍ@ûws¡åQÑßÁ`ŋĴ{ĪTÚÅTSÄ³Yo|Ç[Ç¾µMW¢ĭiÕØ¿@MhpÕ]jéò¿OƇĆƇpêĉâlØwěsǩĵ¸cbU¹ř¨WavquSMzeo_^gsÏ·¥Ó@~¯¿RiīB\\qTGªÇĜçPoÿfñòą¦óQīÈáPābß{ZŗĸIæÅhnszÁCËìñÏ·ąĚÝUm®ó­L·ăUÈíoù´Êj°ŁŤ_uµ^°ìÇ@tĶĒ¡ÆM³Ģ«İĨÅ®ğRāðggheÆ¢zÊ©Ô\\°ÝĎz~ź¤PnMĪÖB£kné§żćĆKĒ°¼L¶èâz¨u¦¥LDĘz¬ýÎmĘd¾ßFzhg²Fy¦ĝ¤ċņbÎ@yĄæm°NĮZRÖíJ²öLĸÒ¨Y®ƌÐVàtt_ÚÂyĠz]ŢhzĎ{ÂĢXc|ÐqfO¢¤ögÌHNPKŖUú´xx[xvĐCûĀìÖT¬¸^}Ìsòd´_KgžLĴÀBon|H@Êx¦BpŰŌ¿fµƌA¾zǈRx¶FkĄźRzŀ~¶[´HnªVƞuĒ­È¨ƎcƽÌm¸ÁÈM¦x͊ëÀxǆBú^´W£dkɾĬpw˂ØɦļĬIŚÊnŔa¸~J°îlɌxĤÊÈðhÌ®gT´øàCÀ^ªerrƘd¢İP|Ė ŸWªĦ^¶´ÂLaT±üWƜǀRÂŶUńĖ[QhlLüAÜ\\qRĄ©'
-        ],
-        encodeOffsets: [[90849, 37210]]
-      },
-      properties: { cp: [91, 30.5], name: '西藏', childNum: 1 }
-    },
-    {
-      id: '610000',
-      geometry: {
-        type: 'Polygon',
-        coordinates: [
-          '@@¸ÂW¢xR­Fq§uF@N¢XLRMº[ğȣſï|¥Jkc`sŉǷ£Y³WN«ùMëï³ÛIg÷±mTșÚÒķø©þ¥yÓğęmWµÎumZyOŅƟĥÓ~sÑL¤µaÅY¦ocyZ{y c]{Ta©`U_Ěē£ωÊƍKùK¶ȱÝƷ§{û»ÅÁȹÍéuĳ|¹cÑdìUYOuFÕÈYvÁCqÓTǢí§·S¹NgV¬ë÷Át°DØ¯C´ŉƒópģ}ąiEËFéGU¥×K§­¶³BČ}C¿åċ`wġB·¤őcƭ²ő[Å^axwQOñJÙïŚĤNĔwƇÄńwĪ­o[_KÓª³ÙnKÇěÿ]ďă_d©·©Ýŏ°Ù®g]±ß×¥¬÷m\\iaǑkěX{¢|ZKlçhLtŇîŵœè[É@ƉĄEtƇÏ³­ħZ«mJ×¾MtÝĦ£IwÄå\\Õ{OwĬ©LÙ³ÙTª¿^¦rÌĢŭO¥lãyC§HÍ£ßEñX¡­°ÙCgpťzb`wIvA|¥hoĕ@E±iYd¥OÿµÇvPW|mCĴŜǂÒW¶¸AĜh^Wx{@¬­F¸¡ķn£P|ªĴ@^ĠĈæbÔc¶lYi^MicĎ°Â[ävï¶gv@ÀĬ·lJ¸sn|¼u~a]ÆÈtŌºJpþ£KKf~¦UbyäIĺãnÔ¿^­ŵMThĠÜ¤ko¼Ŏìąǜh`[tRd²Ĳ_XPrɲlXiL§à¹H°Ȧqº®QCbAŌJ¸ĕÚ³ĺ§ `d¨YjiZvRĺ±öVKkjGȊÄePĞZmļKÀ[`ösìhïÎoĬdtKÞ{¬èÒÒBÔpĲÇĬJŊ¦±J«[©ārHµàåVKe§|P²ÇÓ·vUzgnN¾yI@oHĆÛķhxen¡QQ±ƝJǖRbzy¸ËÐl¼EºpĤ¼x¼½~Ğà@ÚüdK^mÌSjp²ȮµûGĦ}Ħðǚ¶òƄjɂz°{ºØkÈęâ¦jªBg\\ċ°s¬]jú EȌǆ¬stRÆdĠİwÜ¸ôW¾ƮłÒ_{Ìû¼jº¹¢GǪÒ¯ĘZ`ºŊecņą~BÂgzpâēòYƲȐĎ'
-        ],
-        encodeOffsets: [[113634, 40474]]
-      },
-      properties: { cp: [108.9, 34.26], name: '陕西', childNum: 1 }
-    },
-    {
-      id: '620000',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
-          [
-            '@@Vu_^',
-            '@@ųEĠtt~nkh`Q¦ÅÄÜdwAb×ĠąJ¤DüègĺqBqj°lI¡Ĩ¶ĖIHdjÎB°aZ¢KJO[|A£Dx}NĂ¬HUnrk kp¼Y kMJn[aGáÚÏ[½rc}aQxOgsPMnUsncZsKúvAtÞġ£®ĀYKdnFw¢JE°Latf`¼h¬we|Æbj}GA·~W`¢MC¤tL©Ĳ°qdfObÞĬ¹ttu`^ZúE`[@Æsîz®¡CƳƜG²R¢RmfwĸgÜą G@pzJM½mhVy¸uÈÔO±¨{LfæU¶ßGĂq\\ª¬²I¥IŉÈīoıÓÑAçÑ|«LÝcspīðÍgtë_õ\\ĉñLYnĝgRǡÁiHLlõUĹ²uQjYi§Z_c¨´ĹĖÙ·ŋIaBD­R¹ȥr¯GºßK¨jWkɱOqWĳ\\a­Q\\sg_ĆǛōëp»£lğÛgSŶN®À]ÓämĹãJaz¥V}Le¤Lýo¹IsŋÅÇ^bz³tmEÁ´a¹cčecÇNĊãÁ\\č¯dNj]jZµkÓdaćå]ğĳ@ ©O{¤ĸm¢E·®«|@Xwg]Aģ±¯XǁÑǳªcwQÚŝñsÕ³ÛV_ý¥\\ů¥©¾÷w©WÕÊĩhÿÖÁRo¸V¬âDb¨hûxÊ×ǌ~Zâg|XÁnßYoº§ZÅŘv[ĭÖʃuďxcVbnUSfB¯³_TzºÎO©çMÑ~M³]µ^püµÄY~y@X~¤Z³[Èōl@®Å¼£QK·Di¡ByÿQ_´D¥hŗy^ĭÁZ]cIzýah¹MĪğPs{ò²Vw¹t³ŜË[Ñ}X\\gsF£sPAgěp×ëfYHāďÖqēŭOÏëdLü\\it^c®RÊº¶¢H°mrY£B¹čIoľu¶uI]vģSQ{UŻÅ}QÂ|Ì°ƅ¤ĩŪU ęĄÌZÒ\\v²PĔ»ƢNHĂyAmƂwVm`]ÈbH`Ì¢²ILvĜH®¤Dlt_¢JJÄämèÔDëþgºƫaʎÌrêYi~ Îİ¤NpÀA¾Ĕ¼bð÷®üszMzÖĖQdȨýv§Tè|ªHÃ¾a¸|Ð ƒwKĢx¦ivr^ÿ ¸l öæfƟĴ·PJv}n\\h¹¶v·À|\\ƁĚN´ĜçèÁz]ġ¤²¨QÒŨTIlªťØ}¼˗ƦvÄùØEÂ«FïËIqōTvāÜŏíÛßÛVj³âwGăÂíNOPìyV³ŉĖýZso§HÑiYw[ß\\X¦¥c]ÔƩÜ·«jÐqvÁ¦m^ċ±R¦΋ƈťĚgÀ»IïĨʗƮ°ƝĻþÍAƉſ±tÍEÕÞāNUÍ¡\\ſčåÒʻĘm ƭÌŹöʥëQ¤µ­ÇcƕªoIýIÉ_mkl³ăƓ¦j¡YzŇi}Msßõīʋ }ÁVm_[n}eı­Uĥ¼ªI{Î§DÓƻėojqYhĹT©oūĶ£]ďxĩǑMĝq`B´ƃ˺Чç~²ņj@¥@đ´ί}ĥtPńÇ¾V¬ufÓÉCtÓ̻¹£G³]ƖƾŎĪŪĘ̖¨ʈĢƂlɘ۪üºňUðǜȢƢż̌ȦǼĤŊɲĖÂ­KqĘŉ¼ĔǲņɾªǀÞĈĂD½ĄĎÌŗĞrôñnN¼â¾ʄľԆ|Ǆ֦ज़ȗǉ̘̭ɺƅêgV̍ʆĠ·ÌĊv|ýĖÕWĊǎÞ´õ¼cÒÒBĢ͢UĜð͒s¨ňƃLĉÕÝ@ɛƯ÷¿Ľ­ĹeȏĳëCȚDŲyê×Ŗyò¯ļcÂßYtÁƤyAã˾J@ǝrý@¤rz¸oP¹ɐÚyáHĀ[JwcVeȴÏ»ÈĖ}ƒŰŐèȭǢόĀƪÈŶë;Ñ̆ȤМľĮEŔĹŊũ~ËUă{ĻƹɁύȩþĽvĽƓÉ@ēĽɲßǐƫʾǗĒpäWÐxnsÀ^ƆwW©¦cÅ¡Ji§vúF¶¨c~c¼īeXǚ\\đ¾JwÀďksãAfÕ¦L}waoZD½Ml«]eÒÅaÉ²áo½FõÛ]ĻÒ¡wYR£¢rvÓ®y®LFLzĈôe]gx}|KK}xklL]c¦£fRtív¦PŨ£',
-            '@@M T¥'
-          ]
-        ],
-        encodeOffsets: [
-          [
-            [108619, 36299],
-            [108594, 36341],
-            [108600, 36306]
-          ]
-        ]
-      },
-      properties: { cp: [104, 35.5], name: '甘肃', childNum: 3 }
-    },
-    {
-      id: '630000',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
-          [
-            '@@InJo',
-            '@@CÆ½OŃĦsΰ~Ē³¦@@Ņi±è}ШƄ˹A³r_ĞǒNĪĐw¤^ŬĵªpĺSZgrpiƼĘÔ¨C|ÍJ©Ħ»®VĲ~f\\m `UnÂ~ʌĬàöNt~ňjy¢ZiƔ¥Ąk´nl`JÊJþ©pdƖ®È£¶ìRʦźõƮËnʼėæÑƀĎ[¢VÎĂMÖÝÎF²sƊƀÎBļýƞ¯ʘƭðħ¼Jh¿ŦęΌƇ¥²Q]Č¥nuÂÏri¸¬ƪÛ^Ó¦d¥[Wàx\\ZjÒ¨GtpþYŊĕ´zUOëPîMĄÁxH´áiÜUàîÜŐĂÛSuŎrJðÌ¬EFÁú×uÃÎkrĒ{V}İ«O_ÌËĬ©ÓŧSRÑ±§Ģ£^ÂyèçěM³Ƃę{[¸¿uºµ[gt£¸OƤĿéYõ·kĀq]juw¥DĩƍõÇPéÄ½G©ã¤GuȧþRcÕĕNyyût­øï»a½ē¿BMoį£Íj}éZËqbʍƬh¹ìÿÓAçãnIÃ¡I`ks£CG­ěUy×Cy@¶ʡÊBnāzGơMē¼±O÷õJËĚăVĪũƆ£¯{ËL½ÌzżVR|ĠTbuvJvµhĻĖHAëáa­OÇðñęNwœľ·LmI±íĠĩPÉ×®ÿscB³±JKßĊ«`ađ»·QAmOVţéÿ¤¹SQt]]Çx±¯A@ĉĳ¢Óļ©l¶ÅÛrŕspãRk~¦ª]Į­´FRåd­ČsCqđéFn¿ÅƃmÉx{W©ºƝºįkÕƂƑ¸wWūÐ©ÈF£\\tÈ¥ÄRÈýÌJ lGr^×äùyÞ³fjc¨£ÂZ|ǓMĝÏ@ëÜőRĝ÷¡{aïȷPu°ËXÙ{©TmĠ}Y³­ÞIňµç½©C¡į÷¯B»|St»]vųs»}MÓ ÿʪƟǭA¡fs»PY¼c¡»¦cċ­¥£~msĉPSi^o©AecPeǵkgyUi¿h}aHĉ^|á´¡HØûÅ«ĉ®]m¡qċ¶±ÈyôōLÁstB®wn±ă¥HSòė£Së@×œÊăxÇN©©T±ª£Ĳ¡fb®Þbb_Ą¥xu¥B{łĝ³«`dƐt¤ťiñÍUuºí`£^tƃĲc·ÛLO½sç¥Ts{ă\\_»kÏ±q©čiìĉ|ÍI¥ć¥]ª§D{ŝŖÉR_sÿc³ĪōƿÎ§p[ĉc¯bKmR¥{³Ze^wx¹dƽÅ½ôIg §Mĕ ƹĴ¿ǣÜÍ]Ý]snåA{eƭ`ǻŊĿ\\ĳŬűYÂÿ¬jĖqßb¸L«¸©@ěĀ©ê¶ìÀEH|´bRľÓ¶rÀQþvl®ÕETzÜdb hw¤{LRdcb¯ÙVgƜßzÃôì®^jUèXÎ|UäÌ»rK\\ªN¼pZCüVY¤ɃRi^rPŇTÖ}|br°qňbĚ°ªiƶGQ¾²x¦PmlŜ[Ĥ¡ΞsĦÔÏâ\\ªÚŒU\\f¢N²§x|¤§xĔsZPòʛ²SÐqF`ªVÞŜĶƨVZÌL`¢dŐIqr\\oäõFÎ·¤»Ŷ×h¹]ClÙ\\¦ďÌį¬řtTӺƙgQÇÓHţĒ´ÃbEÄlbʔC|CŮkƮ[ʼ¬ň´KŮÈΰÌĪ¶ƶlðļATUvdTGº̼ÔsÊDÔveMg'
-          ]
-        ],
-        encodeOffsets: [
-          [
-            [105308, 37219],
-            [95370, 40081]
-          ]
-        ]
-      },
-      properties: { cp: [97, 36], name: '青海', childNum: 2 }
-    },
-    {
-      id: '640000',
-      geometry: {
-        type: 'Polygon',
-        coordinates: [
-          '@@KëÀęĞ«Oęȿȕı]ŉ¡åįÕÔ«ǴõƪĚQÐZhv K°öqÀÑS[ÃÖHƖčËnL]ûcÙß@ĝ¾}w»»oģF¹»kÌÏ·{zP§B­¢íyÅt@@á]Yv_ssģ¼ißĻL¾ġsKD£¡N_X¸}B~HaiÅf{«x»ge_bsKF¯¡IxmELcÿZ¤­ĢÝsuBLùtYdmVtNmtOPhRw~bd¾qÐ\\âÙH\\bImlNZ»loqlVmGā§~QCw¤{A\\PKNY¯bFkC¥sks_Ã\\ă«¢ħkJi¯rrAhĹûç£CUĕĊ_ÔBixÅÙĄnªÑaM~ħpOu¥sîeQ¥¤^dkKwlL~{L~hw^ófćKyE­K­zuÔ¡qQ¤xZÑ¢^ļöÜ¾Ep±âbÊÑÆ^fk¬NC¾YpxbK~¥eÖäBlt¿Đx½I[ĒǙWf»Ĭ}d§dµùEuj¨IÆ¢¥dXªƅx¿]mtÏwßRĶX¢͎vÆzƂZò®ǢÌʆCrâºMÞzÆMÒÊÓŊZÄ¾r°Î®Ȉmª²ĈUªĚîøºĮ¦ÌĘk^FłĬhĚiĀĖ¾iİbjË'
-        ],
-        encodeOffsets: [[109366, 40242]]
-      },
-      properties: { cp: [106.1, 37.5], name: '宁夏', childNum: 1 }
-    },
-    {
-      id: '650000',
-      geometry: {
-        type: 'Polygon',
-        coordinates: [
-          '@@QØĔ²X¨~ǘBºjʐßØvKƔX¨vĊOÃ·¢i@~cĝe_«E}QxgɪëÏÃ@sÅyXoŖ{ô«ŸuXêÎf`C¹ÂÿÐGĮÕĞXŪōŸMźÈƺQèĽôe|¿ƸJR¤ĘEjcUóº¯Ĩ_ŘÁMª÷Ð¥OéÈ¿ÖğǤǷÂFÒzÉx[]­Ĥĝœ¦EP}ûƥé¿İƷTėƫœŕƅƱB»Đ±ēO¦E}`cȺrĦáŖuÒª«ĲπdƺÏØZƴwʄ¤ĖGĐǂZĶèH¶}ÚZצʥĪï|ÇĦMŔ»İĝǈì¥Βba­¯¥ǕǚkĆŵĦɑĺƯxūД̵nơʃĽá½M»òmqóŘĝčË¾ăCćāƿÝɽ©ǱŅ»ēėŊLrÁ®ɱĕģŉǻ̋ȥơŻǛȡVï¹Ň۩ûkɗġƁ§ʇė̕ĩũƽō^ƕUv£ƁQïƵkŏ½ΉÃŭÇ³LŇʻ«ƭ\\lŭD{ʓDkaFÃÄa³ŤđÔGRÈƚhSӹŚsİ«ĐË[¥ÚDkº^Øg¼ŵ¸£EÍöůŉT¡c_ËKYƧUśĵÝU_©rETÏʜ±OñtYwē¨{£¨uM³x½şL©Ùá[ÓÐĥ Νtģ¢\\śnkOw¥±T»ƷFɯàĩÞáB¹ÆÑUwŕĽw]kE½Èå~Æ÷QyěCFmĭZīŵVÁƿQƛûXS²b½KÏ½ĉS©ŷXĕ{ĕK·¥Ɨcqq©f¿]ßDõU³h­gËÇïģÉɋwk¯í}I·œbmÉřīJɥĻˁ×xoɹīlc¤³Xù]ǅA¿w͉ì¥wÇN·ÂËnƾƍdÇ§đ®ƝvUm©³G\\}µĿQyŹlăµEwǇQ½yƋBe¶ŋÀůo¥AÉw@{Gpm¿AĳŽKLh³`ñcËtW±»ÕSëüÿďDu\\wwwù³VLŕOMËGh£õP¡erÏd{ġWÁč|yšg^ğyÁzÙs`s|ÉåªÇ}m¢Ń¨`x¥ù^}Ì¥H«YªƅAÐ¹n~ź¯f¤áÀzgÇDIÔ´AňĀÒ¶ûEYospõD[{ù°]uJqU|Soċxţ[õÔĥkŋÞŭZËºóYËüċrw ÞkrťË¿XGÉbřaDü·Ē÷AÃª[ÄäIÂ®BÕĐÞ_¢āĠpÛÄȉĖġDKwbmÄNôfƫVÉviǳHQµâFù­Âœ³¦{YGd¢ĚÜO {Ö¦ÞÍÀP^bƾl[vt×ĈÍEË¨¡Đ~´î¸ùÎhuè`¸HÕŔVºwĠââWò@{ÙNÝ´ə²ȕn{¿¥{l÷eé^eďXj©î\\ªÑòÜìc\\üqÕ[Č¡xoÂċªbØ­ø|¶ȴZdÆÂońéG\\¼C°ÌÆn´nxÊOĨŪƴĸ¢¸òTxÊǪMīĞÖŲÃɎOvʦƢ~FRěò¿ġ~åŊúN¸qĘ[Ĕ¶ÂćnÒPĒÜvúĀÊbÖ{Äî¸~Ŕünp¤ÂH¾ĄYÒ©ÊfºmÔĘcDoĬMŬS¤s²ʘÚžȂVŦ èW°ªB|ĲXŔþÈJĦÆæFĚêYĂªĂ]øªŖNÞüAfɨJ¯ÎrDDĤ`mz\\§~D¬{vJÂ«lµĂb¤pŌŰNĄ¨ĊXW|ų ¿¾ɄĦƐMTòP÷fØĶK¢ȝ˔Sô¹òEð­`Ɩ½ǒÂň×äı§ĤƝ§C~¡hlåǺŦŞkâ~}FøàĲaĞfƠ¥Ŕd®U¸źXv¢aƆúŪtŠųƠjdƺƺÅìnrh\\ĺ¯äɝĦ]èpĄ¦´LƞĬ´ƤǬ˼Ēɸ¤rºǼ²¨zÌPðŀbþ¹ļD¢¹\\ĜÑŚ¶ZƄ³âjĦoâȴLÊȮĐ­ĚăÀêZǚŐ¤qȂ\\L¢ŌİfÆs|zºeªÙæ§΢{Ā´ƐÚ¬¨Ĵà²łhʺKÞºÖTiƢ¾ªì°`öøu®Ê¾ãÖ'
-        ],
-        encodeOffsets: [[88824, 50096]]
-      },
-      properties: { cp: [87, 41], name: '新疆', childNum: 1 }
-    },
-    {
-      id: '110000',
-      geometry: {
-        type: 'Polygon',
-        coordinates: [
-          '@@RºaYÕQaúÍÔiþĩȨWĢü|Ėu[qb[swP@ÅğP¿{\\¯Y²·Ñ¨j¯X\\¯MSvU¯YIŕY{[fk­VÁûtŷmiÍt_H»Ĩ±d`¹­{bwYr³S]§§o¹qGtm_SŧoaFLgQN_dV@Zom_ć\\ßW´ÕiœRcfio§ËgToÛJíĔóu|wP¤XnO¢ÉŦ¯pNÄā¤zâŖÈRpŢZÚ{GrFt¦Òx§ø¹RóäV¤XdżâºWbwŚ¨Ud®bêņ¾jnŎGŃŶnzÚScîĚZen¬'
-        ],
-        encodeOffsets: [[119421, 42013]]
-      },
-      properties: { cp: [116.4, 40.24], name: '北京', childNum: 1 }
-    },
-    {
-      id: '120000',
-      geometry: {
-        type: 'Polygon',
-        coordinates: [
-          '@@ŬgX§Ü«E¶FÌ¬O_ïlÁgz±AXeµÄĵ{¶]gitgIj·¥ì_iU¨ÐƎk}ĕ{gBqGf{¿aU^fIư³õ{YıëNĿk©ïËZukāAīlĕĥs¡bġ«@dekąI[nlPqCnp{ō³°`{PNdƗqSÄĻNNâyj]äÒD ĬH°Æ]~¡HO¾X}ÐxgpgWrDGpù^LrzWxZ^¨´T\\|~@IzbĤjeĊªz£®ĔvěLmV¾Ô_ÈNW~zbĬvG²ZmDM~~'
-        ],
-        encodeOffsets: [[120237, 41215]]
-      },
-      properties: { cp: [116.87, 39.5], name: '天津', childNum: 1 }
-    },
-    {
-      id: '310000',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
-          [
-            '@@ɧư¬EpƸÁx]',
-            '@@©²',
-            '@@MA',
-            '@@QpªKWT§¨',
-            '@@bŝÕÕEȣÚƥêImɇǦèÜĠÚÄÓŴ·ʌÇ',
-            '@@Sô¤r]ìƬįǜûȬɋŭ×^sYɍDŋŽąñCG²«ªč@h_p¯A{oloY¬j@Ĳ`gQÚpptǀ^MĲvtbe´Rh@oj¨',
-            '@@ÆLH{a}Eo¦'
-          ]
-        ],
-        encodeOffsets: [
-          [
-            [124702, 32062],
-            [124547, 32200],
-            [124808, 31991],
-            [124726, 32110],
-            [124903, 32376],
-            [124065, 32166],
-            [124870, 31965]
-          ]
-        ]
-      },
-      properties: { cp: [121.4, 31.1], name: '上海', childNum: 7 }
-    },
-    {
-      id: '500000',
-      geometry: {
-        type: 'Polygon',
-        coordinates: [
-          '@@TÂÛ`Ùƅően½SêqDu[RåÍ¹÷eXÍy¸_ĺę}÷`M¯ċfCVµqŉ÷Zgg^d½pDOÎCn^uf²ènh¼WtƏxRGg¦pVFI±G^Ic´ecGĹÞ½sëÆNäÌ¤KÓe¯|R¸§LÜkPoïƭNï¶}Gywdiù©nkĈzj@Óc£»Wă¹Óf§c[µo·Ó|MvÛaq½«è\\ÂoVnÓØÍ²«bq¿ehCĜ^Q~ Évýş¤²ĮpEĶyhsŊwH½¿gÅ¡ýE¡ya£³t\\¨\\vú¹¼©·Ñr_oÒý¥et³]Et©uÖ¥±ă©KVeë]}wVPÀFA¨ąB}qTjgRemfFmQFÝMyùnÑAmÑCawu_p¯sfÛ_gI_pNysB¦zG¸rHeN\\CvEsÐñÚkcDÖĉsaQ¯}_UzÁē}^R Äd^ÍĸZ¾·¶`wećJE¹vÛ·HgéFXjÉê`|ypxkAwWĐpb¥eOsmzwqChóUQl¥F^lafanòsrEvfQdÁUVfÎvÜ^eftET¬ôA\\¢sJnQTjPØxøK|nBzĞ»LYFDxÓvr[ehľvN¢o¾NiÂxGpâ¬zbfZo~hGi]öF||NbtOMn eA±tPTLjpYQ|SHYĀxinzDJÌg¢và¥Pg_ÇzIIII£®S¬ØsÎ¼¥¨^LnGĲļĲƤjÎƀƾ¹¸ØÎezĆT¸}êÐqHðqĖä¥^CÆIj²p\\_ æüY|[YxƊæu°xb®Űb@~¢NQt°¶Sæ Ê~rǉĔëĚ¢~uf`faĔJåĊnÔ]jƎćÊ@£¾a®£Ű{ŶĕFègLk{Y|¡ĜWƔtƬJÑxq±ĢN´òKLÈÃ¼D|s`ŋć]Ã`đMùƱ¿~Y°ħ`ƏíW½eI½{aOIrÏ¡ĕŇapµÜƃġ²'
-        ],
-        encodeOffsets: [[111728, 31311]]
-      },
-      properties: { cp: [107.5, 29.7], name: '重庆', childNum: 1 }
-    },
-    {
-      id: '810000',
-      geometry: {
-        type: 'MultiPolygon',
-        coordinates: [
-          [
-            '@@AlFi',
-            '@@mp',
-            '@@EpHo',
-            '@@rMUwAS¬]',
-            '@@ea¢pl¸Eõ¹hj[]ÔCÎ@lj¡uBX´AI¹[yDU]W`çwZkmcMpÅv}IoJlcafŃK°ä¬XJmÐ đhI®æÔtSHnEÒrÄc'
-          ]
-        ],
-        encodeOffsets: [
-          [
-            [117111, 23002],
-            [117072, 22876],
-            [117045, 22887],
-            [116882, 22747],
-            [116975, 23082]
-          ]
-        ]
-      },
-      properties: { cp: [115.2, 22.75], name: '香港', childNum: 5 }
-    },
-    {
-      id: '820000',
-      geometry: {
-        type: 'Polygon',
-        coordinates: ['@@áw{Îr'],
-        encodeOffsets: [[116285, 22746]]
-      },
-      properties: { cp: [114.52, 22.86], name: '澳门', childNum: 1 }
-    }
-  ],
-  UTF8Encoding: true
+  echarts.registerMap('world', world)
+  echarts.registerMap('china', china)
+  echarts.registerMap('asia', asia)
+  echarts.registerMap('shanghai', shanghai)
 }
 
 export function getMapOptions() {
   // 2. 指定配置和数据
   // 2. 指定配置和数据
   var geoCoordMap = {
-    上海: [121.4648, 31.2891],
-    东莞: [113.8953, 22.901],
-    东营: [118.7073, 37.5513],
-    中山: [113.4229, 22.478],
-    临汾: [111.4783, 36.1615],
-    临沂: [118.3118, 35.2936],
-    丹东: [124.541, 40.4242],
-    丽水: [119.5642, 28.1854],
-    乌鲁木齐: [87.9236, 43.5883],
-    佛山: [112.8955, 23.1097],
-    保定: [115.0488, 39.0948],
-    兰州: [103.5901, 36.3043],
-    包头: [110.3467, 41.4899],
-    北京: [116.4551, 40.2539],
-    北海: [109.314, 21.6211],
-    南京: [118.8062, 31.9208],
-    南宁: [108.479, 23.1152],
-    南昌: [116.0046, 28.6633],
-    南通: [121.1023, 32.1625],
-    厦门: [118.1689, 24.6478],
-    台州: [121.1353, 28.6688],
-    合肥: [117.29, 32.0581],
-    呼和浩特: [111.4124, 40.4901],
-    咸阳: [108.4131, 34.8706],
-    哈尔滨: [127.9688, 45.368],
-    唐山: [118.4766, 39.6826],
-    嘉兴: [120.9155, 30.6354],
-    大同: [113.7854, 39.8035],
-    大连: [122.2229, 39.4409],
-    天津: [117.4219, 39.4189],
-    太原: [112.3352, 37.9413],
-    威海: [121.9482, 37.1393],
-    宁波: [121.5967, 29.6466],
-    宝鸡: [107.1826, 34.3433],
-    宿迁: [118.5535, 33.7775],
-    常州: [119.4543, 31.5582],
-    广州: [113.5107, 23.2196],
-    廊坊: [116.521, 39.0509],
-    延安: [109.1052, 36.4252],
-    张家口: [115.1477, 40.8527],
-    徐州: [117.5208, 34.3268],
-    德州: [116.6858, 37.2107],
-    惠州: [114.6204, 23.1647],
-    成都: [103.9526, 30.7617],
-    扬州: [119.4653, 32.8162],
-    承德: [117.5757, 41.4075],
-    拉萨: [91.1865, 30.1465],
-    无锡: [120.3442, 31.5527],
-    日照: [119.2786, 35.5023],
-    昆明: [102.9199, 25.4663],
-    杭州: [119.5313, 29.8773],
-    枣庄: [117.323, 34.8926],
-    柳州: [109.3799, 24.9774],
-    株洲: [113.5327, 27.0319],
-    武汉: [114.3896, 30.6628],
-    汕头: [117.1692, 23.3405],
-    江门: [112.6318, 22.1484],
-    沈阳: [123.1238, 42.1216],
-    沧州: [116.8286, 38.2104],
-    河源: [114.917, 23.9722],
-    泉州: [118.3228, 25.1147],
-    泰安: [117.0264, 36.0516],
-    泰州: [120.0586, 32.5525],
-    济南: [117.1582, 36.8701],
-    济宁: [116.8286, 35.3375],
-    海口: [110.3893, 19.8516],
-    淄博: [118.0371, 36.6064],
-    淮安: [118.927, 33.4039],
-    深圳: [114.5435, 22.5439],
-    清远: [112.9175, 24.3292],
-    温州: [120.498, 27.8119],
-    渭南: [109.7864, 35.0299],
-    湖州: [119.8608, 30.7782],
-    湘潭: [112.5439, 27.7075],
-    滨州: [117.8174, 37.4963],
-    潍坊: [119.0918, 36.524],
-    烟台: [120.7397, 37.5128],
-    玉溪: [101.9312, 23.8898],
-    珠海: [113.7305, 22.1155],
-    盐城: [120.2234, 33.5577],
-    盘锦: [121.9482, 41.0449],
-    石家庄: [114.4995, 38.1006],
-    福州: [119.4543, 25.9222],
-    秦皇岛: [119.2126, 40.0232],
-    绍兴: [120.564, 29.7565],
-    聊城: [115.9167, 36.4032],
-    肇庆: [112.1265, 23.5822],
-    舟山: [122.2559, 30.2234],
-    苏州: [120.6519, 31.3989],
-    莱芜: [117.6526, 36.2714],
-    菏泽: [115.6201, 35.2057],
-    营口: [122.4316, 40.4297],
-    葫芦岛: [120.1575, 40.578],
-    衡水: [115.8838, 37.7161],
-    衢州: [118.6853, 28.8666],
-    西宁: [101.4038, 36.8207],
-    西安: [109.1162, 34.2004],
-    贵阳: [106.6992, 26.7682],
-    连云港: [119.1248, 34.552],
-    邢台: [114.8071, 37.2821],
-    邯郸: [114.4775, 36.535],
-    郑州: [113.4668, 34.6234],
-    鄂尔多斯: [108.9734, 39.2487],
-    重庆: [107.7539, 30.1904],
-    金华: [120.0037, 29.1028],
-    铜川: [109.0393, 35.1947],
-    银川: [106.3586, 38.1775],
-    镇江: [119.4763, 31.9702],
-    长春: [125.8154, 44.2584],
-    长沙: [113.0823, 28.2568],
-    长治: [112.8625, 36.4746],
-    阳泉: [113.4778, 38.0951],
-    青岛: [120.4651, 36.3373],
-    韶关: [113.7964, 24.7028]
+    Wellington: [174.4638, 41.172],
+    Sydney: [150.53, 33.55],
+    Tokyo: [139.42, 35.41],
+    Seoul: [126.5848, 37.2281],
+    HongKong: [113.4948, 22.0881],
+    ShangHai: [121.4648, 31.2891],
+    DongGuang: [113.8953, 22.901],
+    DongYing: [118.7073, 37.5513],
+    ZhongShan: [113.4229, 22.478],
+    LinFen: [111.4783, 36.1615],
+    LinXin: [118.3118, 35.2936],
+    DanDong: [124.541, 40.4242],
+    LiShui: [119.5642, 28.1854],
+    WuLuMuQi: [87.9236, 43.5883],
+    FoShan: [112.8955, 23.1097],
+    BaoDing: [115.0488, 39.0948],
+    LanZhou: [103.5901, 36.3043],
+    BaoTou: [110.3467, 41.4899],
+    BeiJing: [116.4551, 40.2539],
+    BeiHai: [109.314, 21.6211],
+    NanJing: [118.8062, 31.9208],
+    NanNing: [108.479, 23.1152],
+    NanChang: [116.0046, 28.6633],
+    NanTong: [121.1023, 32.1625],
+    XiaMen: [118.1689, 24.6478],
+    TaiZhou: [121.1353, 28.6688],
+    HeFei: [117.29, 32.0581],
+    HuHeHaoTe: [111.4124, 40.4901],
+    XianYang: [108.4131, 34.8706],
+    HaErBin: [127.9688, 45.368],
+    TangShan: [118.4766, 39.6826],
+    JiaXing: [120.9155, 30.6354],
+    DaTong: [113.7854, 39.8035],
+    DaLian: [122.2229, 39.4409],
+    TianJin: [117.4219, 39.4189],
+    TaiYuan: [112.3352, 37.9413],
+    WeiHai: [121.9482, 37.1393],
+    NingBo: [121.5967, 29.6466],
+    BaoJi: [107.1826, 34.3433],
+    SuQian: [118.5535, 33.7775],
+    ChangZhou: [119.4543, 31.5582],
+    GuangZhou: [113.5107, 23.2196],
+    LangFang: [116.521, 39.0509],
+    YanAn: [109.1052, 36.4252],
+    ZhangJiaKou: [115.1477, 40.8527],
+    XuZhou: [117.5208, 34.3268],
+    DeZhou: [116.6858, 37.2107],
+    HuiZhou: [114.6204, 23.1647],
+    ChengDu: [103.9526, 30.7617],
+    YangZhou: [119.4653, 32.8162],
+    ChenDe: [117.5757, 41.4075],
+    LaSa: [91.1865, 30.1465],
+    WuXi: [120.3442, 31.5527],
+    RiZhao: [119.2786, 35.5023],
+    KunMing: [102.9199, 25.4663],
+    HangZhou: [119.5313, 29.8773],
+    ZhaoZhuang: [117.323, 34.8926],
+    LiuZhou: [109.3799, 24.9774],
+    ZhuZhou: [113.5327, 27.0319],
+    WuHan: [114.3896, 30.6628],
+    ShanTou: [117.1692, 23.3405],
+    JiangMen: [112.6318, 22.1484],
+    ShenYang: [123.1238, 42.1216],
+    XiNing: [101.4038, 36.8207],
+    XiAn: [109.1162, 34.2004],
+    GuiYang: [106.6992, 26.7682],
+    LianYunGang: [119.1248, 34.552],
+    XingTai: [114.8071, 37.2821],
+    HanDan: [114.4775, 36.535],
+    ZhengZhou: [113.4668, 34.6234],
+    ChongQing: [107.7539, 30.1904],
+    JinHua: [120.0037, 29.1028],
+    TongChuang: [109.0393, 35.1947],
+    YinChuang: [106.3586, 38.1775],
+    ZhenJiang: [119.4763, 31.9702],
+    ChangChun: [125.8154, 44.2584],
+    ChangSha: [113.0823, 28.2568],
+    ChangZhi: [112.8625, 36.4746],
+    YangQuan: [113.4778, 38.0951],
+    QingDao: [120.4651, 36.3373],
+    ShaoGuang: [113.7964, 24.7028]
   }
 
   var XAData = [
-    [{ name: '北京' }, { name: '上海', value: 100 }],
-    [{ name: '西安' }, { name: '上海', value: 100 }],
-    [{ name: '成都' }, { name: '上海', value: 100 }],
-    [{ name: '无锡' }, { name: '上海', value: 100 }],
-    [{ name: '广州' }, { name: '上海', value: 100 }],
-    [{ name: '长沙' }, { name: '上海', value: 100 }],
-    [{ name: '嘉兴' }, { name: '上海', value: 100 }],
-    [{ name: '南宁' }, { name: '上海', value: 100 }],
-    [{ name: '长春' }, { name: '上海', value: 100 }],
-    [{ name: '昆明' }, { name: '上海', value: 100 }]
+    [{ name: 'BeiJing' }, { name: 'ShangHai', value: 100 }],
+    [{ name: 'GuangZhou' }, { name: 'ShangHai', value: 100 }],
+    [{ name: 'Seoul' }, { name: 'ShangHai', value: 100 }],
+    [{ name: 'Tokyo' }, { name: 'ShangHai', value: 100 }],
+    [{ name: 'Sydney' }, { name: 'ShangHai', value: 100 }],
+    [{ name: 'Wellington' }, { name: 'ShangHai', value: 100 }],
+    [{ name: 'HongKong' }, { name: 'ShangHai', value: 100 }]
   ]
 
   // var planePath = "path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z";
@@ -2504,8 +7535,8 @@ export function getMapOptions() {
   }
 
   var color = ['#fff', '#fff', '#fff'] //航线的颜色
-  var series = [];
-  [['上海', XAData]].forEach(function(item, i) {
+  var series = []
+  ;[['ShangHai', XAData]].forEach(function(item, i) {
     series.push(
       {
         name: item[0] + ' Top3',
@@ -2634,7 +7665,7 @@ export function getMapOptions() {
     },
 
     geo: {
-      map: 'china',
+      map: 'asia',
       label: {
         emphasis: {
           show: true,
@@ -2644,6 +7675,7 @@ export function getMapOptions() {
       roam: false,
       //   放大我们的地图
       zoom: 1,
+      // center: [121.4648, 31.2891],
       itemStyle: {
         normal: {
           areaColor: 'rgba(43, 196, 243, 0.42)',
@@ -2659,4 +7691,61 @@ export function getMapOptions() {
   }
 
   return option
+}
+
+export function getPointMap() {
+  const options = {
+    bmap: {
+      center: [121.4648, 31.2891],
+      zoom: 10,
+      roam: true,
+      mapStyle: {
+        // 百度地图自定义样式
+        styleJson: [
+          // 陆地
+          {
+            featureType: 'land',
+            elementType: 'all',
+            stylers: {
+              color: '#00166a'
+            }
+          },
+          // 行政标注
+          {
+            featureType: 'label',
+            elementType: 'labels.text.fill',
+            stylers: {
+              color: '#ffffff',
+              visibility: 'on'
+            }
+          },
+          {
+            featureType: 'label',
+            elementType: 'labels.text.stroke',
+            stylers: {
+              color: '#444444',
+              visibility: 'on'
+            }
+          }
+        ]
+      }
+    },
+    tooltip: {
+      alwaysShowContent: false,
+      enterable: true,
+      formatter: function(params) {
+        var value = params.value
+        return params.name + ': ' + value[2]
+      }
+    },
+    series: [
+      {
+        type: 'scatter',
+        coordinateSystem: 'bmap',
+        data: mapValue(metadata)
+      }
+    ]
+  }
+
+  return options
 }

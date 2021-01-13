@@ -272,7 +272,6 @@ export default {
   },
   methods: {
     ...mapActions({
-      removeRecord: 'RemoveRecord',
       saveCurrentDataSet: 'SaveCurrentDataSet'
     }),
     doCopy(text) {
@@ -292,7 +291,7 @@ export default {
       })
     },
     deleteRecord(record) {
-      this.removeRecord(record)
+      this.$store.commit('POP_RECORD', record)
       this.$message.warn(`Removed ${record.key} from the Current Dataset.`, 3)
     },
     handleSearch(selectedKeys, confirm, dataIndex) {

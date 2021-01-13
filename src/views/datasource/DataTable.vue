@@ -45,7 +45,8 @@
       :pagination="pagination"
       :dataSource="data"
       :loading="loading"
-      :scroll="{ x: 1000, y: 780 }">
+      :scroll="{ x: 1000, y: 780 }"
+    >
       <a slot="fileName" slot-scope="text, record" @click="redirectToRecord(record.path)">{{ text }}</a>
     </a-table>
     <a id="downloadAnchorElem" v-show="false"></a>
@@ -221,13 +222,10 @@ export default {
   },
   methods: {
     ...mapMutations({
-      set_page: 'SET_PAGE',
-      set_payload: 'SET_PAYLOAD'
+      set_page: 'SET_PAGE'
     }),
     ...mapActions({
       getCollections: 'GetCollections',
-      addRecord: 'AddRecord',
-      removeRecord: 'RemoveRecord',
       saveCurrentDataSet: 'SaveCurrentDataSet'
     }),
     redirectToRecord(path) {
@@ -245,10 +243,10 @@ export default {
     onSelectRecord(record, selected, selectedRows) {
       console.log('onSelectRecord: ', record, selected, selectedRows)
       if (selected) {
-        this.addRecord(record)
+        this.$store.commit('PUSH_RECORD', record)
         this.$message.success(`Added ${record.key} to the Current Dataset.`, 3)
       } else {
-        this.removeRecord(record)
+        this.$store.commit('POP_RECORD', record)
         this.$message.warn(`Removed ${record.key} from the Current Dataset.`, 3)
       }
     },
@@ -334,7 +332,7 @@ export default {
     searchCollections(callback, disableFormat) {
       this.loading = true
       const formatMode = disableFormat ? false : true
-      this.getCollections(formatMode)
+      this.getCollections({ formatMode: formatMode })
         .then(response => {
           if (callback) {
             callback(response.data)

@@ -1,38 +1,41 @@
 <template>
   <a-row class="dashboard">
     <a-col class="header">
-      <h1 class="title">{{ title }}</h1>
+      <h1 class="title" @click="redirectHome">{{ title }}</h1>
       <div class="datetime">{{ dateTime }}</div>
     </a-col>
     <a-row class="mainbox" :gutter="16">
-      <a-col :span="7">
+      <a-col :span="9">
         <div class="panel bar">
-          <h2>Materials Tubes</h2>
+          <!-- <h2>Materials Tubes</h2> -->
+          <h2>Number of Samples By Metro Line</h2>
           <v-chart class="chart" :options="materialsTubes" :autoresize="true"></v-chart>
           <div class="panel-footer"></div>
         </div>
-        <div class="panel line">
+        <!-- <div class="panel line">
           <h2>Temperature</h2>
           <v-chart class="chart" :options="temperature" :autoresize="true"></v-chart>
           <div class="panel-footer"></div>
-        </div>
+        </div> -->
         <div class="panel pie">
-          <h2>Tubes in SampleType</h2>
+          <h2>Distribution of Samples</h2>
           <v-chart class="chart" :options="sampleTypeTubes" :autoresize="true"></v-chart>
           <div class="panel-footer"></div>
         </div>
+        <div class="panel" id="baidumap" style="padding: 0px;"></div>
       </a-col>
-      <a-col :span="10">
+      <a-col :span="15">
         <div class="no">
           <div class="no-hd">
             <ul>
-              <li>565 Tubes</li>
-              <li>12554 GB</li>
+              <li>2,226 Tubes</li>
+              <li>12,554 GB</li>
             </ul>
           </div>
           <div class="no-bd">
             <ul>
-              <li>Request Tubes</li>
+              <!-- <li>Request Tubes</li> -->
+              <li>Number of Samples</li>
               <li>Data Volume</li>
             </ul>
           </div>
@@ -44,7 +47,7 @@
           <div class="map3"></div>
         </div>
       </a-col>
-      <a-col :span="7">
+      <a-col :span="9" style="display: none;">
         <div class="panel bar1">
           <h2>Tubes in SampleType</h2>
           <v-chart class="chart" :options="sampleTypeTubesBar" :autoresize="true"></v-chart>
@@ -62,12 +65,13 @@
         </div>
       </a-col>
     </a-row>
+    <p style="position: fixed; right: 30%; bottom: 10px; color: #fff; font-size: 14px;">The part of materials come from the Internet</p>
   </a-row>
 </template>
 
 <script>
 import moment from 'moment'
-import { chinaMap, getMapOptions } from './map'
+import { registerChinaMap, getMapOptions, getPointMap } from './map'
 import {
   materialsTubes,
   temperature,
@@ -93,9 +97,11 @@ import 'echarts/lib/component/legend'
 import 'echarts/lib/component/title'
 import 'echarts/lib/component/visualMap'
 import 'echarts/lib/component/dataset'
+import 'echarts/extension/bmap/bmap'
 import 'zrender/lib/svg/svg'
+import * as echarts from 'echarts'
 
-ECharts.registerMap('china', chinaMap)
+registerChinaMap(ECharts)
 
 export default {
   components: {
@@ -104,7 +110,7 @@ export default {
   data() {
     return {
       timer: '',
-      title: 'ClinicoOmics Dashboard',
+      title: 'MetaSUB Project',
       dateTime: '',
       materialsTubes,
       temperature,
@@ -115,18 +121,27 @@ export default {
     }
   },
   methods: {
+    getPointMap,
     getMapOptions,
     updateDateTime() {
       this.dateTime = moment().format('YYYY-MM-DD hh:mm:ss')
+    },
+    redirectHome() {
+      this.$router.push({
+        name: 'data'
+      })
     }
   },
   mounted() {
     this.timer = setInterval(this.updateDateTime, 1000)
+    var bmapChart = echarts.init(document.getElementById('baidumap'))
+    bmapChart.setOption(getPointMap())
   },
   beforeDestroy() {
     clearInterval(this.timer)
   },
-  created() {}
+  created() {
+  }
 }
 </script>
 
@@ -295,7 +310,6 @@ li {
   .no {
     height: 20%;
     background: rgba(101, 132, 226, 0.1);
-    padding: 0.1875em;
 
     .no-hd {
       height: 70%;
@@ -347,7 +361,7 @@ li {
           font-size: 0.875em;
           color: #ffeb7b;
           padding: 0.05em 0;
-          font-family: electronicFont;
+          // font-family: electronicFont;
           font-weight: bold;
 
           &:first-child::after {
@@ -391,7 +405,7 @@ li {
       top: 0;
       left: 0;
       z-index: 5;
-      height: 80%;
+      height: 100%;
       width: 100%;
     }
 

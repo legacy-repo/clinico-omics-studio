@@ -18,7 +18,7 @@ export const asyncRouterMap = [
         name: 'dashboard',
         hidden: false,
         component: () => import('@/views/dashboard/Workplace'),
-        meta: { title: 'Dashboard', icon: 'dashboard', permission: ['dashboard'], keepAlive: false }
+        meta: { title: 'Dashboard', icon: 'dashboard', permission: ['dashboard'], keepAlive: true }
       },
 
       // Data (Level 0 - 4)
@@ -28,7 +28,7 @@ export const asyncRouterMap = [
         hidden: false,
         redirect: '/data/omics-data-commons',
         component: RouteView,
-        meta: { title: 'Data', icon: 'deployment-unit', keepAlive: false },
+        meta: { title: 'Data', icon: 'deployment-unit', keepAlive: true },
         children: [
           {
             path: '/data/data-model',
@@ -46,7 +46,7 @@ export const asyncRouterMap = [
                     src: `http://${window.location.host}/data-model/?project=gdc`
                   }
                 },
-                meta: { title: 'Genomics Data Commons', icon: 'dot-chart' }
+                meta: { title: 'Genomics Data Commons', icon: 'dot-chart', keepAlive: true }
               },
               {
                 path: '/data/data-model/quartet',
@@ -58,7 +58,7 @@ export const asyncRouterMap = [
                     src: `http://${window.location.host}/data-model/?project=chinese-quartet`
                   }
                 },
-                meta: { title: 'Chinese Quartet', icon: 'border-inner' }
+                meta: { title: 'Chinese Quartet', icon: 'border-inner', keepAlive: true }
               },
               {
                 path: '/data/data-model/omics-data-commons',
@@ -70,7 +70,7 @@ export const asyncRouterMap = [
                     src: `http://${window.location.host}/data-model/?project=omics-data-commons`
                   }
                 },
-                meta: { title: 'Omics Data Commons', icon: 'retweet' }
+                meta: { title: 'Omics Data Commons', icon: 'retweet', keepAlive: true }
               },
               {
                 path: '/data/data-model/chiglitazar',
@@ -82,7 +82,7 @@ export const asyncRouterMap = [
                     src: `http://${window.location.host}/data-model/?project=chiglitazar`
                   }
                 },
-                meta: { title: 'Chiglitazar', icon: 'play-circle' }
+                meta: { title: 'Chiglitazar', icon: 'play-circle', keepAlive: true }
               }
             ]
           },
@@ -91,7 +91,7 @@ export const asyncRouterMap = [
             name: 'git-management',
             hidden: false,
             component: () => import('@/views/git/GitList'),
-            meta: { title: 'Metadata Collaboration', icon: 'history', permission: ['table'] }
+            meta: { title: 'Metadata Collaboration', icon: 'history', permission: ['table'], keepAlive: true }
           },
           {
             path: 'http://metabase.3steps.cn',
@@ -104,7 +104,7 @@ export const asyncRouterMap = [
             name: 'omics-data-commons',
             hidden: false,
             component: () => import('@/views/datasource/FilterPanel'),
-            meta: { title: 'Omics Data Commons', icon: 'dashboard', permission: ['dashboard'], keepAlive: false }
+            meta: { title: 'Omics Data Commons', icon: 'dashboard', permission: ['dashboard'], keepAlive: true }
           },
           // Data Record
           {
@@ -123,7 +123,7 @@ export const asyncRouterMap = [
             name: 'portal',
             hidden: false,
             component: () => import('@/views/iframe/DataPortal'),
-            meta: { title: 'Omics Data Portal', icon: 'file-search' }
+            meta: { title: 'Omics Data Portal', icon: 'file-search', keepAlive: true }
           },
           // Exploratory
           {
@@ -131,7 +131,7 @@ export const asyncRouterMap = [
             name: 'exploratory',
             hidden: componentSettings.disabledExploratory == 'true',
             component: () => import('@/views/exploratory/ChartStudio'),
-            meta: { title: 'Data Exploratory', icon: 'dribbble', keepAlive: false }
+            meta: { title: 'Data Exploratory', icon: 'dribbble', keepAlive: true }
           }
         ]
       },
@@ -142,21 +142,21 @@ export const asyncRouterMap = [
         name: 'seq-flow',
         component: RouteView,
         redirect: '/seq-flow/submit',
-        meta: { title: 'Workflow', icon: 'project', permission: ['table'], keepAlive: false },
+        meta: { title: 'Workflow', icon: 'project', permission: ['table'], keepAlive: true },
         children: [
           {
             path: '/seq-flow/workplace',
             name: 'workplace',
             hidden: true,
             component: () => import('@/views/dashboard/Workplace'),
-            meta: { title: 'Workplace', icon: 'dashboard', permission: ['dashboard'], keepAlive: false }
+            meta: { title: 'Workplace', icon: 'dashboard', permission: ['dashboard'], keepAlive: true }
           },
           {
             path: '/seq-flow/app-store',
             name: 'appstore',
             hidden: false,
             component: () => import('@/views/appstore/FilterPanel'),
-            meta: { title: 'Apps & Tools', icon: 'appstore', permission: ['table'], keepAlive: false }
+            meta: { title: 'Apps & Tools', icon: 'appstore', permission: ['table'], keepAlive: true }
           },
           {
             path: '/seq-flow/file-manager',
@@ -167,7 +167,7 @@ export const asyncRouterMap = [
               path: route.query.path,
               enabledContextMenu: componentSettings.disabledContextMenu !== 'true'
             }),
-            meta: { title: 'File Management', icon: 'codepen-circle', keepAlive: false }
+            meta: { title: 'File Management', icon: 'codepen-circle', keepAlive: true }
           },
           {
             path: '/seq-flow/submit/:pageNo([1-9]\\d*)?',
@@ -187,7 +187,7 @@ export const asyncRouterMap = [
               title: 'Job Management',
               icon: 'file-sync',
               drawerMode: false,
-              keepAlive: false,
+              keepAlive: true,
               permission: ['table']
             }
           },
@@ -196,7 +196,7 @@ export const asyncRouterMap = [
             name: 'project-management',
             hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
             component: () => import('@/views/workflow/ProjectManagement'),
-            meta: { title: 'Project Management', icon: 'solution', permission: ['table'], keepAlive: false }
+            meta: { title: 'Project Management', icon: 'solution', permission: ['table'], keepAlive: true }
           }
         ]
       },
@@ -207,7 +207,7 @@ export const asyncRouterMap = [
         name: 'report',
         component: RouteView,
         redirect: '/report/report-management',
-        meta: { title: 'Report', icon: 'dot-chart', keepAlive: false },
+        meta: { title: 'Report', icon: 'dot-chart', keepAlive: true },
         children: [
           {
             path: '/report/report-management',
@@ -215,7 +215,7 @@ export const asyncRouterMap = [
             hidden: false,
             props: route => ({ creationMode: route.query.creationMode, reportTool: route.query.reportTool }),
             component: () => import('@/views/report/ReportManagement'),
-            meta: { title: 'Report Management', icon: 'file-done', permission: ['table'], keepAlive: false }
+            meta: { title: 'Report Management', icon: 'file-done', permission: ['table'], keepAlive: true }
           }
         ]
       },
@@ -321,21 +321,21 @@ export const asyncRouterMap = [
         name: 'tool',
         hidden: true,
         component: RouteView,
-        meta: { title: 'Tool', keepAlive: false, icon: 'folder', permission: ['table'] },
+        meta: { title: 'Tool', keepAlive: true, icon: 'folder', permission: ['table'] },
         children: [
           {
             path: '/tool/xps2pdf',
             name: 'xps2pdf',
             hidden: true,
             component: () => import('@/views/tools/XPS2PDF'),
-            meta: { title: 'XPS2PDF', keepAlive: false }
+            meta: { title: 'XPS2PDF', keepAlive: true }
           },
           {
             path: '/tool/sigma',
             name: 'sigma',
             hidden: true,
             component: () => import('@/views/tools/SigMA'),
-            meta: { title: 'SigMA', keepAlive: false }
+            meta: { title: 'SigMA', keepAlive: true }
           },
           {
             path: '/tool/igv',
@@ -350,7 +350,7 @@ export const asyncRouterMap = [
               bamIndexUrl: route.query.bamIndexUrl,
               search: route.query.search
             }),
-            meta: { title: 'Genome Viewer', keepAlive: false }
+            meta: { title: 'Genome Viewer', keepAlive: true }
           }
         ]
       },
@@ -362,7 +362,7 @@ export const asyncRouterMap = [
         component: RouteView,
         hidden: true,
         redirect: '/datains-report/report-management',
-        meta: { title: 'Report', icon: 'solution', permission: ['table'] },
+        meta: { title: 'Report', icon: 'solution', permission: ['table'], keepAlive: true },
         children: [
           {
             path: '/datains-report/:reportId',
@@ -370,7 +370,7 @@ export const asyncRouterMap = [
             hidden: true,
             component: () => import('@/views/report/ReportDetails'),
             props: route => ({ readonly: route.query.readonly }),
-            meta: { title: 'Report Details', drawerMode: true, permission: ['table'] }
+            meta: { title: 'Report Details', drawerMode: true, permission: ['table'], keepAlive: true }
           }
         ]
       },

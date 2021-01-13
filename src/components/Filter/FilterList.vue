@@ -58,6 +58,8 @@ export default {
       console.log('onChange: ', item, index, event)
       this.$emit('select-filter', {
         key: item.key,
+        name: item.name,
+        count: item.count,
         checked: event.target.checked
       })
     },

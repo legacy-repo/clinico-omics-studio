@@ -1,10 +1,11 @@
+import Vue from 'vue'
 import { getCollections, countCollections, getDataSchema, listCollections } from '@/api/manage'
 import orderBy from 'lodash.orderby'
-import findIndex from 'lodash.findindex'
 import map from 'lodash.map'
 import filter from 'lodash.filter'
-import isEmpty from 'lodash.isempty'
 import { config } from '@/config/defaultSettings'
+import merge from 'lodash.merge'
+import findIndex from 'lodash.findindex'
 
 const formatCounts = function(data) {
   const newRecords = []
@@ -82,14 +83,15 @@ const formatRecord = function(record) {
   return { ...record, ...newRecord }
 }
 
-const makeRule = function(field, value, type) {
+const makeRule = function(field, value, type, operator) {
+  // TODO: how to keep operator valid?
   if (type == 'category') {
     return {
       type: 'rule',
       query: {
         variable: field,
         operator: 'in',
-        value: [value]
+        value: Array.isArray(value) ? value : [value]
       }
     }
   } else {
@@ -97,99 +99,22 @@ const makeRule = function(field, value, type) {
       type: 'rule',
       query: {
         variable: field,
-        operator: '=',
+        operator: operator,
         value: value
       }
     }
   }
 }
 
-const makeGroupRule = function(type, rule1, rule2) {
+const makeGroupRule = function(operator, rule1, rule2) {
   return {
     type: 'group',
-    operator: type,
+    operator: operator,
     children: [rule1, rule2]
   }
 }
 
-const makePayload = function(payload, field, value, type) {
-  const cloned_payload = JSON.parse(JSON.stringify(payload))
-  if (cloned_payload.type == 'rule') {
-    if (cloned_payload.query.variable == field) {
-      cloned_payload.query.value.push(value)
-      return cloned_payload
-    } else {
-      return makeGroupRule('and', makeRule(field, value, type), cloned_payload)
-    }
-  } else if (cloned_payload.type == 'group') {
-    // 两层嵌套
-    var index = findIndex(cloned_payload.children, obj => {
-      return obj.query.variable == field
-    })
-
-    if (index > -1) {
-      const obj = cloned_payload.children[index]
-      if (obj.query.operator == 'in') {
-        obj.query.value.push(value)
-      } else {
-        cloned_payload.children[index] = makeGroupRule('or', makeRule(field, value, type), obj)
-      }
-    } else {
-      cloned_payload.children.push(makeRule(field, value, type))
-    }
-
-    return cloned_payload
-  } else {
-    return makeRule(field, value, type)
-  }
-}
-
-const removeItem = function(array, val) {
-  var index = array.indexOf(val)
-  if (index > -1) {
-    array.splice(index, 1)
-  }
-}
-
-const deletePayload = function(payload, field, value, type) {
-  const cloned_payload = JSON.parse(JSON.stringify(payload))
-  if (cloned_payload.type == 'rule') {
-    if (cloned_payload.query.variable == field) {
-      if (cloned_payload.query.operator == 'in') {
-        removeItem(cloned_payload.query.value, value)
-        if (cloned_payload.query.value.length > 0) {
-          return cloned_payload
-        } else {
-          return {}
-        }
-      } else {
-        return {}
-      }
-    } else {
-      // Doesn't exist
-      return cloned_payload
-    }
-  } else if (cloned_payload.type == 'group') {
-    var children = cloned_payload.children
-    cloned_payload.children = filter(
-      map(children, o => {
-        return deletePayload(o, field, value, type)
-      }),
-      o => {
-        return !isEmpty(o)
-      }
-    )
-
-    if (cloned_payload.children.length <= 1) {
-      return cloned_payload.children[0]
-    } else {
-      return cloned_payload
-    }
-  } else {
-    return {}
-  }
-}
-
+// eslint-disable-next-line no-unused-vars
 const formatField = function(fieldName) {
   console.log('formatField: ', fieldName, fieldName.replace('.', '_'))
   return fieldName.replace('.', '_')
@@ -216,6 +141,87 @@ const initCurrentDataSet = function(defaultCollection) {
   }
 }
 
+const remarkAllFields = function(allFields, predict) {
+  return map(allFields, o => {
+    if (predict(o)) {
+      o['selected'] = true
+    } else {
+      o['selected'] = false
+    }
+
+    // console.log('remarkAllFields: ', o)
+    // Initialize all fields
+    if (o.type == 'category') {
+      const data = []
+      // TODO: Some fields have not values property?
+      if (o.values) {
+        o.values.forEach(item => {
+          if (item == '' || item == undefined || item == null) {
+            data.push({
+              name: 'Unknown',
+              key: item,
+              count: 0
+            })
+          } else {
+            data.push({
+              name: item,
+              key: item,
+              count: 0
+            })
+          }
+        })
+      }
+
+      o['data'] = data
+    } else {
+      o['data'] = []
+    }
+
+    return o
+  })
+}
+
+const makeQueryMap = function(fieldsData) {
+  const rules = []
+  const fieldKeys = Object.keys(fieldsData)
+
+  fieldKeys.forEach(fieldKey => {
+    const field = fieldsData[fieldKey]
+    if (Array.isArray(field)) {
+      const checked = map(
+        filter(field, item => {
+          return item.checked
+        }),
+        'key'
+      )
+
+      if (checked.length > 0) {
+        rules.push(makeRule(fieldKey, checked, 'category'))
+      }
+    } else {
+      rules.push(
+        makeGroupRule(
+          'or',
+          makeRule(field.key, field.min, 'number', '>='),
+          makeRule(field.key, field.max, 'number', '<=')
+        )
+      )
+    }
+  })
+
+  if (rules.length > 1) {
+    return {
+      type: 'group',
+      operator: 'and',
+      children: rules
+    }
+  } else if (rules.length == 1) {
+    return rules[0]
+  } else {
+    return {}
+  }
+}
+
 const data = {
   state: {
     defaultCollection: config.defaultCollection,
@@ -223,27 +229,82 @@ const data = {
       {
         key: 'quartet',
         name: 'Chinese Quartet',
-        description: 'The Quartet Projectfor Quality Controlof Multi-omics Profiling'
+        description: 'The Quartet Projectfor Quality Controlof Multi-omics Profiling',
+        tabs: [
+          {
+            title: 'Files',
+            key: 'files',
+            value: null
+          },
+          {
+            title: 'Libraries',
+            key: 'libraries',
+            value: 'library_id'
+          },
+          {
+            title: 'Donor',
+            key: 'donor',
+            value: 'donor_id'
+          }
+        ]
       },
       {
         key: 'fuscctnbc',
         name: 'FUSCC TNBC',
-        description: 'Multi-omics data for primary triple-negative breast cancer (TNBC).'
+        description: 'Multi-omics data for primary triple-negative breast cancer (TNBC).',
+        tabs: [
+          {
+            title: 'Files',
+            key: 'files',
+            value: null
+          },
+          {
+            title: 'Samples',
+            key: 'samples',
+            value: 'sample_id'
+          },
+          {
+            title: 'Patients',
+            key: 'patients',
+            value: 'patient_id'
+          }
+        ]
       }
     ],
-    queryMap: {
-      parameter: {
-        page: 1,
-        per_page: 10
-      },
-      payload: {}
+    queryParameter: {
+      page: 1,
+      per_page: 10
     },
+    fieldsData: {},
+    allFields: [],
     dataSets: [],
     currentDataSet: initCurrentDataSet(config.defaultCollection)
   },
   getters: {
+    getTabs: state => (key) => {
+      const collection = filter(state.collections, o => {
+        return o.key == key
+      })
+
+      if (collection.length > 0) {
+        return collection[0].tabs
+      } else {
+        return []
+      }
+    },
+    getFieldDataByKey: state => (key, filterValue) => {
+      if (filterValue) {
+        return filter(state.fieldsData[key], record => {
+          // Remove Special Character
+          const pattern = /[`~!@#$^&*()=|{}':;',\\[\].<>/?~！@#￥……&*（）——|{}【】'；：""'。，、？\s]/g
+          return record.name.match(new RegExp(filterValue.replace(pattern, ''), 'i'))
+        })
+      } else {
+        return state.fieldsData[key] ? state.fieldsData[key] : []
+      }
+    },
     queryString: state => {
-      return JSON.stringify(state.queryMap.payload)
+      return JSON.stringify(makeQueryMap(state.fieldsData))
     },
     defaultCollection: state => {
       return state.defaultCollection
@@ -261,29 +322,88 @@ const data = {
       return map(state.currentDataSet, o => {
         return o.key
       })
+    },
+    allFields: state => {
+      return state.allFields
+    },
+    fieldsData: state => {
+      return state.fieldsData
     }
   },
   mutations: {
+    RESET_QUERY_MAP: state => {
+      Vue.set(state, 'fieldsData', {})
+    },
+    ADD_FIELD: (state, key) => {
+      const field = filter(state.allFields, o => {
+        return o.key == key
+      })
+
+      if (field.length > 0) {
+        field[0].selected = true
+      }
+    },
+    REMOVE_FIELD: (state, key) => {
+      const field = filter(state.allFields, o => {
+        return o.key === key
+      })
+
+      if (field.length > 0) {
+        field[0].selected = false
+      }
+    },
+    UPDATE_FIELD: (state, { fieldKey, data }) => {
+      if (state.fieldsData[fieldKey]) {
+        const index = findIndex(state.fieldsData[fieldKey], o => {
+          return o.key == data.key
+        })
+
+        state.fieldsData[fieldKey][index] = { ...data }
+
+        // make the fieldsData change and activate updateing
+        state.fieldsData = { ...state.fieldsData }
+        console.log('UPDATE_FIELD: ', fieldKey, state.fieldsData, data, index)
+      }
+    },
+    UPDATE_FIELD_DATA: (state, { fieldKey, data }) => {
+      if (state.fieldsData[fieldKey]) {
+        const oldData = state.fieldsData[fieldKey]
+        const updatedData = map(oldData, record => {
+          const matched = filter(data, item => {
+            return item.key === record.key
+          })
+
+          if (matched.length > 0) {
+            return merge(record, matched[0])
+          } else {
+            return {
+              ...record,
+              count: 0
+            }
+          }
+        })
+
+        Vue.set(state.fieldsData, fieldKey, updatedData)
+
+        console.log('updatedData: ', updatedData, data)
+      } else {
+        const initiatedData = map(data, o => {
+          return { ...o, checked: false }
+        })
+        console.log('initiatedData: ', initiatedData, data)
+        Vue.set(state.fieldsData, fieldKey, initiatedData)
+      }
+    },
+    SET_FIELDS: (state, fields) => {
+      state.allFields = fields
+    },
     SET_PAGE: (state, { page, per_page }) => {
       if (page >= 1) {
-        state.queryMap.parameter.page = page
+        state.queryParameter.page = page
       }
 
       if (per_page >= 1) {
-        state.queryMap.parameter.per_page = per_page
-      }
-    },
-    SET_PAYLOAD: (state, { field, value, type }) => {
-      state.queryMap.payload = makePayload(state.queryMap.payload, formatField(field), value, type)
-    },
-    DELETE_PAYLOAD: (state, { field, value, type }) => {
-      state.queryMap.payload = deletePayload(state.queryMap.payload, formatField(field), value, type)
-    },
-    RESET_PAYLOAD: state => {
-      state.queryMap.payload = {}
-      state.queryMap.parameter = {
-        page: 1,
-        per_page: 10
+        state.queryParameter.per_page = per_page
       }
     },
     SET_COLLECTION: (state, collectionName) => {
@@ -305,22 +425,16 @@ const data = {
     SaveCurrentDataSet({ state }) {
       localStorage.setItem(`datains__${state.defaultCollection}__cart_files`, JSON.stringify(state.currentDataSet))
     },
-    ResetPayload({ commit }) {
-      commit('RESET_PAYLOAD')
-    },
-    SetCollection({ commit }, collectionName) {
-      commit('SET_COLLECTION', collectionName)
-    },
-    AddRecord({ commit }, record) {
-      commit('PUSH_RECORD', record)
-    },
-    RemoveRecord({ commit }, record) {
-      commit('POP_RECORD', record)
-    },
-    GetDataSchema({ state }) {
+    GetDataSchema({ commit, state }) {
       return new Promise((resolve, reject) => {
         getDataSchema(state.defaultCollection)
           .then(response => {
+            commit(
+              'SET_FIELDS',
+              remarkAllFields(response, o => {
+                return o.priority <= 5
+              })
+            )
             resolve(response)
           })
           .catch(error => {
@@ -366,11 +480,21 @@ const data = {
           })
       })
     },
-    GetCollections({ state }, formatMode) {
-      const parameter = state.queryMap.parameter
-      const payload = state.queryMap.payload
+    GetCollections({ state }, { formatMode, parameter }) {
+      let payload = {}
+      let parameters = {}
+
+      if (parameter && parameter.queryMap) {
+        payload = parameter.queryMap
+        delete parameter.queryMap
+        parameters = { ...state.queryParameter, ...parameter }
+      } else {
+        payload = makeQueryMap(state.fieldsData)
+        parameters = { ...state.queryParameter, ...parameter }
+      }
+
       return new Promise((resolve, reject) => {
-        getCollections(state.defaultCollection, parameter, payload)
+        getCollections(state.defaultCollection, parameters, payload)
           .then(response => {
             let data = response
             if (formatMode) {
@@ -390,9 +514,19 @@ const data = {
       })
     },
     CountCollections({ state }, parameter) {
-      const parameters = { ...state.queryMap.parameter, ...parameter }
-      console.log('Parameters: ', parameters, parameter, state.queryMap.parameter)
-      const payload = state.queryMap.payload
+      let payload = {}
+      let parameters = {}
+
+      if (parameter.queryMap) {
+        payload = parameter.queryMap
+        delete parameter.queryMap
+        parameters = { ...state.queryParameter, ...parameter }
+      } else {
+        payload = makeQueryMap(state.fieldsData)
+        parameters = { ...state.queryParameter, ...parameter }
+      }
+
+      console.log('Parameters: ', parameters, parameter, state.queryParameter, payload)
 
       return new Promise((resolve, reject) => {
         countCollections(state.defaultCollection, parameters, payload)

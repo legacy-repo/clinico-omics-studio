@@ -61,8 +61,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      countCollections: 'CountCollections',
-      resetPayload: 'ResetPayload'
+      countCollections: 'CountCollections'
     }),
     setNum(field, num) {
       const items = filter(this.factData, o => {
@@ -114,7 +113,6 @@ export default {
     }
   },
   created() {
-    this.resetPayload()
     this.getProjectCount()
     this.getSiteCount()
     this.getFileCount()

@@ -78,6 +78,7 @@ export const config = (function() {
       // eslint-disable-next-line no-undef
       websiteLogo: require('@/assets/logo.png'),
       websiteName: 'ClinicoOmics',
+      // websiteName: 'ClinicoOmics',
       websiteId: 'clinicoomics',
       noPermission: false,
       websiteDesc: 'The ClinicoOmics Platform for Clinico OMICS & BioMedGPS',

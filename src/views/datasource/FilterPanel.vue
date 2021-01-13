@@ -2,42 +2,41 @@
   <!--eslint-disable-->
   <a-row class="filter-panel" :gutter="16" style="margin-right: 0px;">
     <a-col class="left" :xl="6" :lg="6" :md="6" :sm="24" :xs="24">
-      <a-tabs default-active-key="1">
-        <a-tab-pane key="1" tab="Files">
-          <a-row style="display: flex; justify-content: center; margin: 10px 10px;">
-            <a-tooltip>
-              <template slot="title">Show Projects</template>
-              <a-button icon="pic-left" style="width: 50px;" @click="switchProjectPanel"></a-button>
-            </a-tooltip>
-            <a-input-search
-              allowClear
-              placeholder="Enter Search Text"
-              @change="filterFieldsList"
-              style="margin: 0px 5px;"
-            />
-            <a-tooltip>
-              <template slot="title">Add a File Filter</template>
-              <a-button icon="setting" style="width: 50px;" @click="showFilterPanel"></a-button>
-            </a-tooltip>
+      <a-tabs defaultActiveKey="files" @change="onChangeTab">
+        <a-tab-pane :tab="tab.title" v-for="tab in tabs" :key="tab.key">
+          <a-row class="content">
+            <a-row style="display: flex; justify-content: center; margin: 10px 10px;">
+              <a-tooltip>
+                <template slot="title">Show Projects</template>
+                <a-button icon="pic-left" style="width: 50px;" @click="switchProjectPanel"></a-button>
+              </a-tooltip>
+              <a-input-search
+                allowClear
+                placeholder="Enter Search Text"
+                @change="filterFieldsList"
+                style="margin: 0px 5px;"
+              />
+              <a-tooltip>
+                <template slot="title">Add a File Filter</template>
+                <a-button icon="setting" style="width: 50px;" @click="showFilterPanel"></a-button>
+              </a-tooltip>
+            </a-row>
+            <a-collapse :activeKey="activeFilterList" ref="collapse">
+              <a-collapse-panel
+                :header="toTitleCase(field.name)"
+                :key="field.name"
+                :id="field.key"
+                v-for="field in fieldsList"
+              >
+                <filter-list
+                  :dataSource="$store.getters.getFieldDataByKey(field.key, filterValue)"
+                  @select-filter="filterCollections(field.key, $event)"
+                ></filter-list>
+                <a-icon slot="extra" type="delete" @click="removeField(field.key)" />
+              </a-collapse-panel>
+            </a-collapse>
           </a-row>
-          <a-collapse :activeKey="activeFilterList" ref="collapse">
-            <a-collapse-panel
-              :header="toTitleCase(field.name)"
-              :key="field.name"
-              :id="field.key"
-              v-for="field in filteredFieldsList"
-              v-if="field.data.length <= maxLimit"
-            >
-              <filter-list
-                :dataSource="field.data"
-                @select-filter="filterCollections(field.key, $event)"
-              ></filter-list>
-              <a-icon slot="extra" type="delete" @click="removeField(field.key)" />
-            </a-collapse-panel>
-          </a-collapse>
         </a-tab-pane>
-        <a-tab-pane key="2" tab="Samples" disabled></a-tab-pane>
-        <a-tab-pane key="3" tab="Patients" disabled></a-tab-pane>
       </a-tabs>
       <a-drawer
         v-show="projectVisible"
@@ -74,22 +73,19 @@
       <a-tabs class="chart-container" defaultActiveKey="1" @change="onChangeChartTab">
         <a-tab-pane tab="Files" key="1">
           <a-row class="pie-container">
-            <a-col
-              v-for="item in fieldsList"
-              v-if="item.data.length <= maxLimit"
-              :key="item.name"
-              :xl="5"
-              :lg="5"
-              :md="8"
-              :sm="12"
-            >
-              <pie :dataSource="item.data" :height="120" :width="120" :title="item.short" />
+            <a-col v-for="item in fieldsList" :key="item.name" :xl="5" :lg="5" :md="8" :sm="12">
+              <pie
+                :dataSource="$store.getters.getFieldDataByKey(item.key)"
+                :height="120"
+                :width="120"
+                :title="item.short"
+              />
             </a-col>
           </a-row>
         </a-tab-pane>
         <a-tab-pane tab="Search Advanced" key="2" disabled></a-tab-pane>
       </a-tabs>
-      <a-tabs defaultActiveKey="1" @change="onChangeTab">
+      <a-tabs defaultActiveKey="1">
         <a-tab-pane tab="Table" key="1">
           <data-table></data-table>
         </a-tab-pane>
@@ -153,13 +149,12 @@
 </template>
 
 <script>
-import { mapActions, mapMutations, mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { FilterList } from '@/components'
 import Pie from './Pie'
 import DataTable from './DataTable'
 import filter from 'lodash.filter'
 import map from 'lodash.map'
-import merge from 'lodash.merge'
 import sortBy from 'lodash.sortby'
 import orderBy from 'lodash.orderby'
 
@@ -174,7 +169,6 @@ export default {
     return {
       hideActive: false,
       projectVisible: false,
-      allFields: [],
       maxLimit: 20,
       visible: false,
       searchValue: '',
@@ -186,8 +180,12 @@ export default {
   computed: {
     ...mapGetters({
       collections: 'collections',
-      defaultCollection: 'defaultCollection'
+      defaultCollection: 'defaultCollection',
+      allFields: 'allFields'
     }),
+    tabs() {
+      return this.$store.getters.getTabs(this.defaultCollection)
+    },
     fieldsList() {
       return sortBy(
         filter(this.allFields, o => {
@@ -199,7 +197,9 @@ export default {
     activeFilterList() {
       const active = []
       for (const field of this.fieldsList) {
-        active.push(field.name)
+        if (this.$store.getters.getFieldDataByKey(field.key, this.filterValue).length > 0) {
+          active.push(field.name)
+        }
       }
       return active
     },
@@ -231,26 +231,6 @@ export default {
       } else {
         return orderBy(fields, ['key'], 'asc')
       }
-    },
-    filteredFieldsList() {
-      if (this.filterValue.length > 0) {
-        return map(this.fieldsList, fieldRecord => {
-          console.log('filteredFieldsList: ', fieldRecord, this.filterValue)
-          const newFieldRecord = {}
-          newFieldRecord['name'] = fieldRecord.name
-          newFieldRecord['short'] = fieldRecord.short
-          newFieldRecord['key'] = fieldRecord.key
-          newFieldRecord['data'] = filter(fieldRecord.data, record => {
-            // Remove Special Character
-            const pattern = /[`~!@#$^&*()=|{}':;',\\[\].<>/?~！@#￥……&*（）——|{}【】'；：""'。，、？\s]/g
-            return record.name.match(new RegExp(this.filterValue.replace(pattern, ''), 'i'))
-          })
-
-          return newFieldRecord
-        })
-      } else {
-        return this.fieldsList
-      }
     }
   },
   watch: {
@@ -259,19 +239,14 @@ export default {
     }
   },
   methods: {
-    ...mapMutations({
-      setPayload: 'SET_PAYLOAD',
-      deletePayload: 'DELETE_PAYLOAD'
-    }),
     ...mapActions({
-      getDataSchema: 'GetDataSchema',
-      countCollections: 'CountCollections',
-      resetPayload: 'ResetPayload',
-      setCollection: 'SetCollection'
+      countCollections: 'CountCollections'
     }),
     loadProject(name) {
-      this.resetPayload()
-      this.setCollection(name)
+      this.$store.commit('SET_COLLECTION', name)
+      // Reset
+      this.$store.commit('RESET_QUERY_MAP')
+      this.dedupField = null
     },
     switchProjectPanel() {
       this.projectVisible = !this.projectVisible
@@ -291,19 +266,19 @@ export default {
       }
     },
     addField(key) {
-      const field = filter(this.allFields, o => {
-        return o.key == key
-      })
-
-      if (field.length > 0) {
-        field[0].selected = true
-      }
+      this.$store.commit('ADD_FIELD', key)
 
       this.visible = !this.visible
       this.fetchCounts()
       console.log('addField: ', key)
       this.$message.success(`Added Field ${key} into Filter Panel.`)
       this.focusField(key)
+    },
+    removeField(fieldKey) {
+      this.$store.commit('REMOVE_FIELD', fieldKey)
+
+      this.fetchCounts()
+      this.$message.success(`Removed Field ${fieldKey} from Filter Panel.`)
     },
     showFilterPanel() {
       this.visible = !this.visible
@@ -317,18 +292,6 @@ export default {
         document.getElementById(field).scrollIntoView({ behavior: 'smooth' })
       }, 300)
     },
-    removeField(fieldKey) {
-      const field = filter(this.allFields, o => {
-        return o.key === fieldKey
-      })
-
-      if (field.length > 0) {
-        field[0].selected = false
-      }
-      this.fetchCounts()
-
-      this.$message.success(`Removed Field ${fieldKey} from Filter Panel.`)
-    },
     filterFields(e) {
       this.searchValue = e.target.value
     },
@@ -339,130 +302,61 @@ export default {
       this.reverseOrder = !this.reverseOrder
     },
     onChangeChartTab() {},
-    onChangeTab() {},
+    onChangeTab(activeKey) {
+      // TODO: The dedupField exists?
+      this.dedupField = filter(this.tabs, o => {
+        return o.key == activeKey
+      })[0].value
+
+      // We need to a new results when the group & dedup_field is different
+      this.$store.commit('RESET_QUERY_MAP')
+      this.fetchCounts()
+    },
     toTitleCase(str) {
       return str.replace(/\w\S*/g, function(txt) {
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
       })
     },
-    changeCheckedStatus(fieldKey, key, checked) {
-      for (let idx in this.fieldsList) {
-        if (this.fieldsList[idx].key == fieldKey) {
-          for (let i in this.fieldsList[idx].data) {
-            if (this.fieldsList[idx].data[i].key == key) {
-              this.fieldsList[idx].data[i].checked = checked
-            }
-          }
-        }
-      }
-
-      console.log('changeCheckedStatus: ', this.fieldsList, fieldKey, key, checked)
-    },
     filterCollections(fieldKey, event) {
       console.log('filterCollections: ', fieldKey, event)
-      const key = event.key
-      const checked = event.checked
 
-      if (checked) {
-        this.setPayload({
-          field: fieldKey,
-          value: key,
-          type: 'category'
-        })
-      } else {
-        this.deletePayload({
-          field: fieldKey,
-          value: key,
-          type: 'category'
-        })
-      }
+      this.$store.commit('UPDATE_FIELD', { fieldKey: fieldKey, data: event })
 
-      this.fetchCounts({
-        fieldKey: fieldKey,
-        key: key,
-        checked: checked
-      })
-    },
-    cloneMap(queryMap) {
-      return JSON.parse(JSON.stringify(queryMap))
-    },
-    updateData(oldData, newData) {
-      const clonedOldData = this.cloneMap(oldData)
-      const clonedNewData = this.cloneMap(newData)
-
-      if (clonedOldData.length > 0) {
-        return map(clonedOldData, record => {
-          const matched = filter(clonedNewData, item => {
-            return item.key === record.key
-          })
-
-          if (matched.length > 0) {
-            return merge(record, matched[0])
-          } else {
-            return {
-              name: record.name,
-              key: record.key,
-              count: 0
-            }
-          }
-        })
-      } else {
-        return clonedNewData
-      }
+      this.fetchCounts()
     },
     formatField(fieldName) {
       return fieldName.replace('.', '_')
     },
-    fetchCounts(checkedObj) {
+    fetchCounts() {
       const collections = map(this.filterKeys, o => {
-        return this.countCollections({ group: this.formatField(o) })
+        return this.countCollections({ group: this.formatField(o), dedup_field: this.dedupField })
       })
 
       Promise.all(collections)
         .then(results => {
           for (let idx in this.filterKeys) {
-            const key = this.filterKeys[idx]
+            const fieldKey = this.filterKeys[idx]
             const field = filter(this.fieldsList, record => {
-              return record.key === key
+              return record.key === fieldKey
             })
 
             if (field.length > 0) {
-              const data = this.updateData(field[0].data, results[idx])
-
-              field[0].data = data
+              this.$store.commit('UPDATE_FIELD_DATA', { fieldKey: fieldKey, data: results[idx] })
             }
           }
 
-          if (checkedObj != undefined) {
-            this.changeCheckedStatus(checkedObj.fieldKey, checkedObj.key, checkedObj.checked)
-          }
+          console.log('fetchCounts: ', results)
         })
         .catch(error => {
           console.log('fetchCounts Error: ', error)
           this.$message.warn('Cannot fetch data, please retry later.')
         })
     },
-    remarkAllFields(allFields, predict) {
-      return map(allFields, o => {
-        if (predict(o)) {
-          o['selected'] = true
-        } else {
-          o['selected'] = false
-        }
-
-        // Initialize all fields
-        o['data'] = []
-
-        return o
-      })
-    },
     getFieldsList(callback) {
-      this.getDataSchema()
+      this.$store
+        .dispatch('GetDataSchema')
         .then(response => {
-          this.allFields = this.remarkAllFields(response, o => {
-            return o.priority <= 5
-          })
-
+          console.log('getFieldsList', response)
           callback()
         })
         .catch(error => {
@@ -471,10 +365,6 @@ export default {
           console.log('getFieldsList: ', error)
         })
     }
-  },
-  beforeDestroy() {
-    console.log('Reset Payload...')
-    this.resetPayload()
   },
   created() {
     this.getFieldsList(this.fetchCounts)
@@ -493,8 +383,7 @@ export default {
       }
 
       .ant-tabs-content {
-        height: calc(100% - 60px);
-        overflow: scroll;
+        height: calc(100% - 45px);
       }
     }
   }
@@ -608,6 +497,11 @@ export default {
         }
       }
     }
+
+    .content {
+      height: 100%;
+      overflow: scroll;
+    }
   }
 
   .right {
@@ -625,8 +519,9 @@ export default {
     }
 
     .pie-container {
+      overflow-x: scroll;
+      overflow-y: hidden;
       display: flex;
-      height: 150px;
       margin-right: 25px;
 
       .pie-chart {
@@ -636,6 +531,10 @@ export default {
           margin: 0px 30px;
         }
       }
+    }
+
+    .pie-container::-webkit-scrollbar {
+      width: 0 !important;
     }
 
     .graph-tab {

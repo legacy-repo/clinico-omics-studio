@@ -183,8 +183,8 @@ export default {
     },
     requestFailed (err) {
       this.$notification['error']({
-        message: '错误',
-        description: ((err.response || {}).data || {}).message || '请求出现错误，请稍后再试',
+        message: 'Error',
+        description: ((err.response || {}).data || {}).message || 'Request Error, Please Retry Later.',
         duration: 4
       })
       this.registerBtn = false

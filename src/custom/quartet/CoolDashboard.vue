@@ -1,7 +1,7 @@
 <template>
   <a-row class="dashboard">
     <a-col class="header">
-      <h1 class="title" @click="redirectHome">{{ title }}</h1>
+      <a class="title" @click="redirectHome">{{ title }}</a>
       <div class="datetime">{{ dateTime }}</div>
     </a-col>
     <a-row class="mainbox" :gutter="16">
@@ -16,7 +16,7 @@
           <h2>Temperature</h2>
           <v-chart class="chart" :options="temperature" :autoresize="true"></v-chart>
           <div class="panel-footer"></div>
-        </div> -->
+        </div>-->
         <div class="panel pie">
           <h2>Distribution of Samples</h2>
           <v-chart class="chart" :options="sampleTypeTubes" :autoresize="true"></v-chart>
@@ -65,7 +65,9 @@
         </div>
       </a-col>
     </a-row>
-    <p style="position: fixed; right: 30%; bottom: 10px; color: #fff; font-size: 14px;">The part of materials come from the Internet</p>
+    <p
+      style="position: fixed; right: 30%; bottom: 10px; color: #fff; font-size: 14px;"
+    >The part of materials come from the Internet</p>
   </a-row>
 </template>
 
@@ -140,8 +142,7 @@ export default {
   beforeDestroy() {
     clearInterval(this.timer)
   },
-  created() {
-  }
+  created() {}
 }
 </script>
 
@@ -443,6 +444,10 @@ li {
 </style>
 
 <style lang="less">
+.anchorBL {
+  display: none;
+}
+
 @keyframes rotate {
   from {
     transform: translate(-50%, -50%) rotate(0deg);

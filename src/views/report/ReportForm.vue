@@ -142,6 +142,7 @@ import moment from 'moment'
 import flatMap from 'lodash.flatmap'
 import map from 'lodash.map'
 import filter from 'lodash.filter'
+import isEmpty from 'lodash.isempty'
 import zipObject from 'lodash.zipobject'
 import PopupFileBrowser from '@/views/filemanager/PopupFileBrowser'
 import FormTable from './FormTable'
@@ -310,10 +311,18 @@ export default {
 
       return parameters
     },
+    isRequired(key) {
+      if(this.schema.properties[key]) {
+        return !isEmpty(this.schema.properties[key].properties)
+      } else {
+        return false
+      }
+    },
     handleSubmit(e) {
       e.preventDefault()
+
       this.form.validateFields((err, values) => {
-        if (this.metadataValid && this.metadataBody.length === 0) {
+        if (this.isRequired('metadata') && this.metadataValid && this.metadataBody.length === 0) {
           this.metadataStatus = 'error'
           this.metadataHelpText = 'Please enter metadata!'
           err = true
@@ -322,7 +331,7 @@ export default {
           this.metadataHelpText = ''
         }
 
-        if (this.parametersValid && this.parametersBody.length === 0) {
+        if (this.isRequired('parameters') && this.parametersValid && this.parametersBody.length === 0) {
           this.parametersStatus = 'error'
           this.parametersHelpText = 'Please enter parameters!'
           err = true

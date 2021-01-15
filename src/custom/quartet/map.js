@@ -7702,29 +7702,88 @@ export function getPointMap() {
       mapStyle: {
         // 百度地图自定义样式
         styleJson: [
-          // 陆地
+          {
+            featureType: 'road',
+            elementType: 'geometry',
+            stylers: {
+              visibility: 'on'
+            }
+          },
+          {
+            featureType: 'road',
+            elementType: 'labels',
+            stylers: {
+              visibility: 'off'
+            }
+          },
           {
             featureType: 'land',
-            elementType: 'all',
+            elementType: 'geometry',
             stylers: {
-              color: '#00166a'
+              color: '#001255ff'
             }
           },
-          // 行政标注
           {
-            featureType: 'label',
-            elementType: 'labels.text.fill',
+            featureType: 'water',
+            elementType: 'geometry',
             stylers: {
-              color: '#ffffff',
+              color: '#ffffffff'
+            }
+          },
+          {
+            featureType: 'subwaystation',
+            elementType: 'geometry',
+            stylers: {
+              color: '#ffffffff'
+            }
+          },
+          {
+            featureType: 'highway',
+            elementType: 'geometry',
+            stylers: {
+              visibility: 'off'
+            }
+          },
+          {
+            featureType: 'highway',
+            elementType: 'labels',
+            stylers: {
+              visibility: 'off'
+            }
+          },
+          {
+            featureType: 'nationalway',
+            elementType: 'labels',
+            stylers: {
               visibility: 'on'
             }
           },
           {
-            featureType: 'label',
-            elementType: 'labels.text.stroke',
+            featureType: 'nationalway',
+            elementType: 'geometry',
             stylers: {
-              color: '#444444',
               visibility: 'on'
+            }
+          },
+          {
+            featureType: 'provincialway',
+            elementType: 'geometry',
+            stylers: {
+              visibility: 'on'
+            }
+          },
+          {
+            featureType: 'provincialway',
+            elementType: 'labels',
+            stylers: {
+              visibility: 'on'
+            }
+          },
+          {
+            featureType: 'subway',
+            elementType: 'geometry.fill',
+            stylers: {
+              color: '#ffffffff'
             }
           }
         ]
@@ -7742,7 +7801,8 @@ export function getPointMap() {
       {
         type: 'scatter',
         coordinateSystem: 'bmap',
-        data: mapValue(metadata)
+        data: mapValue(metadata),
+        symbolSize: 8
       }
     ]
   }

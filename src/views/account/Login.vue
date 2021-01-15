@@ -52,7 +52,7 @@
       </a-tabs>
 
       <a-form-item>
-        <router-link class="register" :to="{ name: 'register' }">Register</router-link>
+        <router-link class="register" :to="{ name: 'register' }" disabled>Register</router-link>
         <a @click="redirectFindBack" class="forge-password" style="float: right;">Forget Password?</a>
       </a-form-item>
 
@@ -168,8 +168,8 @@ export default {
       console.log('Login Error: ', err)
       this.isLoginError = true
       this.$notification.error({
-        message: '错误',
-        description: '请求出现错误，请稍后再试',
+        message: 'Error',
+        description: 'Request Error, Please Retry Later.',
         duration: 4
       })
       this.Logout()

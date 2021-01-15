@@ -8,7 +8,7 @@
     </template>
 
     <div class="mask-window" v-if="reportFormVisible" @click="hideReportForm"></div>
-    <report-form class="popup-form-container" :reportTool="reportTool" :mode="creationMode" v-if="reportFormVisible" @finished="forceUpdate"></report-form>
+    <report-form class="popup-form-container" :reportTool="reportTool" :mode="mode" v-if="reportFormVisible" @finished="forceUpdate"></report-form>
 
     <report-list></report-list>
   </page-view>
@@ -42,6 +42,7 @@ export default {
   data() {
     return {
       reportFormVisible: false,
+      mode: 'directory'
     }
   },
   methods: {
@@ -64,6 +65,7 @@ export default {
   created() {
     if(this.creationMode) {
       this.reportFormVisible = true
+      this.mode = this.creationMode
     }
   }
 }

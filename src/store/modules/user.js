@@ -51,12 +51,10 @@ const user = {
       return new Promise((resolve, reject) => {
         getInfo()
           .then(response => {
-            console.log('GetInfo: ', response, userInfo)
+            userInfo.name = response.name ? response.name : response.preferred_username
+            userInfo.username = v.titleCase(userInfo.name)
 
-            if (response.preferred_username) {
-              userInfo.name = response.preferred_username
-              userInfo.username = v.titleCase(response.preferred_username)
-            }
+            console.log('GetInfo: ', response, userInfo, userInfo.name)
 
             if (userInfo.role && userInfo.role.permissions.length > 0) {
               const role = userInfo.role

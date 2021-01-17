@@ -99,7 +99,7 @@ export default {
   width: 1000px;
   top: 30%;
   left: 50%;
-  margin-top: -100px;
+  margin-top: -150px;
   margin-left: -500px;
   z-index: 1001;
 

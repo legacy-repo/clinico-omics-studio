@@ -331,6 +331,13 @@ export const asyncRouterMap = [
             meta: { title: 'XPS2PDF', keepAlive: true }
           },
           {
+            path: '/tool/merge-rnaseq-exp',
+            name: 'merge-rnaseq-exp',
+            hidden: true,
+            component: () => import('@/views/tools/MergeExp'),
+            meta: { title: 'Merge Expression Table', keepAlive: true }
+          },
+          {
             path: '/tool/sigma',
             name: 'sigma',
             hidden: true,

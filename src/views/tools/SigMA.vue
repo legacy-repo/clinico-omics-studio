@@ -168,21 +168,24 @@ const columns = [
   {
     title: 'Created Time',
     dataIndex: 'createdTime',
-    key: 'createdTime'
+    key: 'createdTime',
+    align: 'center'
   },
   {
     title: 'Status',
     key: 'status',
     dataIndex: 'status',
     scopedSlots: { customRender: 'status' },
-    width: '100px'
+    width: '100px',
+    align: 'center'
   },
   {
     title: 'Result',
     dataIndex: 'result',
     key: 'result',
     scopedSlots: { customRender: 'result' },
-    width: '100px'
+    width: '100px',
+    align: 'center'
   }
 ]
 

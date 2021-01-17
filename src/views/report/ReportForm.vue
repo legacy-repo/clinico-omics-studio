@@ -93,6 +93,7 @@
         style="float: right; width: 100px;"
       >Submit</a-button>
     </a-form>
+    <div class="mask-window" v-if="fileBrowserActive"></div>
     <popup-file-browser
       filterType="/"
       @select-files="confirmSelectFiles"

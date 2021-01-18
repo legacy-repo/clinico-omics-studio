@@ -5,10 +5,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <link rel="icon" href="<%= BASE_URL %>logo.png" />
+    <meta http-equiv="Expires" content="0" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Cache-control" content="no-cache" />
+    <meta http-equiv="Cache" content="no-cache" />
     <!-- <link rel="stylesheet" href="//cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css"/> -->
     <link rel="stylesheet" href="//at.alicdn.com/t/font_2155842_k7bze8rvc3t.css" />
     <title>ClinicoOmics Platform</title>
-    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=WNOTyCIzhkkSTYCP13F8YxM5U6gPPNNu"></script>
+    <script
+      type="text/javascript"
+      src="http://api.map.baidu.com/api?v=2.0&ak=WNOTyCIzhkkSTYCP13F8YxM5U6gPPNNu"
+    ></script>
     <style>
       #loading-mask {
         position: fixed;
@@ -112,9 +119,22 @@
     <!-- built files will be auto injected -->
   </body>
   <script>
-    !(function(c,b,d,a){c[a]||(c[a]={});c[a].config={pid:"a09h3slvga@f91caae0a2b260a",appType:"web",imgUrl:"https://arms-retcode.aliyuncs.com/r.png?",sendResource:true,enableLinkTrace:true,behavior:true,enableSPA:true,useFmp:true,enableConsole:true};
-    with(b)with(body)with(insertBefore(createElement("script"),firstChild))setAttribute("crossorigin","",src=d)
-    })(window,document,"https://retcode.alicdn.com/retcode/bl.js","__bl");
+    !(function(c, b, d, a) {
+      c[a] || (c[a] = {})
+      c[a].config = {
+        pid: 'a09h3slvga@f91caae0a2b260a',
+        appType: 'web',
+        imgUrl: 'https://arms-retcode.aliyuncs.com/r.png?',
+        sendResource: true,
+        enableLinkTrace: true,
+        behavior: true,
+        enableSPA: true,
+        useFmp: true,
+        enableConsole: true
+      }
+      with (b)
+        with (body) with (insertBefore(createElement('script'), firstChild)) setAttribute('crossorigin', '', (src = d))
+    })(window, document, 'https://retcode.alicdn.com/retcode/bl.js', '__bl')
   </script>
 
   <!--
@@ -135,5 +155,4 @@
     }
   </script>
   <script type="text/javascript" src="https://retcode.alicdn.com/retcode/bl.js" crossorigin></script> 
--->
-</html>
+--></html>

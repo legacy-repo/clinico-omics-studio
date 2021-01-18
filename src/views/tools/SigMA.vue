@@ -350,7 +350,7 @@ export default {
           const idx = this.data.findIndex(obj => obj.log == task.log)
           if (resp.status.toUpperCase() == 'SUCCESS') {
             this.data[idx].status = 'success'
-          } else if (resp.status.toUpperCase == 'ERROR') {
+          } else if (resp.status.toUpperCase() == 'ERROR') {
             this.data[idx].status = 'error'
           }
         })

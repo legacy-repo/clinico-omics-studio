@@ -237,11 +237,11 @@ export default {
 
       runningTasks.forEach(task => {
         this.updateTask(task, resp => {
-          console.log('updateTask: ', task, resp)
           const idx = this.data.findIndex(obj => obj.log == task.log)
+          console.log('updateTask: ', task, resp, idx, resp.status.toUpperCase())
           if (resp.status.toUpperCase() == 'SUCCESS') {
             this.data[idx].status = 'success'
-          } else if (resp.status.toUpperCase == 'ERROR') {
+          } else if (resp.status.toUpperCase() == 'ERROR') {
             this.data[idx].status = 'error'
           }
         })
@@ -374,6 +374,8 @@ export default {
     }
 
     .help-doc {
+      overflow: scroll;
+      text-align: justify;
       height: 180px;
       border-radius: 3px;
       border: 1px solid #e8e8e8;

@@ -167,7 +167,7 @@ export const asyncRouterMap = [
               path: route.query.path,
               enabledContextMenu: componentSettings.disabledContextMenu !== 'true'
             }),
-            meta: { title: 'File Management', icon: 'codepen-circle', keepAlive: true }
+            meta: { title: 'File Management', icon: 'codepen-circle', keepAlive: false }
           },
           {
             path: '/seq-flow/submit/:pageNo([1-9]\\d*)?',

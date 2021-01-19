@@ -1138,6 +1138,10 @@ export default {
         .catch(error => {
           console.log('getUploadUrl: ', error)
         })
+    },
+    initFileService() {
+      this.loadBookmarks()
+      this.loadServices(this.loadService)
     }
   },
   watch: {
@@ -1163,7 +1167,12 @@ export default {
           // Authorization header will cause invalid request error, so we need use axios instead of this.$http
           axios.get(this.downloadUrl).then(response => {
             // Sometimes the previewContent will be not shown because the valud is number 0. bool(0) will return false.
-            this.previewContent = JSON.stringify(response.data)
+            const data = response.data
+            if (typeof data == 'number') {
+              this.previewContent = JSON.stringify(data)
+            } else {
+              this.previewContent = data
+            }
           })
         }
       })
@@ -1189,8 +1198,7 @@ export default {
       this.selectedRowKeys = this.selected
     }
 
-    this.loadBookmarks()
-    this.loadServices(this.loadService)
+    this.initFileService()
   }
 }
 </script>

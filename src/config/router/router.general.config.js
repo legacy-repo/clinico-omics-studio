@@ -187,7 +187,7 @@ export const asyncRouterMap = [
               title: 'Job Management',
               icon: 'file-sync',
               drawerMode: false,
-              keepAlive: true,
+              keepAlive: false,
               permission: ['table']
             }
           },
@@ -196,7 +196,7 @@ export const asyncRouterMap = [
             name: 'project-management',
             hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
             component: () => import('@/views/workflow/ProjectManagement'),
-            meta: { title: 'Project Management', icon: 'solution', permission: ['table'], keepAlive: true }
+            meta: { title: 'Project Management', icon: 'solution', permission: ['table'], keepAlive: false }
           }
         ]
       },

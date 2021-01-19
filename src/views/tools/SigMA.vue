@@ -130,7 +130,7 @@
               >Download</a>
             </span>
             <span slot="status" slot-scope="status">
-              <a-tag :color="status === 'success' ? 'green' : 'volcano'">{{ status.toUpperCase() }}</a-tag>
+              <a-tag :color="formatColor(status)">{{ status.toUpperCase() }}</a-tag>
             </span>
           </a-table>
           <a-icon slot="extra" type="delete" @click="removeHistory" />
@@ -355,6 +355,15 @@ export default {
           }
         })
       })
+    },
+    formatColor(status) {
+      if (status == 'success') {
+        return '#87d068'
+      } else if (status == 'running') {
+        return '#108ee9'
+      } else {
+        return '#f50'
+      }
     },
     updateTask(task, callback) {
       this.$http({

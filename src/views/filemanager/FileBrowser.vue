@@ -1162,7 +1162,8 @@ export default {
         if (this.recordDetail.size < 1048576) {
           // Authorization header will cause invalid request error, so we need use axios instead of this.$http
           axios.get(this.downloadUrl).then(response => {
-            this.previewContent = response
+            // Sometimes the previewContent will be not shown because the valud is number 0. bool(0) will return false.
+            this.previewContent = JSON.stringify(response.data)
           })
         }
       })

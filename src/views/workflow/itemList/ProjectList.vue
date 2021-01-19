@@ -183,7 +183,8 @@ export default {
       installedApps: [],
       loading: false,
       radioGroupValue: 'total',
-      strokeColor: { '0%': '#108ee9', '100%': '#87d068' }
+      strokeColor: { '0%': '#108ee9', '100%': '#87d068' },
+      timer: null
     }
   },
   computed: {
@@ -351,6 +352,11 @@ export default {
     this.timer = setInterval(() => {
       this.refresh()
     }, 60000)
+  },
+  // When keepAlive is true, we need to clear timer before route leaving
+  beforeRouteLeave (to, from, next) {
+    clearInterval(this.timer)
+    next()
   },
   beforeDestroy () {
     clearInterval(this.timer)

@@ -29,8 +29,8 @@
           <span style="vertical-align: middle;">{{ nickname }}</span>
         </span>
         <a-menu slot="overlay" class="user-dropdown-menu-wrapper">
-          <a-menu-item key="0" disabled>
-            <router-link :to="{ name: 'center' }">
+          <a-menu-item key="0">
+            <router-link :to="{ name: 'center' }" disabled>
               <a-icon type="user" />
               <span>User Center</span>
             </router-link>

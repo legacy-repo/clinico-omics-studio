@@ -451,9 +451,9 @@ body::-webkit-scrollbar {
 .user-dropdown-menu-wrapper.ant-dropdown-menu {
   padding: 4px 0;
 
-  .ant-dropdown-menu-item {
-    width: 160px;
-  }
+  // .ant-dropdown-menu-item {
+  //   width: 160px;
+  // }
 
   .ant-dropdown-menu-item > .anticon:first-child,
   .ant-dropdown-menu-item > a > .anticon:first-child,
@@ -546,4 +546,9 @@ body::-webkit-scrollbar {
   border: 1px solid #eee;
   border-radius: 5px;
   background-color: #fff;
+}
+
+.ant-dropdown-menu-item > a[disabled],
+.ant-dropdown-menu-submenu-title > a[disabled] {
+  color: rgba(0,0,0,.25);
 }

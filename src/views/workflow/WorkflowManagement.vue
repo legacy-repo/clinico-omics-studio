@@ -127,7 +127,8 @@ export default {
     return {
       project: {
         statusDetails: {}
-      }
+      },
+      timer: null
     }
   },
   computed: {
@@ -206,6 +207,11 @@ export default {
     this.timer = setInterval(() => {
       this.searchProject(this.projectId)
     }, 60000)
+  },
+  // When keepAlive is true, we need to clear timer before route leaving
+  beforeRouteLeave (to, from, next) {
+    clearInterval(this.timer)
+    next()
   },
   beforeDestroy() {
     clearInterval(this.timer)

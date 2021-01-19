@@ -49,7 +49,7 @@
               </span>
               <span slot="status" slot-scope="status">
                 <a-tag
-                  :color="status === 'success' ? 'green' : 'volcano'"
+                  :color="formatColor(status)"
                 >{{ status.toUpperCase() }}</a-tag>
               </span>
             </a-table>
@@ -129,6 +129,15 @@ export default {
       this.loadHistory()
       this.$message.success('Remove History Successfully.')
       event.stopPropagation()
+    },
+    formatColor(status) {
+      if (status == 'success') {
+        return '#87d068'
+      } else if (status == 'running') {
+        return '#108ee9'
+      } else {
+        return '#f50'
+      }
     },
     update () {
       this.$nextTick(() => {

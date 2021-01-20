@@ -21,7 +21,7 @@ import './utils/filter' // global filter
 import i18n from './locales'
 
 Vue.config.productionTip = false
-Vue.config.devtools = true
+Vue.config.devtools = false
 
 // mount axios Vue.$http and this.$http
 Vue.use(VueAxios)

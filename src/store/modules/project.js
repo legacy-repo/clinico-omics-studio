@@ -49,7 +49,7 @@ const formatRecords = function (records) {
       finishedAt: formatDateTime(record.finished_time),
       samples: record.samples,
       labels: record.labels,
-      status: formatStatus(record.status),
+      status: record.finished_time ? 'success' : formatStatus(record.status),
       statusDetails: {
         success: 0,
         running: 0,
@@ -57,7 +57,7 @@ const formatRecords = function (records) {
         total: record.samples.length,
         error: 0
       },
-      percentage: Math.floor(record.percentage * 100) / 100
+      percentage: record.finished_time ? 100 : Math.floor(record.percentage * 100) / 100
     })
   }
 

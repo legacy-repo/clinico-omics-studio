@@ -52,19 +52,29 @@
           title="Ongoing Projects"
           :body-style="{ padding: 0 }"
         >
-          <a slot="extra" @click="onShowProjectMgmt">All Projects</a>
+          <a-button slot="extra" type="primary" @click="onShowProjectMgmt" style="margin-right: 5px;">All Projects</a-button>
+          <a-radio-group
+            slot="extra"
+            defaultValue="active"
+            @change="filterProject"
+          >
+            <a-radio-button value="total">Total</a-radio-button>
+            <a-radio-button value="active">Running</a-radio-button>
+            <a-radio-button value="exception">Failed</a-radio-button>
+            <a-radio-button value="success">Finished</a-radio-button>
+          </a-radio-group>
           <div>
             <a-card-grid
               @click.native="showProject(item.id)"
               style="width:25%;"
               class="project-card-grid"
               :key="i"
-              v-for="(item, i) in projects"
+              v-for="(item, i) in filteredProject"
             >
               <a-card :bordered="false" :body-style="{ padding: 0 }">
                 <a-card-meta>
                   <div slot="title" class="card-title">
-                    <a-icon theme="filled" spin type="clock-circle" style="color: #52c41a" />
+                    <a-icon theme="filled" v-if="item.status !== 'success'" spin type="clock-circle" style="color: #52c41a" />
                     <a-badge
                       :count="item.percentage"
                       :overflowCount="100"
@@ -81,7 +91,7 @@
                 </div>
               </a-card>
             </a-card-grid>
-            <a-list v-if="projects.length == 0"></a-list>
+            <a-list v-if="filteredProject.length == 0"></a-list>
           </div>
         </a-card>
       </a-row>
@@ -161,6 +171,7 @@ export default {
     return {
       timeFix: timeFix(),
       projects: [],
+      filteredProject: [],
       activities: [],
       teams: [],
       projectNums: '0',
@@ -193,6 +204,18 @@ export default {
       getReportList: 'GetReportList',
       getWorkflowList: 'GetWorkflowList'
     }),
+    filterProject(e) {
+      const status = e.target.value
+      this.filteredProject = filter(this.projects, project =>  {
+        if (status == 'total') {
+          return true
+        } else {
+          return project.status == status
+        }
+      })
+
+      console.log("Workplace - filterProject: ", status, this.projects, this.filteredProject)
+    },
     showProject(projectId) {
       this.$router.push({
         name: 'job-management',
@@ -238,7 +261,7 @@ export default {
         page: 1,
         per_page: 12
       }).then(result => {
-        this.projects = filter(result.data, this.runningStatus)
+        this.projects = result.data
         this.projectNums = result.total.toString()
         this.loading = false
       })

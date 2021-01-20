@@ -1,5 +1,5 @@
 <template>
-  <div class="file-list">
+  <div class="file-list" :key="refreshKey">
     <a-card
       :bordered="false"
       :class="{ standalone: standalone }"
@@ -352,6 +352,11 @@ export default {
     ChartModal
   },
   props: {
+    refreshKey: {
+      required: false,
+      default: '',
+      type: String
+    },
     path: {
       required: false,
       default: '',
@@ -744,6 +749,7 @@ export default {
           console.log('Load Services: ', response)
           this.services = response.services
           console.log('loadServices: ', this.defaultService, this.services)
+          
           if (this.services.indexOf(this.defaultService) > -1) {
             this.service = this.defaultService
           } else {
@@ -764,22 +770,26 @@ export default {
           this.$message.error('Can not load any services.')
         })
     },
-    loadService() {
+    loadService(reloadService) {
       this.getBuckets({ service: this.service })
         .then(response => {
           this.buckets = response.data
+
           if (this.buckets.length > 0) {
-            if (this.isValidLink(this.path)) {
-              if (this.bucketName) {
-                this.onSearch(this.path)
+            // Only want to reload Service
+            if (!reloadService) {
+              if (this.isValidLink(this.path)) {
+                if (this.bucketName) {
+                  this.onSearch(this.path)
+                } else {
+                  this.$message.error('No such link.')
+                  this.$router.go(-1)
+                }
               } else {
-                this.$message.error('No such link.')
-                this.$router.go(-1)
+                // Invalid path
+                this.bucketName = this.buckets[0]
+                this.redirectHome()
               }
-            } else {
-              // Invalid path
-              this.bucketName = this.buckets[0]
-              this.redirectHome()
             }
           } else {
             this.$message.error('No such link.')
@@ -830,13 +840,15 @@ export default {
       this.loadBookmarks()
     },
     isDirectory(link) {
-      if (link.match(/.*\/$/)) {
+      // e.g. "oss://share-data-temp/R20059380-20201027-LCL3-3-20201027-LCL3-3_combined/" || "oss://share-data-temp"
+      if (/.*\/$/.test(link) || /(.*):\/\/([a-zA-Z0-9\-._:]+)$/.test(link)) {
         return true
       } else {
         return false
       }
     },
     parseFile(link) {
+      console.log('Parse File: ', link)
       // e.g. "oss://share-data-temp/NARD/R20059380-20201027-LCL3-3-20201027-LCL3-3_combined_R2.fastq.gz"
       let parsedList = link.match(/(.*):\/\/([a-zA-Z0-9\-._:]+)\/(.*)\/([^/]*)$/)
       if (parsedList) {
@@ -852,10 +864,19 @@ export default {
       }
     },
     parseDirectory(link) {
+      console.log('Parse Directory: ', link)
+      // e.g. "oss://share-data-temp/R20059380-20201027-LCL3-3-20201027-LCL3-3_combined/"
       let parsedList = link.match(/(.*):\/\/([a-zA-Z0-9\-._:]+)\/(.*)\/$/)
       if (parsedList) {
         // serviceName, bucketName, prefix, fileName
         return parsedList.slice(1).concat('')
+      }
+
+      // e.g. "oss://share-data-temp/"
+      parsedList = link.match(/(.*):\/\/([a-zA-Z0-9\-._:]+)\/?$/)
+      if (parsedList) {
+        // serviceName, bucketName, prefix
+        return [parsedList[1], parsedList[2], '']
       }
     },
     parsePath(link) {
@@ -867,20 +888,22 @@ export default {
       }
     },
     isValidLink(link) {
-      if (link.match(/(.*):\/\/([a-zA-Z0-9\-._:]+)\/(.*)/)) {
+      if (/(.*):\/\/(.*)/.test(link)) {
         return true
       } else {
         return false
       }
     },
     onSearch(searchStr) {
-      console.log('onSearch: ', searchStr)
+      // TODO: How to handle invalid link?
+      console.log('onSearch: ', searchStr, this.parsePath(searchStr))
       if (this.isValidLink(searchStr)) {
         // Search with oss://|s3:// link
         const [service, bucketName, prefix, fileName] = this.parsePath(searchStr)
         this.service = service
         this.bucketName = bucketName
-        const pathList = this.trimSlash(prefix).split('/')
+        const trimmedPrefix = this.trimSlash(prefix)
+        const pathList = trimmedPrefix == '' ? [] : trimmedPrefix.split('/')
         this.redirect(pathList, fileName)
       } else {
         // Search in current directory
@@ -968,6 +991,8 @@ export default {
         prefix = this.getPrefix(pathList, fileName)
       }
 
+      // We need to update buckets list when we redirect from a path
+      this.loadService(true)
       this.searchObjects(this.bucketName, this.defaultPage, this.defaultPageSize, prefix)
     },
     resetFilters() {
@@ -1075,13 +1100,10 @@ export default {
       return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
     },
     getPrefix(pathList, searchStr) {
-      // this.pathList.join('/') + '/': Prefix need a slash when you are a directory
-      // When need to list directory, searchStr must be an empty string
-      const prefix = pathList.join('/') + '/' + searchStr
-      if (prefix === '/') {
-        return null
+      if (pathList && pathList.length > 0) {
+        return pathList.join('/') + '/' + searchStr
       } else {
-        return prefix
+        return searchStr
       }
     },
     handleRemove(file) {
@@ -1142,6 +1164,9 @@ export default {
     initFileService() {
       this.loadBookmarks()
       this.loadServices(this.loadService)
+    },
+    resetSelections() {
+      this.selectedRowKeys = this.selected
     }
   },
   watch: {
@@ -1176,6 +1201,15 @@ export default {
           })
         }
       })
+    },
+    selected: function() {
+      this.resetSelections()
+      // Redirect to the first filepath
+      if (this.selected.length > 0) {
+        // We need to redirect the parent directory but the directory
+        const self = this.trimSlash(this.selected[0])
+        this.onSearch(self)
+      }
     }
   },
   computed: {
@@ -1195,7 +1229,7 @@ export default {
   created() {
     // Restore Selected
     if (!this.standalone) {
-      this.selectedRowKeys = this.selected
+      this.resetSelections()
     }
 
     this.initFileService()

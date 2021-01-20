@@ -4,7 +4,12 @@
       <a-col :sm="24" :xs="24" :md="12" :lg="12" class="file-info">
         <a-row class="title" style="padding-left: 0px;">
           <span>File Properties</span>
-          <a-button style="float: right; height: 18px; padding-right: 0px;" type="link" icon="info-circle" @click="showDetails(recordId)">Details</a-button>
+          <a-button
+            style="float: right; height: 18px; padding-right: 0px;"
+            type="link"
+            icon="info-circle"
+            @click="showDetails(recordId)"
+          >Details</a-button>
         </a-row>
         <a-row v-for="(value, key) in fileRecord" :key="key" class="content">
           <a-col :sm="8" :xs="24" class="key">{{ formatKey(key) }}</a-col>
@@ -93,7 +98,7 @@ export default {
     showDetails(link) {
       this.$router.push({
         name: 'file-manager',
-        query: { path: link }
+        query: { path: link, refreshKey: JSON.stringify(Date.now()) }
       })
     },
     formatKey(key) {

@@ -165,9 +165,11 @@ export const asyncRouterMap = [
             component: () => import('@/views/filemanager/FileBrowser'),
             props: route => ({
               path: route.query.path,
+              // We need a dynamic string to force render the FileBrowser component when we pass a path.
+              refreshKey: route.query.refreshKey,
               enabledContextMenu: componentSettings.disabledContextMenu !== 'true'
             }),
-            meta: { title: 'File Management', icon: 'codepen-circle', keepAlive: false }
+            meta: { title: 'File Management', icon: 'codepen-circle', keepAlive: true }
           },
           {
             path: '/seq-flow/submit/:pageNo([1-9]\\d*)?',

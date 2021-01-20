@@ -273,7 +273,7 @@ export default {
       const minioLink = 'minio://tservice/' + result
       this.$router.push({
         name: 'file-manager',
-        query: { path: minioLink }
+        query: { path: minioLink, refreshKey: JSON.stringify(Date.now()) }
       })
     },
     formatParameters(values) {

@@ -89,7 +89,13 @@
                       slot="content"
                       style="font-size: 16px; margin-bottom: 10px; display: block;"
                     >All tasks will rerun, sure?</span>
-                    <a-button type="danger" @click="resubmitJob(item.id)" slot="content" size="small" style="margin-left: 50%;">
+                    <a-button
+                      type="danger"
+                      @click="resubmitJob(item.id)"
+                      slot="content"
+                      size="small"
+                      style="margin-left: 50%;"
+                    >
                       <a-icon type="redo" />Resubmit
                     </a-button>
                     <a>Resubmit</a>
@@ -315,7 +321,7 @@ export default {
             } else if (workflowOutput) {
               this.$router.push({
                 name: 'file-manager',
-                query: { path: workflowOutput + '/' } // Need to add a slash when the path is a directory
+                query: { path: workflowOutput + '/', refreshKey: JSON.stringify(Date.now()) } // Need to add a slash when the path is a directory
               })
             } else {
               this.$message.warning('No such result.')
@@ -328,7 +334,10 @@ export default {
             } else {
               this.$router.push({
                 name: 'file-manager',
-                query: { path: protocol + '://' + 'projects/' + this.projectName + '/' + id + '/' }
+                query: {
+                  path: protocol + '://' + 'projects/' + this.projectName + '/' + id + '/',
+                  refreshKey: JSON.stringify(Date.now())
+                }
               })
             }
           }
@@ -342,7 +351,7 @@ export default {
       if (data.startsWith('s3://') || data.startsWith('oss://') || data.startsWith('minio://')) {
         this.$router.push({
           name: 'file-manager',
-          query: { path: data }
+          query: { path: data, refreshKey: JSON.stringify(Date.now()) }
         })
       } else {
         this.$message.warning('Non-file Link.')
@@ -358,7 +367,7 @@ export default {
     }, 60000)
   },
   // When keepAlive is true, we need to clear timer before route leaving
-  beforeRouteLeave (to, from, next) {
+  beforeRouteLeave(to, from, next) {
     clearInterval(this.timer)
     next()
   },

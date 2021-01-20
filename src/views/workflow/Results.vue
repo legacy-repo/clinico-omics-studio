@@ -313,7 +313,7 @@ export default {
     redirectFS(path) {
       this.$router.push({
         name: 'file-manager',
-        query: { path: path }
+        query: { path: path, refreshKey: JSON.stringify(Date.now()) }
       })
     },
     filterByArray(items, keys) {

@@ -104,7 +104,7 @@
         </template>
       </a-form-item>
     </a-form>
-    <a-row class="box" v-if="fileManagerActive">
+    <a-row class="box" v-show="fileManagerActive">
       <popup-file-browser
         @select-files="confirmSelectFiles"
         @cancel-select-files="cancelSelectFiles"
@@ -173,8 +173,12 @@ export default {
 
       console.log('Registry File Manager: ', model, multiple, filterType, this.selected)
     },
-    cancelSelectFiles() {
+    resetFileBrowser() {
       this.fileManagerActive = false
+      this.selected = []      
+    },
+    cancelSelectFiles() {
+      this.resetFileBrowser()
     },
     getPath(file) {
       return file.path
@@ -185,7 +189,8 @@ export default {
       return filePaths
     },
     confirmSelectFiles(filePathList) {
-      this.fileManagerActive = false
+      this.resetFileBrowser()
+
       const fields = {}
       if (this.multiple) {
         fields[this.whichFileManager] = filePathList

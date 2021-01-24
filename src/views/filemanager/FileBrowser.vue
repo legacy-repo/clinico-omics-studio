@@ -16,10 +16,10 @@
         <a-select :value="bucketName" style="width: 200px" @change="selectBucket">
           <a-select-option v-for="bucket in buckets" :key="bucket">{{ bucket }}</a-select-option>
         </a-select>
-        <a-button @click="switchUploadPanel" v-if="standalone">
+        <a-button @click="switchUploadPanel" v-if="standalone" disabled>
           <a-icon type="upload" />Upload
         </a-button>
-        <a-button @click="switchFolderDialog" v-if="standalone">
+        <a-button @click="switchFolderDialog" v-if="standalone" disabled>
           <a-icon type="folder-add" />Add Folder
         </a-button>
         <a-button @click="refresh">

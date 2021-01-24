@@ -82,7 +82,7 @@ export const config = (function() {
       websiteId: 'clinicoomics',
       noPermission: false,
       websiteDesc: 'The ClinicoOmics Platform for Clinico OMICS & BioMedGPS',
-      defaultCollection: 'fuscctnbc'
+      defaultCollection: 'tcoa'
     }
   }
 })()

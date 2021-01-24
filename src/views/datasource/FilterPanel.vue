@@ -84,6 +84,11 @@
           </a-row>
         </a-tab-pane>
         <a-tab-pane tab="Search Advanced" key="2" disabled></a-tab-pane>
+        <a-select :defaultValue="defaultCollection" style="width: 240px" @change="loadProject" slot="tabBarExtraContent">
+          <a-select-option :value="collection.key" v-for="collection in collections" :key="collection.key">
+            {{ collection.name }}
+          </a-select-option>
+        </a-select>
       </a-tabs>
       <a-tabs defaultActiveKey="1">
         <a-tab-pane tab="Table" key="1">
@@ -386,6 +391,10 @@ export default {
         height: calc(100% - 45px);
       }
     }
+  }
+
+  .ant-select-selection-selected-value {
+    color: @primary-color;
   }
 }
 

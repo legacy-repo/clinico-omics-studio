@@ -228,8 +228,8 @@ const data = {
     collections: [
       {
         key: 'quartet',
-        name: 'Chinese Quartet',
-        description: 'The Quartet Projectfor Quality Controlof Multi-omics Profiling',
+        name: 'Chinese Quartet & Sample ABCD',
+        description: 'The Quartet Project for Quality Control of Multi-omics Profiling',
         tabs: [
           {
             title: 'Files',
@@ -249,9 +249,9 @@ const data = {
         ]
       },
       {
-        key: 'fuscctnbc',
-        name: 'FUSCC TNBC',
-        description: 'Multi-omics data for primary triple-negative breast cancer (TNBC).',
+        key: 'tcoa',
+        name: 'The Cancer Omics Atlas',
+        description: 'Multi-omics Data for The Cancer Omics Atlas (TCOA).',
         tabs: [
           {
             title: 'Files',

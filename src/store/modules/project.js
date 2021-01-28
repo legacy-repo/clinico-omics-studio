@@ -24,7 +24,7 @@ const formatStatus = function (status) {
 
 const formatDateTime = function (datetime) {
   if (datetime && datetime > 0) {
-    return moment(datetime).utcOffset('+16:00').format('YYYY-MM-DD HH:mm')
+    return moment(datetime).utcOffset('+8:00').format('YYYY-MM-DD HH:mm')
   } else {
     return '0000-00-00 00:00'
   }

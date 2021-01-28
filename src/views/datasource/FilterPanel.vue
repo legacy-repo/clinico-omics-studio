@@ -84,7 +84,7 @@
           </a-row>
         </a-tab-pane>
         <a-tab-pane tab="Search Advanced" key="2" disabled></a-tab-pane>
-        <a-select :defaultValue="defaultCollection" style="width: 240px" @change="loadProject" slot="tabBarExtraContent">
+        <a-select :defaultValue="defaultCollection" style="width: 260px" @change="loadProject" slot="tabBarExtraContent">
           <a-select-option :value="collection.key" v-for="collection in collections" :key="collection.key">
             {{ collection.name }}
           </a-select-option>

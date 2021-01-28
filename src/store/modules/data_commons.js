@@ -250,7 +250,7 @@ const data = {
       },
       {
         key: 'tcoa',
-        name: 'The Cancer Omics Atlas',
+        name: 'The Cancer Omics Atlas (TCOA)',
         description: 'Multi-omics Data for The Cancer Omics Atlas (TCOA).',
         tabs: [
           {

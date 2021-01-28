@@ -276,6 +276,7 @@ import axios from 'axios'
 import filter from 'lodash.filter'
 import flatMap from 'lodash.flatmap'
 import uniqBy from 'lodash.uniqby'
+import FileSaver from 'file-saver'
 
 import Vue from 'vue'
 import Contextmenu from 'vue-contextmenujs'
@@ -749,7 +750,7 @@ export default {
           console.log('Load Services: ', response)
           this.services = response.services
           console.log('loadServices: ', this.defaultService, this.services)
-          
+
           if (this.services.indexOf(this.defaultService) > -1) {
             this.service = this.defaultService
           } else {
@@ -928,6 +929,20 @@ export default {
         })
     },
     downloadFile(link) {
+      try {
+        let isFileSaverSupported = !!new Blob()
+        let fileName = link
+          .split('/')
+          .pop()
+          .split('#')[0]
+          .split('?')[0]
+        console.log('Support FileSaver?', isFileSaverSupported)
+        FileSaver.saveAs(link, fileName)
+      } catch (e) {
+        this.downloadFileAsLink(link)
+      }
+    },
+    downloadFileAsLink(link) {
       const downloadAnchorNode = document.createElement('a')
       downloadAnchorNode.setAttribute('href', link)
       downloadAnchorNode.setAttribute('target', '_blank')

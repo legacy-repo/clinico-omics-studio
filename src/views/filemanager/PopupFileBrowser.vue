@@ -70,6 +70,16 @@ export default {
       return 'file-browser'
     }
   },
+  watch: {
+    selected: {
+      handler: function (newVal, oldVal) {
+        if (newVal.length > 0) {
+          this.files = newVal
+        }
+      },
+      deep: true
+    }
+  },
   methods: {
     getPath(file) {
       return file.path

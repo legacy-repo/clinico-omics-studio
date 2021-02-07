@@ -13,7 +13,8 @@
  *
  */
 
-const project = 'clinico-omics'
+// const project = 'clinico-omics'
+const project = 'quartet'
 export const config = (function() {
   if (project == 'quartet') {
     return {
@@ -47,7 +48,10 @@ export const config = (function() {
       websiteId: 'quartet', // clinicoomics
       noPermission: true, // false
       websiteDesc: 'The Quartet Project for the Quality Control of Omics Data', // The ClinicoOmics Platform for Clinico OMICS & BioMedGPS
-      defaultCollection: 'quartet'
+      defaultCollection: 'quartet',
+      feedbackEntrypoint: 'https://yuque.com/quartet/topics?language=en-us',
+      policyEntrypoint: 'https://yuque.com/quartet/policies?language=en-us',
+      helpEntrypoint: 'https://yuque.com/quartet/help?language=en-us'
     }
   } else if (project == 'clinico-omics') {
     return {
@@ -82,7 +86,10 @@ export const config = (function() {
       websiteId: 'clinicoomics',
       noPermission: false,
       websiteDesc: 'The ClinicoOmics Platform for Clinico OMICS & BioMedGPS',
-      defaultCollection: 'tcoa'
+      defaultCollection: 'tcoa',
+      feedbackEntrypoint: 'https://yuque.com/clinico-omics/topics',
+      policyEntrypoint: 'https://yuque.com/clinico-omics/policies',
+      helpEntrypoint: 'https://yuque.com/clinico-omics/help'
     }
   }
 })()
@@ -94,7 +101,7 @@ export function initBaseURL() {
     console.log(`BASE_API_URL: ${apiService}`)
     return apiService
   } else if (project === 'quartet') {
-    const apiService = 'http://10.157.72.56'
+    const apiService = 'http://quartet-backend.3steps.cn'
     console.log(`BASE_API_URL: ${apiService}`)
     return apiService
   }

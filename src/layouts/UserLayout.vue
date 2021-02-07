@@ -4,7 +4,7 @@
       <div class="top">
         <div class="header">
           <router-link :to="{ name: 'welcome' }">
-            <img :src="websiteLogo" class="logo" alt="logo">
+            <img :src="websiteLogo" class="logo" alt="logo" />
             <span class="title">{{ websiteName }}</span>
           </router-link>
         </div>
@@ -17,13 +17,12 @@
 
       <div class="footer">
         <div class="links">
-          <a href="https://yuque.com/clinico-omics/help">Help</a>
-          <a href="https://yuque.com/clinico-omics/topics">Feedback</a>
+          <a :href="policyEntrypoint">Help</a>
+          <a :href="helpEntrypoint">Help</a>
+          <a :href="feedbackEntrypoint">Feedback</a>
           <a href="_self">Terms</a>
         </div>
-        <div class="copyright">
-          Copyright &copy;  2019 The Genius Medicine Consortium
-        </div>
+        <div class="copyright">Copyright &copy; 2019 The Genius Medicine Consortium</div>
       </div>
     </div>
   </div>
@@ -32,23 +31,27 @@
 <script>
 import RouteView from './RouteView'
 import { mixinDevice } from '@/utils/mixin'
+import { mapGetters } from 'vuex'
 import { websiteDesc, websiteLogo, websiteName } from '@/config/defaultSettings'
 
 export default {
   name: 'UserLayout',
   components: { RouteView },
+  computed: {
+    ...mapGetters(['topicEntrypoint', 'policyEntrypoint', 'helpEntrypoint'])
+  },
   mixins: [mixinDevice],
-  data () {
+  data() {
     return {
       websiteDesc,
       websiteLogo,
       websiteName
     }
   },
-  mounted () {
+  mounted() {
     document.body.classList.add('userLayout')
   },
-  beforeDestroy () {
+  beforeDestroy() {
     document.body.classList.remove('userLayout')
   }
 }
@@ -105,7 +108,7 @@ export default {
 
         .title {
           font-size: 33px;
-          color: rgba(0, 0, 0, .85);
+          color: rgba(0, 0, 0, 0.85);
           font-family: Avenir, 'Helvetica Neue', Arial, Helvetica, sans-serif;
           font-weight: 600;
           position: relative;

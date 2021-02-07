@@ -389,34 +389,6 @@ export const constantRouterMap = [
     meta: { isPublic: true, keepAlive: false }
   },
 
-  {
-    path: '/metabase',
-    name: 'Metabase Iframe',
-    props: route => ({ src: 'http://metabase.3steps.cn', toPath: 'welcome' }),
-    component: () => import('@/views/iframe/EmbededFrame')
-  },
-
-  {
-    path: '/api-mgmt',
-    name: 'API Management Iframe',
-    props: route => ({ src: 'http://yapi.3steps.cn', toPath: 'welcome' }),
-    component: () => import('@/views/iframe/EmbededFrame')
-  },
-
-  {
-    path: '/jupyter',
-    name: 'Jupyter Iframe',
-    props: route => ({ src: 'http://jupyterhub.3steps.cn', toPath: 'welcome' }),
-    component: () => import('@/views/iframe/EmbededFrame')
-  },
-
-  {
-    path: '/webapps',
-    name: 'Webapps',
-    props: route => ({ src: route.query.src, toPath: 'welcome' }),
-    component: () => import('@/views/iframe/EmbededFrame')
-  },
-
   // User
   {
     path: '/user',

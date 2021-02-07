@@ -12,11 +12,15 @@ import {
   DEFAULT_CONTENT_WIDTH_TYPE,
   DEFAULT_MULTI_TAB
 } from '@/store/mutation-types'
+import { config } from '@/config/defaultSettings'
 
 const app = {
   state: {
     sidebar: true,
     device: 'desktop',
+    feedbackEntrypoint: config.feedbackEntrypoint,
+    policyEntrypoint: config.policyEntrypoint,
+    helpEntrypoint: config.helpEntrypoint,
     theme: '',
     layout: '',
     contentWidth: '',

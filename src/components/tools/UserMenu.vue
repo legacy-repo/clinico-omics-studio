@@ -5,7 +5,7 @@
         <template slot="title">
           <span>Feedback</span>
         </template>
-        <a href="https://yuque.com/clinico-omics/topics" target="_blank">
+        <a :href="feedbackEntrypoint" target="_blank">
           <span class="action">
             <a-icon type="message" />
           </span>
@@ -13,9 +13,19 @@
       </a-tooltip>
       <a-tooltip placement="bottom">
         <template slot="title">
+          <span>Policies</span>
+        </template>
+        <a :href="policyEntrypoint" target="_blank">
+          <span class="action">
+            <a-icon type="safety-certificate" />
+          </span>
+        </a>
+      </a-tooltip>
+      <a-tooltip placement="bottom">
+        <template slot="title">
           <span>Documentation</span>
         </template>
-        <a href="https://yuque.com/clinico-omics/help" target="_blank">
+        <a :href="helpEntrypoint" target="_blank">
           <span class="action">
             <a-icon type="question-circle-o"></a-icon>
           </span>
@@ -69,7 +79,7 @@ export default {
     AppStoreIcon
   },
   computed: {
-    ...mapGetters(['nickname', 'avatar'])
+    ...mapGetters(['nickname', 'avatar', 'feedbackEntrypoint', 'policyEntrypoint', 'helpEntrypoint'])
   },
   methods: {
     ...mapActions(['Logout']),

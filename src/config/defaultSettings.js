@@ -1,139 +1,14 @@
-/**
- * 项目默认配置项
- * primaryColor - 默认主题色, 如果修改颜色不生效，请清理 localStorage
- * navTheme - sidebar theme ['dark', 'light'] 两种主题
- * colorWeak - 色盲模式
- * layout - 整体布局方式 ['sidemenu', 'topmenu'] 两种布局
- * fixedHeader - 固定 Header : boolean
- * fixSiderbar - 固定左侧菜单栏 ： boolean
- * autoHideHeader - 向下滚动时，隐藏 Header : boolean
- * contentWidth - 内容区布局： 流式 |  固定
- *
- * storageOptions: {} - Vue-ls 插件配置项 (localStorage/sessionStorage)
- *
- */
+export const project = require('@/custom/index').project
 
-// const project = 'clinico-omics'
-const project = 'quartet'
-export const config = (function() {
-  if (project == 'quartet') {
-    return {
-      primaryColor: '#2F54EB', // primary color of ant design
-      navTheme: 'light', // theme for nav menu
-      layout: 'topmenu', // nav menu position: sidemenu or topmenu
-      contentWidth: 'Fluid', // layout of content: Fluid or Fixed, only works when layout is topmenu
-      hiddenHeader: false, // Hide header
-      fixedHeader: true, // sticky header
-      fixSiderbar: false, // sticky siderbar
-      autoHideHeader: true, //  auto hide header
-      colorWeak: false,
-      multiTab: false,
-      // eslint-disable-next-line
-      production: process.env.NODE_ENV === 'production' && process.env.VUE_APP_PREVIEW !== 'true',
-      // vue-ls options
-      storageOptions: {
-        namespace: 'pro__', // key prefix
-        name: 'ls', // name variable Vue.[ls] or this.[$ls],
-        storage: 'local' // storage name session, local, memory
-      },
-      initialComponentSettings: {
-        disabledContextMenu: 'true',
-        disabledExploratory: 'true',
-        dashboardName: 'QuartetDashboard'
-      },
-      domTitle: 'Quartet Data Portal', // The ClinicoOmics Platform
-      // eslint-disable-next-line no-undef
-      websiteLogo: require('@/assets/logo.png'),
-      websiteName: 'QUARTET', // ClinicoOmics
-      websiteId: 'quartet', // clinicoomics
-      noPermission: true, // false
-      websiteDesc: 'The Quartet Project for the Quality Control of Omics Data', // The ClinicoOmics Platform for Clinico OMICS & BioMedGPS
-      defaultCollection: 'quartet',
-      feedbackEntrypoint: 'https://yuque.com/quartet/topics?language=en-us',
-      policyEntrypoint: 'https://yuque.com/quartet/policies?language=en-us',
-      helpEntrypoint: 'https://yuque.com/quartet/help?language=en-us'
-    }
-  } else if (project == 'clinico-omics') {
-    return {
-      primaryColor: '#2F54EB', // primary color of ant design
-      navTheme: 'light', // theme for nav menu
-      layout: 'topmenu', // nav menu position: sidemenu or topmenu
-      contentWidth: 'Fluid', // layout of content: Fluid or Fixed, only works when layout is topmenu
-      hiddenHeader: false, // Hide header
-      fixedHeader: true, // sticky header
-      fixSiderbar: false, // sticky siderbar
-      autoHideHeader: true, //  auto hide header
-      colorWeak: false,
-      multiTab: false,
-      // eslint-disable-next-line
-      production: process.env.NODE_ENV === 'production' && process.env.VUE_APP_PREVIEW !== 'true',
-      // vue-ls options
-      storageOptions: {
-        namespace: 'pro__', // key prefix
-        name: 'ls', // name variable Vue.[ls] or this.[$ls],
-        storage: 'local' // storage name session, local, memory
-      },
-      initialComponentSettings: {
-        disabledContextMenu: 'true',
-        disabledExploratory: 'true',
-        dashboardName: 'QuartetDashboard'
-      },
-      domTitle: 'The ClinicoOmics Platform',
-      // eslint-disable-next-line no-undef
-      websiteLogo: require('@/assets/logo.png'),
-      websiteName: 'ClinicoOmics',
-      // websiteName: 'ClinicoOmics',
-      websiteId: 'clinicoomics',
-      noPermission: false,
-      websiteDesc: 'The ClinicoOmics Platform for Clinico OMICS & BioMedGPS',
-      defaultCollection: 'tcoa',
-      feedbackEntrypoint: 'https://yuque.com/clinico-omics/topics',
-      policyEntrypoint: 'https://yuque.com/clinico-omics/policies',
-      helpEntrypoint: 'https://yuque.com/clinico-omics/help'
-    }
-  }
-})()
+const customConfig = require('@/custom/config/' + project)
 
-// BASE_API
-export function initBaseURL() {
-  if (project === 'clinico-omics') {
-    const apiService = 'http://service.3steps.cn'
-    console.log(`BASE_API_URL: ${apiService}`)
-    return apiService
-  } else if (project === 'quartet') {
-    const apiService = 'http://quartet-backend.3steps.cn'
-    console.log(`BASE_API_URL: ${apiService}`)
-    return apiService
-  }
-}
-
-export function getDnaHost() {
-  const hostname = window.location.hostname
-  if (hostname == 'pgx.fudan.edu.cn') {
-    return 'http://pgx.fudan.edu.cn/dnaseq/'
-  } else {
-    return `${initBaseURL()}:8081/quartet-dna-vis/`
-  }
-}
-
-export function getRnaHost() {
-  const hostname = window.location.hostname
-  if (hostname == 'pgx.fudan.edu.cn') {
-    return 'http://pgx.fudan.edu.cn/rnaseq/'
-  } else {
-    return `${initBaseURL()}:8081/quartet-rna-vis/`
-  }
-}
+export const config = customConfig.projectSettings
+export const initBaseURL = customConfig.initBaseURL
 
 // SeqFlow
 export function initSeqFlowHost() {
   const seqFlowHost = localStorage.getItem('seqFlowHost')
   console.log(`SEQ_FLOW_HOST: ${seqFlowHost}`)
-
-  const hostname = window.location.hostname
-  if (hostname == 'pgx.fudan.edu.cn') {
-    return 'http://pgx.fudan.edu.cn/seqflow'
-  }
 
   return seqFlowHost || `${initBaseURL()}/datains`
 }
@@ -143,11 +18,6 @@ export function initTServiceHost() {
   const tServiceHost = localStorage.getItem('tServiceHost')
   console.log(`TSERVICE_HOST: ${tServiceHost}`)
 
-  const hostname = window.location.hostname
-  if (hostname == 'pgx.fudan.edu.cn') {
-    return 'http://pgx.fudan.edu.cn/tservice'
-  }
-
   return tServiceHost || `${initBaseURL()}/tservice`
 }
 
@@ -155,11 +25,6 @@ export function initTServiceHost() {
 export function initDataSeqHost() {
   const dataSeqHost = localStorage.getItem('dataSeqHost')
   console.log(`DATA_SEQ_HOST: ${dataSeqHost}`)
-
-  const hostname = window.location.hostname
-  if (hostname == 'pgx.fudan.edu.cn') {
-    return 'http://pgx.fudan.edu.cn/dataseq'
-  }
 
   return dataSeqHost || `${initBaseURL()}/dataseq`
 }

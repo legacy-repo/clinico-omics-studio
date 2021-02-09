@@ -9,7 +9,7 @@
     </a-row>
     <a-row class="show-window">
       <a-row class="show-window-header">
-        <img class="logo" :src="require('../../assets/images/precision-medicine.png')" />
+        <img class="logo" :src="require('@/assets/images/precision-medicine.png')" />
         <a-row class="news">
           <p class="slogan" v-html="news"></p>
         </a-row>
@@ -215,7 +215,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import '../../assets/css/search-page.less';
+@import '~@/assets/css/search-page.less';
 </style>
 
 <style lang="less">

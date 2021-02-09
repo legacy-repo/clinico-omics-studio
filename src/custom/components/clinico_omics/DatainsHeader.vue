@@ -92,5 +92,5 @@ export default {
 </script>
 
 <style scoped lang="less">
-@import '../../assets/css/header.less';
+@import '~@/assets/css/header.less';
 </style>

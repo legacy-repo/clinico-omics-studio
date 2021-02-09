@@ -178,5 +178,5 @@ export default {
 </script>
 
 <style scoped lang="less">
-@import '../../assets/css/footer.less';
+@import '~@/assets/css/footer.less';
 </style>

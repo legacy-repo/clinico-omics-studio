@@ -225,52 +225,7 @@ const makeQueryMap = function(fieldsData) {
 const data = {
   state: {
     defaultCollection: config.defaultCollection,
-    collections: [
-      {
-        key: 'quartet',
-        name: 'Chinese Quartet & Sample ABCD',
-        description: 'The Quartet Project for Quality Control of Multi-omics Profiling',
-        tabs: [
-          {
-            title: 'Files',
-            key: 'files',
-            value: null
-          },
-          {
-            title: 'Libraries',
-            key: 'libraries',
-            value: 'library_id'
-          },
-          {
-            title: 'Donor',
-            key: 'donor',
-            value: 'donor_id'
-          }
-        ]
-      },
-      {
-        key: 'tcoa',
-        name: 'The Cancer Omics Atlas (TCOA)',
-        description: 'Multi-omics Data for The Cancer Omics Atlas (TCOA).',
-        tabs: [
-          {
-            title: 'Files',
-            key: 'files',
-            value: null
-          },
-          {
-            title: 'Samples',
-            key: 'samples',
-            value: 'sample_id'
-          },
-          {
-            title: 'Patients',
-            key: 'patients',
-            value: 'patient_id'
-          }
-        ]
-      }
-    ],
+    collections: config.collections,
     queryParameter: {
       page: 1,
       per_page: 10

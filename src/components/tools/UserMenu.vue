@@ -46,7 +46,7 @@
             </router-link>
           </a-menu-item>
           <a-menu-item key="1">
-            <router-link :to="{ name: 'settings' }">
+            <router-link :to="{ name: 'settings' }" disabled>
               <a-icon type="setting" />
               <span>Settings</span>
             </router-link>

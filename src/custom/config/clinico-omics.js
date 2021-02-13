@@ -42,7 +42,7 @@ export const projectSettings = {
   websiteName: 'ClinicoOmics',
   // websiteName: 'ClinicoOmics',
   websiteId: 'clinicoomics',
-  noPermission: false,
+  noPermission: true,
   websiteDesc: 'The ClinicoOmics Platform for Clinico OMICS & BioMedGPS',
   defaultCollection: 'tcoa',
   collections: [

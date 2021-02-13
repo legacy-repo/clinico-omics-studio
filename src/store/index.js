@@ -13,6 +13,9 @@ import data from './modules/data_commons'
 import chartStudio from './modules/chart_studio'
 import chart from './modules/chart'
 import materials from './modules/materials'
+// New way
+import preqc from './modules/preqc'
+
 import i18n from './modules/i18n'
 import permission from './modules/permission'
 import getters from './getters'
@@ -30,6 +33,7 @@ export default new Vuex.Store({
     choppyApp,
     fs,
     materials,
+    preqc,
     data,
     chart,
     chartStudio,

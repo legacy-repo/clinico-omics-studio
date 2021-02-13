@@ -326,6 +326,13 @@ export const asyncRouterMap = [
         meta: { title: 'Tool', keepAlive: true, icon: 'folder', permission: ['table'] },
         children: [
           {
+            path: '/tool/preqc-pack',
+            name: 'preqc-pack',
+            hidden: true,
+            component: () => import('@/views/tools/PreQC'),
+            meta: { title: 'PreQC Pack', keepAlive: true }
+          },
+          {
             path: '/tool/xps2pdf',
             name: 'xps2pdf',
             hidden: true,

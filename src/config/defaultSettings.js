@@ -5,6 +5,18 @@ const customConfig = require('@/custom/config/' + project)
 export const config = customConfig.projectSettings
 export const initBaseURL = customConfig.initBaseURL
 
+// PreQC Pack
+export function initPreQCHost() {
+  // TODO: How to access serverless function by proxy server
+  // const preQcHost = localStorage.getItem('preQcHost')
+  // console.log(`PRE_QC_HOST: ${preQcHost}`)
+
+  // return preQcHost || `${initBaseURL()}/preqc-pack`
+
+  // Temporary Solution
+  return 'http://serverless.3steps.cn'
+}
+
 // SeqFlow
 export function initSeqFlowHost() {
   const seqFlowHost = localStorage.getItem('seqFlowHost')

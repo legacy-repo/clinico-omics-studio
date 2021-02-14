@@ -1,10 +1,11 @@
 import rawAxios from 'axios'
+import { initPreQCHost } from '@/config/defaultSettings'
 
 class PreQCService {
   getItem(filepath) {
     return new Promise((resolve, reject) => {
       rawAxios({
-        url: 'http://serverless.3steps.c',
+        url: `${initPreQCHost()}/fastq-meta`,
         method: 'post',
         data: {
           filepath: filepath

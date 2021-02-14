@@ -13,7 +13,7 @@
               :defaultChecked="item.visible"
               :checked="item.visible"
               :key="item.key"
-              @change="onSelectColumn(item.title, $event)"
+              @change="onSelectColumn(item.key, $event)"
             >
               {{ item.title }}
             </a-checkbox>
@@ -30,7 +30,7 @@
       <a-table
         :scroll="{ x: width }"
         :columns="filteredColumns"
-        :data-source="data"
+        :data-source="items"
         :pagination="false"
         :loading="loading"
         :rowKey="rowKey"
@@ -108,9 +108,6 @@ export default {
     }
   },
   computed: {
-    data: function() {
-      return this.items
-    },
     filteredColumns: function() {
       return filter(this.columns, item => {
         return item.visible
@@ -163,8 +160,8 @@ export default {
         return commit(this.namespace + '/updateColumn', payload)
       }
     }),
-    onSelectColumn(name, event) {
-      console.log('onSelectColumn: ', name, event)
+    onSelectColumn(key, event) {
+      console.log('onSelectColumn: ', key, event)
       const status = event.target.checked
       if (status && this.filteredColumns.length + 1 > 10) {
         this.$message.warning('Maximum number of selectable columns is 10')
@@ -172,7 +169,7 @@ export default {
       }
 
       this.updateColumn({
-        name: name,
+        key: key,
         value: status
       })
     },

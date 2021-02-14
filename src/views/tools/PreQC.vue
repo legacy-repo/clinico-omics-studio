@@ -4,13 +4,29 @@
     logo="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png"
   >
     <a-row class="preqc-pack">
+      <div class="mask-window" v-if="fileBrowserActive"></div>
+      <popup-file-browser
+        filterType=".fq.gz|.fastq.gz|.fq|.fastq"
+        :multiple="true"
+        :selected="selected"
+        @select-files="confirmSelectFiles"
+        @cancel-select-files="cancelSelectFiles"
+        v-if="fileBrowserActive"
+      ></popup-file-browser>
       <a-collapse :activeKey="activeKey">
         <a-collapse-panel key="1" header="Config Panel">
           <a-col class="input-area">
-            <label style="display: inline-block">
-              {{ inputLabel }}&nbsp;
-              <a @click="loadExample" style="margin-left: 5px">{{ 'Load Example' }}</a>
-            </label>
+            <a-row class="action-header">
+              <a-col :span="16">
+                <label style="display: inline-block">
+                  {{ inputLabel }}&nbsp;
+                  <a @click="loadExample" style="margin-left: 5px">{{ 'Load Example' }}</a>
+                </label>
+              </a-col>
+              <a-col :span="8">
+                <a-button @click="selectFiles" style="float: right"> <a-icon type="plus" />Select Files </a-button>
+              </a-col>
+            </a-row>
             <a-row style="padding-top: 10px">
               <a-textarea
                 :class="{ error: error }"
@@ -42,11 +58,14 @@
 
 <script>
 import { PageView } from '@/layouts'
+import uniqBy from 'lodash.uniqby'
 import QueryTable from './QueryTable'
 import { mapActions, mapMutations, mapState } from 'vuex'
+import PopupFileBrowser from '@/views/filemanager/PopupFileBrowser'
 
 export default {
   components: {
+    PopupFileBrowser,
     PageView,
     QueryTable
   },
@@ -54,13 +73,16 @@ export default {
   data() {
     return {
       activeKey: ['1'],
-      example: 'oss://test/test.fq.gz',
+      example:
+        'oss://choppy-app-example-data/RNAseq/production_example_data/sample5_R1.fq.gz,028a9952446d0470ee48de9b92140f82',
       inputLabel: 'Please Input OSS Links >>>',
       errorMsg: '',
       error: false,
       placeholder: 'Load example or input your data.',
       links: '',
-      disabled: false
+      disabled: false,
+      fileBrowserActive: false,
+      selected: []
     }
   },
   computed: {
@@ -69,7 +91,28 @@ export default {
   methods: {
     ...mapActions('preqc', ['getItem']),
     ...mapMutations('preqc', ['setItems']),
+    confirmSelectFiles(filePathList) {
+      this.fileBrowserActive = false
+      console.log('Selected Files: ', filePathList)
+      this.links = filePathList.join('\n')
+    },
+    cancelSelectFiles() {
+      this.fileBrowserActive = false
+    },
+    selectFiles() {
+      this.fileBrowserActive = true
+    },
+    loadExample() {
+      this.links = this.example
+      this.validateSync(this.links)
+    },
+    changeLinks(e) {
+      this.links = e.target.value
+      this.validateSync(this.links)
+    },
     validateInput(value) {
+      // TODO: Performance?
+      let records = this.makeRecords(value)
       let errorMsg = ''
       let error = false
       if (value.length === 0) {
@@ -81,6 +124,9 @@ export default {
       } else if (value.split('\n').length > 10) {
         errorMsg = 'The number of rows shoud not be more than 10.'
         error = true
+      } else if (uniqBy(records, 'filepath').length !== records.length) {
+        errorMsg = 'Duplicated OSS Link'
+        error = true
       } else {
         errorMsg = ''
         error = false
@@ -91,19 +137,13 @@ export default {
         errorMsg: errorMsg
       }
     },
-    loadExample() {
-      this.links = this.example
-      this.validateSync(this.links)
-    },
-    changeLinks(e) {
-      this.links = e.target.value
-      this.validateSync(this.links)
-    },
     validateSync(links) {
       const { error, errorMsg } = this.validateInput(links)
       // We need to reset/set error status
       this.error = error
       this.errorMsg = errorMsg
+      // Reset disabled status
+      this.disabled = false
 
       if (error) {
         this.updateToTable()
@@ -142,7 +182,7 @@ export default {
       this.items.forEach(item => {
         this.getItem(item)
       })
-      this.disabled = !this.disabled
+      this.disabled = true
     }
   },
   created() {}
@@ -155,6 +195,12 @@ export default {
   height: 100%;
   border-radius: 5px;
   // min-height: 525px;
+
+  .action-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
 }
 </style>
 

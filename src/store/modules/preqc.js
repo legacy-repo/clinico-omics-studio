@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import PreQCService from '@/api/preqc'
 import map from 'lodash.map'
 
@@ -10,7 +11,13 @@ const preqc = {
         dataIndex: 'name',
         key: 'name',
         visible: true,
-        width: 240,
+        align: 'center'
+      },
+      {
+        title: 'File Path',
+        dataIndex: 'filepath',
+        key: 'filepath',
+        visible: false,
         align: 'center'
       },
       {
@@ -18,7 +25,7 @@ const preqc = {
         dataIndex: 'expected_md5sum',
         key: 'expected_md5sum',
         visible: true,
-        width: 240,
+        // width: 320,
         align: 'center'
       },
       {
@@ -26,16 +33,16 @@ const preqc = {
         dataIndex: 'md5sum',
         key: 'md5sum',
         visible: true,
-        width: 150,
+        // width: 320,
         align: 'center'
       },
       {
         title: 'Data Size',
         dataIndex: 'datasize',
         key: 'datasize',
-        width: 120,
         align: 'center',
         visible: true,
+        // width: 150,
         sorter: (a, b) => a.datasize - b.datasize,
         sortDirections: ['descend', 'ascend']
       },
@@ -43,8 +50,8 @@ const preqc = {
         title: 'Status',
         dataIndex: 'status',
         key: 'status',
-        width: 120,
         align: 'center',
+        width: 150,
         visible: true,
         scopedSlots: { customRender: 'tag' }
       }
@@ -95,15 +102,20 @@ const preqc = {
       state.searchOptions = Object.assign(state.searchOptions, payload)
     },
     updateRecord(state, { filepath, updatedValues }) {
-      map(state.items, record => {
-        if (record.filepath === filepath) {
-          Object.assign(record, updatedValues)
-        }
-      })
+      // Cannot make vue know the mutation
+      // map(state.items, record => {
+      //   if (record.filepath === filepath) {
+      //     Object.assign(record, updatedValues)
+      //   }
+      // })
+      const index = state.items.findIndex(item => item.filepath === filepath)
+      if (index !== -1) {
+        Vue.set(state.items, index, Object.assign(state.items[index], updatedValues))
+      }
     },
-    updateColumn(state, { name, value }) {
+    updateColumn(state, { key, value }) {
       map(state.columns, record => {
-        if (record.name === name) {
+        if (record.key === key) {
           record.visible = value
         }
       })
@@ -136,12 +148,12 @@ const preqc = {
             updatedValues['md5sum'] = response.data.filemeta.md5sum
             updatedValues['datasize'] = response.data.fastqc.datasize
 
-            if (updatedValues['md5sum'] === record.expected_md5sum) {
+            if (record.expected_md5sum && updatedValues['md5sum'] !== record.expected_md5sum) {
+              updatedValues['status'] = 'warning'
+              updatedValues['statusMsg'] = 'Mismatch'
+            } else {
               updatedValues['status'] = 'success'
               updatedValues['statusMsg'] = 'Success'
-            } else {
-              updatedValues['status'] = 'custom'
-              updatedValues['statusMsg'] = 'Mismatch'
             }
 
             commit('updateRecord', {

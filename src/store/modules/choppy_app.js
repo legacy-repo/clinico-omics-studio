@@ -8,6 +8,7 @@ import {
   getReportSchema
 } from '@/api/manage'
 import orderBy from 'lodash.orderby'
+import { config } from '@/config/defaultSettings'
 
 const formatRecords = function(records) {
   const newRecords = []
@@ -124,9 +125,14 @@ const app = {
           .then(response => {
             console.log('GetToolManifest: ', parameter, response)
 
+            let tools = formatManifest(response)
+            if (config.localTools) {
+              tools = tools.concat(config.localTools)
+            }
+
             const data = {
               total: response.length,
-              data: formatManifest(response)
+              data: tools
             }
 
             resolve(data)

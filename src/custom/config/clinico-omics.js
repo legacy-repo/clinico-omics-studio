@@ -42,7 +42,7 @@ export const projectSettings = {
   websiteName: 'ClinicoOmics',
   // websiteName: 'ClinicoOmics',
   websiteId: 'clinicoomics',
-  noPermission: true,
+  noPermission: false,
   websiteDesc: 'The ClinicoOmics Platform for Clinico OMICS & BioMedGPS',
   defaultCollection: 'tcoa',
   collections: [
@@ -93,7 +93,28 @@ export const projectSettings = {
   ],
   feedbackEntrypoint: 'https://yuque.com/clinico-omics/topics',
   policyEntrypoint: 'https://yuque.com/clinico-omics/policies',
-  helpEntrypoint: 'https://yuque.com/clinico-omics/help'
+  helpEntrypoint: 'https://yuque.com/clinico-omics/help',
+  localTools: [
+    {
+      id: '64578311997f9234517982151f10c077',
+      title: 'PreQC Pack for FASTQ File',
+      shortName: 'preqc-pack-meta',
+      appName: 'yangjingcheng/preqc-pack-meta',
+      home: 'https://github.com/clinico-omics/datains-frontend',
+      hidden: false,
+      author: 'Jingcheng Yang',
+      description: 'Computing QC Metrics for FASTQ File',
+      icons: [
+        {
+          sizes: '192x192',
+          src: '',
+          type: 'image/png'
+        }
+      ],
+      category: 'Tool',
+      source: 'PGx'
+    }
+  ]
 }
 
 export function initBaseURL() {

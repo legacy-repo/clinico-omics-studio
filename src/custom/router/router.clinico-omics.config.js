@@ -326,8 +326,8 @@ export const asyncRouterMap = [
         meta: { title: 'Tool', keepAlive: true, icon: 'folder', permission: ['table'] },
         children: [
           {
-            path: '/tool/preqc-pack',
-            name: 'preqc-pack',
+            path: '/tool/preqc-pack-meta',
+            name: 'preqc-pack-meta',
             hidden: true,
             component: () => import('@/views/tools/PreQC'),
             meta: { title: 'PreQC Pack', keepAlive: true }

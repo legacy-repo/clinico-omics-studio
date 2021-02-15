@@ -1,8 +1,8 @@
 <template>
   <a-row class="query-table">
     <a-col class="action">
-      <a-button @click="downloadAsJSON">Download As JSON</a-button>
-      <a-button style="margin-left: 5px" @click="downloadAsCSV">Download As CSV</a-button>
+      <a-button @click="downloadAsJSON(items)">Download As JSON</a-button>
+      <a-button style="margin-left: 5px" @click="downloadAsCSV(items)">Download As CSV</a-button>
     </a-col>
     <a-col class="results">
       <a-popover v-model="menuVisible" trigger="click" placement="rightTop">
@@ -191,15 +191,15 @@ export default {
       csv = csv.join('\r\n')
       return csv
     },
-    downloadAsJSON() {
-      var dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(this.biomarkers))
+    downloadAsJSON(data) {
+      var dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(data))
       var dlAnchorElem = document.getElementById('downloadAnchorElem')
       dlAnchorElem.setAttribute('href', dataStr)
       dlAnchorElem.setAttribute('download', 'data.json')
       dlAnchorElem.click()
     },
-    downloadAsCSV() {
-      const csv = this.json2csv(this.biomarkers)
+    downloadAsCSV(data) {
+      const csv = this.json2csv(data)
       var dataStr = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv)
       var dlAnchorElem = document.getElementById('downloadAnchorElem')
       dlAnchorElem.setAttribute('href', dataStr)

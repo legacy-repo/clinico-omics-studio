@@ -2,6 +2,18 @@ import Vue from 'vue'
 import PreQCService from '@/api/preqc'
 import map from 'lodash.map'
 
+const formatBytes = function(bytes, decimals = 2) {
+  if (bytes === 0) return ''
+
+  const k = 1024
+  const dm = decimals < 0 ? 0 : decimals
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+
+  const i = Math.floor(Math.log(bytes) / Math.log(k))
+
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
+}
+
 const preqc = {
   namespaced: true,
   state: () => ({
@@ -35,6 +47,15 @@ const preqc = {
         visible: true,
         // width: 320,
         align: 'center'
+      },
+      {
+        title: 'File Size',
+        dataIndex: 'filesize',
+        key: 'filesize',
+        align: 'center',
+        visible: true,
+        sorter: (a, b) => a.filesize - b.filesize,
+        sortDirections: ['descend', 'ascend']
       },
       {
         title: 'Data Size',
@@ -144,9 +165,9 @@ const preqc = {
         PreQCService.getItem(record.filepath)
           .then(response => {
             const updatedValues = {}
-            updatedValues['filesize'] = response.data.filemeta.filesize
-            updatedValues['md5sum'] = response.data.filemeta.md5sum
-            updatedValues['datasize'] = response.data.fastqc.datasize
+            updatedValues['filesize'] = formatBytes(response.filemeta.filesize)
+            updatedValues['md5sum'] = response.filemeta.md5sum
+            updatedValues['datasize'] = response.fastqc.datasize
 
             if (record.expected_md5sum && updatedValues['md5sum'] !== record.expected_md5sum) {
               updatedValues['status'] = 'warning'

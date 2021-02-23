@@ -25,3 +25,7 @@ data
 
 # Aliyun
 ossutil_output
+
+# Temp
+*.temp
+

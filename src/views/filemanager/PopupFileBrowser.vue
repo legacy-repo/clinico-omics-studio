@@ -111,7 +111,7 @@ export default {
   left: 50%;
   margin-top: -150px;
   margin-left: -500px;
-  z-index: 1001;
+  z-index: 1000;
 
   .file-list {
     border: 1px solid #d3d3d3;

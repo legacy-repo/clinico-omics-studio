@@ -88,12 +88,19 @@ export default {
   computed: {
     ...mapState('preqc', ['items', 'columns'])
   },
+  watch: {
+    links(oldValue, newValue) {
+      console.log('Links Updated: ', oldValue, newValue)
+      this.validateSync(this.links)
+    }
+  },
   methods: {
     ...mapActions('preqc', ['getItem']),
     ...mapMutations('preqc', ['setItems']),
     confirmSelectFiles(filePathList) {
       this.fileBrowserActive = false
       console.log('Selected Files: ', filePathList)
+      this.selected = filePathList
       this.links = filePathList.join('\n')
     },
     cancelSelectFiles() {
@@ -104,11 +111,9 @@ export default {
     },
     loadExample() {
       this.links = this.example
-      this.validateSync(this.links)
     },
     changeLinks(e) {
       this.links = e.target.value
-      this.validateSync(this.links)
     },
     validateInput(value) {
       // TODO: Performance?
@@ -200,6 +205,10 @@ export default {
     display: flex;
     flex-direction: row;
     align-items: center;
+  }
+
+  .file-manager-container {
+    top: 10%;
   }
 }
 </style>

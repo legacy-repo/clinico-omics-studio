@@ -288,6 +288,10 @@ export default {
     left: 0;
     background: rgba(0, 0, 0, 0.3);
     z-index: 10;
+
+    .file-manager-container {
+      top: 35%;
+    }
   }
 }
 </style>

@@ -12,7 +12,11 @@
           </a-popover>
           <a-icon type="share-alt" />
         </template>
-        <a-card-meta :title="app.title" :description="app.description" class="card-meta">
+        <a-card-meta :title="app.title" class="card-meta">
+          <p slot="description">
+            <a-tag color="#108ee9">{{ formatAppVersion(app) }}</a-tag>
+            <span>{{ app.description }}</span>
+          </p>
           <!-- <a-avatar slot="avatar" :src="app.icon" /> -->
           <a-avatar slot="avatar" style="backgroundColor: #87d068">
             {{ app.title[0].toUpperCase() }}
@@ -34,6 +38,12 @@ export default {
     }
   },
   methods: {
+    formatAppVersion(app) {
+      return app.appName.split('-').pop()
+    },
+    formatDescription(app) {
+      return "[" + app.appName.split('-').pop() + "] " + app.description
+    },
     onView(app) {
       if (app.repoUrl && app.repoUrl.match(/^http[s]?:.*/)) {
         window.open(app.repoUrl, '_blank')

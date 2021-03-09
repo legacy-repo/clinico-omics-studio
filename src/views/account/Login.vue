@@ -94,10 +94,12 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters(['nickname', 'clientId', 'clientSecret']),
+  },
   created() {},
   methods: {
     ...mapActions(['Login', 'Logout']),
-    ...mapGetters(['nickname']),
     // handler
     handleUsernameOrEmail(rule, value, callback) {
       const { state } = this
@@ -124,10 +126,10 @@ export default {
       const validateFieldsKey = ['username', 'password']
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
-          console.log('Login Form: ', values)
+          console.log('Login Form: ', values, this.clientId, this.clientSecret)
           const loginParams = {
-            client_id: 'clinico-omics',
-            client_secret: '97a7d2e8-94f4-48a7-aa90-c8ed206b89df',
+            client_id: this.clientId,
+            client_secret: this.clientSecret,
             scope: 'openid',
             grant_type: 'password',
             ...values

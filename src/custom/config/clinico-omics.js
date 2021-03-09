@@ -94,6 +94,27 @@ export const projectSettings = {
   feedbackEntrypoint: 'https://yuque.com/clinico-omics/topics',
   policyEntrypoint: 'https://yuque.com/clinico-omics/policies',
   helpEntrypoint: 'https://yuque.com/clinico-omics/help',
+  clientId: 'clinico-omics',
+  clientSecret: '97a7d2e8-94f4-48a7-aa90-c8ed206b89df',
+  appListConfig: [
+    {
+      name: 'Fast File Transfer',
+      icon: 'thunderbolt',
+      link: 'http://docs.3steps.cn/docs/datains/datains-intro.html#ossutil'
+    }, {
+      name: 'File Browser',
+      icon: 'global',
+      link: 'http://docs.3steps.cn/docs/datains/datains-intro.html#%E4%B8%8B%E8%BD%BD%E5%B9%B6%E5%AE%89%E8%A3%85-datains-browser'
+    }, {
+      name: 'API Management',
+      icon: 'api',
+      link: 'http://yapi.3steps.cn/'
+    }, {
+      name: 'Documentation',
+      icon: 'file-markdown',
+      link: 'https://yuque.com/clinico-omics/help'
+    }
+  ],
   localTools: [
     {
       id: '64578311997f9234517982151f10c077',

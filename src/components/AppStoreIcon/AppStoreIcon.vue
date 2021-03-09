@@ -11,7 +11,7 @@
   >
     <template slot="content">
       <a-row class="app-store-block">
-        <a-col v-for="app in apps" :key="app.name" :span="12" class="app-item" @click="onShowApp(app.link)">
+        <a-col v-for="app in appListConfig" :key="app.name" :span="12" class="app-item" @click="onShowApp(app.link)">
           <a-icon class="icon" :type="app.icon" />
           <div class="text">{{ app.name }}</div>
         </a-col>
@@ -25,6 +25,7 @@
 
 <script>
 import { appStoreIcon } from '@/core/icons'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'HeaderAppStore',
@@ -41,32 +42,11 @@ export default {
   data () {
     return {
       loadding: false,
-      visible: false,
-      apps: [
-        {
-          name: 'TGMC Home',
-          icon: 'home',
-          link: 'http://datains.3steps.cn'
-        },
-        {
-          name: 'Fast File Transfer',
-          icon: 'thunderbolt',
-          link: 'http://docs.3steps.cn/docs/datains/datains-intro.html#ossutil'
-        }, {
-          name: 'File Browser',
-          icon: 'global',
-          link: 'http://docs.3steps.cn/docs/datains/datains-intro.html#%E4%B8%8B%E8%BD%BD%E5%B9%B6%E5%AE%89%E8%A3%85-datains-browser'
-        }, {
-          name: 'API Management',
-          icon: 'api',
-          link: 'http://yapi.3steps.cn/'
-        }, {
-          name: 'Documentation',
-          icon: 'file-markdown',
-          link: 'https://yuque.com/clinico-omics/help'
-        }
-      ]
+      visible: false
     }
+  },
+  computed: {
+    ...mapGetters(['appListConfig']),
   },
   methods: {
     showAppPanel () {

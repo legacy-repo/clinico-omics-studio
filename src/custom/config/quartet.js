@@ -70,7 +70,33 @@ export const projectSettings = {
   ],
   feedbackEntrypoint: 'https://yuque.com/quartet/topics?language=en-us',
   policyEntrypoint: 'https://yuque.com/quartet/policies?language=en-us',
-  helpEntrypoint: 'https://yuque.com/quartet/help?language=en-us'
+  helpEntrypoint: 'https://yuque.com/quartet/help?language=en-us',
+  clientId: 'clinico-omics',
+  clientSecret: '97a7d2e8-94f4-48a7-aa90-c8ed206b89df',
+  appListConfig: [
+    {
+      name: 'Home',
+      icon: 'home',
+      link: 'http://chinese-quartet.org'
+    },
+    {
+      name: 'Fast File Transfer',
+      icon: 'thunderbolt',
+      link: 'http://docs.3steps.cn/docs/datains/datains-intro.html#ossutil'
+    }, {
+      name: 'File Browser',
+      icon: 'global',
+      link: 'http://docs.3steps.cn/docs/datains/datains-intro.html#%E4%B8%8B%E8%BD%BD%E5%B9%B6%E5%AE%89%E8%A3%85-datains-browser'
+    }, {
+      name: 'API Management',
+      icon: 'api',
+      link: 'http://yapi.3steps.cn/'
+    }, {
+      name: 'Documentation',
+      icon: 'file-markdown',
+      link: 'https://yuque.com/quartet/help'
+    }
+  ]
 }
 
 export function initBaseURL() {

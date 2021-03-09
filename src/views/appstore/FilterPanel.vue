@@ -1,7 +1,11 @@
 <template>
   <!--eslint-disable-->
   <a-row class="filter-panel" :gutter="16">
-    <a-col class="left" :xl="6" :lg="6" :md="24" :sm="24" :xs="24">
+    <a-col class="left" :xl="{span: expanded ? 0 : 6}"
+      :lg="{span: expanded ? 0 : 6}"
+      :md="{span: expanded ? 0 : 24}"
+      :sm="{span: expanded ? 0 : 24}"
+      :xs="{span: expanded ? 0 : 24}">
       <a-tabs default-active-key="1">
         <a-tab-pane key="1" tab="Filter">
           <a-row style="display: flex; justify-content: center; margin: 10px 10px;">
@@ -24,7 +28,10 @@
         </a-tab-pane>
       </a-tabs>
     </a-col>
-    <a-col class="right" :xl="18" :lg="18" :md="24" :sm="24" :xs="24">
+    <a-col class="right" :class="{expanded: expanded}"
+      :xl="{span: expanded ? 24 : 18}"
+      :lg="{span: expanded ? 24 : 18}"
+      :md="24" :sm="24" :xs="24">
       <a-tabs defaultActiveKey="1" :activeKey="currentTab" @change="onChangeTab">
         <a-tab-pane tab="Apps" key="app">
           <app-list :appList="filteredApps" :key="localAppMode"></app-list>
@@ -39,6 +46,12 @@
         <a-tab-pane tab="Charts" key="chart" disabled>
           <chart-list :chartList="filteredCharts" :key="localChartMode"></chart-list>
         </a-tab-pane>
+        <a-button slot="tabBarExtraContent" @click="expandPanel" type="primary" v-if="!expanded">
+          Expand<a-icon type="fullscreen" />
+        </a-button>
+        <a-button slot="tabBarExtraContent" @click="expandPanel" type="primary" v-else>
+          Shrink<a-icon type="fullscreen-exit" />
+        </a-button>
       </a-tabs>
     </a-col>
   </a-row>
@@ -101,7 +114,8 @@ export default {
       localReportMode: false,
       localReports: [],
       localChartMode: false,
-      localCharts: []
+      localCharts: [],
+      expanded: false
     }
   },
   props: {},
@@ -143,21 +157,21 @@ export default {
         return orderBy(this.localTools, 'title', 'aes')
       } else {
         return orderBy(this.toolList, 'title', 'aes')
-      }      
+      }
     },
     filteredReports() {
       if (this.localReportMode) {
         return orderBy(this.localReports, 'title', 'aes')
       } else {
         return orderBy(this.reportList, 'title', 'aes')
-      }      
+      }
     },
     filteredCharts() {
       if (this.localChartMode) {
         return orderBy(this.localCharts, 'title', 'aes')
       } else {
         return orderBy(this.chartList, 'title', 'aes')
-      }      
+      }
     },
     toolList() {
       return filter(this.tools, o => {
@@ -184,6 +198,9 @@ export default {
       getAppManifest: 'GetAppManifest',
       getToolManifest: 'GetToolManifest'
     }),
+    expandPanel() {
+      this.expanded = !this.expanded
+    },
     onChangeTab(activeKey) {
       this.currentTab = activeKey
 
@@ -213,11 +230,15 @@ export default {
             }
           })
         } else if (element.key === 'title') {
-          element.data = map(appList, app => {
+          element.data = Object.entries(
+            groupBy(appList, app => {
+              return app.title
+            })
+          ).map(([key, value]) => {
             return {
-              name: app.title,
-              key: app.title,
-              count: 1
+              name: key,
+              key: key,
+              count: value.length
             }
           })
         } else if (element.key === 'author') {
@@ -327,6 +348,11 @@ export default {
         }
       }
     }
+  }
+
+  .expanded {
+    margin-left: 8px;
+    width: calc(100% - 8px);
   }
 
   .right {

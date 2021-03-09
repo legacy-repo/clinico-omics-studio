@@ -38,7 +38,7 @@ export default {
   name: 'UserLayout',
   components: { RouteView },
   computed: {
-    ...mapGetters(['topicEntrypoint', 'policyEntrypoint', 'helpEntrypoint'])
+    ...mapGetters(['feedbackEntrypoint', 'policyEntrypoint', 'helpEntrypoint'])
   },
   mixins: [mixinDevice],
   data() {

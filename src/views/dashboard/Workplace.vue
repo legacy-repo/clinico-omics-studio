@@ -55,7 +55,7 @@
           <a-button slot="extra" type="primary" @click="onShowProjectMgmt" style="margin-right: 5px;">All Projects</a-button>
           <a-radio-group
             slot="extra"
-            defaultValue="active"
+            defaultValue="total"
             @change="filterProject"
           >
             <a-radio-button value="total">Total</a-radio-button>
@@ -66,7 +66,7 @@
           <div>
             <a-card-grid
               @click.native="showProject(item.id)"
-              style="width:25%;"
+              style="width:25%; height: 144px;"
               class="project-card-grid"
               :key="i"
               v-for="(item, i) in filteredProject"

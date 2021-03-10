@@ -142,13 +142,15 @@ const chartStudio = {
       }
     },
     ADD_NEW_FILE: (state, name) => {
-      state.files.forEach(item => {
-        if (item.name !== name) {
-          state.files.push(get_file(name))
-        } else {
-          state.files.push(get_file(name + '0'))
-        }
+      let index = findIndex(state.files, file => {
+        return file.name === name
       })
+
+      if (index >= 0) {
+        state.files.push(get_file(name + '0'))
+      } else {
+        state.files.push(get_file(name))
+      }
     }
   },
   actions: {

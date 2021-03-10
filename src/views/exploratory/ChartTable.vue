@@ -1,13 +1,7 @@
 <template>
   <div class="hot-table" ref="chartTable" :style="{ height: clientHeight + 'px' }">
     <a-tabs type="editable-card" :activeKey="activeKey" @edit="onEdit" @change="changeTab">
-      <a-tab-pane
-        v-for="pane in panes"
-        :key="pane.key"
-        :tab="pane.name"
-        :closable="pane.closable"
-        forceRender
-      >
+      <a-tab-pane v-for="pane in panes" :key="pane.key" :tab="pane.name" :closable="pane.closable" forceRender>
         <hot-table
           :id="'hotTable' + pane.key"
           :ref="'hotTable' + pane.key"
@@ -27,6 +21,7 @@ import { HotTable } from '@handsontable/vue'
 import { mapState, mapActions } from 'vuex'
 import filter from 'lodash.filter'
 import map from 'lodash.map'
+import v from 'voca'
 
 export default {
   name: 'ChartTable',
@@ -86,6 +81,7 @@ export default {
           }
         }
       },
+      unamedIndex: 1,
       activeKey: 'unamed_grid_1',
       isMouseDown: false,
       originX: 0,
@@ -171,7 +167,7 @@ export default {
         const instance = this.$refs['hotTable' + activeKey]
         const header = this.getHeader(pane.data)
         const body = this.getBody(pane.data)
-        
+
         console.log('loadData: ', pane, instance[0], activeKey)
         if (instance && instance.length > 0) {
           setTimeout(() => {
@@ -192,11 +188,21 @@ export default {
       this.refreshTable(activeKey)
     },
     add() {
-      this.add_new_file('Unamed Grid 1')
+      this.unamedIndex += 1
+      let name = 'Unamed Grid ' + this.unamedIndex
+      this.add_new_file(name)
+      this.activeKey = v.snakeCase(name)
     },
     remove(targetKey) {
       const panes = this.panes.filter(pane => pane.key !== targetKey)
       this.reset_files(panes)
+
+      // 切换焦点
+      if (panes.length > 0) {
+        this.activeKey = panes[0].key
+      } else {
+        this.activeKey = 'unamed_grid_1'
+      }
     }
   },
   computed: mapState({

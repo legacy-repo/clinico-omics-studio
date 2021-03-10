@@ -103,7 +103,7 @@ const chartStudio = {
       })
     },
     ADD_TRACE: (state, { name, type, x, y }) => {
-      console.log("ADD_TRACE: ", name, type, x, y, state.files)
+      console.log('ADD_TRACE: ', name, type, x, y, state.files)
       const trace = JSON.parse(JSON.stringify(state.trace))
       trace.name = name
       trace.type = type
@@ -193,25 +193,25 @@ const chartStudio = {
       commit('ADD_NEW_FILE', key)
     },
     UpdateTrace({ commit, state }, trace) {
-      if (state.figure.data.length > 0) {
-        state.figure.data.forEach(item => {
-          if (item.name == trace.name) {
-            delete trace.name
+      console.log('Update Trace(chart_studio.js): ', state.figure.data)
+      let index = findIndex(state.figure.data, item => {
+        return item.name === trace.name
+      })
 
-            if (trace.x) {
-              trace.x = getObj(trace.x, state.files)
-            }
+      if (index >= 0) {
+        let item = state.figure.data[index]
+        delete trace.name
 
-            if (trace.y) {
-              trace.y = getObj(trace.y, state.files)
-            }
+        if (trace.x) {
+          trace.x = getObj(trace.x, state.files)
+        }
 
-            Object.assign(item, trace)
-            console.log("Update Trace", item)
-          } else {
-            commit('ADD_TRACE', trace)
-          }
-        })
+        if (trace.y) {
+          trace.y = getObj(trace.y, state.files)
+        }
+
+        Object.assign(item, trace)
+        console.log('Update Trace', item)
       } else {
         commit('ADD_TRACE', trace)
       }

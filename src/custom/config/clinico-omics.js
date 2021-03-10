@@ -33,7 +33,7 @@ export const projectSettings = {
   },
   initialComponentSettings: {
     disabledContextMenu: 'true',
-    disabledExploratory: 'true',
+    disabledExploratory: 'false',
     dashboardName: 'QuartetDashboard'
   },
   domTitle: 'The ClinicoOmics Platform',

@@ -23,6 +23,16 @@ import caseIcon from '@/assets/icons/case-o.svg?inline'
 import sitemapIcon from '@/assets/icons/sitemap.svg?inline'
 import studioIcon from '@/assets/icons/obsstudio.svg?inline'
 
+// Charts
+import lineIcon from '@/assets/icons/line.svg?inline'
+import barIcon from '@/assets/icons/bar.svg?inline'
+import scatterIcon from '@/assets/icons/scatter.svg?inline'
+import areaIcon from '@/assets/icons/area.svg?inline'
+import heatmapIcon from '@/assets/icons/heatmap.svg?inline'
+import tableIcon from '@/assets/icons/table.svg?inline'
+import pieIcon from '@/assets/icons/pie.svg?inline'
+import contourIcon from '@/assets/icons/contour.svg?inline'
+
 export {
   bxAnaalyse,
   appStoreIcon,
@@ -39,5 +49,15 @@ export {
   folderLockLogo,
   fileLockLogo,
   sitemapIcon,
-  studioIcon
+  studioIcon,
+
+  // Charts
+  lineIcon,
+  barIcon,
+  scatterIcon,
+  areaIcon,
+  heatmapIcon,
+  tableIcon,
+  pieIcon,
+  contourIcon,
 }

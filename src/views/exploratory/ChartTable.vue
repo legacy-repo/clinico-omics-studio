@@ -1,6 +1,6 @@
 <template>
   <div class="hot-table" ref="chartTable" :style="{ height: clientHeight + 'px' }">
-    <a-tabs type="editable-card" @edit="onEdit" @change="changeTab">
+    <a-tabs type="editable-card" :activeKey="activeKey" @edit="onEdit" @change="changeTab">
       <a-tab-pane
         v-for="pane in panes"
         :key="pane.key"
@@ -86,7 +86,7 @@ export default {
           }
         }
       },
-      newTabIndex: 0,
+      activeKey: 'unamed_grid_1',
       isMouseDown: false,
       originX: 0,
       originY: 0
@@ -140,7 +140,7 @@ export default {
     },
     refreshTable(activeKey) {
       const instance = this.$refs['hotTable' + activeKey]
-      console.log('refreshTable: ', activeKey, instance[0])
+      console.log('refreshTable: ', activeKey, instance)
       if (instance && instance.length > 0) {
         setTimeout(() => {
           instance[0].hotInstance.render()
@@ -188,6 +188,7 @@ export default {
         return pane.key === activeKey
       })
       this.loadData(activeKey, pane[0]) // TODO: any exception?
+      this.activeKey = activeKey
       this.refreshTable(activeKey)
     },
     add() {

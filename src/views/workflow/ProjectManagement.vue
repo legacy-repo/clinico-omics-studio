@@ -1,7 +1,7 @@
 <template>
   <page-view :title="getTitle()" logo="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png">
     <template slot="action">
-      <a-button type="primary" @click="onCreateProject">Create Project</a-button>
+      <a-button type="primary" @click="onCreateProject">{{ $t('workflow.projectManagement.createProject') }}</a-button>
     </template>
 
     <project-list :id="refreshToken"></project-list>
@@ -11,6 +11,7 @@
 <script>
 import { PageView } from '@/layouts'
 import ProjectList from '@/views/workflow/itemList/ProjectList'
+import { formatTitle } from '@/views/utils'
 
 export default {
   name: 'ProjectManagement',
@@ -41,7 +42,7 @@ export default {
   },
   methods: {
     getTitle () {
-      return this.$route.meta.title
+      return formatTitle(this, this.$route.meta.title)
     },
     onCreateProject () {
       this.$router.push({

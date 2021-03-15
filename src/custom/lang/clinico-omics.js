@@ -66,7 +66,7 @@ export const zhCN = {
       appsTools: 'APP & 工具',
       fileManagement: '文件管理',
       createProject: '创建项目',
-      jobManagement: 'Job管理',
+      jobManagement: '作业管理',
       projectManagement: '项目管理',
       // Report
       report: '报告',

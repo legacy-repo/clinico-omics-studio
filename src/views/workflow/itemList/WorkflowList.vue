@@ -2,19 +2,19 @@
   <div>
     <a-card style="margin-top: 10px" :bordered="false">
       <div slot="title">
-        <a-tag color="#87d068">Number of Jobs: {{ data.length }}</a-tag>
+        <a-tag color="#87d068">{{ $t('workflow.itemList.workflowList.numberOfJobs') }}: {{ data.length }}</a-tag>
       </div>
       <div slot="extra">
         <a-radio-group @change="onClickRadioBtn" defaultValue="total" :value="radioGroupValue">
-          <a-radio-button value="total">Total</a-radio-button>
-          <a-radio-button value="Submitted">Submitted</a-radio-button>
-          <a-radio-button value="Running">Running</a-radio-button>
-          <a-radio-button value="Failed">Failed</a-radio-button>
-          <a-radio-button value="Succeeded">Finished</a-radio-button>
+          <a-radio-button value="total">{{ $t('workflow.itemList.workflowList.total') }}</a-radio-button>
+          <a-radio-button value="Submitted">{{ $t('workflow.itemList.workflowList.submitted') }}</a-radio-button>
+          <a-radio-button value="Running">{{ $t('workflow.itemList.workflowList.running') }}</a-radio-button>
+          <a-radio-button value="Failed">{{ $t('workflow.itemList.workflowList.failed') }}</a-radio-button>
+          <a-radio-button value="Succeeded">{{ $t('workflow.itemList.workflowList.succeeded') }}</a-radio-button>
         </a-radio-group>
         <a-input-search
           style="margin-left: 16px; width: 272px;"
-          placeholder="Please Enter Job Name"
+          :placeholder="$t('workflow.itemList.workflowList.enterJobName')"
           :loading="loading"
           :value="searchStr"
           disabled
@@ -33,7 +33,7 @@
                   v-for="(value, key) in item.labels"
                 >{{ key }} = {{ value }}</a-tag>
               </div>
-              <a-popover slot="avatar" placement="right" title="Job Parameters">
+              <a-popover slot="avatar" placement="right" :title="$t('workflow.itemList.workflowList.jobParameters')">
                 <template slot="content">
                   <vue-json-pretty
                     class="json-popover"
@@ -41,13 +41,13 @@
                     v-if="Object.keys(item.jobParams).length !== 0"
                     :data="item.jobParams"
                   ></vue-json-pretty>
-                  <span v-else>No Content</span>
+                  <span v-else>{{ $t('workflow.itemList.workflowList.noContent') }}</span>
                 </template>
                 <config-logo class="config-logo" />
               </a-popover>
               <a-tooltip placement="top" slot="title">
                 <template slot="title">
-                  <a @click="doCopy(item.workflowId)">Copy WorkflowId</a>
+                  <a @click="doCopy(item.workflowId)">{{ $t('workflow.itemList.workflowList.copyWorkflowId') }}</a>
                 </template>
                 <a
                   @click="onShowLog(item.workflowId, item.title)"
@@ -57,11 +57,11 @@
           </a-col>
           <a-col class="list-content" :lg="12" :md="12" :sm="24" :xs="24">
             <div class="list-content-item">
-              <span>Started</span>
+              <span>{{ $t('workflow.itemList.workflowList.started') }}</span>
               <p>{{ item.startedAt }}</p>
             </div>
             <div class="list-content-item">
-              <span>Finished</span>
+              <span>{{ $t('workflow.itemList.workflowList.finished') }}</span>
               <p>{{ item.finishedAt }}</p>
             </div>
             <div class="list-content-item">
@@ -73,15 +73,15 @@
             </div>
           </a-col>
           <div slot="actions">
-            <a @click="onShowLog(item.workflowId, item.title)">Logs</a>
+            <a @click="onShowLog(item.workflowId, item.title)">{{ $t('workflow.itemList.workflowList.logs') }}</a>
             &nbsp;
             <a-dropdown>
               <a-menu slot="overlay">
                 <a-menu-item>
-                  <a @click="redirectToFS(item.title, item.workflowId, 'metadata')">Metadata</a>
+                  <a @click="redirectToFS(item.title, item.workflowId, 'metadata')">{{ $t('workflow.itemList.workflowList.metadata') }}</a>
                 </a-menu-item>
                 <a-menu-item>
-                  <a @click="redirectToFS(item.title, item.workflowId, 'results')">Results</a>
+                  <a @click="redirectToFS(item.title, item.workflowId, 'results')">{{ $t('workflow.itemList.workflowList.results') }}</a>
                 </a-menu-item>
                 <a-menu-item v-if="item.status == 'exception'">
                   <a-popover title="Notice" trigger="hover" placement="bottomRight">
@@ -96,14 +96,14 @@
                       size="small"
                       style="margin-left: 50%;"
                     >
-                      <a-icon type="redo" />Resubmit
+                      <a-icon type="redo" />{{ $t('workflow.itemList.workflowList.resubmit') }}
                     </a-button>
-                    <a>Resubmit</a>
+                    <a>{{ $t('workflow.itemList.workflowList.resubmit') }}</a>
                   </a-popover>
                 </a-menu-item>
               </a-menu>
               <a>
-                More Actions
+                {{ $t('workflow.itemList.workflowList.moreActions') }}
                 <a-icon type="down" />
               </a>
             </a-dropdown>

@@ -1,5 +1,6 @@
 import Menu from 'ant-design-vue/es/menu'
 import Icon from 'ant-design-vue/es/icon'
+import v from 'voca'
 
 const { Item, SubMenu } = Menu
 
@@ -57,6 +58,15 @@ export default {
     }
   },
   methods: {
+    formatTitle(title) {
+      const key = v.camelCase(title)
+      const formatedTitle = this.$t('router.meta.' + key)
+      if (formatedTitle === 'router.meta.' + key) {
+        return title
+      } else {
+        return formatedTitle
+      }
+    },
     // select menu item
     onOpenChange (openKeys) {
       // 在水平模式下时执行，并且不再执行后续
@@ -117,7 +127,7 @@ export default {
         <Item {...{ key: menu.path }} disabled={ menu.meta.disabled }>
           <tag {...{ props, attrs }}>
             {this.renderIcon(menu.meta.icon)}
-            <span>{menu.meta.title}</span>
+            <span>{this.formatTitle(menu.meta.title)}</span>
           </tag>
         </Item>
       )
@@ -131,7 +141,7 @@ export default {
         <SubMenu {...{ key: menu.path }} disabled={ menu.meta.disabled }>
           <span slot="title">
             {this.renderIcon(menu.meta.icon)}
-            <span>{menu.meta.title}</span>
+            <span>{this.formatTitle(menu.meta.title)}</span>
           </span>
           {itemArr}
         </SubMenu>

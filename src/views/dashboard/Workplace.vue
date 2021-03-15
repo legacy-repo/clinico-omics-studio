@@ -49,19 +49,19 @@
           :loading="projectLoading"
           style="margin: 0px 12px 10px;"
           :bordered="false"
-          title="Ongoing Projects"
+          :title="$t('dashboard.workplace.ongoingProjects')"
           :body-style="{ padding: 0 }"
         >
-          <a-button slot="extra" type="primary" @click="onShowProjectMgmt" style="margin-right: 5px;">All Projects</a-button>
+          <a-button slot="extra" type="primary" @click="onShowProjectMgmt" style="margin-right: 5px;">{{ $t('dashboard.workplace.allProjects') }}</a-button>
           <a-radio-group
             slot="extra"
             defaultValue="total"
             @change="filterProject"
           >
-            <a-radio-button value="total">Total</a-radio-button>
-            <a-radio-button value="active">Running</a-radio-button>
-            <a-radio-button value="exception">Failed</a-radio-button>
-            <a-radio-button value="success">Finished</a-radio-button>
+            <a-radio-button value="total">{{ $t('dashboard.workplace.total') }}</a-radio-button>
+            <a-radio-button value="active">{{ $t('dashboard.workplace.running') }}</a-radio-button>
+            <a-radio-button value="exception">{{ $t('dashboard.workplace.failed') }}</a-radio-button>
+            <a-radio-button value="success">{{ $t('dashboard.workplace.finished') }}</a-radio-button>
           </a-radio-group>
           <div>
             <a-card-grid
@@ -98,7 +98,7 @@
       <a-row :gutter="24">
         <a-col style="padding: 0 12px;" :xl="8" :lg="24" :md="24" :sm="24" :xs="24">
           <a-card
-            title="Quick Start / Navigation"
+            :title="$t('dashboard.workplace.quickStart')"
             style="height: 100px; margin-bottom: 10px"
             :bordered="false"
             :body-style="{padding: 0}"
@@ -106,12 +106,12 @@
           >
             <div class="item-group">
               <!-- <a>操作一</a> -->
-              <a-button disabled size="small" type="primary" ghost icon="plus">Add</a-button>
+              <a-button disabled size="small" type="primary" ghost icon="plus">{{ $t('dashboard.workplace.addBtn') }}</a-button>
             </div>
           </a-card>
           <a-card
             :loading="teamLoading"
-            title="Data Task"
+            :title="$t('dashboard.workplace.dataTask')"
             style="margin-bottom: 10px"
             :bordered="false"
           >
@@ -129,7 +129,7 @@
           </a-card>
         </a-col>
         <a-col style="padding-left: 0px;" :xl="16" :lg="24" :md="24" :sm="24" :xs="24">
-          <a-card :loading="activityLoading" title="Activity" :bordered="false">
+          <a-card :loading="activityLoading" :title="$t('dashboard.workplace.activity')" :bordered="false">
             <a-list>
               <a-list-item :key="index" v-for="(item, index) in activities">
                 <a-list-item-meta>

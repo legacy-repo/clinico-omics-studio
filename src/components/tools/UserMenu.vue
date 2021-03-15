@@ -3,7 +3,7 @@
     <div class="content-box">
       <a-tooltip placement="bottom">
         <template slot="title">
-          <span>Feedback</span>
+          <span>{{ $t('components.tools.userMenu.feedback') }}</span>
         </template>
         <a :href="feedbackEntrypoint" target="_blank">
           <span class="action">
@@ -13,7 +13,7 @@
       </a-tooltip>
       <a-tooltip placement="bottom">
         <template slot="title">
-          <span>Policies</span>
+          <span>{{ $t('components.tools.userMenu.policies') }}</span>
         </template>
         <a :href="policyEntrypoint" target="_blank">
           <span class="action">
@@ -23,7 +23,7 @@
       </a-tooltip>
       <a-tooltip placement="bottom">
         <template slot="title">
-          <span>Documentation</span>
+          <span>{{ $t('components.tools.userMenu.documentation') }}</span>
         </template>
         <a :href="helpEntrypoint" target="_blank">
           <span class="action">
@@ -42,20 +42,20 @@
           <a-menu-item key="0">
             <router-link :to="{ name: 'center' }" disabled>
               <a-icon type="user" />
-              <span>User Center</span>
+              <span>{{ $t('components.tools.userMenu.userCenter') }}</span>
             </router-link>
           </a-menu-item>
           <a-menu-item key="1">
             <router-link :to="{ name: 'settings' }" disabled>
               <a-icon type="setting" />
-              <span>Settings</span>
+              <span>{{ $t('components.tools.userMenu.settings') }}</span>
             </router-link>
           </a-menu-item>
           <a-menu-divider />
           <a-menu-item key="2">
             <a href="javascript:;" @click="handleLogout">
               <a-icon type="logout" />
-              <span>Logout</span>
+              <span>{{ $t('components.tools.userMenu.logout') }}</span>
             </a>
           </a-menu-item>
         </a-menu>

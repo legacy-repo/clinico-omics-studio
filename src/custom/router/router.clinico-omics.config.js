@@ -62,7 +62,7 @@ export const asyncRouterMap = [
               },
               {
                 path: '/data/data-model/omics-data-commons',
-                name: 'Omics Data Commons',
+                name: 'omics-data-commons',
                 hidden: false,
                 redirect: {
                   name: 'embeded-frame',
@@ -70,7 +70,7 @@ export const asyncRouterMap = [
                     src: `http://${window.location.host}/data-model/?project=omics-data-commons`
                   }
                 },
-                meta: { title: 'Omics Data Commons', icon: 'retweet', keepAlive: true }
+                meta: { title: 'The Cancer Omics Atlas', icon: 'retweet', keepAlive: true }
               },
               {
                 path: '/data/data-model/chiglitazar',

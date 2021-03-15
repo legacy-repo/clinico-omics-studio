@@ -12,23 +12,23 @@
         :tabBarStyle="{ textAlign: 'center', borderBottom: 'unset' }"
         @change="handleTabClick"
       >
-        <a-tab-pane key="tab1" tab="Account Login">
+        <a-tab-pane key="tab1" :tab="$t('account.login.accountLogin')">
           <a-alert
             v-if="isLoginError"
             type="error"
             showIcon
             style="margin-bottom: 24px;"
-            message="Username or password is not valid."
+            :message="$t('account.login.usernamePasswordInValid')"
           />
           <a-form-item>
             <a-input
               size="large"
               type="text"
               @change="removeLoginErr"
-              placeholder="Please enter your username."
+              :placeholder="$t('account.login.inputUsername')"
               v-decorator="[
                 'username',
-                {rules: [{ required: true, message: 'Please enter your username' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
+                {rules: [{ required: true, message: $t('account.login.inputUsername') }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
               ]"
             >
               <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }" />
@@ -39,10 +39,10 @@
             <a-input-password
               @change="removeLoginErr"
               size="large"
-              placeholder="Please enter your password."
+              :placeholder="$t('account.login.inputPassword')"
               v-decorator="[
                 'password',
-                {rules: [{ required: true, message: 'Please enter your password.' }], validateTrigger: 'blur'}
+                {rules: [{ required: true, message: $t('account.login.inputPassword') }], validateTrigger: 'blur'}
               ]"
             >
               <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }" />
@@ -52,8 +52,8 @@
       </a-tabs>
 
       <a-form-item>
-        <router-link class="register" :to="{ name: 'register' }" disabled>Register</router-link>
-        <a @click="redirectFindBack" class="forge-password" style="float: right;">Forget Password?</a>
+        <router-link class="register" :to="{ name: 'register' }" disabled>{{ $t('account.login.register') }}</router-link>
+        <a @click="redirectFindBack" class="forge-password" style="float: right;">{{ $t('account.login.forgetPassword') }}?</a>
       </a-form-item>
 
       <a-form-item style="margin-top:24px">
@@ -64,7 +64,7 @@
           class="login-button"
           :loading="state.loginBtn"
           :disabled="state.loginBtn"
-        >Login</a-button>
+        >{{ $t('account.login.loginBtn') }}</a-button>
       </a-form-item>
     </a-form>
   </div>

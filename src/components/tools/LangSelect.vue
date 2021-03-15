@@ -9,6 +9,11 @@
           <span role="img" aria-label="English">🇬🇧</span> English
         </a>
       </a-menu-item>
+      <a-menu-item key="zh-CN">
+        <a rel="noopener noreferrer">
+          <span role="img" aria-label="Chinese">🇨🇳</span> 中文
+        </a>
+      </a-menu-item>
     </a-menu>
   </a-dropdown>
 </template>

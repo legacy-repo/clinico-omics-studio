@@ -1,5 +1,8 @@
 <template>
   <div id="userLayout" :class="['user-layout-wrapper', device]">
+    <a-row class="lang-panel">
+      <lang-select />
+    </a-row>
     <div class="container">
       <div class="top">
         <div class="header">
@@ -17,12 +20,12 @@
 
       <div class="footer">
         <div class="links">
-          <a :href="policyEntrypoint">Help</a>
-          <a :href="helpEntrypoint">Help</a>
-          <a :href="feedbackEntrypoint">Feedback</a>
-          <a href="_self">Terms</a>
+          <a :href="policyEntrypoint">{{ $t('layouts.userLayout.dataPolicies') }}</a>
+          <a :href="helpEntrypoint">{{ $t('layouts.userLayout.help') }}</a>
+          <a :href="feedbackEntrypoint">{{ $t('layouts.userLayout.feedback') }}</a>
+          <a href="_self">{{ $t('layouts.userLayout.terms') }}</a>
         </div>
-        <div class="copyright">Copyright &copy; 2019 The Genius Medicine Consortium</div>
+        <div class="copyright">{{ $t('layouts.userLayout.copyright') }}</div>
       </div>
     </div>
   </div>
@@ -33,10 +36,11 @@ import RouteView from './RouteView'
 import { mixinDevice } from '@/utils/mixin'
 import { mapGetters } from 'vuex'
 import { websiteDesc, websiteLogo, websiteName } from '@/config/defaultSettings'
+import LangSelect from '@/components/tools/LangSelect'
 
 export default {
   name: 'UserLayout',
-  components: { RouteView },
+  components: { RouteView, LangSelect },
   computed: {
     ...mapGetters(['feedbackEntrypoint', 'policyEntrypoint', 'helpEntrypoint'])
   },
@@ -68,6 +72,13 @@ export default {
         width: 98%;
       }
     }
+  }
+
+  .lang-panel {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    z-index: 10;
   }
 
   .container {

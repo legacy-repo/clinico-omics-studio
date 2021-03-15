@@ -109,7 +109,7 @@
 
 <script>
 import { PageView } from '@/layouts'
-import DetailList from '@/components/tools/DetailList'
+import DetailList from '@/components/Tools/DetailList'
 import WorkflowList from '@/views/workflow/itemList/WorkflowList'
 import { mapActions } from 'vuex'
 

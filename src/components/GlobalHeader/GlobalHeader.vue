@@ -26,9 +26,9 @@
 </template>
 
 <script>
-import UserMenu from '../tools/UserMenu'
+import UserMenu from '../Tools/UserMenu'
 import SMenu from '../Menu/'
-import Logo from '../tools/Logo'
+import Logo from '../Tools/Logo'
 import { mixin } from '@/utils/mixin'
 import { websiteName, websiteLogo } from '@/config/defaultSettings'
 

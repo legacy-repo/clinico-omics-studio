@@ -159,7 +159,7 @@ import { mapState, mapActions } from 'vuex'
 import filter from 'lodash.filter'
 
 import { PageView } from '@/layouts'
-import HeadInfo from '@/components/tools/HeadInfo'
+import HeadInfo from '@/components/Tools/HeadInfo'
 
 export default {
   name: 'Workplace',

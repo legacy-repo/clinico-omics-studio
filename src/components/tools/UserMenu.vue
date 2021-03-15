@@ -69,7 +69,7 @@
 import NoticeIcon from '@/components/NoticeIcon'
 import AppStoreIcon from '@/components/AppStoreIcon'
 import { mapActions, mapGetters } from 'vuex'
-import LangSelect from '@/components/tools/LangSelect'
+import LangSelect from '@/components/Tools/LangSelect'
 
 export default {
   name: 'UserMenu',

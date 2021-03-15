@@ -52,7 +52,7 @@
 import { PageView } from '@/layouts'
 import EmbededFrame from '@/views/iframe/EmbededFrame'
 import { mapActions } from 'vuex'
-import DetailList from '@/components/tools/DetailList'
+import DetailList from '@/components/Tools/DetailList'
 
 const DetailListItem = DetailList.Item
 

@@ -121,7 +121,7 @@
 </template>
 
 <script>
-// import HeadInfo from '@/components/tools/HeadInfo'
+// import HeadInfo from '@/components/Tools/HeadInfo'
 // import LogContainer from '@/components/LogContainer/LogContainer'
 import LogContainer from '@/views/workflow/LogContainer'
 import Results from '@/views/workflow/Results'

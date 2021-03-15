@@ -36,7 +36,7 @@ import RouteView from './RouteView'
 import { mixinDevice } from '@/utils/mixin'
 import { mapGetters } from 'vuex'
 import { websiteDesc, websiteLogo, websiteName } from '@/config/defaultSettings'
-import LangSelect from '@/components/tools/LangSelect'
+import LangSelect from '@/components/Tools/LangSelect'
 
 export default {
   name: 'UserLayout',
@@ -79,6 +79,10 @@ export default {
     top: 20px;
     right: 30px;
     z-index: 10;
+  }
+
+  .lang-panel:hover {
+    cursor: pointer;
   }
 
   .container {

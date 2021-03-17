@@ -101,15 +101,19 @@ export const projectSettings = {
       name: 'Fast File Transfer',
       icon: 'thunderbolt',
       link: 'http://docs.3steps.cn/docs/datains/datains-intro.html#ossutil'
-    }, {
+    },
+    {
       name: 'File Browser',
       icon: 'global',
-      link: 'http://docs.3steps.cn/docs/datains/datains-intro.html#%E4%B8%8B%E8%BD%BD%E5%B9%B6%E5%AE%89%E8%A3%85-datains-browser'
-    }, {
+      link:
+        'http://docs.3steps.cn/docs/datains/datains-intro.html#%E4%B8%8B%E8%BD%BD%E5%B9%B6%E5%AE%89%E8%A3%85-datains-browser'
+    },
+    {
       name: 'API Management',
       icon: 'api',
       link: 'http://yapi.3steps.cn/'
-    }, {
+    },
+    {
       name: 'Documentation',
       icon: 'file-markdown',
       link: 'https://yuque.com/clinico-omics/help'
@@ -135,7 +139,48 @@ export const projectSettings = {
       category: 'Tool',
       source: 'PGx'
     }
-  ]
+  ],
+  footerConfig: {
+    metadata: [
+      {
+        name: 'tservice',
+        version: 'v0.1.7-b09dbb47',
+        repo: 'https://github.com/clinico-omics/tservice'
+      },
+      {
+        name: 'tservice-plugins',
+        version: 'v0.1.4-1de22b3d',
+        repo: 'https://github.com/clinico-omics/tservice-plugins'
+      },
+      {
+        name: 'datains',
+        version: 'v0.3.3-a48d05cb',
+        repo: 'https://github.com/clinico-omics/datains'
+      },
+      {
+        name: 'dataseq-core',
+        version: 'v0.2.2-b2192d1d',
+        repo: 'https://github.com/clinico-omics/dataseq-core'
+      }
+    ],
+    links: [
+      {
+        href: 'https://www.3steps.cn',
+        name: '智汇医圈联盟',
+        target: '_blank'
+      },
+      {
+        href: 'https://github.com/clinico-omics',
+        target: '_blank',
+        logo: 'github'
+      },
+      {
+        href: 'http://choppy.3steps.cn/',
+        target: '_blank',
+        name: 'Choppy Platform'
+      }
+    ]
+  }
 }
 
 export function initBaseURL() {

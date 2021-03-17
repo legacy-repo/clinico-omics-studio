@@ -1,21 +1,21 @@
 <template>
   <div class="footer">
     <div class="links">
-      <a href="https://www.3steps.cn" target="_blank">智汇医圈联盟</a>
-      <a href="https://github.com/clinico-omics" target="_blank">
-        <a-icon type="github" />
+      <a v-for="link in links" :key="link.href" :href="link.href" target="_blank">
+        <a-icon :type="link.logo" v-if="link.logo" />
+        {{ link.name }}
       </a>
-      <a href="http://choppy.3steps.cn/">Choppy Platform</a>
     </div>
     <div class="copyright">
-      Copyright
-      <a-icon type="copyright" />2019
-      <span>The Genius Medicine Consortium</span>
+      {{ $t('components.globalFooter.copyright') }}
+      <a-icon type="copyright" />2015-{{ (new Date()).getFullYear() }}
+      <span>{{ $t('components.globalFooter.companyName') }}</span>
     </div>
     <div class="links">
       |&nbsp;
       <span v-for="item in metadata" :key="item.name">
-        <a :href="item.repo">{{ item.name + ' ' + item.version }}</a>&nbsp;|&nbsp;
+        <a :href="item.repo">{{ item.name + ' ' + item.version }}</a
+        >&nbsp;|&nbsp;
       </span>
     </div>
   </div>
@@ -24,31 +24,18 @@
 <script>
 export default {
   name: 'GlobalFooter',
-  data() {
-    return {
-      metadata: [
-        {
-          name: 'tservice',
-          version: 'v0.1.7-b09dbb47',
-          repo: 'https://github.com/clinico-omics/tservice'
-        },
-        {
-          name: 'tservice-plugins',
-          version: 'v0.1.4-1de22b3d',
-          repo: 'https://github.com/clinico-omics/tservice-plugins'
-        },
-        {
-          name: 'datains',
-          version: 'v0.3.3-a48d05cb',
-          repo: 'https://github.com/clinico-omics/datains'
-        },
-        {
-          name: 'dataseq-core',
-          version: 'v0.2.2-b2192d1d',
-          repo: 'https://github.com/clinico-omics/dataseq-core'
-        }
-      ]
+  props: {
+    metadata: {
+      type: Array,
+      required: true
+    },
+    links: {
+      type: Array,
+      required: true
     }
+  },
+  data() {
+    return {}
   },
   methods: {}
 }

@@ -96,7 +96,48 @@ export const projectSettings = {
       icon: 'file-markdown',
       link: 'https://yuque.com/quartet/help'
     }
-  ]
+  ],
+  footerConfig: {
+    metadata: [
+      {
+        name: 'tservice',
+        version: 'v0.1.7-b09dbb47',
+        repo: 'https://github.com/clinico-omics/tservice'
+      },
+      {
+        name: 'tservice-plugins',
+        version: 'v0.1.4-1de22b3d',
+        repo: 'https://github.com/clinico-omics/tservice-plugins'
+      },
+      {
+        name: 'datains',
+        version: 'v0.3.3-a48d05cb',
+        repo: 'https://github.com/clinico-omics/datains'
+      },
+      {
+        name: 'dataseq-core',
+        version: 'v0.2.2-b2192d1d',
+        repo: 'https://github.com/clinico-omics/dataseq-core'
+      }
+    ],
+    links: [
+      {
+        href: 'https://www.3steps.cn',
+        name: '智汇医圈联盟',
+        target: '_blank'
+      },
+      {
+        href: 'https://github.com/clinico-omics',
+        target: '_blank',
+        logo: 'github'
+      },
+      {
+        href: 'http://choppy.3steps.cn/',
+        target: '_blank',
+        name: 'Choppy Platform'
+      }
+    ]
+  }
 }
 
 export function initBaseURL() {

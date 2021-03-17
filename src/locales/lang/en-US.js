@@ -89,6 +89,10 @@ export default {
         settings: 'Settings',
         logout: 'Logout'        
       }
+    },
+    globalFooter: {
+      copyright: 'Copyright',
+      companyName: 'The Genius Medicine Consortium'
     }
   },
   // Layouts

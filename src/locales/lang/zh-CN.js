@@ -61,7 +61,6 @@ export default {
         moreActions: '更多操作',
         resubmit: '重新提交',
         jobParameters: '作业参数',
-        
       }
     }
   },
@@ -86,6 +85,10 @@ export default {
         settings: '配置',
         logout: '登出'
       }
+    },
+    globalFooter: {
+      copyright: '版权所有',
+      companyName: '智汇医圈联盟'
     }
   },
   layouts: {

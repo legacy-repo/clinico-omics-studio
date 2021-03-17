@@ -49,7 +49,7 @@
 
       <!-- layout footer -->
       <a-layout-footer>
-        <global-footer />
+        <global-footer :metadata="footer.metadata" :links="footer.links" />
       </a-layout-footer>
 
       <!-- Setting Drawer (show in development mode) -->
@@ -94,7 +94,8 @@ export default {
   computed: {
     ...mapState({
       // 动态主路由
-      mainMenu: state => state.permission.addRouters
+      mainMenu: state => state.permission.addRouters,
+      footer: state => state.app.footer
     }),
     contentPaddingLeft () {
       if (!this.fixSidebar || this.isMobile()) {

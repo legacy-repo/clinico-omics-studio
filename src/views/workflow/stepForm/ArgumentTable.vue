@@ -2,11 +2,11 @@
   <div class="hot-table">
     <a-row class="table-header">
       <a-button-group>
-        <a-button block @click="downloadFile">Download</a-button>
-        <a-button block v-shortkey="['meta', 's']" @shortkey="saveData" @click="saveData">Save</a-button>
-        <a-button block @click="clearData">Reset</a-button>
+        <a-button block @click="downloadFile">{{ $t('workflow.stepForm.argumentTable.download') }}</a-button>
+        <a-button block v-shortkey="['meta', 's']" @shortkey="saveData" @click="saveData">{{ $t('workflow.stepForm.argumentTable.save') }}</a-button>
+        <a-button block @click="clearData">{{ $t('workflow.stepForm.argumentTable.reset') }}</a-button>
       </a-button-group>
-      <h3 class="title">Job Parameters</h3>
+      <h3 class="title">{{ $t('workflow.stepForm.argumentTable.jobParameters') }}</h3>
     </a-row>
     <hot-table ref="hotTable" :settings="hotSettings" licenseKey="non-commercial-and-evaluation"></hot-table>
   </div>
@@ -100,7 +100,7 @@ export default {
     },
     clearData () {
       localStorage.removeItem('datains_FINAL_APP_DATA')
-      this.$message.success('Refresh Successfully.')
+      this.$message.success(this.$t('workflow.stepForm.argumentTable.refreshSuccessfully'))
       this.loadData()
     },
     filterData (data) {
@@ -116,7 +116,7 @@ export default {
         header: header,
         body: this.filterData(data)
       }))
-      this.$message.success('Save Successfully.')
+      this.$message.success(this.$t('workflow.stepForm.argumentTable.saveSuccessfully'))
     },
     loadData () {
       const container = this.$refs.hotTable.hotInstance

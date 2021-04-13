@@ -34,6 +34,8 @@ import Card from '@/components/Card'
 import SimpleCard from '@/components/SimpleCard'
 import FullFrame from '@/components/FullFrame'
 import PdfViewer from '@/components/PDF'
+import ImageViewer from '@/components/ImageViewer'
+import FileViewer from '@/components/FileViewer'
 
 export {
   AvatarList,
@@ -71,5 +73,7 @@ export {
   Card,
   SimpleCard,
   FullFrame,
-  PdfViewer
+  PdfViewer,
+  ImageViewer,
+  FileViewer
 }

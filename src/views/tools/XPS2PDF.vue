@@ -12,7 +12,7 @@
             @click="handleUpload"
             :disabled="fileList.length === 0"
             :loading="uploading"
-          >Convert</a-button>
+          >{{ $t('tools.xps2pdf.convert') }}</a-button>
         </a-row>
         <a-upload-dragger
           name="file"
@@ -25,27 +25,27 @@
           <p class="ant-upload-drag-icon">
             <a-icon type="inbox" />
           </p>
-          <p class="ant-upload-text">Click this area to upload</p>
+          <p class="ant-upload-text">{{ $t('tools.xps2pdf.uploadText') }}</p>
           <p class="ant-upload-hint">
-            Support for a single or bulk upload.
+            {{ $t('tools.xps2pdf.uploadHint') }}
           </p>
         </a-upload-dragger>
         <a-collapse v-model="activeKey">
-          <a-collapse-panel key="1" header="Task History">
+          <a-collapse-panel key="1" :header="$t('tools.xps2pdf.taskHistory')">
             <a-table :columns="columns" :data-source="data" size="small">
               <span slot="pdf" slot-scope="pdf, record">
                 <a
                   :href="tServiceHost + '/' + pdf"
                   target="_blank"
                   :disabled="record.status !== 'success'"
-                >Download</a>
+                >{{ $t('tools.xps2pdf.download') }}</a>
               </span>
               <span slot="zip" slot-scope="zip, record">
                 <a
                   :href="tServiceHost + '/' + zip"
                   target="_blank"
                   :disabled="record.status !== 'success'"
-                >Download</a>
+                >{{ $t('tools.xps2pdf.download') }}</a>
               </span>
               <span slot="status" slot-scope="status">
                 <a-tag
@@ -71,40 +71,6 @@ import Prism from 'prismjs'
 import moment from 'moment'
 import { initTServiceHost } from '@/config/defaultSettings'
 
-const columns = [
-  {
-    dataIndex: 'filename',
-    key: 'filename',
-    title: 'File Name'
-  },
-  {
-    title: 'Created Time',
-    dataIndex: 'createdTime',
-    key: 'createdTime'
-  },
-  {
-    title: 'Status',
-    key: 'status',
-    dataIndex: 'status',
-    scopedSlots: { customRender: 'status' },
-    width: '100px'
-  },
-  {
-    title: 'PDF File',
-    dataIndex: 'pdf',
-    key: 'pdf',
-    scopedSlots: { customRender: 'pdf' },
-    width: '100px'
-  },
-  {
-    title: 'ZIP File',
-    dataIndex: 'zip',
-    key: 'zip',
-    scopedSlots: { customRender: 'zip' },
-    width: '100px'
-  }
-]
-
 export default {
   components: {
     PageView,
@@ -114,20 +80,52 @@ export default {
     return {
       appName: 'xps2pdf',
       helpLink: 'https://nordata-cdn.oss-cn-shanghai.aliyuncs.com/clinico-omics/xps2pdf.md',
-      helpMsg: 'No Help Documentation.',
+      helpMsg: this.$t('tools.xps2pdf.helpMsg'),
       data: [],
-      columns,
       fileList: [],
       uploading: false,
       activeKey: ['1'],
-      tServiceHost: initTServiceHost()
+      tServiceHost: initTServiceHost(),
+      columns: [
+        {
+          dataIndex: 'filename',
+          key: 'filename',
+          title: this.$t('tools.xps2pdf.fileName')
+        },
+        {
+          title: this.$t('tools.xps2pdf.createdTime'),
+          dataIndex: 'createdTime',
+          key: 'createdTime'
+        },
+        {
+          title: this.$t('tools.xps2pdf.status'),
+          key: 'status',
+          dataIndex: 'status',
+          scopedSlots: { customRender: 'status' },
+          width: '100px'
+        },
+        {
+          title: this.$t('tools.xps2pdf.pdfFile'),
+          dataIndex: 'pdf',
+          key: 'pdf',
+          scopedSlots: { customRender: 'pdf' },
+          width: '100px'
+        },
+        {
+          title: this.$t('tools.xps2pdf.zipFile'),
+          dataIndex: 'zip',
+          key: 'zip',
+          scopedSlots: { customRender: 'zip' },
+          width: '100px'
+        }
+      ]
     }
   },
   methods: {
     removeHistory (event) {
       localStorage.setItem('xps2pdf-history', '[]')
       this.loadHistory()
-      this.$message.success('Remove History Successfully.')
+      this.$message.success(this.$t('removeHistorySuccessfully'))
       event.stopPropagation()
     },
     formatColor(status) {
@@ -154,7 +152,7 @@ export default {
         this.helpMsg = content
         console.log('loadHelpMsg: ', content)
       }).catch(error => {
-        this.helpMsg = 'No help document.'
+        this.helpMsg = this.$t('tools.xps2pdf.helpMsg')
         console.log('loadHelpMsg Error: ', error)
       })
     },
@@ -166,7 +164,7 @@ export default {
     },
     beforeUpload (file) {
       if (!file.name.match(/.*.xps/)) {
-        this.$message.warn('Only support XPS format.')
+        this.$message.warn(this.$t('onlyXpsFormat'))
         return false
       }
 
@@ -187,7 +185,7 @@ export default {
       })
         .then(resp => {
           this.uploading = false
-          this.$message.success('Convert successfully.')
+          this.$message.success(this.$t('tools.xps2pdf.convertSuccessfully'))
 
           file['pdf'] = resp['pdf_url']
           file['zip'] = resp['zip_url']
@@ -206,7 +204,7 @@ export default {
           localStorage.setItem('xps2pdf-history', JSON.stringify(xps2pdfHistory))
           this.uploading = false
           console.log('Error: ', error)
-          this.$message.error('Convert failed.')
+          this.$message.error(this.$t('tools.xps2pdf.convertFailed'))
         })
     },
     handleUpload () {
@@ -243,7 +241,7 @@ export default {
         .catch(error => {
           this.uploading = false
           console.log('Error: ', error)
-          this.$message.error('Convert failed.')
+          this.$message.error(this.$t('tools.xps2pdf.convertFailed'))
         })
     },
     loadHistory () {

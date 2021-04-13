@@ -1,8 +1,8 @@
 <template>
   <a-row class="file-viewer">
-    <a-row class="title">{{ title }}</a-row>
-    <pathology :data="data" v-if="viewerType == 'PATHOLOGY'"></pathology>
-    <dicom :data="data" v-else-if="viewerType == 'DICOM'"></dicom>
+    <a-row class="title" v-if="title">{{ title }}</a-row>
+    <pathology :data="data" v-if="viewerType == 'PATHOLOGY'" :class="{'title-mode': title}"></pathology>
+    <dicom :data="data" v-else-if="viewerType == 'DICOM'" :class="{'title-mode': title}"></dicom>
     <a-empty v-else />
   </a-row>
 </template>
@@ -19,7 +19,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: 'File Viewer',
+      default: '',
       required: false
     },
     baseUrl: {
@@ -32,9 +32,9 @@ export default {
     },
     viewerType: {
       type: String,
-      required: true,
+      required: false,
       validator: viewerType => {
-        const viewerList = ['PATHOLOGY', 'DICOM']
+        const viewerList = ['PATHOLOGY', 'DICOM', '']
         return viewerList.indexOf(viewerType) >= 0
       }
     }
@@ -71,7 +71,7 @@ export default {
   width: 100%;
   height: 100%;
   border-radius: 5px;
-  border: 1px solid #d9d9d9;
+  // border: 1px solid #d9d9d9;
 
   .title {
     font-size: 16px;
@@ -82,9 +82,8 @@ export default {
     border-top-right-radius: 5px;
   }
 
-  .pathology-container,
-  .dicom-container {
-    height: calc(100% - 47px);
+  .title-mode {
+    height: calc(100% - 44px);
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
   }

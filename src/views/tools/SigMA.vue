@@ -5,7 +5,7 @@
   >
     <a-row class="tool-page" :gutter="16">
       <a-row class="page-header">
-        <a-col :span="12" class="title">Parameters</a-col>
+        <a-col :span="12" class="title">{{ $t('tools.sigma.parameters') }}</a-col>
         <a-col :span="12" class="btn-group">
           <a-button
             type="primary"
@@ -13,26 +13,26 @@
             @click="handleUpload"
             :disabled="fileList.length === 0"
             :loading="uploading"
-          >Run</a-button>
-          <a-button type="primary" @click="showHelp">Help</a-button>
+          >{{ $t('tools.sigma.run') }}</a-button>
+          <a-button type="primary" @click="showHelp">{{ $t('tools.sigma.help') }}</a-button>
         </a-col>
       </a-row>
       <a-row class="tool-form">
         <a-col :xl="12" :lg="12" :md="12" :sm="24" :xs="24">
           <a-form :form="form" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }">
-            <a-form-item label="File Type">
+            <a-form-item :label="$t('tools.sigma.fileType')">
               <a-select
-                v-decorator="['filetype', { initialValue: 'maf', rules: [{ required: true, message: 'Please select a file type!' }]}]"
-                placeholder="Select a option"
+                v-decorator="['filetype', { initialValue: 'maf', rules: [{ required: true, message: $t('tools.sigma.fileTypeMessage') }]}]"
+                :placeholder="$t('tools.sigma.selectOption')"
               >
                 <a-select-option value="maf">MAF</a-select-option>
                 <a-select-option value="vcf">VCF</a-select-option>
               </a-select>
             </a-form-item>
-            <a-form-item label="Tumor Type">
+            <a-form-item :label="$t('tools.sigma.tumorType')">
               <a-select
-                v-decorator="['tumor_type', { initialValue: 'breast', rules: [{ required: true, message: 'Please select a tumor type!' }]}]"
-                placeholder="Select a option"
+                v-decorator="['tumor_type', { initialValue: 'breast', rules: [{ required: true, message: $t('tools.sigma.tumorTypeMessage') }]}]"
+                :placeholder="$t('tools.sigma.selectOption')"
               >
                 <a-select-option
                   v-for="item in orderedTumorTypeList"
@@ -46,9 +46,9 @@
                 </a-select-option>
               </a-select>
             </a-form-item>
-            <a-form-item label="Data Type">
+            <a-form-item :label="$t('tools.sigma.dataType')">
               <a-select
-                v-decorator="['data', { initialValue: 'seqcap', rules: [{ required: true, message: 'Please select a file type!' }]}]"
+                v-decorator="['data', { initialValue: 'seqcap' }]"
                 placeholder="Select a option"
               >
                 <a-select-option
@@ -63,36 +63,36 @@
                 </a-select-option>
               </a-select>
             </a-form-item>
-            <a-form-item label="Do Assign">
+            <a-form-item :label="$t('tools.sigma.doAssign')">
               <a-select
-                v-decorator="['do_assign', { initialValue: 'true', rules: [{ required: true, message: 'Please select a file type!' }]}]"
+                v-decorator="['do_assign', { initialValue: 'true' }]"
                 placeholder="Select a option"
               >
                 <a-select-option value="true">True</a-select-option>
                 <a-select-option value="false">False</a-select-option>
               </a-select>
             </a-form-item>
-            <a-form-item label="Do MVA">
+            <a-form-item :label="$t('tools.sigma.doMva')">
               <a-select
-                v-decorator="['do_mva', { initialValue: 'true', rules: [{ required: true, message: 'Please select a file type!' }]}]"
+                v-decorator="['do_mva', { initialValue: 'true' }]"
                 placeholder="Select a option"
               >
                 <a-select-option value="true">True</a-select-option>
                 <a-select-option value="false">False</a-select-option>
               </a-select>
             </a-form-item>
-            <a-form-item label="Lite Format">
+            <a-form-item :label="$t('tools.sigma.liteFormat')">
               <a-select
-                v-decorator="['lite_format', { initialValue: 'true', rules: [{ required: true, message: 'Please select a file type!' }]}]"
+                v-decorator="['lite_format', { initialValue: 'true' }]"
                 placeholder="Select a option"
               >
                 <a-select-option value="true">True</a-select-option>
                 <a-select-option value="false">False</a-select-option>
               </a-select>
             </a-form-item>
-            <a-form-item label="Check MSI">
+            <a-form-item :label="$t('tools.sigma.checkMSI')">
               <a-select
-                v-decorator="['check_msi', { initialValue: 'true', rules: [{ required: true, message: 'Please select a file type!' }]}]"
+                v-decorator="['check_msi', { initialValue: 'true' }]"
                 placeholder="Select a option"
               >
                 <a-select-option value="true">True</a-select-option>
@@ -112,15 +112,15 @@
             <p class="ant-upload-drag-icon">
               <a-icon type="inbox" />
             </p>
-            <p class="ant-upload-text">Click this area to upload</p>
-            <p class="ant-upload-hint">Support for a single VCF file or MAF file upload.</p>
+            <p class="ant-upload-text">{{ $t('tools.sigma.uploadText') }}</p>
+            <p class="ant-upload-hint">{{ $t('tools.sigma.uploadHint') }}</p>
           </a-upload-dragger>
         </a-col>
       </a-row>
     </a-row>
     <a-row class="task-history">
       <a-collapse v-model="activeKey">
-        <a-collapse-panel key="1" header="Task History">
+        <a-collapse-panel key="1" :header="$t('tools.sigma.taskHistory')">
           <a-table :columns="columns" :data-source="data" size="small">
             <span slot="result" slot-scope="result, record">
               <a
@@ -158,36 +158,6 @@ import moment from 'moment'
 import orderBy from 'lodash.orderby'
 import filter from 'lodash.filter'
 import { initTServiceHost } from '@/config/defaultSettings'
-
-const columns = [
-  {
-    dataIndex: 'filename',
-    key: 'filename',
-    title: 'File Name'
-  },
-  {
-    title: 'Created Time',
-    dataIndex: 'createdTime',
-    key: 'createdTime',
-    align: 'center'
-  },
-  {
-    title: 'Status',
-    key: 'status',
-    dataIndex: 'status',
-    scopedSlots: { customRender: 'status' },
-    width: '100px',
-    align: 'center'
-  },
-  {
-    title: 'Result',
-    dataIndex: 'result',
-    key: 'result',
-    scopedSlots: { customRender: 'result' },
-    width: '100px',
-    align: 'center'
-  }
-]
 
 const dataTypeList = [
   { key: 'seqcap', value: 'Whole Exome Sequencing 37 Mb' },
@@ -241,7 +211,35 @@ export default {
       data: [],
       orderedDataTypeList,
       orderedTumorTypeList,
-      columns,
+      columns: [
+        {
+          dataIndex: 'filename',
+          key: 'filename',
+          title: this.$t('tools.sigma.fileName')
+        },
+        {
+          title: this.$t('tools.sigma.createdTime'),
+          dataIndex: 'createdTime',
+          key: 'createdTime',
+          align: 'center'
+        },
+        {
+          title: this.$t('tools.sigma.status'),
+          key: 'status',
+          dataIndex: 'status',
+          scopedSlots: { customRender: 'status' },
+          width: '100px',
+          align: 'center'
+        },
+        {
+          title: this.$t('tools.sigma.result'),
+          dataIndex: 'result',
+          key: 'result',
+          scopedSlots: { customRender: 'result' },
+          width: '100px',
+          align: 'center'
+        }
+      ],
       fileList: [],
       parameters: {},
       uploading: false,

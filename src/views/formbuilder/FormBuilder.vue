@@ -35,6 +35,20 @@
             @change="onUpdate(field)"
           ></a-input-number>
         </template>
+        <!-- Input Number -->
+        <template v-if="field.tmplType === 'input_number'">
+          <a-input-number
+            :placeholder="field.placeholder"
+            :key="field.name + index"
+            :id="field.id || ''"
+            :min="field.min || 1"
+            :max="field.max || 100"
+            :disabled="field.disabled || false"
+            :ref="field.name"
+            v-decorator="[field.model, field.config]"
+            @change="onUpdate(field)"
+          ></a-input-number>
+        </template>
         <!-- Input -->
         <template v-if="field.tmplType === 'input'">
           <a-input

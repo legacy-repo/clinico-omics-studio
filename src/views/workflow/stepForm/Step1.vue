@@ -2,7 +2,7 @@
   <div>
     <a-form-model ref="projectForm" :model="projectData" :rules="rules" style="max-width: 500px; margin: 40px auto 0;">
       <a-form-model-item
-        label="Project Name"
+        :label="$t('workflow.stepForm.step1.projectName')"
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
         prop="projectName"
@@ -11,10 +11,10 @@
         <a-input
           v-model="projectData.projectName"
           @blur="() => {$refs.projectName.onFieldBlur()}"
-          placeholder="Please enter your project name"/>
+          :placeholder="$t('workflow.stepForm.step1.enterProjectName')"/>
       </a-form-model-item>
       <a-form-model-item
-        label="Description"
+        :label="$t('workflow.stepForm.step1.description')"
         :labelCol="labelCol"
         ref="description"
         prop="description"
@@ -22,11 +22,11 @@
         <a-textarea
           rows="4"
           v-model="projectData.description"
-          placeholder="Please enter a description of the project"
+          :placeholder="$t('workflow.stepForm.step1.enterProjectDescription')"
           @blur="() => {$refs.description.onFieldBlur()}"/>
       </a-form-model-item>
       <a-form-model-item
-        label="Started Time"
+        :label="$t('workflow.stepForm.step1.startedTime')"
         prop="createdTime"
         ref="createdTime"
         :labelCol="labelCol"
@@ -41,7 +41,7 @@
         />
       </a-form-model-item>
       <a-form-model-item
-        label="Group"
+        :label="$t('workflow.stepForm.step1.group')"
         prop="group"
         ref="group"
         :labelCol="labelCol"
@@ -54,14 +54,14 @@
         />
       </a-form-model-item>
       <a-form-model-item
-        label="Choppy App"
+        :label="$t('workflow.stepForm.step1.choppyApp')"
         prop="appId"
         ref="appId"
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
       >
         <a-select
-          placeholder="Please choose a choppy app"
+          :placeholder="$t('workflow.stepForm.step1.chooseAppPlaceholder')"
           v-model="projectData.appId">
           <a-select-option :value="item.id" v-for="item in installedApps" :key="item.id">
             {{ item.name }}
@@ -69,7 +69,7 @@
         </a-select>
       </a-form-model-item>
       <a-form-model-item :wrapperCol="{span: 19, offset: 5}">
-        <a-button type="primary" @click="nextStep('projectForm')">Next</a-button>
+        <a-button type="primary" @click="nextStep('projectForm')">{{ $t('workflow.stepForm.step1.next') }}</a-button>
       </a-form-model-item>
     </a-form-model>
     <a-divider />

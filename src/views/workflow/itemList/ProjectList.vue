@@ -1,47 +1,58 @@
 <template>
   <div class="project-list">
     <a-card style="margin-top: 10px" :bordered="false">
-      <a-badge slot="extra" showZero :count="pagination.total" :numberStyle="{backgroundColor: '#52c41a'}"/>
+      <a-badge slot="extra" showZero :count="pagination.total" :numberStyle="{ backgroundColor: '#52c41a' }" />
       <div slot="title">
         <a-radio-group @change="onClickRadioBtn" defaultValue="total" :value="radioGroupValue">
-          <a-radio-button value="total">Total</a-radio-button>
-          <a-radio-button value="Running">Running</a-radio-button>
-          <a-radio-button value="Failed">Failed</a-radio-button>
-          <a-radio-button value="Succeeded">Finished</a-radio-button>
+          <a-radio-button value="total">{{ $t('workflow.itemList.projectList.total') }}</a-radio-button>
+          <a-radio-button value="Running">{{ $t('workflow.itemList.projectList.running') }}</a-radio-button>
+          <a-radio-button value="Failed">{{ $t('workflow.itemList.projectList.failed') }}</a-radio-button>
+          <a-radio-button value="Succeeded">{{ $t('workflow.itemList.projectList.finished') }}</a-radio-button>
+          <a-radio-button value="Aborted">{{ $t('workflow.itemList.projectList.aborted') }}</a-radio-button>
         </a-radio-group>
 
-        <a-select style="margin-left: 10px; width: 272px;" placeholder="Search By App" @change="onSelectApp" allowClear>
+        <a-select
+          style="margin-left: 10px; width: 272px"
+          :placeholder="$t('workflow.itemList.projectList.searchPlaceholder')"
+          @change="onSelectApp"
+          allowClear
+        >
           <a-select-option :value="item.id" :key="item.name" v-for="item in installedApps">
             {{ item.name }}
           </a-select-option>
         </a-select>
 
         <a-input-search
-          style="margin-left: 16px; width: 272px;"
-          placeholder="Please Enter Project Name"
+          disabled
+          style="margin-left: 16px; width: 272px"
+          :placeholder="$t('workflow.itemList.projectList.enterProjectName')"
           :loading="loading"
           allowClear
           @search="onSearchProject"
         />
       </div>
 
-      <a-list
-        size="large"
-        :loading="loading"
-        :pagination="pagination">
+      <a-list size="large" :loading="loading" :pagination="pagination">
         <a-list-item :key="index" v-for="(item, index) in data">
           <a-col :lg="8" :md="8" :sm="24" :xs="24">
             <a-list-item-meta>
               <div slot="description">{{ item.description }}</div>
               <a-popover slot="avatar" placement="right">
                 <template slot="title">
-                  App Name: <a-tag color="#87d068" style="font-size: 16px;">{{ item.appName }}</a-tag>
+                  {{ $t('workflow.itemList.projectList.appName') }}:
+                  <a-tag color="#87d068" style="font-size: 16px">{{ item.appName }}</a-tag>
                 </template>
                 <template slot="content">
-                  <vue-good-table class="table-popover" :search-options="{ enabled: true }"
-                                  styleClass="vgt-table striped bordered condensed" :columns="genColumns(item.samples)" 
-                                  :rows="item.samples" v-if="item.samples.length !== 0"
-                                  :pagination-options="paginationOptions" :line-numbers="true">
+                  <vue-good-table
+                    class="table-popover"
+                    :search-options="{ enabled: true }"
+                    styleClass="vgt-table striped bordered condensed"
+                    :columns="genColumns(item.samples)"
+                    :rows="item.samples"
+                    v-if="item.samples.length !== 0"
+                    :pagination-options="paginationOptions"
+                    :line-numbers="true"
+                  >
                     <template slot="table-row" slot-scope="props">
                       <a-tooltip placement="top">
                         <template slot="title">
@@ -51,7 +62,7 @@
                       </a-tooltip>
                     </template>
                   </vue-good-table>
-                  <span v-else>No Content</span>
+                  <span v-else>{{ $t('workflow.itemList.projectList.noContent') }}</span>
                 </template>
                 <project-logo class="project-logo" />
               </a-popover>
@@ -60,55 +71,61 @@
           </a-col>
           <a-col class="list-content" :lg="12" :md="12" :sm="24" :xs="24" :gutter="16">
             <a-col class="list-content-item" :span="8">
-              <span>Started</span>
+              <span>{{ $t('workflow.itemList.projectList.startedTime') }}</span>
               <p>{{ item.startedAt }}</p>
             </a-col>
             <a-col class="list-content-item" :span="8">
-              <span>Finished</span>
+              <span>{{ $t('workflow.itemList.projectList.finishedTime') }}</span>
               <p>{{ item.finishedAt }}</p>
             </a-col>
             <a-col class="list-content-item" :span="8">
               <!-- <a-progress :stroke-color="strokeColor" :percent="item.percentage" :status="!item.status ? null : item.status" style="width: 180px" /> -->
-              <span>Status</span>
+              <span>{{ $t('workflow.itemList.projectList.status') }}</span>
               <a-row class="badge-list" :gutter="10">
                 <a-tooltip placement="top">
                   <template slot="title">
-                    <span>Total Jobs</span>
+                    <span>{{ $t('workflow.itemList.projectList.totalJobs') }}</span>
                   </template>
-                  <a-col class="badge" :style="{ backgroundColor: '#a2a2a2', color: '#fff' }">{{ item.statusDetails.total }}</a-col>
+                  <a-col class="badge" :style="{ backgroundColor: '#a2a2a2', color: '#fff' }">
+                    {{ item.statusDetails.total }}</a-col>
                 </a-tooltip>
                 <!-- Submitted -->
                 <a-tooltip placement="top">
                   <template slot="title">
-                    <span>Submitted Jobs</span>
+                    <span>{{ $t('workflow.itemList.projectList.submittedJobs') }}</span>
                   </template>
-                  <a-col class="badge" :style="{ backgroundColor: '#838383', color: '#fff' }">{{ countSubmitted(item) }}</a-col>
+                  <a-col class="badge" :style="{ backgroundColor: '#838383', color: '#fff' }">
+                    {{ countSubmitted(item) }}</a-col>
                 </a-tooltip>
                 <!-- Running -->
                 <a-tooltip placement="top">
                   <template slot="title">
-                    <span>Running Jobs</span>
+                    <span>{{ $t('workflow.itemList.projectList.runningJobs') }}</span>
                   </template>
-                  <a-col class="badge" :style="{ backgroundColor: '#108ee9', color: '#fff' }">{{ item.statusDetails.running }}</a-col>
+                  <a-col class="badge" :style="{ backgroundColor: '#108ee9', color: '#fff' }">
+                    {{ item.statusDetails.running }}</a-col>
                 </a-tooltip>
                 <!-- Red -->
                 <a-tooltip placement="top">
                   <template slot="title">
-                    <span>Failed Jobs</span>
+                    <span>{{ $t('workflow.itemList.projectList.failedJobs') }}</span>
                   </template>
-                  <a-col class="badge" :style="{ backgroundColor: '#f5222d', color: '#fff' }">{{ item.statusDetails.error }}</a-col>
+                  <a-col class="badge" :style="{ backgroundColor: '#f5222d', color: '#fff' }">
+                    {{ item.statusDetails.error }}</a-col>
                 </a-tooltip>
                 <!-- Green -->
                 <a-tooltip placement="top">
                   <template slot="title">
-                    <span>Succeeded Jobs</span>
+                    <span>{{ $t('workflow.itemList.projectList.succeededJobs') }}</span>
                   </template>
-                  <a-col class="badge" :style="{ backgroundColor: '#52c41a', color: '#fff' }">{{ item.statusDetails.success }}</a-col>
+                  <a-col class="badge" :style="{ backgroundColor: '#52c41a', color: '#fff' }">{{
+                    item.statusDetails.success
+                  }}</a-col>
                 </a-tooltip>
                 <!-- Yellow -->
                 <a-tooltip placement="top">
                   <template slot="title">
-                    <span>Warning Jobs</span>
+                    <span>{{ $t('workflow.itemList.projectList.warningJobs') }}</span>
                   </template>
                   <a-col class="badge" :style="{ backgroundColor: '#faad14', color: '#fff' }">0</a-col>
                 </a-tooltip>
@@ -116,9 +133,27 @@
             </a-col>
           </a-col>
           <div slot="actions">
-            <a @click="onShowWorkflowList(item.id, item.title)">View</a>
+            <a @click="onShowWorkflowList(item.id, item.title)">{{ $t('workflow.itemList.projectList.view') }}</a>
             &nbsp;
-            <a @click="onShowReport(item.id)" :disabled="!item.id">Report</a>
+            <a @click="onShowReport(item.id)" :disabled="!item.id">{{ $t('workflow.itemList.projectList.report') }}</a>
+            &nbsp;
+            <a-popover :title="$t('workflow.itemList.projectList.notice')" trigger="hover" placement="bottomRight">
+              <span slot="content" style="margin-bottom: 10px; display: block">
+                {{ $t('workflow.itemList.projectList.noticeContent') }}
+              </span>
+              <a-row slot="content" style="text-align: end;">
+                <a-button
+                  type="danger"
+                  @click="onAbortProject(item.id)"
+                  size="small"
+                >
+                  <a-icon type="delete" />{{ $t('workflow.itemList.projectList.archive') }}
+                </a-button>
+              </a-row>
+              <a v-if="adminGroup && item.status !== 'aborted'">
+                {{ $t('workflow.itemList.projectList.archive') }}
+              </a>
+            </a-popover>
           </div>
         </a-list-item>
       </a-list>
@@ -127,10 +162,11 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import v from 'voca'
 import sortBy from 'lodash.sortby'
 import orderBy from 'lodash.orderby'
+import filter from 'lodash.filter'
 import { VueGoodTable } from 'vue-good-table'
 import 'vue-good-table/dist/vue-good-table.css'
 import { projectLogo } from '@/core/icons'
@@ -141,8 +177,9 @@ export default {
     VueGoodTable,
     projectLogo
   },
-  data () {
+  data() {
     return {
+      popoverVisible: false,
       selectedApp: '',
       searchStr: '',
       data: [],
@@ -188,27 +225,40 @@ export default {
     }
   },
   computed: {
+    adminGroup() {
+      return this.userInfo().groups.includes('admin')
+    }
   },
   methods: {
     ...mapActions({
       getProjectList: 'GetProjectList',
       getProjectStat: 'GetProjectStat',
       getInstalledAppList: 'GetInstalledAppList',
-      getReportList: 'GetReportList'
+      getReportList: 'GetReportList',
+      updateProject: 'UpdateProject'
     }),
-    countSubmitted (item) {
-      return item.statusDetails.total - (item.statusDetails.success + item.statusDetails.running + item.statusDetails.error)
+    ...mapGetters(['userInfo']),
+    countSubmitted(item) {
+      return (
+        item.statusDetails.total - (item.statusDetails.success + item.statusDetails.running + item.statusDetails.error)
+      )
     },
-    onSelectApp (selectedApp) {
+    onSelectApp(selectedApp) {
       this.selectedApp = selectedApp
       this.refresh()
     },
-    getInstalledApps () {
+    getInstalledApps() {
       this.getInstalledAppList().then(res => {
         console.log('res', res)
-        this.installedApps = orderBy(res.data, [item => {
-          item.name.toLowerCase()
-        }], ['asc'])
+        this.installedApps = orderBy(
+          res.data,
+          [
+            item => {
+              item.name.toLowerCase()
+            }
+          ],
+          ['asc']
+        )
       })
     },
     makePayload() {
@@ -223,19 +273,22 @@ export default {
 
       if (this.radioGroupValue !== 'total') {
         payload['status'] = this.radioGroupValue
+      } else {
+        // TODO: datains service need to support advanced query condition
+        payload['status'] = 'Submitted'
       }
 
       return payload
     },
-    onSearchProject (value) {
+    onSearchProject(value) {
       this.searchStr = value
       this.refresh()
     },
-    refresh () {
+    refresh() {
       const payload = this.makePayload()
       this.searchProject(this.pagination.page, this.pagination.pageSize, payload)
     },
-    searchProject (page, pageSize, searchMap) {
+    searchProject(page, pageSize, searchMap) {
       this.loading = true
       const payload = {
         page: page,
@@ -244,6 +297,7 @@ export default {
       }
       this.getProjectList(payload).then(result => {
         const that = this
+
         that.data = result.data
 
         const statusDetails = new Array()
@@ -252,7 +306,7 @@ export default {
           statusDetails.push(this.getProjectStat(projectId))
         }
 
-        Promise.all(statusDetails).then((values) => {
+        Promise.all(statusDetails).then(values => {
           for (const idx in values) {
             Object.assign(that.data[idx].statusDetails, values[idx])
           }
@@ -264,10 +318,10 @@ export default {
         this.loading = false
       })
     },
-    formatKey (key) {
+    formatKey(key) {
       return v.titleCase(key)
     },
-    genColumns (rows) {
+    genColumns(rows) {
       var columns = []
       if (rows.length > 0) {
         const record = rows[0]
@@ -289,26 +343,28 @@ export default {
         }
       }
 
-      return sortBy(columns, (o) => {
+      return sortBy(columns, o => {
         return o.label
       })
     },
-    formatRow (value) {
+    formatRow(value) {
       if (value.match(/^\/(\w+\/?)+/)) {
         return this.baseName(value)
       } else {
         return value
       }
     },
-    baseName (str) {
+    baseName(str) {
       return String(str).substring(str.lastIndexOf('/') + 1)
     },
-    onClickRadioBtn (event) {
+    onClickRadioBtn(event) {
+      // Reset Page
+      this.pagination.page = 1
       this.radioGroupValue = event.target.value
       console.log('Current Radio Button Value: ', this.radioGroupValue)
       this.refresh()
     },
-    onShowWorkflowList (projectId, projectName) {
+    onShowWorkflowList(projectId, projectName) {
       this.$router.push({
         name: 'job-management',
         params: {
@@ -319,46 +375,54 @@ export default {
         }
       })
     },
-    onShowReport (projectId) {
-      this.getReportList({
-        'project_id': projectId
-      }).then(result => {
-        console.log('onShowReport: ', result)
-        if (result.total > 0) {
-          const data = result.data
-          this.$router.push({
-            name: 'report-details',
-            params: {
-              reportId: data[0].id
-            },
-            query: {
-              readonly: true
-            }
-          })
-        } else {
-          this.$message.warn('No related report.')
-        }
-      }).catch(error => {
-        console.log('getReportList: ', error)
-        this.$message.warn('No related report.')
+    onAbortProject(projectId) {
+      this.updateProject(projectId).then(response => {
+        console.log('onAbortProject: ', response)
+        this.refresh()
       })
+    },
+    onShowReport(projectId) {
+      this.getReportList({
+        project_id: projectId
+      })
+        .then(result => {
+          console.log('onShowReport: ', result)
+          if (result.total > 0) {
+            const data = result.data
+            this.$router.push({
+              name: 'report-details',
+              params: {
+                reportId: data[0].id
+              },
+              query: {
+                readonly: true
+              }
+            })
+          } else {
+            this.$message.warn('No related report.')
+          }
+        })
+        .catch(error => {
+          console.log('getReportList: ', error)
+          this.$message.warn('No related report.')
+        })
     }
   },
-  created () {
-    this.searchProject(this.pagination.current, this.pagination.pageSize, {})
+  created() {
+    this.searchProject(this.pagination.current, this.pagination.pageSize, { status: 'Submitted' })
     this.getInstalledApps()
   },
-  mounted () {
+  mounted() {
     this.timer = setInterval(() => {
       this.refresh()
     }, 60000)
   },
   // When keepAlive is true, we need to clear timer before route leaving
-  beforeRouteLeave (to, from, next) {
+  beforeRouteLeave(to, from, next) {
     clearInterval(this.timer)
     next()
   },
-  beforeDestroy () {
+  beforeDestroy() {
     clearInterval(this.timer)
   }
 }
@@ -379,7 +443,8 @@ export default {
     flex-direction: row;
   }
 
-  .ant-list-item-meta, .list-content-item {
+  .ant-list-item-meta,
+  .list-content-item {
     margin-top: 5px;
   }
 
@@ -430,7 +495,8 @@ export default {
   }
 }
 
-.json-popover, .table-popover {
+.json-popover,
+.table-popover {
   margin-top: 0px;
   max-width: 600px;
   max-height: 300px;

@@ -38,7 +38,7 @@
               :style="{ backgroundColor: '#108ee9', color: '#fff' }"
             >{{ project.statusDetails.running }}</a-col>
           </a-tooltip>
-          <!-- Red -->
+          <!-- Failed -->
           <a-tooltip placement="top">
             <template slot="title">
               <span>{{ $t('workflow.workflowManagement.failedJobs') }}</span>
@@ -48,7 +48,7 @@
               :style="{ backgroundColor: '#f5222d', color: '#fff' }"
             >{{ project.statusDetails.error }}</a-col>
           </a-tooltip>
-          <!-- Green -->
+          <!-- Succeeded -->
           <a-tooltip placement="top">
             <template slot="title">
               <span>{{ $t('workflow.workflowManagement.succeededJobs') }}</span>
@@ -58,7 +58,7 @@
               :style="{ backgroundColor: '#52c41a', color: '#fff' }"
             >{{ project.statusDetails.success }}</a-col>
           </a-tooltip>
-          <!-- Yellow -->
+          <!-- Warning -->
           <a-tooltip placement="top">
             <template slot="title">
               <span>{{ $t('workflow.workflowManagement.warningJobs') }}</span>

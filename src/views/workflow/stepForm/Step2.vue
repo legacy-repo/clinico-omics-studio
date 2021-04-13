@@ -34,7 +34,7 @@ export default {
       formMode: 'batch',
       helpMsg: '',
       visible: false,
-      helpTitle: 'Help Documentation'
+      helpTitle: this.$t('workflow.stepForm.step2.helpTitle')
     }
   },
   methods: {

@@ -8,11 +8,11 @@
     />
     <h3>{{ workflowId }}</h3>
     <div class="loading" v-if="loading">
-      <a-spin tip="Loading..."></a-spin>
+      <a-spin :tip="$t('workflow.logContainer.loading')"></a-spin>
     </div>
     <a-list class="loading" v-else-if="logs.length == 0"></a-list>
     <a-row v-else :gutter="16">
-      <a-select @change="selectLog" allowClear autofocus showSearch placeholder="Select Log File">
+      <a-select @change="selectLog" allowClear autofocus showSearch :placeholder="$t('workflow.logContainer.selectLogFile')">
         <a-select-option
           :value="item"
           :key="item"
@@ -20,10 +20,10 @@
         >{{ cleanedLogKey(item) }}</a-select-option>
       </a-select>
       <a-tabs size="small" :activeKey="defaultTab" animated type="card" @change="switchTab">
-        <a-tab-pane tab="Standard Output" key="stdout">
+        <a-tab-pane :tab="$t('workflow.logContainer.standardOut')" key="stdout">
           <a-textarea read-only v-model="stdoutContent" />
         </a-tab-pane>
-        <a-tab-pane tab="Standard Error" key="stderr">
+        <a-tab-pane :tab="$t('workflow.logContainer.standardError')" key="stderr">
           <a-textarea read-only v-model="stderrContent" />
         </a-tab-pane>
       </a-tabs>
@@ -52,8 +52,8 @@ export default {
     return {
       loading: false,
       logs: {},
-      stdoutContent: 'Choose a log key from the dropdown menu.',
-      stderrContent: 'Choose a log key from the dropdown menu.',
+      stdoutContent: this.$t('workflow.logContainer.chooseLogKey'),
+      stderrContent: this.$t('workflow.logContainer.chooseLogKey'),
       currentLogKey: '',
       seqFlowHost: initSeqFlowHost(),
       defaultTab: 'stdout'
@@ -74,8 +74,8 @@ export default {
           this.loadSystemLog('system')
         }
       } else {
-        this.stdoutContent = 'Choose a log key from the dropdown menu.'
-        this.stderrContent = 'Choose a log key from the dropdown menu.'
+        this.stdoutContent = this.$t('workflow.logContainer.chooseLogKey')
+        this.stderrContent = this.$t('workflow.logContainer.chooseLogKey')
         this.currentLogKey = ''
         this.defaultTab = 'stdout'
       }
@@ -116,7 +116,7 @@ export default {
             this[objKey] = response.message
           })
           .catch(error => {
-            this[objKey] = 'Not Found Log.'
+            this[objKey] = this.$t('workflow.logContainer.notFoundLog')
             console.log('Fetch Error: ', error)
           })
       } else {
@@ -127,7 +127,7 @@ export default {
             this[objKey] = response
           })
           .catch(error => {
-            this[objKey] = 'Not Found Log.'
+            this[objKey] = this.$t('workflow.logContainer.notFoundLog')
             console.log('Fetch Error: ', error)
           })
       }

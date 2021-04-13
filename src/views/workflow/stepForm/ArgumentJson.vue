@@ -2,9 +2,9 @@
   <div class="json-viewer-container">
     <a-row class="json-header">
       <a-button-group>
-        <a-button block @click="downloadFile(body, 'sample')">Download</a-button>
+        <a-button block @click="downloadFile(body, 'sample')">{{ $t('workflow.stepForm.argumentJson.download') }}</a-button>
       </a-button-group>
-      <h3 class="title">Job Parameters</h3>
+      <h3 class="title">{{ $t('workflow.stepForm.argumentJson.jobParameters') }}</h3>
     </a-row>
     <vue-json-pretty class="json-viewer" :data="body"></vue-json-pretty>
   </div>

@@ -1,14 +1,14 @@
-import { getProjectList, getProject, submitProject, getProjectStat } from '@/api/manage'
+import { getProjectList, getProject, submitProject, getProjectStat, updateProject } from '@/api/manage'
 import moment from 'moment'
 
-const formatStatus = function (status) {
+const formatStatus = function(status) {
   switch (status) {
     case 'Running':
       return 'active'
     case 'Submitted':
       return 'active'
     case 'Aborted':
-      return 'exception'
+      return 'aborted'
     case 'Aborting':
       return 'exception'
     case 'Failed':
@@ -22,21 +22,24 @@ const formatStatus = function (status) {
   }
 }
 
-const formatDateTime = function (datetime) {
+const formatDateTime = function(datetime) {
   if (datetime && datetime > 0) {
-    return moment(datetime).utcOffset('+8:00').format('YYYY-MM-DD HH:mm')
+    return moment(datetime)
+      .utcOffset('+8:00')
+      .format('YYYY-MM-DD HH:mm')
   } else {
     return '0000-00-00 00:00'
   }
 }
 
-const timeToInt = function (datetime) {
+const timeToInt = function(datetime) {
   return moment(datetime, 'YYYY-MM-DD HH:mm:ss').valueOf()
 }
 
-const formatRecords = function (records) {
+const formatRecords = function(records) {
   const newRecords = []
   for (const record of records) {
+    // Filter by status
     newRecords.push({
       id: record.id,
       title: record.project_name,
@@ -49,7 +52,7 @@ const formatRecords = function (records) {
       finishedAt: formatDateTime(record.finished_time),
       samples: record.samples,
       labels: record.labels,
-      status: record.finished_time ? 'success' : formatStatus(record.status),
+      status: record.finished_time && record.status === 'Submitted' ? 'success' : formatStatus(record.status),
       statusDetails: {
         success: 0,
         running: 0,
@@ -64,7 +67,7 @@ const formatRecords = function (records) {
   return newRecords
 }
 
-const formatPostData = function (data) {
+const formatPostData = function(data) {
   const newData = {
     project_name: data.projectName,
     group_name: data.group,
@@ -96,82 +99,108 @@ const project = {
 
   actions: {
     // 获取用户信息
-    GetProjectList ({ commit }, parameter) {
+    GetProjectList({ commit }, parameter) {
       return new Promise((resolve, reject) => {
-        getProjectList(parameter).then(response => {
-          const data = {
-            perPage: response['per_page'],
-            page: response['page'],
-            total: response['total'],
-            data: formatRecords(response.data)
-          }
-          commit('SET_PROJECT_LIST', data)
+        getProjectList(parameter)
+          .then(response => {
+            const data = {
+              perPage: response['per_page'],
+              page: response['page'],
+              total: response['total'],
+              data: formatRecords(response.data)
+            }
+            commit('SET_PROJECT_LIST', data)
 
-          console.log('GetProjectList: ', parameter, response, data)
+            console.log('GetProjectList: ', parameter, response, data)
 
-          resolve(data)
-        }).catch(error => {
-          reject(error)
-        })
+            resolve(data)
+          })
+          .catch(error => {
+            reject(error)
+          })
       })
     },
-    ExistProject ({ commit }, projectName) {
+    ExistProject({ commit }, projectName) {
       var parameter = {
         project_name: projectName
       }
 
       return new Promise((resolve, reject) => {
-        getProjectList(parameter).then(response => {
-          console.log('ExistProject: ', parameter, response)
+        getProjectList(parameter)
+          .then(response => {
+            console.log('ExistProject: ', parameter, response)
 
-          const data = {
-            perPage: response['per_page'],
-            page: response['page'],
-            total: response['total'],
-            data: formatRecords(response.data)
-          }
+            const data = {
+              perPage: response['per_page'],
+              page: response['page'],
+              total: response['total'],
+              data: formatRecords(response.data)
+            }
 
-          resolve(data)
-        }).catch(error => {
-          reject(error)
-        })
+            resolve(data)
+          })
+          .catch(error => {
+            reject(error)
+          })
       })
     },
-    GetProject ({ commit }, projectId) {
+    GetProject({ commit }, projectId) {
       return new Promise((resolve, reject) => {
-        getProject(projectId).then(response => {
-          console.log('GetProject: ', projectId, response)
+        getProject(projectId)
+          .then(response => {
+            console.log('GetProject: ', projectId, response)
 
-          const data = formatRecords([response])[0]
+            const data = formatRecords([response])[0]
 
-          commit('SET_PROJECT', data)
+            commit('SET_PROJECT', data)
 
-          resolve(data)
-        }).catch(error => {
-          reject(error)
-        })
+            resolve(data)
+          })
+          .catch(error => {
+            reject(error)
+          })
       })
     },
-    GetProjectStat ({ commit }, projectId) {
+    UpdateProject({ commit }, projectId) {
+      const payload = {
+        status: 'Aborted'
+      }
       return new Promise((resolve, reject) => {
-        getProjectStat(projectId).then(response => {
-          // console.log('GetProject: ', projectId, response)
+        updateProject(projectId, payload)
+          .then(response => {
+            console.log('Abort Project: ', projectId, response)
 
-          resolve(response)
-        }).catch(error => {
-          reject(error)
-        })
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error)
+          })
       })
     },
-    SubmitProject ({ commit }, data) {
+    GetProjectStat({ commit }, projectId) {
+      return new Promise((resolve, reject) => {
+        getProjectStat(projectId)
+          .then(response => {
+            // console.log('GetProject: ', projectId, response)
+
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error)
+          })
+      })
+    },
+    SubmitProject({ commit }, data) {
       const formatedData = formatPostData(data)
       console.log('SubmitProject: ', formatedData)
       return new Promise((resolve, reject) => {
-        submitProject(formatedData).then(response => {
-          resolve(response)
-        }).catch(error => {
-          reject(error)
-        })
+        submitProject(formatedData)
+          .then(response => {
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error)
+          })
       })
     }
   }

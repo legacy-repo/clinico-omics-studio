@@ -1,9 +1,9 @@
 <template>
   <a-card :bordered="false" class="step-form">
     <a-steps class="steps" :current="stepNum">
-      <a-step title="Project Information" />
-      <a-step title="Job Parameters" />
-      <a-step title="Submit" />
+      <a-step :title="$t('workflow.stepForm.stepForm.projectInformation')" />
+      <a-step :title="$t('workflow.stepForm.stepForm.jobParameters')" />
+      <a-step :title="$t('workflow.stepForm.stepForm.submit')" />
     </a-steps>
     <div class="content">
       <step1 v-if="stepNum === 0" @nextStep="nextStep" :appId="appId"/>

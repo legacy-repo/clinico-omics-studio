@@ -53,6 +53,7 @@ const user = {
           .then(response => {
             userInfo.name = response.name ? response.name : response.preferred_username
             userInfo.username = v.titleCase(userInfo.name)
+            userInfo.groups = response.groups
 
             console.log('GetInfo: ', response, userInfo, userInfo.name)
 

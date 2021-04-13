@@ -61,7 +61,7 @@ export const asyncRouterMap = [
                 meta: { title: 'Chinese Quartet', icon: 'border-inner', keepAlive: true }
               },
               {
-                path: '/data/data-model/omics-data-commons',
+                path: '/data/data-model/tcoa',
                 name: 'The Cancer Omics Atlas',
                 hidden: false,
                 redirect: {
@@ -220,6 +220,15 @@ export const asyncRouterMap = [
             meta: { title: 'Report Management', icon: 'file-done', permission: ['table'], keepAlive: true }
           }
         ]
+      },
+
+      // Embeded Frame
+      {
+        path: '/image-viewer',
+        name: 'image-viewer',
+        hidden: true,
+        component: () => import('@/components/ImageViewer'),
+        meta: { title: 'Image Viewer', icon: 'dot-chart', keepAlive: false }
       },
 
       // Embeded Frame

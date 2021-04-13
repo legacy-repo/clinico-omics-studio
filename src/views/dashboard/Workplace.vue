@@ -74,7 +74,7 @@
               <a-card :bordered="false" :body-style="{ padding: 0 }">
                 <a-card-meta>
                   <div slot="title" class="card-title">
-                    <a-icon theme="filled" v-if="item.status !== 'success'" spin type="clock-circle" style="color: #52c41a" />
+                    <a-icon theme="filled" v-if="!['success', 'aborted'].includes(item.status)" spin type="clock-circle" style="color: #52c41a" />
                     <a-badge
                       :count="item.percentage"
                       :overflowCount="100"

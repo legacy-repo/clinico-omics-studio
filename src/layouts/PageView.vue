@@ -15,24 +15,24 @@
           </template>
         </div>
       </div>
-      <slot slot="extra" name="extra" v-if="typeof extraImage !== 'undefined'" >
+      <slot slot="extra" name="extra" v-if="typeof extraImage !== 'undefined'">
         <div class="extra-img">
-          <img :src="extraImage"/>
+          <img :src="extraImage" />
         </div>
       </slot>
       <div slot="pageMenu">
         <div class="page-menu-search" v-if="search">
           <a-input-search
             style="width: 80%; max-width: 522px;"
-            placeholder="Please Enter..."
+            :placeholder="$t('layouts.pageView.searchPlaceholder')"
             size="large"
-            enterButton="Search"
+            :enterButton="$t('layouts.pageView.search')"
           />
         </div>
         <div class="page-menu-tabs" v-if="tabs && tabs.items">
           <!-- @change="callback" :activeKey="activeKey" -->
-          <a-tabs :tabBarStyle="{margin: 0}" :activeKey="tabs.active()" @change="tabs.callback">
-            <a-tab-pane v-for="item in tabs.items" :tab="item.title" :key="item.key"></a-tab-pane>
+          <a-tabs :tabBarStyle="{margin: 0}" :activeKey="tabs.active()" @change="tabs.callback" >
+            <a-tab-pane v-for="item in tabs.items" :tab="item.title" :key="item.key" ></a-tab-pane>
           </a-tabs>
         </div>
       </div>

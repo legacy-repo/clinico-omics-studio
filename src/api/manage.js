@@ -368,6 +368,14 @@ export function getProject(projectId) {
   })
 }
 
+export function updateProject(projectId, payload) {
+  return axios({
+    url: api.seqFlow.project + '/' + projectId,
+    method: 'put',
+    data: payload
+  })
+}
+
 export function getProjectStat(projectId) {
   return axios({
     url: api.seqFlow.project + '/' + projectId + '/stats',

@@ -8,10 +8,10 @@
         </a-row>
       </a-col>
       <a-col :sm="6" :xs="5" :md="5" :lg="4" class="btn-group">
-        <a-button block type="default" @click="prevStep">Previous Step</a-button>
-        <a-button block type="default" @click="showJobs">Show Jobs</a-button>
-        <a-button block type="default" @click="showProjects">Show Projects</a-button>
-        <a-button block type="primary" @click="postProject">Submit Project</a-button>
+        <a-button block type="default" @click="prevStep">{{ $t('workflow.stepForm.step3.previousStep') }}</a-button>
+        <a-button block type="default" @click="showJobs">{{ $t('workflow.stepForm.step3.showJobs') }}</a-button>
+        <a-button block type="default" @click="showProjects">{{ $t('workflow.stepForm.step3.showProjects') }}</a-button>
+        <a-button block type="primary" @click="postProject">{{ $t('workflow.stepForm.step3.submitProject') }}</a-button>
       </a-col>
     </a-row>
     <argument-table :header="header" :body="body" v-if="formMode === 'batch'"></argument-table>

@@ -32,8 +32,8 @@
           size="small"
           style="width: 90px; margin-right: 8px"
           @click="() => handleSearch(selectedKeys, confirm, column.dataIndex)"
-        >Search</a-button>
-        <a-button size="small" style="width: 90px" @click="() => handleReset(clearFilters)">Reset</a-button>
+        >{{ $t('workflow.results.search') }}</a-button>
+        <a-button size="small" style="width: 90px" @click="() => handleReset(clearFilters)">{{ $t('workflow.results.reset') }}</a-button>
       </div>
       <a-icon
         slot="filterIcon"
@@ -77,7 +77,7 @@
       style="margin-top: 5px; float: right; z-index: 1;"
       :disabled="!workflowRoot"
       @click="redirectFS(workflowRoot)"
-    >Access Working Directory ({{ `${data.length} files` }})</a-button>
+    >{{ $t('workflow.results.accessWorkingDirectory') }} ({{ `${data.length} files` }})</a-button>
   </a-row>
 </template>
 
@@ -128,7 +128,7 @@ export default {
       searchedColumn: '',
       columns: [
         {
-          title: 'File Name',
+          title: this.$t('workflow.results.fileName'),
           dataIndex: 'fileName',
           align: 'center',
           key: 'fileName',
@@ -153,7 +153,7 @@ export default {
           ellipsis: true
         },
         {
-          title: 'File Index',
+          title: this.$t('workflow.results.fileIndex'),
           dataIndex: 'name',
           align: 'center',
           key: 'name',
@@ -178,7 +178,7 @@ export default {
           ellipsis: true
         },
         {
-          title: 'Project',
+          title: this.$t('workflow.results.project'),
           align: 'center',
           width: 150,
           visible: true,
@@ -186,7 +186,7 @@ export default {
           key: 'project'
         },
         {
-          title: 'Job Name',
+          title: this.$t('workflow.results.jobName'),
           align: 'center',
           width: 150,
           visible: true,
@@ -211,7 +211,7 @@ export default {
           }
         },
         {
-          title: 'File Type',
+          title: this.$t('workflow.results.fileType'),
           dataIndex: 'fileType',
           width: 150,
           align: 'center',

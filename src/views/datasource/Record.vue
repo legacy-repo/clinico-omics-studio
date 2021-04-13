@@ -2,14 +2,11 @@
   <a-row class="record-container">
     <a-row class="info">
       <a-col :sm="24" :xs="24" :md="12" :lg="12" class="file-info">
-        <a-row class="title" style="padding-left: 0px;">
+        <a-row class="title" style="padding-left: 0px">
           <span>File Properties</span>
-          <a-button
-            style="float: right; height: 18px; padding-right: 0px;"
-            type="link"
-            icon="info-circle"
-            @click="showDetails(recordId)"
-          >Details</a-button>
+          <a-button class="details-btn" type="link" icon="info-circle" @click="showDetails(recordId)">
+            Details
+          </a-button>
         </a-row>
         <a-row v-for="(value, key) in fileRecord" :key="key" class="content">
           <a-col :sm="8" :xs="24" class="key">{{ formatKey(key) }}</a-col>
@@ -34,12 +31,95 @@
         </a-row>
       </a-col>
     </a-row>
-    <file-viewer
-      :title="title"
-      :instanceId="instanceId"
-      :viewerType="viewerType"
-      :baseUrl="baseUrl"
-    ></file-viewer>
+    <a-collapse v-model="activeKey">
+      <a-collapse-panel key="file-viewer" :header="formatTitle(viewerType)">
+        <file-viewer :instanceId="instanceId" :viewerType="viewerType" :baseUrl="baseUrl"></file-viewer>
+        <a-dropdown slot="extra" v-if="viewerType === 'PATHOLOGY'">
+          <a-menu slot="overlay" class="extra-actions">
+            <a-menu-item key="1">
+              <a-button type="link" disabled>
+                <a-icon style="font-size: 16px" theme="filled" type="play-circle" />
+                PIK3CA_Mutation
+              </a-button>
+            </a-menu-item>
+            <a-menu-item key="2">
+              <a-button type="link">
+                <a-icon style="font-size: 16px" theme="outlined" type="play-circle" />
+                BLIS
+              </a-button>
+            </a-menu-item>
+            <a-menu-item key="3">
+              <a-button type="link">
+                <a-icon style="font-size: 16px" theme="outlined" type="play-circle" />
+                IM
+              </a-button>
+            </a-menu-item>
+            <a-menu-item key="3">
+              <a-button type="link">
+                <a-icon style="font-size: 16px" theme="outlined" type="play-circle" />
+                LAR
+              </a-button>
+            </a-menu-item>
+            <a-menu-item key="3">
+              <a-button type="link">
+                <a-icon style="font-size: 16px" theme="outlined" type="play-circle" />
+                MES
+              </a-button>
+            </a-menu-item>
+          </a-menu>
+          <a-button style="margin-left: 8px">
+            <a-icon type="block" style="font-size: 18px" />
+            Highlight Patches
+            <a-icon type="down" />
+          </a-button>
+        </a-dropdown>
+      </a-collapse-panel>
+      <a-collapse-panel key="pathology-model" v-if="viewerType === 'PATHOLOGY'" header="Pathology Model">
+        <pathology-model
+          :data="pathologyPrediction"
+          :imageId="instanceId"
+        ></pathology-model>
+        <a-dropdown slot="extra">
+          <a-menu slot="overlay" class="extra-actions">
+            <a-menu-item key="1">
+              <a-button type="link" disabled>
+                <a-icon style="font-size: 16px" theme="filled" type="play-circle" />
+                PIK3CA_Mutation
+              </a-button>
+            </a-menu-item>
+            <a-menu-item key="2">
+              <a-button type="link">
+                <a-icon style="font-size: 16px" theme="outlined" type="play-circle" />
+                BLIS
+              </a-button>
+            </a-menu-item>
+            <a-menu-item key="3">
+              <a-button type="link">
+                <a-icon style="font-size: 16px" theme="outlined" type="play-circle" />
+                IM
+              </a-button>
+            </a-menu-item>
+            <a-menu-item key="3">
+              <a-button type="link">
+                <a-icon style="font-size: 16px" theme="outlined" type="play-circle" />
+                LAR
+              </a-button>
+            </a-menu-item>
+            <a-menu-item key="3">
+              <a-button type="link">
+                <a-icon style="font-size: 16px" theme="outlined" type="play-circle" />
+                MES
+              </a-button>
+            </a-menu-item>
+          </a-menu>
+          <a-button style="margin-left: 8px">
+            <a-icon type="codepen-circle" style="font-size: 18px" />
+            Prediction Models
+            <a-icon type="down" />
+          </a-button>
+        </a-dropdown>
+      </a-collapse-panel>
+    </a-collapse>
   </a-row>
 </template>
 
@@ -48,10 +128,12 @@ import v from 'voca'
 import FileViewer from '@/components/FileViewer'
 import { mapActions } from 'vuex'
 import { initBaseURL } from '@/config/defaultSettings'
+import PathologyModel from './PathologyModel'
 
 export default {
   components: {
-    FileViewer
+    FileViewer,
+    PathologyModel
   },
   props: {
     recordId: {
@@ -68,8 +150,9 @@ export default {
       instanceId: '', // e.g. FUSCCTNBC185
       baseUrl: '', // http://10.157.72.54/pathology or http://10.157.72.54/dicom
       viewerType: '', // PATHOLOGY or DICOM
-      title: '', // Pathology Viewer or DICOM Viewer
-      record: {}
+      record: {},
+      pathologyPrediction: [],
+      activeKey: ['file-viewer', 'pathology-model']
     }
   },
   computed: {
@@ -95,6 +178,15 @@ export default {
     ...mapActions({
       getCollection: 'GetCollection'
     }),
+    formatTitle(viewerType) {
+      if (viewerType === 'PATHOLOGY') {
+        return 'Pathology Viewer'
+      } else if (viewerType === 'DICOM') {
+        return 'DICOM Viewer'
+      } else {
+        return 'File Viewer'
+      }
+    },
     showDetails(link) {
       this.$router.push({
         name: 'file-manager',
@@ -114,19 +206,20 @@ export default {
           this.instanceId = this.record.patientId
           this.baseUrl = `${initBaseURL()}/attachments/pathology`
           this.viewerType = 'PATHOLOGY'
-          this.title = 'Pathology Viewer'
         } else if (this.record.dataFormat == 'NIFTI') {
           this.instanceId = this.record.patientId
           this.baseUrl = `${initBaseURL()}/attachments/dicom`
           this.viewerType = 'DICOM'
-          this.title = 'DICOM Viewer'
-        } else {
-          this.title = 'File Viewer'
         }
       })
       .catch(error => {
         console.log(`No Such Record(${error}): `, this.recordId, this.project)
       })
+
+    this.$http.get('https://nordata-cdn.oss-cn-shanghai.aliyuncs.com/pathology-prediction.json').then(response => {
+      console.log('Record: ', response)
+      this.pathologyPrediction = response
+    })
   }
 }
 </script>
@@ -149,22 +242,25 @@ export default {
     margin: 10px 0px;
     border-radius: 5px;
 
-    .title {
-      font-size: 16px;
-      margin-bottom: 10px;
-      color: #6b6262;
-      border-bottom: 1px solid #d9d9d9;
-    }
-
     .file-info {
       margin-right: 10px;
+
+      .details-btn {
+        float: right;
+        height: 18px;
+        padding-right: 0px;
+      }
+
+      .details-btn:hover {
+        border-color: #fff;
+      }
     }
 
     .file-info,
     .data-info {
       width: calc(50% - 5px);
       background-color: #fff;
-      // font-size: 16px;
+      font-size: 15px;
       border-radius: 5px;
 
       .key {
@@ -186,7 +282,41 @@ export default {
         // 利用css选择器，偶数列增加背景色
         background: #e8f4ff;
       }
+
+      .title {
+        padding: 10px;
+        font-size: 16px;
+        margin-bottom: 10px;
+        color: #6b6262;
+        border-bottom: 1px solid #d9d9d9;
+      }
     }
+  }
+}
+</style>
+
+<style lang="less">
+.record-container {
+  .ant-collapse-content > .ant-collapse-content-box {
+    padding: 0px;
+  }
+
+  .ant-collapse > .ant-collapse-item > .ant-collapse-header {
+    font-size: 16px;
+  }
+
+  .ant-collapse-extra {
+    margin-top: -5px;
+  }
+}
+
+.extra-actions {
+  .ant-dropdown-menu-item {
+    padding: 0px;
+  }
+
+  .ant-btn:hover {
+    border-color: #fff;
   }
 }
 </style>

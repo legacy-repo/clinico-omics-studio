@@ -138,6 +138,25 @@ export const projectSettings = {
       ],
       category: 'Tool',
       source: 'PGx'
+    },
+    {
+      id: '3d561642d6b4a22f5ef43e8ce34c5004',
+      title: 'Pathology AI Model',
+      shortName: 'pathology-ai-model',
+      appName: 'fuscc/pathology-ai-model',
+      home: 'https://github.com/clinico-omics/datains-frontend',
+      hidden: false,
+      author: 'FUSCC',
+      description: 'AI models for pathology images.',
+      icons: [
+        {
+          sizes: '192x192',
+          src: '',
+          type: 'image/png'
+        }
+      ],
+      category: 'Tool',
+      source: 'FUSCC'
     }
   ],
   footerConfig: {
@@ -184,7 +203,8 @@ export const projectSettings = {
 }
 
 export function initBaseURL() {
-  const apiService = 'http://service.3steps.cn'
+  // const apiService = 'http://service.3steps.cn'
+  const apiService = 'http://47.101.207.113'
   console.log(`BASE_API_URL: ${apiService}`)
   return apiService
 }

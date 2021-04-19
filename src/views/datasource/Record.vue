@@ -39,31 +39,7 @@
             <a-menu-item key="1">
               <a-button type="link" disabled>
                 <a-icon style="font-size: 16px" theme="filled" type="play-circle" />
-                PIK3CA_Mutation
-              </a-button>
-            </a-menu-item>
-            <a-menu-item key="2">
-              <a-button type="link">
-                <a-icon style="font-size: 16px" theme="outlined" type="play-circle" />
-                BLIS
-              </a-button>
-            </a-menu-item>
-            <a-menu-item key="3">
-              <a-button type="link">
-                <a-icon style="font-size: 16px" theme="outlined" type="play-circle" />
-                IM
-              </a-button>
-            </a-menu-item>
-            <a-menu-item key="3">
-              <a-button type="link">
-                <a-icon style="font-size: 16px" theme="outlined" type="play-circle" />
-                LAR
-              </a-button>
-            </a-menu-item>
-            <a-menu-item key="3">
-              <a-button type="link">
-                <a-icon style="font-size: 16px" theme="outlined" type="play-circle" />
-                MES
+                Left vs. Right
               </a-button>
             </a-menu-item>
           </a-menu>
@@ -75,44 +51,22 @@
         </a-dropdown>
       </a-collapse-panel>
       <a-collapse-panel key="pathology-model" v-if="viewerType === 'PATHOLOGY'" header="Pathology Model">
-        <pathology-model
-          :data="pathologyPrediction"
-          :imageId="instanceId"
-        ></pathology-model>
-        <a-dropdown slot="extra">
+        <pathology-model v-if="pathologyPrediction.length > 0" :data="pathologyPrediction" :imageId="instanceId"></pathology-model>
+        <a-empty v-else style="display: flex; justify-content: center; flex-direction: column; align-items: center; height: 300px;" />
+        <a-dropdown slot="extra" v-if="isAdminGroup">
           <a-menu slot="overlay" class="extra-actions">
-            <a-menu-item key="1">
-              <a-button type="link" disabled>
-                <a-icon style="font-size: 16px" theme="filled" type="play-circle" />
-                PIK3CA_Mutation
-              </a-button>
-            </a-menu-item>
-            <a-menu-item key="2">
-              <a-button type="link">
-                <a-icon style="font-size: 16px" theme="outlined" type="play-circle" />
-                BLIS
-              </a-button>
-            </a-menu-item>
-            <a-menu-item key="3">
-              <a-button type="link">
-                <a-icon style="font-size: 16px" theme="outlined" type="play-circle" />
-                IM
-              </a-button>
-            </a-menu-item>
-            <a-menu-item key="3">
-              <a-button type="link">
-                <a-icon style="font-size: 16px" theme="outlined" type="play-circle" />
-                LAR
-              </a-button>
-            </a-menu-item>
-            <a-menu-item key="3">
-              <a-button type="link">
-                <a-icon style="font-size: 16px" theme="outlined" type="play-circle" />
-                MES
+            <a-menu-item v-for="(status, model) in pathologyModels" :key="model">
+              <a-button type="link" @click="refreshModel(model)">
+                <a-icon
+                  style="font-size: 16px"
+                  :theme="status === 'Success' ? 'filled' : 'outlined'"
+                  type="play-circle"
+                />
+                {{ model }}
               </a-button>
             </a-menu-item>
           </a-menu>
-          <a-button style="margin-left: 8px">
+          <a-button style="margin-left: 8px" @click.stop="">
             <a-icon type="codepen-circle" style="font-size: 18px" />
             Prediction Models
             <a-icon type="down" />
@@ -126,9 +80,11 @@
 <script>
 import v from 'voca'
 import FileViewer from '@/components/FileViewer'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { initBaseURL } from '@/config/defaultSettings'
 import PathologyModel from './PathologyModel'
+import filter from 'lodash.filter'
+import map from 'lodash.map'
 
 export default {
   components: {
@@ -152,10 +108,20 @@ export default {
       viewerType: '', // PATHOLOGY or DICOM
       record: {},
       pathologyPrediction: [],
-      activeKey: ['file-viewer', 'pathology-model']
+      activeKey: ['file-viewer', 'pathology-model'],
+      pathologyModels: {
+        PIK3CA_Mutation: 'Success',
+        BLIS: '',
+        IM: '',
+        LAR: '',
+        MES: ''
+      }
     }
   },
   computed: {
+    isAdminGroup() {
+      return this.userInfo().groups.includes('admin')
+    },
     fileRecord() {
       return (({ fileName, projectId, md5sum, dataFormat, fileSize }) => ({
         fileName,
@@ -178,6 +144,79 @@ export default {
     ...mapActions({
       getCollection: 'GetCollection'
     }),
+    ...mapGetters(['userInfo']),
+    getModelResult(modelName) {
+      const url = `${initBaseURL()}/attachments/pathology/${
+        this.instanceId
+      }_models/${modelName}/prediction.json?random=${Math.random()
+        .toString(36)
+        .slice(-8)}`
+      return new Promise((resolve, reject) => {
+        this.$http
+          .get(url)
+          .then(response => {
+            console.log('Model: ', response)
+            resolve(response)
+          })
+          .catch(error => {
+            console.log('Get Model Result: ', error)
+            reject(undefined)
+          })
+      })
+    },
+    batchLoad(models) {
+      const modelRequests = map(models, modelName => {
+        return this.getModelResult(modelName)
+      })
+      Promise.all(
+        modelRequests.map(function(promiseItem) {
+          return promiseItem.catch(function(err) {
+            return err
+          })
+        })
+      )
+        .then(results => {
+          for (let idx in models) {
+            const modelName = models[idx]
+            const prediction = filter(this.pathologyPrediction, prediction => {
+              return prediction.model === modelName
+            })
+
+            if (prediction.length === 0 && results[idx]) {
+              this.pathologyModels[modelName] = 'Success'
+              this.pathologyPrediction.push(results[idx])
+              console.log('Batch Load: ', results[idx])
+            } else {
+              this.pathologyModels[modelName] = ''
+            }
+          }
+
+          console.log('fetchModels: ', results)
+        })
+        .catch(error => {
+          console.log('fetchModels Error: ', error)
+        })
+    },
+    refreshModel(modelName) {
+      console.log('Refresh Model: ', modelName)
+      this.getModelResult(modelName)
+        .then(response => {
+          const results = filter(this.pathologyPrediction, prediction => {
+            return prediction.model === modelName
+          })
+
+          if (results.length === 0) {
+            this.pathologyPrediction.push(response)
+            this.pathologyModels[modelName] = 'Success'
+          } else {
+            this.pathologyModels[modelName] = ''
+          }
+        })
+        .catch(error => {
+          console.log('Refresh Model: ', error)
+          this.$message.warning('Not Ready...')
+        })
+    },
     formatTitle(viewerType) {
       if (viewerType === 'PATHOLOGY') {
         return 'Pathology Viewer'
@@ -206,6 +245,8 @@ export default {
           this.instanceId = this.record.patientId
           this.baseUrl = `${initBaseURL()}/attachments/pathology`
           this.viewerType = 'PATHOLOGY'
+          // Load the Model Result for Pathology
+          this.batchLoad(Object.keys(this.pathologyModels))
         } else if (this.record.dataFormat == 'NIFTI') {
           this.instanceId = this.record.patientId
           this.baseUrl = `${initBaseURL()}/attachments/dicom`
@@ -215,11 +256,6 @@ export default {
       .catch(error => {
         console.log(`No Such Record(${error}): `, this.recordId, this.project)
       })
-
-    this.$http.get('https://nordata-cdn.oss-cn-shanghai.aliyuncs.com/pathology-prediction.json').then(response => {
-      console.log('Record: ', response)
-      this.pathologyPrediction = response
-    })
   }
 }
 </script>
@@ -307,6 +343,15 @@ export default {
 
   .ant-collapse-extra {
     margin-top: -5px;
+  }
+
+  .ant-tabs-tab {
+    font-size: 16px;
+    font-weight: 800;
+  }
+  
+  .ant-tabs-nav .ant-tabs-tab-active {
+    color: #ff0000;
   }
 }
 

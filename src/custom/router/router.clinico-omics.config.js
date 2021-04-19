@@ -363,6 +363,13 @@ export const asyncRouterMap = [
             meta: { title: 'SigMA', keepAlive: true }
           },
           {
+            path: '/tool/pathology-ai-model',
+            name: 'pathology-ai-model',
+            hidden: true,
+            component: () => import('@/views/tools/PathologyModel'),
+            meta: { title: 'Pathology AI Model', keepAlive: true }
+          },
+          {
             path: '/tool/igv',
             name: 'igv',
             hidden: true,

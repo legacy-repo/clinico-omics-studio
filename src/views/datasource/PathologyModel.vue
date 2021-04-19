@@ -136,8 +136,8 @@ export default {
     genImages(rows) {
       return map(rows, row => {
         return {
-          title: row.patch_name,
-          source: `${initBaseURL()}/attachments/pathology/${this.imageId}_models/norm_patches/${row.patch_name}`
+          title: row.name,
+          source: `${initBaseURL()}/attachments/pathology/${this.imageId}_models/norm_patches/${row.name}`
         }
       })
     },

@@ -1,7 +1,7 @@
 <template>
   <div class="report-list">
     <a-card style="margin-top: 10px" :bordered="false">
-      <a-badge slot="extra" showZero :count="pagination.total" :numberStyle="{backgroundColor: '#52c41a'}"/>
+      <a-badge slot="extra" showZero :count="pagination.total" :numberStyle="{ backgroundColor: '#52c41a' }" />
       <div slot="title">
         <a-radio-group @change="onClickRadioBtn" defaultValue="total" :value="radioGroupValue">
           <a-radio-button value="total">Total</a-radio-button>
@@ -10,7 +10,7 @@
           <a-radio-button value="Archived">Archived</a-radio-button>
         </a-radio-group>
         <a-input-search
-          style="margin-left: 16px; width: 272px;"
+          style="margin-left: 16px; width: 272px"
           placeholder="Please Enter Report Name"
           :loading="loading"
           :value="searchStr"
@@ -18,10 +18,7 @@
         />
       </div>
 
-      <a-list
-        size="large"
-        :loading="loading"
-        :pagination="pagination">
+      <a-list size="large" :loading="loading" :pagination="pagination">
         <a-list-item :key="index" v-for="(item, index) in data">
           <a-col :lg="10" :md="8" :sm="24" :xs="24">
             <a-list-item-meta>
@@ -32,7 +29,12 @@
               </div>
               <a-popover slot="avatar" placement="rightTop">
                 <template slot="content">
-                  <vue-friendly-iframe :src="item.reportUrl" class="popover" frameborder="0" scrolling="auto"></vue-friendly-iframe>
+                  <vue-friendly-iframe
+                    :src="item.reportUrl"
+                    class="popover"
+                    frameborder="0"
+                    scrolling="auto"
+                  ></vue-friendly-iframe>
                 </template>
                 <report-logo class="report-logo" />
               </a-popover>
@@ -54,12 +56,13 @@
             &nbsp;
             <a-dropdown>
               <a-menu slot="overlay">
-                <a-menu-item><a>Update</a></a-menu-item>
-                <a-menu-item><a>Delete</a></a-menu-item>
-                <a-menu-item><a>Checked</a></a-menu-item>
-                <a-menu-item><a>Archived</a></a-menu-item>
+                <a-menu-item><a @click="downloadReport(item.reportUrl)">Download</a></a-menu-item>
+                <a-menu-item><a disabled>Update</a></a-menu-item>
+                <a-menu-item><a disabled>Delete</a></a-menu-item>
+                <a-menu-item><a disabled>Checked</a></a-menu-item>
+                <a-menu-item><a disabled>Archived</a></a-menu-item>
               </a-menu>
-              <a disabled>More<a-icon type="down"/></a>
+              <a>More<a-icon type="down" /></a>
             </a-dropdown>
           </div>
         </a-list-item>
@@ -72,6 +75,7 @@
 import VueFriendlyIframe from 'vue-friendly-iframe'
 import { reportLogo } from '@/core/icons'
 import { mapActions } from 'vuex'
+import { downloadFile } from '@/views/utils'
 
 export default {
   name: 'ReportList',
@@ -79,7 +83,7 @@ export default {
     VueFriendlyIframe,
     reportLogo
   },
-  data () {
+  data() {
     return {
       searchStr: null,
       data: {},
@@ -105,7 +109,18 @@ export default {
     ...mapActions({
       getReportList: 'GetReportList'
     }),
-    searchReport (page, pageSize, status) {
+    downloadReport(reportUrl) {
+      this.$http
+        .get(reportUrl)
+        .then(response => {
+          downloadFile(response, 'report.html')
+        })
+        .catch(error => {
+          this.$message.warn('Something wrong, please retry later.')
+          console.log('Download Report: ', error)
+        })
+    },
+    searchReport(page, pageSize, status) {
       this.loading = true
       this.getReportList({
         page: page,
@@ -120,7 +135,7 @@ export default {
         this.loading = false
       })
     },
-    onClickRadioBtn (event) {
+    onClickRadioBtn(event) {
       this.radioGroupValue = event.target.value
       console.log('Current Radio Button Value: ', this.radioGroupValue)
       if (this.radioGroupValue === 'total') {
@@ -129,7 +144,7 @@ export default {
         this.searchReport(this.pagination.current, this.pagination.pageSize, this.radioGroupValue)
       }
     },
-    onShowReport (projectName, reportId) {
+    onShowReport(projectName, reportId) {
       this.$router.push({
         name: 'report-details',
         params: {
@@ -141,7 +156,7 @@ export default {
       })
     }
   },
-  created () {
+  created() {
     this.searchReport(this.pagination.current, this.pagination.pageSize, this.searchStr)
   }
 }
@@ -164,7 +179,8 @@ export default {
     flex-direction: row;
   }
 
-  .ant-list-item-meta, .list-content-item {
+  .ant-list-item-meta,
+  .list-content-item {
     margin-top: 5px;
   }
 

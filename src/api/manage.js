@@ -32,7 +32,8 @@ const api = {
     listCollections: dataSeqHost + '/api/list-collections',
     schema: dataSeqHost + '/api/schema',
     collections: dataSeqHost + '/api/collections',
-    groups: dataSeqHost + '/api/count-collections'
+    groups: dataSeqHost + '/api/count-collections',
+    repo: dataSeqHost + '/api/repo'
   }
 }
 
@@ -128,6 +129,76 @@ export function countCollections(collection, parameter, payload) {
     method: 'post',
     params: parameter,
     data: payload
+  })
+}
+
+// Data Repo
+export function listRepo() {
+  return axios({
+    url: api.dataCommons.repo,
+    method: 'get'
+  })
+}
+
+export function addRepo(name, description) {
+  return axios({
+    url: api.dataCommons.repo,
+    method: 'post',
+    data: {
+      name: name,
+      description: description
+    }
+  })
+}
+
+export function updateRepo(name, files, config) {
+  return axios({
+    url: api.dataCommons.repo,
+    method: 'put',
+    data: {
+      name: name,
+      files: files,
+      config: config
+    }
+  })
+}
+
+export function listRepoVersion(name) {
+  return axios({
+    url: api.dataCommons.repo + '/' + name + '/commits',
+    method: 'get'
+  })
+}
+
+export function addRepoVersion(name, message, files) {
+  return axios({
+    url: api.dataCommons.repo + '/' + name + '/commits',
+    method: 'post',
+    data: {
+      message: message,
+      files: files
+    }
+  })
+}
+
+export function getRepoStatus(name, subpath) {
+  return axios({
+    url: api.dataCommons.repo + '/' + name + '/status',
+    method: 'get',
+    parameter: {
+      subpath: subpath
+    }
+  })
+}
+
+export function getRepoFiles(name, commitId, subpath) {
+  return axios({
+    url: api.dataCommons.repo + '/' + name + '/files',
+    method: 'get',
+    parameter: {
+      'commit-ish': commitId,
+      subpath: subpath
+    }
   })
 }
 

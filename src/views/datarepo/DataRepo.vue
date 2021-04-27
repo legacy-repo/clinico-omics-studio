@@ -1,53 +1,60 @@
 <template>
-  <div class="git-list">
+  <div class="data-repo">
     <a-card :bordered="false">
       <a-col slot="title" :lg="12" :md="12" :sm="24" :xs="24">
-        <a-popover placement="bottom" style="min-width: 260px;">
+        <a-popover placement="bottom" style="min-width: 260px">
           <template slot="content">
             <a-timeline class="json-popover" :reverse="true">
               <a-timeline-item color="green" @click="loadVersion(item.id)" :key="item.id" v-for="item in versions">
                 {{ item.content }}
               </a-timeline-item>
               <a-timeline-item @click="loadVersion('Current Workspace')">
-                <a-icon slot="dot" type="clock-circle-o" style="font-size: 16px;" />
+                <a-icon slot="dot" type="clock-circle-o" style="font-size: 16px" />
                 Current Workspace...
               </a-timeline-item>
             </a-timeline>
           </template>
           <a-button>
-            <a-icon type="history"/>
+            <a-icon type="history" />
             {{ totalVersions }} Versions <a-divider type="vertical" /> {{ dataVersion }}
           </a-button>
         </a-popover>
-        <a-button type="danger" style="margin-left: 5px;" @click="showModal" :disabled="!isDirty"><a-icon type="file-done"/>New Version</a-button>
+        <a-button type="danger" style="margin-left: 5px" @click="showModal" :disabled="!isDirty"
+          ><a-icon type="file-done" />New Version</a-button
+        >
         <a-modal
           title="Do you want to make a new version?"
           class="comment-box"
           v-model="visible"
           @ok="hideModal"
           okText="Submit"
-          cancelText="Cancel">
+          cancelText="Cancel"
+        >
           <a-textarea
             v-model="commentValue"
             placeholder="Comment the current version."
-            :autoSize="{ minRows: 3, maxRows: 5 }"/>
+            :autoSize="{ minRows: 3, maxRows: 5 }"
+          />
         </a-modal>
       </a-col>
-      <a-col slot="title" style="display: flex; flex-direction: row; float: right;">
-        <a-button type="danger" style="margin-right: 5px;" :disabled="dataVersion == 'Current Workspace'"><a-icon type="undo"/>Restore</a-button>
+      <a-col slot="title" style="display: flex; flex-direction: row; float: right">
+        <a-button type="danger" style="margin-right: 5px" :disabled="dataVersion == 'Current Workspace'"
+          ><a-icon type="undo" />Restore</a-button
+        >
         <a-upload
           name="file"
           :multiple="true"
           action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
           :headers="headers"
-          @change="uploadFiles">
-          <a-button :disabled="latestVersion !== dataVersion"><a-icon type="upload"/>Upload</a-button>
+          @change="uploadFiles"
+        >
+          <a-button :disabled="latestVersion !== dataVersion"><a-icon type="upload" />Upload</a-button>
         </a-upload>
       </a-col>
 
       <a-row class="control-header">
-        <a-col :lg="12" :md="12" :sm="24" :xs="24" style="display:flex;">
-          <a-breadcrumb style="margin-right: 15px;" >
+        <a-col :lg="12" :md="12" :sm="24" :xs="24" style="display: flex">
+          <a-breadcrumb style="margin-right: 15px">
             <a-breadcrumb-item href="">
               <a-icon type="home" />
             </a-breadcrumb-item>
@@ -55,18 +62,13 @@
               <a-icon type="user" />
               <span>Data Repo</span>
             </a-breadcrumb-item>
-            <a-breadcrumb-item>
-              Quartet Project
-            </a-breadcrumb-item>
+            <a-breadcrumb-item> Quartet Project </a-breadcrumb-item>
           </a-breadcrumb>
-          <a-badge showZero :count="totalFiles" :numberStyle="{backgroundColor: '#52c41a'}"/>
+          <a-badge showZero :count="totalFiles" :numberStyle="{ backgroundColor: '#52c41a' }" />
         </a-col>
         <a-col :lg="12" :md="12" :sm="24" :xs="24">
-          <div style="float: right;">
-            <a-select
-              placeholder="Which Service"
-              style="width: 180px; margin-right: 5px;"
-              @change="handleChange">
+          <div style="float: right">
+            <a-select placeholder="Which Service" style="width: 180px; margin-right: 5px" @change="handleChange">
               <a-select-option value="jack">Metadata Quality Review</a-select-option>
               <a-select-option value="lucy">Omics Data Commons</a-select-option>
               <a-select-option value="disabled" disabled>Data Fusion</a-select-option>
@@ -75,15 +77,13 @@
               <template slot="title">
                 <span>Current directory is dirty, so you can't publish.</span>
               </template>
-              <a-button type="primary" :disabled="isDirty" ><a-icon type="cloud-upload"/>Publish</a-button>
+              <a-button type="primary" :disabled="isDirty"><a-icon type="cloud-upload" />Publish</a-button>
             </a-tooltip>
           </div>
         </a-col>
       </a-row>
 
-      <a-list
-        size="small"
-        :loading="loading">
+      <a-list size="small" :loading="loading">
         <a-list-item :key="index" v-for="(item, index) in data">
           <a-col :lg="6" :md="6" :sm="24" :xs="24">
             <a-list-item-meta>
@@ -130,10 +130,16 @@
 <script>
 import { fileLockLogo, folderLockLogo } from '@/core/icons'
 import VueJsonPretty from 'vue-json-pretty'
+import { mapActions } from 'vuex'
 
 export default {
-  name: 'GitList',
-  data () {
+  props: {
+    repoName: {
+      type: String,
+      required: true
+    }
+  },
+  data() {
     return {
       headers: {
         authorization: 'authorization-text'
@@ -147,91 +153,93 @@ export default {
       totalFiles: 7,
       data: [
         {
-          'name': 'datafile',
-          'size': 0,
-          'isFile': false,
-          'modified': 1585924514000,
-          'created': '2020-04-03T14:35:08Z',
-          'type': null,
-          'status': 'unchanged',
-          'location': '/Users/choppy/Downloads/vcf',
-          'md5': 'ec5b89dc49c433a9521a13928c032120'
+          name: 'datafile',
+          size: 0,
+          isFile: false,
+          modified: 1585924514000,
+          created: '2020-04-03T14:35:08Z',
+          type: null,
+          status: 'unchanged',
+          location: '/Users/choppy/Downloads/vcf',
+          md5: 'ec5b89dc49c433a9521a13928c032120'
         },
         {
-          'name': 'library',
-          'size': 0,
-          'isFile': false,
-          'modified': 1585906390000,
-          'created': '2020-04-03T09:33:10Z',
-          'type': null,
-          'status': 'unchanged',
-          'location': '/Users/choppy/Downloads/vcf',
-          'md5': 'ec5b89dc49c433a9521a13928c032121'
+          name: 'library',
+          size: 0,
+          isFile: false,
+          modified: 1585906390000,
+          created: '2020-04-03T09:33:10Z',
+          type: null,
+          status: 'unchanged',
+          location: '/Users/choppy/Downloads/vcf',
+          md5: 'ec5b89dc49c433a9521a13928c032121'
         },
         {
-          'name': 'patient',
-          'size': 0,
-          'isFile': false,
-          'modified': 1585906529000,
-          'created': '2020-04-03T09:35:29Z',
-          'type': null,
-          'location': '/Users/choppy/Downloads/vcf',
-          'status': 'unchanged',
-          'md5': 'ec5b89dc49c433a9521a13928c032100'
+          name: 'patient',
+          size: 0,
+          isFile: false,
+          modified: 1585906529000,
+          created: '2020-04-03T09:35:29Z',
+          type: null,
+          location: '/Users/choppy/Downloads/vcf',
+          status: 'unchanged',
+          md5: 'ec5b89dc49c433a9521a13928c032100'
         },
         {
-          'name': 'project',
-          'size': 0,
-          'isFile': false,
-          'modified': 1585906390000,
-          'created': '2020-04-03T09:33:10Z',
-          'type': null,
-          'location': '/Users/choppy/Downloads/vcf',
-          'status': 'unchanged',
-          'md5': 'ec5b89dc49c433a9521a13928c032124'
+          name: 'project',
+          size: 0,
+          isFile: false,
+          modified: 1585906390000,
+          created: '2020-04-03T09:33:10Z',
+          type: null,
+          location: '/Users/choppy/Downloads/vcf',
+          status: 'unchanged',
+          md5: 'ec5b89dc49c433a9521a13928c032124'
         },
         {
-          'name': 'sample',
-          'size': 0,
-          'isFile': false,
-          'modified': 1585906529000,
-          'created': '2020-04-03T09:35:29Z',
-          'type': null,
-          'location': '/Users/choppy/Downloads/vcf',
-          'status': 'unchanged',
-          'md5': 'ec5b89dc49c433a9521a13928c032130'
+          name: 'sample',
+          size: 0,
+          isFile: false,
+          modified: 1585906529000,
+          created: '2020-04-03T09:35:29Z',
+          type: null,
+          location: '/Users/choppy/Downloads/vcf',
+          status: 'unchanged',
+          md5: 'ec5b89dc49c433a9521a13928c032130'
         },
         {
-          'name': 'sequencing',
-          'size': 0,
-          'isFile': false,
-          'modified': 1585906529000,
-          'created': '2020-04-03T09:35:29Z',
-          'type': null,
-          'location': '/Users/choppy/Downloads/vcf',
-          'status': 'unchanged',
-          'md5': 'ec5b89dc49c433a9521a13928c032129'
+          name: 'sequencing',
+          size: 0,
+          isFile: false,
+          modified: 1585906529000,
+          created: '2020-04-03T09:35:29Z',
+          type: null,
+          location: '/Users/choppy/Downloads/vcf',
+          status: 'unchanged',
+          md5: 'ec5b89dc49c433a9521a13928c032129'
         },
         {
-          'name': 'schema.json',
-          'size': 500,
-          'isFile': true,
-          'modified': 1585906529000,
-          'created': '2020-04-03T09:35:29Z',
-          'type': '.json',
-          'location': '/Users/choppy/Downloads/vcf',
-          'status': 'unchanged',
-          'md5': 'ec5b89dc49c433a9521a13928c032129'
+          name: 'schema.json',
+          size: 500,
+          isFile: true,
+          modified: 1585906529000,
+          created: '2020-04-03T09:35:29Z',
+          type: '.json',
+          location: '/Users/choppy/Downloads/vcf',
+          status: 'unchanged',
+          md5: 'ec5b89dc49c433a9521a13928c032129'
         }
       ],
       versions: [
         {
           id: 'v0.1.0',
           content: 'First Commit.'
-        }, {
+        },
+        {
           id: 'v0.1.1',
           content: 'Fix some bugs.'
-        }, {
+        },
+        {
           id: 'v0.1.2',
           content: 'Add some records.'
         }
@@ -246,20 +254,19 @@ export default {
   },
   computed: {},
   methods: {
-    showModal () {
+    ...mapActions('data_repo', ['GetRepoVersion']),
+    showModal() {
       if (this.latestVersion === this.dataVersion || this.dataVersion === 'Current Workspace') {
         this.visible = true
       } else {
         this.$message.warning('You can make a new version based on the latest version.')
       }
     },
-    hideModal () {
+    hideModal() {
       this.visible = false
     },
-    uploadFiles () {
-
-    },
-    loadVersion (id) {
+    uploadFiles() {},
+    loadVersion(id) {
       if (id !== 'Current Workspace') {
         this.dataVersion = id
         this.isDirty = false
@@ -268,42 +275,34 @@ export default {
         this.isDirty = true
       }
     },
-    handleChange (value) {
+    handleChange(value) {
       console.log(`selected ${value}`)
     },
-    handleBlur () {
+    handleBlur() {
       console.log('blur')
     },
-    handleFocus () {
+    handleFocus() {
       console.log('focus')
     },
-    filterOption (input, option) {
-      return (
-        option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
-      )
+    filterOption(input, option) {
+      return option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
     },
-    getColor (status) {
+    getColor(status) {
       if (status === 'modified') {
         return '#f50'
       } else if (status === 'unchanged') {
         return '#87d068'
       }
     },
-    searchGit (page, pageSize, status) {
-
-    },
-    onLoadFile (name, ftype) {
-
-    }
+    searchGit(page, pageSize, status) {},
+    onLoadFile(name, ftype) {}
   },
-  created () {
-
-  }
+  created() {}
 }
 </script>
 
 <style lang="less">
-.git-list {
+.data-repo {
   .ant-card-head-title {
     padding-top: 0px;
 
@@ -327,7 +326,8 @@ export default {
     flex-direction: row;
   }
 
-  .ant-list-item-meta, .list-content-item {
+  .ant-list-item-meta,
+  .list-content-item {
     margin-top: 5px;
   }
 
@@ -390,7 +390,8 @@ export default {
   width: 0 !important;
 }
 
-.file-logo, .folder-logo {
+.file-logo,
+.folder-logo {
   margin-top: 5px;
   font-size: 16px;
   padding: 4px;
@@ -399,7 +400,7 @@ export default {
   vertical-align: middle;
 }
 
-.git-list .ant-card-body {
+.data-repo .ant-card-body {
   padding: 0px 24px 10px;
 }
 
@@ -410,7 +411,8 @@ export default {
     padding: 0px 24px 10px;
   }
 
-  .ant-modal-header, .ant-modal-footer {
+  .ant-modal-header,
+  .ant-modal-footer {
     border: unset;
   }
 }

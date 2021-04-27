@@ -332,16 +332,6 @@ export const asyncRouterMap = [
         meta: { title: 'Notifications', icon: 'notification', permission: ['table'] }
       },
 
-      // Subcomponent - Git
-      {
-        path: '/git-management',
-        name: 'git-management',
-        hidden: true,
-        component: () => import('@/views/git/GitList'),
-
-        meta: { title: 'Git', icon: 'history', permission: ['table'] }
-      },
-
       // Subcomponent - Statistics
       {
         path: '/statistics',

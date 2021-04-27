@@ -87,10 +87,10 @@ export const asyncRouterMap = [
             ]
           },
           {
-            path: '/data/git-management',
-            name: 'git-management',
+            path: '/data/repo-management',
+            name: 'repo-management',
             hidden: false,
-            component: () => import('@/views/git/GitList'),
+            component: () => import('@/views/datarepo/DataRepoList'),
             meta: { title: 'Metadata Collaboration', icon: 'history', permission: ['table'], keepAlive: true }
           },
           {

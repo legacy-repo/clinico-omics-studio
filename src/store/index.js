@@ -10,6 +10,7 @@ import notification from './modules/notification'
 import choppyApp from './modules/choppy_app'
 import fs from './modules/fs'
 import data from './modules/data_commons'
+import dataRepo from './modules/data_repo'
 import chartStudio from './modules/chart_studio'
 import chart from './modules/chart'
 import materials from './modules/materials'
@@ -35,19 +36,14 @@ export default new Vuex.Store({
     materials,
     preqc,
     data,
+    dataRepo,
     chart,
     chartStudio,
     i18n,
     permission
   },
-  state: {
-
-  },
-  mutations: {
-
-  },
-  actions: {
-
-  },
+  state: {},
+  mutations: {},
+  actions: {},
   getters
 })

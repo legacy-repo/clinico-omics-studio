@@ -29,6 +29,14 @@ export function initTServiceHost() {
   return tServiceHost || `${initBaseURL()}/tservice`
 }
 
+// TService Ai
+export function initTServiceAiHost() {
+  const tServiceHost = localStorage.getItem('tServiceAiHost')
+  console.log(`TSERVICE_Ai_HOST: ${tServiceHost}`)
+
+  return tServiceHost || `${initBaseURL()}/tservice-ai`
+}
+
 // DataSeq
 export function initDataSeqHost() {
   const dataSeqHost = localStorage.getItem('dataSeqHost')
@@ -79,6 +87,10 @@ export function saveSeqFlowHost(seqFlowHost) {
 
 export function saveTServiceHost(tServiceHost) {
   localStorage.setItem('tServiceHost', tServiceHost)
+}
+
+export function saveTServiceAiHost(tServiceAiHost) {
+  localStorage.setItem('tServiceAiHost', tServiceAiHost)
 }
 
 export function saveDataSeqHost(dataSeqHost) {

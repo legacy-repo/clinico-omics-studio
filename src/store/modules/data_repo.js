@@ -36,7 +36,8 @@ const repo = {
           })
       })
     },
-    AddRepo({ commit }, { name, description }) {
+    AddRepo({ commit }, payload) {
+      const { name, description } = payload
       return new Promise((resolve, reject) => {
         addRepo(name, description)
           .then(response => {
@@ -47,7 +48,8 @@ const repo = {
           })
       })
     },
-    UpdateRepo({ commit }, { name, files, config }) {
+    UpdateRepo({ commit }, payload) {
+      const { name, files, config } = payload
       return new Promise((resolve, reject) => {
         updateRepo(name, files, config)
           .then(response => {
@@ -58,7 +60,8 @@ const repo = {
           })
       })
     },
-    AddRepoVersion({ commit }, { name, message, files }) {
+    AddRepoVersion({ commit }, payload) {
+      const { name, message, files } = payload
       return new Promise((resolve, reject) => {
         addRepoVersion(name, message, files)
           .then(response => {
@@ -80,7 +83,8 @@ const repo = {
           })
       })
     },
-    GetRepoStatus({ commit }, { name, subpath }) {
+    GetRepoStatus({ commit }, payload) {
+      const { name, subpath } = payload
       return new Promise((resolve, reject) => {
         getRepoStatus(name, subpath)
           .then(response => {
@@ -91,7 +95,8 @@ const repo = {
           })
       })
     },
-    GetRepoFiles({ commit }, { name, commitId, subpath }) {
+    GetRepoFiles({ commit }, payload) {
+      const { name, commitId, subpath } = payload
       return new Promise((resolve, reject) => {
         getRepoFiles(name, commitId, subpath)
           .then(response => {

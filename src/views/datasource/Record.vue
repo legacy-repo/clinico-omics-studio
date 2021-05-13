@@ -51,12 +51,19 @@
         </a-dropdown>
       </a-collapse-panel>
       <a-collapse-panel key="pathology-model" v-if="viewerType === 'PATHOLOGY'" header="Pathology Model">
-        <pathology-model v-if="pathologyPrediction.length > 0" :data="pathologyPrediction" :imageId="instanceId"></pathology-model>
-        <a-empty v-else style="display: flex; justify-content: center; flex-direction: column; align-items: center; height: 300px;" />
+        <pathology-model
+          v-if="pathologyPrediction.length > 0"
+          :data="pathologyPrediction"
+          :imageId="instanceId"
+        ></pathology-model>
+        <a-empty
+          v-else
+          style="display: flex; justify-content: center; flex-direction: column; align-items: center; height: 300px"
+        />
         <a-dropdown slot="extra" v-if="isAdminGroup">
           <a-menu slot="overlay" class="extra-actions">
             <a-menu-item v-for="(status, model) in pathologyModels" :key="model">
-              <a-button type="link" @click="refreshModel(model)">
+              <a-button type="link" @click="refresh(instanceId, model)">
                 <a-icon
                   style="font-size: 16px"
                   :theme="status === 'Success' ? 'filled' : 'outlined'"
@@ -84,13 +91,14 @@ import { mapActions, mapGetters } from 'vuex'
 import { initBaseURL } from '@/config/defaultSettings'
 import PathologyModel from './PathologyModel'
 import filter from 'lodash.filter'
-import map from 'lodash.map'
+import PathologyMixins from '@/mixins/pathology'
 
 export default {
   components: {
     FileViewer,
     PathologyModel
   },
+  mixins: [PathologyMixins],
   props: {
     recordId: {
       type: String,
@@ -145,61 +153,8 @@ export default {
       getCollection: 'GetCollection'
     }),
     ...mapGetters(['userInfo']),
-    getModelResult(modelName) {
-      const url = `${initBaseURL()}/attachments/pathology/${
-        this.instanceId
-      }_models/${modelName}/prediction.json?random=${Math.random()
-        .toString(36)
-        .slice(-8)}`
-      return new Promise((resolve, reject) => {
-        this.$http
-          .get(url)
-          .then(response => {
-            console.log('Model: ', response)
-            resolve(response)
-          })
-          .catch(error => {
-            console.log('Get Model Result: ', error)
-            reject(undefined)
-          })
-      })
-    },
-    batchLoad(models) {
-      const modelRequests = map(models, modelName => {
-        return this.getModelResult(modelName)
-      })
-      Promise.all(
-        modelRequests.map(function(promiseItem) {
-          return promiseItem.catch(function(err) {
-            return err
-          })
-        })
-      )
-        .then(results => {
-          for (let idx in models) {
-            const modelName = models[idx]
-            const prediction = filter(this.pathologyPrediction, prediction => {
-              return prediction.model === modelName
-            })
-
-            if (prediction.length === 0 && results[idx]) {
-              this.pathologyModels[modelName] = 'Success'
-              this.pathologyPrediction.push(results[idx])
-              console.log('Batch Load: ', results[idx])
-            } else {
-              this.pathologyModels[modelName] = ''
-            }
-          }
-
-          console.log('fetchModels: ', results)
-        })
-        .catch(error => {
-          console.log('fetchModels Error: ', error)
-        })
-    },
-    refreshModel(modelName) {
-      console.log('Refresh Model: ', modelName)
-      this.getModelResult(modelName)
+    refresh(instanceId, modelName) {
+      this.refreshModel(instanceId, modelName)
         .then(response => {
           const results = filter(this.pathologyPrediction, prediction => {
             return prediction.model === modelName
@@ -246,7 +201,29 @@ export default {
           this.baseUrl = `${initBaseURL()}/attachments/pathology`
           this.viewerType = 'PATHOLOGY'
           // Load the Model Result for Pathology
-          this.batchLoad(Object.keys(this.pathologyModels))
+          const models = Object.keys(this.pathologyModels)
+          this.batchLoad(this.instanceId, models)
+            .then(results => {
+              for (let idx in models) {
+                const modelName = models[idx]
+                const prediction = filter(this.pathologyPrediction, prediction => {
+                  return prediction.model === modelName
+                })
+
+                if (prediction.length === 0 && results[idx]) {
+                  this.pathologyModels[modelName] = 'Success'
+                  this.pathologyPrediction.push(results[idx])
+                  console.log('Batch Load: ', results[idx])
+                } else {
+                  this.pathologyModels[modelName] = ''
+                }
+              }
+
+              console.log('fetchModels: ', results)
+            })
+            .catch(error => {
+              console.log('fetchModels Error: ', error)
+            })
         } else if (this.record.dataFormat == 'NIFTI') {
           this.instanceId = this.record.patientId
           this.baseUrl = `${initBaseURL()}/attachments/dicom`
@@ -349,7 +326,7 @@ export default {
     font-size: 16px;
     font-weight: 800;
   }
-  
+
   .ant-tabs-nav .ant-tabs-tab-active {
     color: #ff0000;
   }

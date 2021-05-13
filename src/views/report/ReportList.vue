@@ -125,7 +125,8 @@ export default {
       this.getReportList({
         page: page,
         per_page: pageSize,
-        status: status
+        status: status,
+        report_type: "multiqc"
       }).then(result => {
         const that = this
         that.data = result.data

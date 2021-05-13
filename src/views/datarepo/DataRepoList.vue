@@ -23,13 +23,14 @@
                 <template slot="content">
                   <vue-json-pretty
                     class="json-popover"
-                    v-if="Object.keys(item.config).length !== 0"
+                    v-if="Object.keys(item.config).length + item.files.length > 0"
                     :data="formatJSON(item.config, item.files)"
-                  ></vue-json-pretty>                  
+                  ></vue-json-pretty>
+                  <a-empty v-else />
                 </template>
                 <a-avatar icon="history" style="backgroundColor:#87d068" />
               </a-popover>
-              <a slot="title">{{ item.name }}</a>
+              <a slot="title" @click="onShowRepo(item.name)">{{ item.name }}</a>
             </a-list-item-meta>
           </a-col>
           <a-col class="list-content" :lg="10" :md="12" :sm="24" :xs="24">
@@ -43,11 +44,11 @@
             </div>
           </a-col>
           <div slot="actions">
-            <a @click="onShowRepo(item.title, item.id)" :disabled="!item.id || !item.status.finished">View</a>
+            <a @click="onShowRepo(item.name)" :disabled="!item.name">View</a>
             &nbsp;
             <a-dropdown>
               <a-menu slot="overlay">
-                <a-menu-item><a @click="downloadRepo(item.reportUrl)">Download</a></a-menu-item>
+                <a-menu-item><a disabled @click="downloadRepo(item.reportUrl)">Download</a></a-menu-item>
                 <a-menu-item><a disabled>Update</a></a-menu-item>
                 <a-menu-item><a disabled>Delete</a></a-menu-item>
               </a-menu>
@@ -97,9 +98,9 @@ export default {
         this.loading = false
       })
     },
-    onShowRepo(projectName, repoName) {
+    onShowRepo(repoName) {
       this.$router.push({
-        name: 'repo-details',
+        name: 'data-repo-details',
         params: {
           repoName: repoName
         }

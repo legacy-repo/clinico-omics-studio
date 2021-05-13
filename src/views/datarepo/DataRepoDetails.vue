@@ -4,13 +4,19 @@
       <a-col slot="title" :lg="12" :md="12" :sm="24" :xs="24">
         <a-popover placement="bottom" style="min-width: 260px">
           <template slot="content">
-            <a-timeline class="json-popover" :reverse="true">
-              <a-timeline-item color="green" @click="loadVersion(item.id)" :key="item.id" v-for="item in versions">
-                {{ item.content }}
-              </a-timeline-item>
+            <a-timeline class="json-popover" :reverse="false">
               <a-timeline-item @click="loadVersion('Current Workspace')">
                 <a-icon slot="dot" type="clock-circle-o" style="font-size: 16px" />
                 Current Workspace...
+              </a-timeline-item>
+              <a-timeline-item color="green" @click="loadVersion(item.id)" :key="item.id" v-for="item in versions">
+                <a-row class="version-item">
+                  <span class="title">{{ item.time }}</span>
+                  <p class="content" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden">
+                    {{ item.id }}
+                  </p>
+                  <p class="content">{{ item.message }}</p>
+                </a-row>
               </a-timeline-item>
             </a-timeline>
           </template>
@@ -19,14 +25,14 @@
             {{ totalVersions }} Versions <a-divider type="vertical" /> {{ dataVersion }}
           </a-button>
         </a-popover>
-        <a-button type="danger" style="margin-left: 5px" @click="showModal" :disabled="!isDirty"
-          ><a-icon type="file-done" />New Version</a-button
-        >
+        <a-button type="danger" style="margin-left: 5px" @click="showModal" :disabled="!isDirty">
+          <a-icon type="file-done" />New Version
+        </a-button>
         <a-modal
           title="Do you want to make a new version?"
           class="comment-box"
           v-model="visible"
-          @ok="hideModal"
+          @ok="submitNewVersion"
           okText="Submit"
           cancelText="Cancel"
         >
@@ -38,9 +44,9 @@
         </a-modal>
       </a-col>
       <a-col slot="title" style="display: flex; flex-direction: row; float: right">
-        <a-button type="danger" style="margin-right: 5px" :disabled="dataVersion == 'Current Workspace'"
-          ><a-icon type="undo" />Restore</a-button
-        >
+        <a-button type="danger" style="margin-right: 5px" :disabled="dataVersion == 'Current Workspace'">
+          <a-icon type="undo" />Restore
+        </a-button>
         <a-upload
           name="file"
           :multiple="true"
@@ -56,13 +62,12 @@
         <a-col :lg="12" :md="12" :sm="24" :xs="24" style="display: flex">
           <a-breadcrumb style="margin-right: 15px">
             <a-breadcrumb-item href="">
-              <a-icon type="home" />
+              <span @click.stop="returnHome" style="cursive: pointer">
+                <a-icon type="home" />
+                <span style="margin-left: 5px">Data Repo</span>
+              </span>
             </a-breadcrumb-item>
-            <a-breadcrumb-item href="">
-              <a-icon type="user" />
-              <span>Data Repo</span>
-            </a-breadcrumb-item>
-            <a-breadcrumb-item> Quartet Project </a-breadcrumb-item>
+            <a-breadcrumb-item>{{ repoName }}</a-breadcrumb-item>
           </a-breadcrumb>
           <a-badge showZero :count="totalFiles" :numberStyle="{ backgroundColor: '#52c41a' }" />
         </a-col>
@@ -101,11 +106,11 @@
           <a-col class="list-content" :lg="14" :md="14" :sm="24" :xs="24">
             <div class="list-content-item">
               <span>Created</span>
-              <p>{{ item.created }}</p>
+              <p>{{ formatDateTime(item.created) }}</p>
             </div>
             <div class="list-content-item">
               <span>Modified</span>
-              <p>{{ item.modified }}</p>
+              <p>{{ formatDateTime(item.modified) }}</p>
             </div>
             <div class="list-content-item">
               <span>Size</span>
@@ -113,7 +118,7 @@
             </div>
             <div class="list-content-item">
               <span>MD5 CheckSum</span>
-              <p>{{ item.md5 }}</p>
+              <p>{{ item.md5sum }}</p>
             </div>
           </a-col>
           <div slot="actions">
@@ -131,14 +136,11 @@
 import { fileLockLogo, folderLockLogo } from '@/core/icons'
 import VueJsonPretty from 'vue-json-pretty'
 import { mapActions } from 'vuex'
+import orderBy from 'lodash.orderby'
+import moment from 'moment'
 
 export default {
-  props: {
-    repoName: {
-      type: String,
-      required: true
-    }
-  },
+  props: {},
   data() {
     return {
       headers: {
@@ -149,8 +151,8 @@ export default {
       latestVersion: 'ffff',
       commentValue: '',
       visible: false,
-      totalVersions: 3,
-      totalFiles: 7,
+      totalVersions: 0,
+      totalFiles: 0,
       data: [
         {
           name: 'datafile',
@@ -161,89 +163,10 @@ export default {
           type: null,
           status: 'unchanged',
           location: '/Users/choppy/Downloads/vcf',
-          md5: 'ec5b89dc49c433a9521a13928c032120'
-        },
-        {
-          name: 'library',
-          size: 0,
-          isFile: false,
-          modified: 1585906390000,
-          created: '2020-04-03T09:33:10Z',
-          type: null,
-          status: 'unchanged',
-          location: '/Users/choppy/Downloads/vcf',
-          md5: 'ec5b89dc49c433a9521a13928c032121'
-        },
-        {
-          name: 'patient',
-          size: 0,
-          isFile: false,
-          modified: 1585906529000,
-          created: '2020-04-03T09:35:29Z',
-          type: null,
-          location: '/Users/choppy/Downloads/vcf',
-          status: 'unchanged',
-          md5: 'ec5b89dc49c433a9521a13928c032100'
-        },
-        {
-          name: 'project',
-          size: 0,
-          isFile: false,
-          modified: 1585906390000,
-          created: '2020-04-03T09:33:10Z',
-          type: null,
-          location: '/Users/choppy/Downloads/vcf',
-          status: 'unchanged',
-          md5: 'ec5b89dc49c433a9521a13928c032124'
-        },
-        {
-          name: 'sample',
-          size: 0,
-          isFile: false,
-          modified: 1585906529000,
-          created: '2020-04-03T09:35:29Z',
-          type: null,
-          location: '/Users/choppy/Downloads/vcf',
-          status: 'unchanged',
-          md5: 'ec5b89dc49c433a9521a13928c032130'
-        },
-        {
-          name: 'sequencing',
-          size: 0,
-          isFile: false,
-          modified: 1585906529000,
-          created: '2020-04-03T09:35:29Z',
-          type: null,
-          location: '/Users/choppy/Downloads/vcf',
-          status: 'unchanged',
-          md5: 'ec5b89dc49c433a9521a13928c032129'
-        },
-        {
-          name: 'schema.json',
-          size: 500,
-          isFile: true,
-          modified: 1585906529000,
-          created: '2020-04-03T09:35:29Z',
-          type: '.json',
-          location: '/Users/choppy/Downloads/vcf',
-          status: 'unchanged',
-          md5: 'ec5b89dc49c433a9521a13928c032129'
+          md5sum: 'ec5b89dc49c433a9521a13928c032120'
         }
       ],
-      versions: [
-        {
-          id: 'v0.1.0',
-          content: 'First Commit.'
-        },
-        {
-          id: 'v0.1.1',
-          content: 'Fix some bugs.'
-        },
-        {
-          id: 'v0.1.2',
-          content: 'Add some records.'
-        }
-      ],
+      versions: [],
       loading: false
     }
   },
@@ -252,9 +175,23 @@ export default {
     folderLockLogo,
     VueJsonPretty
   },
-  computed: {},
+  watch: {
+    dataVersion(newValue, oldValue) {
+      console.log('Data Version Changed: ', newValue, oldValue)
+      if (newValue !== 'Current Workspace') {
+        this.searchRepoFiles(this.repoName, newValue)
+      } else {
+        this.searchRepoFiles(this.repoName, this.latestVersion)
+      }
+    }
+  },
+  computed: {
+    repoName() {
+      return this.$route.params.repoName
+    }
+  },
   methods: {
-    ...mapActions('data_repo', ['GetRepoVersion']),
+    ...mapActions({ getRepoVersion: 'GetRepoVersion', getRepoFiles: 'GetRepoFiles' }),
     showModal() {
       if (this.latestVersion === this.dataVersion || this.dataVersion === 'Current Workspace') {
         this.visible = true
@@ -262,8 +199,20 @@ export default {
         this.$message.warning('You can make a new version based on the latest version.')
       }
     },
-    hideModal() {
-      this.visible = false
+    submitNewVersion() {
+      if (this.commentValue.length === 0) {
+        this.$message.warning("Comment can't be empty.")
+      } else {
+        // TODO: Create a new version
+        this.visible = false
+      }
+    },
+    formatDateTime(datetime) {
+      if (datetime) {
+        return moment(datetime).format('YYYY-MM-DD HH:mm')
+      } else {
+        return ''
+      }
     },
     uploadFiles() {},
     loadVersion(id) {
@@ -295,9 +244,51 @@ export default {
       }
     },
     searchGit(page, pageSize, status) {},
-    onLoadFile(name, ftype) {}
+    onLoadFile(name, ftype) {},
+    returnHome() {
+      console.log('Return Home')
+      this.$router.push({
+        name: 'data-repo-management'
+      })
+    },
+    searchRepoVersion(name) {
+      this.getRepoVersion(name)
+        .then(response => {
+          this.versions = response
+          this.totalVersions = this.versions.length
+          if (this.totalVersions > 0) {
+            this.latestVersion = this.versions[0].id
+            this.searchRepoFiles(name, this.latestVersion)
+          }
+          console.log('Search Repo Version: ', response)
+        })
+        .catch(error => {
+          console.log('Search Repo Version Error: ', error)
+        })
+    },
+    searchRepoFiles(name, version, subpath) {
+      this.loading = true
+      this.getRepoFiles({
+        name: name,
+        commitId: version,
+        subpath: subpath
+      })
+        .then(response => {
+          this.data = orderBy(response, 'isFile')
+          this.totalFiles = this.data.length
+          console.log('Search Repo Files: ', response)
+          this.loading = false
+        })
+        .catch(error => {
+          this.data = []
+          console.log('Search Repo Files Error: ', error)
+          this.loading = false
+        })
+    }
   },
-  created() {}
+  created() {
+    this.searchRepoVersion(this.repoName)
+  }
 }
 </script>
 
@@ -368,13 +359,28 @@ export default {
 
 .json-popover {
   margin-top: 10px;
-  max-width: 500px;
+  max-width: 280px;
+  min-width: 240px;
   max-height: 300px;
-  overflow: scroll;
   padding: 5px;
+  overflow: scroll;
 
   .ant-timeline-item {
     cursor: pointer;
+
+    .version-item {
+      .title {
+        font-size: 15px;
+        font-weight: 500;
+      }
+
+      .content {
+        font-size: 14px;
+        font-weight: 400;
+        color: #00000073;
+        margin-bottom: 0px;
+      }
+    }
   }
 
   .ant-timeline-item-last {

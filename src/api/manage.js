@@ -1,9 +1,10 @@
 import { axios } from '@/utils/request'
-import { initTServiceHost, initDataSeqHost, initSeqFlowHost } from '@/config/defaultSettings'
+import { initTServiceHost, initDataSeqHost, initSeqFlowHost, initTServiceAiHost } from '@/config/defaultSettings'
 
 const seqFlowHost = initSeqFlowHost()
 const tserviceHost = initTServiceHost()
 const dataSeqHost = initDataSeqHost()
+const tserviceAiHost = initTServiceAiHost()
 
 const api = {
   // Datains
@@ -25,7 +26,8 @@ const api = {
     root: tserviceHost,
     reportEndpoint: tserviceHost + '/api/report/',
     report: tserviceHost + '/api/reports',
-    chart: tserviceHost + '/api/chart'
+    chart: tserviceHost + '/api/chart',
+    pathologyAiModel: tserviceAiHost + 'api/tool/pathology-model'
   },
   // Data Commons
   dataCommons: {
@@ -185,17 +187,18 @@ export function getRepoStatus(name, subpath) {
   return axios({
     url: api.dataCommons.repo + '/' + name + '/status',
     method: 'get',
-    parameter: {
+    params: {
       subpath: subpath
     }
   })
 }
 
 export function getRepoFiles(name, commitId, subpath) {
+  console.log('getRepoFiles: ', name, commitId, subpath)
   return axios({
     url: api.dataCommons.repo + '/' + name + '/files',
     method: 'get',
-    parameter: {
+    params: {
       'commit-ish': commitId,
       subpath: subpath
     }
@@ -371,6 +374,20 @@ export function getWorkflow(workflowId) {
     url: api.seqFlow.workflow + '/' + workflowId,
     method: 'get',
     params: {}
+  })
+}
+
+// TService AI Model
+export function submitPathologyAiTask(filepath, modelType) {
+  return axios({
+    url: api.tservice.pathologyAiModel,
+    method: 'post',
+    data: {
+      filepath: filepath,
+      parameters: {
+        model_type: modelType
+      }
+    }
   })
 }
 

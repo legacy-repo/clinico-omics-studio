@@ -1,280 +1,275 @@
 <template>
-  <page-view title="Pathology AI Model" logo="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png">
-    <a-table class="pathology-model-container" :columns="columns" :data-source="data" @expand="loadModelResults">
-      <a slot="link" slot-scope="text, record" @click="redirectToRecord(record.file_path, defaultCollection)">{{
-        text
-      }}</a>
-      <a slot="operation" slot-scope="text" @click="showModal">Prediction</a>
-      <span slot="status" slot-scope="text">
-        <a-tag color="#87d068" v-if="text === 'Success'">
-          {{ text }}
-        </a-tag>
-        <a-tag color="#f50" v-if="text === 'Error'">
-          {{ text }}
-        </a-tag>
-        <a-tag color="#108ee9" v-if="text === 'Running'">
-          {{ text }}
-        </a-tag>
-      </span>
-      <template v-slot:expandedRowRender="record">
-        <a-table :columns="innerColumns" :data-source="innerData" :pagination="false" class="inner-table">
-          <span slot="status" slot-scope="text">
-            <a-tag color="#87d068" v-if="text === 'Success'">
-              {{ text }}
-            </a-tag>
-            <a-tag color="#f50" v-if="text === 'Error'">
-              {{ text }}
-            </a-tag>
-            <a-tag color="#108ee9" v-if="text === 'Running'">
-              {{ text }}
-            </a-tag>
-            <a-tag color="#d0d0d0" v-if="text === 'Unknown'">
-              {{ text }}
-            </a-tag>
-          </span>
-          <span slot="operation" slot-scope="text" class="table-operation">
-            <a @click="redirectToRecord(record.file_path, defaultCollection)" :disabled="text !== 'Success'">View</a>
-          </span>
-        </a-table>
-      </template>
-    </a-table>
-    <a-modal
-      class="prediction-modal"
-      title="Choose Model(s)"
-      :width="450"
-      :visible="visible"
-      @ok="prediction"
-      @cancel="hideModal"
-    >
-      <a-checkbox-group :options="modelOptions" />
-    </a-modal>
-  </page-view>
+  <a-row class="pathology-model-container">
+    <a-row class="title" v-if="title">{{ title }}</a-row>
+    <a-row class="content">
+      <a-tabs>
+        <a-tab-pane :key="index" v-for="(item, index) in data" :tab="item.model">
+          <a-row class="info">
+            <a-col :sm="24" :xs="24" :md="12" :lg="12" class="detail-info">
+              <a-row class="title" style="padding-left: 0px">
+                <span>Prediction</span>
+              </a-row>
+              <a-row v-for="(value, key) in item.patient" :key="key" class="content">
+                <a-col :sm="8" :xs="24" class="key">{{ formatKey(key) }}</a-col>
+                <a-tooltip placement="topLeft">
+                  <template slot="title">
+                    <span>{{ formatValue(value) }}</span>
+                  </template>
+                  <a-col :sm="16" :xs="24" class="value">{{ formatValue(value) }}</a-col>
+                </a-tooltip>
+              </a-row>
+            </a-col>
+            <a-col :sm="24" :xs="24" :md="12" :lg="12" class="data-info">
+              <a-row class="title">Annotation</a-row>
+              <a-row class="content">
+                <p>{{ item.annotation }}</p>
+              </a-row>
+            </a-col>
+          </a-row>
+          <a-row>
+            <a-icon v-show="imageViewerVisible" class="close-btn" @click="hideImageViewer" theme="filled" type="close-circle" />
+            <image-viewer ref="viewer" class="image-viewer" v-show="imageViewerVisible"></image-viewer>
+          </a-row>
+          <vue-good-table
+            class="vue-good-table"
+            :search-options="{ enabled: true }"
+            styleClass="vgt-table striped bordered condensed"
+            :columns="genColumns(item.patch)"
+            :rows="genRows(item.patch)"
+            v-if="item.patch.length !== 0"
+            :pagination-options="paginationOptions"
+            :line-numbers="true"
+          >
+            <template slot="table-row" slot-scope="props">
+              <a
+                @click="showPatchImage(props.formattedRow[props.column.field], genImages(item.patch))"
+                v-if="props.column.field.indexOf('name') >= 0"
+              >
+                {{ props.formattedRow[props.column.field] }}
+              </a>
+              <span v-else>{{ props.formattedRow[props.column.field] }}</span>
+            </template>
+          </vue-good-table>
+        </a-tab-pane>
+      </a-tabs>
+    </a-row>
+  </a-row>
 </template>
 
 <script>
-import { PageView } from '@/layouts'
-import { getCollections } from '@/api/manage'
-import PathologyMixins from '@/mixins/pathology'
-import map from 'lodash.map'
-import filter from 'lodash.filter'
+import v from 'voca'
+import { VueGoodTable } from 'vue-good-table'
+import sortBy from 'lodash.sortby'
 import orderBy from 'lodash.orderby'
-
-const columns = [
-  {
-    title: 'File Name',
-    dataIndex: 'file_name',
-    key: 'file_name',
-    align: 'left',
-    scopedSlots: { customRender: 'link' }
-  },
-  {
-    title: 'Patient ID',
-    dataIndex: 'patient_id',
-    key: 'patient_id',
-    align: 'center'
-  },
-  {
-    title: 'Disease Type',
-    dataIndex: 'disease_type',
-    key: 'disease_type',
-    align: 'center'
-  },
-  {
-    title: 'Primary Site',
-    dataIndex: 'primary_site',
-    key: 'primary_site',
-    align: 'center'
-  },
-  {
-    title: 'Data Format',
-    dataIndex: 'data_format',
-    key: 'data_format',
-    align: 'center'
-  },
-  {
-    title: 'Data Category',
-    dataIndex: 'data_category',
-    key: 'data_category',
-    align: 'center'
-  },
-  {
-    title: 'Status',
-    dataIndex: 'status',
-    key: 'status',
-    align: 'center',
-    scopedSlots: { customRender: 'status' }
-  },
-  {
-    title: 'Action',
-    key: 'operation',
-    scopedSlots: { customRender: 'operation' },
-    align: 'center'
-  }
-]
-
-const innerColumns = [
-  { title: 'Model Name', dataIndex: 'modelName', key: 'modelName' },
-  { title: 'Description', align: 'center', dataIndex: 'description', key: 'description' },
-  { title: 'Status', align: 'center', dataIndex: 'status', key: 'status', scopedSlots: { customRender: 'status' } },
-  { title: 'Report', key: 'action', dataIndex: 'status', scopedSlots: { customRender: 'operation' } }
-]
+import 'vue-good-table/dist/vue-good-table.css'
+import { ImageViewer } from '@/components'
+import { initBaseURL } from '@/config/defaultSettings'
+import map from 'lodash.map'
 
 export default {
   components: {
-    PageView
+    VueGoodTable,
+    ImageViewer
   },
-  mixins: [PathologyMixins],
+  props: {
+    title: {
+      type: String,
+      required: false,
+      default: ''
+    },
+    imageId: {
+      type: String,
+      required: true,
+      default: 'FUSCCTNBC001'
+    },
+    data: {
+      type: Array,
+      required: true
+    }
+  },
   data() {
     return {
-      columns,
-      innerColumns,
-      defaultCollection: 'tcoa',
-      data: [],
-      innerData: [
-        {
-          modelName: 'PIK3CA_Mutation',
-          description: 'PIK3CA Mutation Model',
-          status: 'Success'
-        },
-        {
-          modelName: 'BLIS',
-          description: 'Basal-like Immunosuppressed Model',
-          status: 'Success'
-        },
-        {
-          modelName: 'IM',
-          description: 'Immunomodulatory Model',
-          status: 'Success'
-        },
-        {
-          modelName: 'LAR',
-          description: 'Luminal Androgen Receptor (LAR) Model',
-          status: 'Success'
-        },
-        {
-          modelName: 'MES',
-          description: 'Mesenchymal (MES) Model',
-          status: 'Success'
-        }
-      ],
-      modelOptions: [
-        { label: 'PIK3CA Mutation Model', value: 'PIK3CA_Mutation' },
-        { label: 'Basal-like Immunosuppressed Model', value: 'BLIS' },
-        { label: 'Immunomodulatory Model', value: 'IM' },
-        { label: 'Luminal Androgen Receptor (LAR) Model', value: 'LAR' },
-        { label: 'Mesenchymal (MES) Model', value: 'MES' }
-      ],
-      visible: false
+      paginationOptions: {
+        enabled: true,
+        mode: 'records',
+        perPage: 10,
+        position: 'top',
+        perPageDropdown: [10, 20, 30, 50, 100],
+        dropdownAllowAll: false,
+        setCurrentPage: 1,
+        nextLabel: 'next',
+        prevLabel: 'prev',
+        rowsPerPageLabel: 'Rows per page',
+        ofLabel: 'of',
+        pageLabel: 'page', // for 'pages' mode
+        allLabel: 'All'
+      },
+      imageViewerVisible: false
     }
   },
   methods: {
-    getCollections,
-    redirectToRecord(recordId, project) {
-      this.$router.push({
-        name: 'record-viewer',
-        query: {
-          recordId: recordId,
-          project: project
+    showPatchImage(patchId, images) {
+      this.imageViewerVisible = true
+      const index = images.findIndex(image => {
+        return image.title === patchId
+      })
+
+      this.$refs.viewer[0].show(images.slice(index, index + 8), index)
+    },
+    hideImageViewer() {
+      this.imageViewerVisible = false
+    },
+    formatKey(key) {
+      const formattedKey = key.replace(/([A-Z])/g, ' $1')
+      return v.titleCase(formattedKey.split('_').join(' '))
+    },
+    isFloat(n) {
+      return Number(n) === n && n % 1 !== 0
+    },
+    formatValue(value) {
+      if (this.isFloat(value)) {
+        return value.toFixed(3)
+      } else {
+        return value
+      }
+    },
+    genImages(rows) {
+      return map(rows, row => {
+        return {
+          title: row.name,
+          source: `${initBaseURL()}/attachments/pathology/${this.imageId}_models/norm_patches/${row.name}`
         }
       })
     },
-    showModal() {
-      this.visible = true
+    sortFn(x, y, col, rowX, rowY) {
+      // x - row1 value for column
+      // y - row2 value for column
+      // col - column being sorted
+      // rowX - row object for row1
+      // rowY - row object for row2
+      return x < y ? -1 : x > y ? 1 : 0
     },
-    hideModal() {
-      this.visible = false
-    },
-    prediction(models) {},
-    getPathologyCollections() {
-      const parameter = {
-        page: 1,
-        per_page: 1000
-      }
+    genColumns(rows) {
+      var columns = []
+      if (rows.length > 0) {
+        const record = rows[0]
+        for (const [key, value] of Object.entries(record)) {
+          let config = {
+            // label: this.formatKey(key),
+            label: key,
+            field: key,
+            sortable: true,
+            width: '180px',
+            tdClass: 'text-center',
+            thClass: 'text-center'
+          }
 
-      const payload = {
-        type: 'rule',
-        query: {
-          variable: 'data_format',
-          operator: '=',
-          value: 'NDPI'
+          if (typeof record[key] === 'number') {
+            config['sortFn'] = this.sortFn
+          }
+
+          columns.push(config)
         }
       }
 
-      this.getCollections(this.defaultCollection, parameter, payload)
-        .then(response => {
-          if (response.total > 0) {
-            this.data = orderBy(response.data, 'file_name')
-          } else {
-            this.data = []
-          }
-        })
-        .catch(error => {
-          console.log('Get Pathology Collections: ', error)
-        })
+      return sortBy(columns, o => {
+        return o.label
+      })
     },
-    loadModelResults(expanded, record) {
-      if (expanded) {
-        const models = map(this.innerData, 'modelName')
-        this.batchLoad(record.patient_id, models)
-          .then(results => {
-            const pathologyPrediction = []
-            for (let idx in models) {
-              const modelName = models[idx]
-              const prediction = filter(this.innerData, prediction => {
-                return prediction.modelName === modelName
-              })
-
-              if (prediction.length > 0 && results[idx]) {
-                pathologyPrediction.push({
-                  modelName: modelName,
-                  description: prediction[0].description,
-                  status: 'Success'
-                })
-                console.log('Batch Load: ', results[idx])
-              } else {
-                pathologyPrediction.push({
-                  modelName: modelName,
-                  description: prediction[0].description,
-                  status: 'Unknown'
-                })                
-              }
-            }
-
-            this.innerData = pathologyPrediction
-            console.log('fetchModels: ', results, pathologyPrediction)
-          })
-          .catch(error => {
-            console.log('fetchModels Error: ', error)
-          })
-      }
+    genRows(rows) {
+      return orderBy(rows, ['score'], ['desc'])
     }
-  },
-  created() {
-    this.getPathologyCollections()
   }
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .pathology-model-container {
   width: 100%;
   height: 100%;
   background-color: #fff;
 
-  .ant-pagination {
-    margin-right: 5px;
+  .title {
+    font-size: 16px;
+    background-color: #fff;
+    color: #6b6262;
+    padding: 10px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom: 1px solid #d9d9d9;
   }
 
-  .inner-table {
-    margin: 0px !important;
-    border-radius: 5px;
-    border: 1px solid #d6d6d6;
+  .content {
+    padding: 0px 10px 10px;
+
+    .info {
+      display: flex;
+      flex-direction: row;
+      margin: 10px 0px;
+      border-radius: 5px;
+      border: 1px solid #d9d9d9;
+
+      .detail-info {
+        margin-right: 10px;
+      }
+
+      .detail-info,
+      .data-info {
+        width: calc(50% - 5px);
+        background-color: #fff;
+        font-size: 15px;
+        border-radius: 5px;
+
+        .key {
+          // font-weight: 450;
+        }
+
+        .value {
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+        }
+
+        .ant-row {
+          padding: 5px 10px;
+          margin: 5px 10px;
+        }
+
+        .content.ant-row:nth-child(even) {
+          // 利用css选择器，偶数列增加背景色
+          background: #e8f4ff;
+        }
+
+        .title {
+          padding: 10px 0px;
+          font-size: 16px;
+          margin-bottom: 10px;
+          color: #6b6262;
+          border-bottom: 1px solid #d9d9d9;
+        }
+      }
+    }
+  }
+
+  .close-btn {
+    z-index: 10;
+    font-size: 16px;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+  }
+
+  .image-viewer {
+    height: 450px;
+    margin-bottom: 10px;
   }
 }
+</style>
 
-.prediction-modal {
-  .ant-modal-body {
-    padding: 16px 24px;
+<style lang="less">
+.pathology-model-container {
+  .ant-tabs-bar {
+    margin: 0px;
   }
 }
 </style>

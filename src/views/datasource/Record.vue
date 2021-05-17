@@ -34,51 +34,6 @@
     <a-collapse v-model="activeKey">
       <a-collapse-panel key="file-viewer" :header="formatTitle(viewerType)">
         <file-viewer :instanceId="instanceId" :viewerType="viewerType" :baseUrl="baseUrl"></file-viewer>
-        <a-dropdown slot="extra" v-if="viewerType === 'PATHOLOGY'">
-          <a-menu slot="overlay" class="extra-actions">
-            <a-menu-item key="1">
-              <a-button type="link" disabled>
-                <a-icon style="font-size: 16px" theme="filled" type="play-circle" />
-                Left vs. Right
-              </a-button>
-            </a-menu-item>
-          </a-menu>
-          <a-button style="margin-left: 8px">
-            <a-icon type="block" style="font-size: 18px" />
-            Highlight Patches
-            <a-icon type="down" />
-          </a-button>
-        </a-dropdown>
-      </a-collapse-panel>
-      <a-collapse-panel key="pathology-model" v-if="viewerType === 'PATHOLOGY'" header="Pathology Model">
-        <pathology-model
-          v-if="pathologyPrediction.length > 0"
-          :data="pathologyPrediction"
-          :imageId="instanceId"
-        ></pathology-model>
-        <a-empty
-          v-else
-          style="display: flex; justify-content: center; flex-direction: column; align-items: center; height: 300px"
-        />
-        <a-dropdown slot="extra" v-if="isAdminGroup">
-          <a-menu slot="overlay" class="extra-actions">
-            <a-menu-item v-for="(status, model) in pathologyModels" :key="model">
-              <a-button type="link" @click="refresh(instanceId, model)">
-                <a-icon
-                  style="font-size: 16px"
-                  :theme="status === 'Success' ? 'filled' : 'outlined'"
-                  type="play-circle"
-                />
-                {{ model }}
-              </a-button>
-            </a-menu-item>
-          </a-menu>
-          <a-button style="margin-left: 8px" @click.stop="">
-            <a-icon type="codepen-circle" style="font-size: 18px" />
-            Prediction Models
-            <a-icon type="down" />
-          </a-button>
-        </a-dropdown>
       </a-collapse-panel>
     </a-collapse>
   </a-row>
@@ -89,16 +44,11 @@ import v from 'voca'
 import FileViewer from '@/components/FileViewer'
 import { mapActions, mapGetters } from 'vuex'
 import { initBaseURL } from '@/config/defaultSettings'
-import PathologyModel from './PathologyModel'
-import filter from 'lodash.filter'
-import PathologyMixins from '@/mixins/pathology'
 
 export default {
   components: {
-    FileViewer,
-    PathologyModel
+    FileViewer
   },
-  mixins: [PathologyMixins],
   props: {
     recordId: {
       type: String,
@@ -115,15 +65,7 @@ export default {
       baseUrl: '', // http://10.157.72.54/pathology or http://10.157.72.54/dicom
       viewerType: '', // PATHOLOGY or DICOM
       record: {},
-      pathologyPrediction: [],
-      activeKey: ['file-viewer', 'pathology-model'],
-      pathologyModels: {
-        PIK3CA_Mutation: 'Success',
-        BLIS: '',
-        IM: '',
-        LAR: '',
-        MES: ''
-      }
+      activeKey: ['file-viewer']
     }
   },
   computed: {
@@ -153,25 +95,6 @@ export default {
       getCollection: 'GetCollection'
     }),
     ...mapGetters(['userInfo']),
-    refresh(instanceId, modelName) {
-      this.refreshModel(instanceId, modelName)
-        .then(response => {
-          const results = filter(this.pathologyPrediction, prediction => {
-            return prediction.model === modelName
-          })
-
-          if (results.length === 0) {
-            this.pathologyPrediction.push(response)
-            this.pathologyModels[modelName] = 'Success'
-          } else {
-            this.pathologyModels[modelName] = ''
-          }
-        })
-        .catch(error => {
-          console.log('Refresh Model: ', error)
-          this.$message.warning('Not Ready...')
-        })
-    },
     formatTitle(viewerType) {
       if (viewerType === 'PATHOLOGY') {
         return 'Pathology Viewer'
@@ -200,30 +123,6 @@ export default {
           this.instanceId = this.record.patientId
           this.baseUrl = `${initBaseURL()}/attachments/pathology`
           this.viewerType = 'PATHOLOGY'
-          // Load the Model Result for Pathology
-          const models = Object.keys(this.pathologyModels)
-          this.batchLoad(this.instanceId, models)
-            .then(results => {
-              for (let idx in models) {
-                const modelName = models[idx]
-                const prediction = filter(this.pathologyPrediction, prediction => {
-                  return prediction.model === modelName
-                })
-
-                if (prediction.length === 0 && results[idx]) {
-                  this.pathologyModels[modelName] = 'Success'
-                  this.pathologyPrediction.push(results[idx])
-                  console.log('Batch Load: ', results[idx])
-                } else {
-                  this.pathologyModels[modelName] = ''
-                }
-              }
-
-              console.log('fetchModels: ', results)
-            })
-            .catch(error => {
-              console.log('fetchModels Error: ', error)
-            })
         } else if (this.record.dataFormat == 'NIFTI') {
           this.instanceId = this.record.patientId
           this.baseUrl = `${initBaseURL()}/attachments/dicom`
@@ -316,29 +215,6 @@ export default {
 
   .ant-collapse > .ant-collapse-item > .ant-collapse-header {
     font-size: 16px;
-  }
-
-  .ant-collapse-extra {
-    margin-top: -5px;
-  }
-
-  .ant-tabs-tab {
-    font-size: 16px;
-    font-weight: 800;
-  }
-
-  .ant-tabs-nav .ant-tabs-tab-active {
-    color: #ff0000;
-  }
-}
-
-.extra-actions {
-  .ant-dropdown-menu-item {
-    padding: 0px;
-  }
-
-  .ant-btn:hover {
-    border-color: #fff;
   }
 }
 </style>

@@ -1,8 +1,8 @@
 <template>
   <a-row class="file-viewer">
     <a-row class="title" v-if="title">{{ title }}</a-row>
-    <pathology :data="data" v-if="viewerType == 'PATHOLOGY'" :class="{'title-mode': title}"></pathology>
-    <dicom :data="data" v-else-if="viewerType == 'DICOM'" :class="{'title-mode': title}"></dicom>
+    <pathology :data="data" :key="instanceId" v-if="viewerType == 'PATHOLOGY'" :class="{'title-mode': title}"></pathology>
+    <dicom :data="data" :key="instanceId" v-else-if="viewerType == 'DICOM'" :class="{'title-mode': title}"></dicom>
     <a-empty v-else />
   </a-row>
 </template>

@@ -366,7 +366,7 @@ export const asyncRouterMap = [
             path: '/tool/pathology-ai-model',
             name: 'pathology-ai-model',
             hidden: true,
-            component: () => import('@/views/tools/PathologyModel'),
+            component: () => import('@/views/tools/PathologyModelList'),
             meta: { title: 'Pathology AI Model', keepAlive: true }
           },
           {

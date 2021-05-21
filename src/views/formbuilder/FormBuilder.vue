@@ -13,6 +13,7 @@
             <a-icon type="plus" />Select Files
           </a-button>
           <a-select
+            :allowClear="field.allowClear || true"
             :mode="field.multiple ? 'multiple' : 'default'"
             :placeholder="field.placeholder"
             :maxTagCount="3"
@@ -77,7 +78,7 @@
             :showSearch="true"
             :name="field.name"
             :mode="field.mode"
-            :allowClear="true"
+            :allowClear="field.allowClear || true"
             :data="field.options"
             :placeholder="field.placeholder"
             @change="onUpdate(field)"

@@ -35,6 +35,18 @@
       <a-collapse-panel key="file-viewer" :header="formatTitle(viewerType)">
         <file-viewer :instanceId="instanceId" :viewerType="viewerType" :baseUrl="baseUrl"></file-viewer>
       </a-collapse-panel>
+      <a-collapse-panel key="clinical-data" header="Clinical Data">
+        <data-portal v-if="instanceId" :id="instanceId + '-clinical-data'" :subpath="'/patient/clinicalData?' + parameters"></data-portal>
+        <a-empty v-else />
+      </a-collapse-panel>
+      <a-collapse-panel key="omics-data" header="Omics Data">
+        <data-portal v-if="instanceId" :id="instanceId + '-omics-data'" :subpath="'/patient/summary?' + parameters"></data-portal>
+        <a-empty v-else />
+      </a-collapse-panel>
+      <a-collapse-panel key="pathways" header="Pathways">
+        <data-portal v-if="instanceId" :id="instanceId + '-pathways'" :subpath="'/patient/pathways?' + parameters"></data-portal>
+        <a-empty v-else />
+      </a-collapse-panel>
     </a-collapse>
   </a-row>
 </template>
@@ -44,10 +56,12 @@ import v from 'voca'
 import FileViewer from '@/components/FileViewer'
 import { mapActions, mapGetters } from 'vuex'
 import { initBaseURL } from '@/config/defaultSettings'
+import DataPortal from '@/views/iframe/DataPortal'
 
 export default {
   components: {
-    FileViewer
+    FileViewer,
+    DataPortal
   },
   props: {
     recordId: {
@@ -65,10 +79,13 @@ export default {
       baseUrl: '', // http://10.157.72.54/pathology or http://10.157.72.54/dicom
       viewerType: '', // PATHOLOGY or DICOM
       record: {},
-      activeKey: ['file-viewer']
+      activeKey: ['file-viewer', 'omics-data', 'clinical-data', 'pathways']
     }
   },
   computed: {
+    parameters() {
+      return `caseId=${this.instanceId}&studyId=FUSCC_TNBC_2019&hideHeader=true&hideTabHeader=true`
+    },
     isAdminGroup() {
       return this.userInfo().groups.includes('admin')
     },
@@ -127,6 +144,8 @@ export default {
           this.instanceId = this.record.patientId
           this.baseUrl = `${initBaseURL()}/attachments/dicom`
           this.viewerType = 'DICOM'
+        } else if (this.record.patientId) {
+          this.instanceId = this.record.patientId
         }
       })
       .catch(error => {

@@ -1,5 +1,5 @@
 <template>
-  <full-frame :src="src" :onloadfn="onload"></full-frame>
+  <full-frame :id="id" :src="url" :onloadfn="onload"></full-frame>
 </template>
 
 <script>
@@ -10,12 +10,41 @@ export default {
   components: {
     FullFrame
   },
+  props: {
+    id: {
+      type: String,
+      required: false,
+      default: Math.random()
+        .toString(36)
+        .slice(-8)
+    },
+    subpath: {
+      type: String,
+      required: false,
+      default: undefined
+    }
+  },
+  computed: {
+    url() {
+      return this.joinPath(this.src, this.subpath)
+    }
+  },
   data() {
     return {
-      src: 'http://data.3steps.cn',
+      // src: 'http://data.3steps.cn',
+      src: 'http://47.117.3.66/cdataportal',
       onload: function(id) {
         console.log('DataPortal: ', id)
-        document.getElementById(id).contentWindow.postMessage({ hideHeader: true }, 'http://data.3steps.cn')
+        document.getElementById(id).contentWindow.postMessage({ hideHeader: true }, 'http://47.117.3.66/')
+      }
+    }
+  },
+  methods: {
+    joinPath(root, subpath) {
+      if (subpath) {
+        return root.replace(/\/$/g, '') + subpath
+      } else {
+        return root + '?hideHeader=true'
       }
     }
   }

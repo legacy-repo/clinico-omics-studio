@@ -103,7 +103,8 @@ export default {
             },
             {
               title: 'Choppy Data Portal',
-              src: 'http://data.3steps.cn',
+              // src: 'http://data.3steps.cn',
+              src: 'http://47.117.3.66/cdataportal',  // Fudan Data Portal v3.6.14
               type: 'link',
               target: '_blank'
             }

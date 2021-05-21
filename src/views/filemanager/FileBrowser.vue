@@ -277,6 +277,7 @@ import filter from 'lodash.filter'
 import flatMap from 'lodash.flatmap'
 import uniqBy from 'lodash.uniqby'
 import FileSaver from 'file-saver'
+import path from 'path'
 
 import Vue from 'vue'
 import Contextmenu from 'vue-contextmenujs'
@@ -413,26 +414,12 @@ export default {
           this.selectedRowKeys = selectedRowKeys
         },
         onSelect: (record, selected, selectedRows) => {
-          const selectedItems = this.filterByType(selectedRows, this.filterType)
-
-          if (selectedItems.length !== selectedRows.length) {
-            if (this.filterType === '/') {
-              this.$message.warn('Only support directory.')
-            } else {
-              this.$message.warn('Only support ' + this.filterType + ' files')
-            }
-
-            this.selectedRowKeys = this.getFilePath(selectedItems)
-          }
-
-          this.selectedRows = this.selectedRows.concat(selectedItems)
-          this.selectedRows = uniqBy(this.filterByArray(this.selectedRows, this.selectedRowKeys), 'path')
-
-          this.$emit('file-select', this.selectedRows)
-          console.log('File selection: ', selectedRows, selectedItems, this.selectedRows, this.selectedRowKeys)
+          console.log("onSelect", record, selected, selectedRows)
+          this.filterAndSelect(selectedRows)
         },
         onSelectAll: (selected, selectedRows, changeRows) => {
-          console.log(selected, selectedRows, changeRows)
+          console.log("onSelectAll", selected, selectedRows, changeRows)
+          this.filterAndSelect(selectedRows)
         },
         getCheckboxProps: record => ({
           props: {
@@ -523,6 +510,25 @@ export default {
       getObjectMeta: 'GetObjectMeta',
       uploadObject: 'UploadObject'
     }),
+    filterAndSelect(selectedRows) {
+      const selectedItems = this.filterByType(selectedRows, this.filterType)
+
+      if (selectedItems.length !== selectedRows.length) {
+        if (this.filterType === '/') {
+          this.$message.warn('Only support directory.')
+        } else {
+          this.$message.warn('Only support ' + this.filterType + ' files')
+        }
+
+        this.selectedRowKeys = this.getFilePath(selectedItems)
+      }
+
+      this.selectedRows = this.selectedRows.concat(selectedItems)
+      this.selectedRows = uniqBy(this.filterByArray(this.selectedRows, this.selectedRowKeys), 'path')
+
+      this.$emit('file-select', this.selectedRows)
+      console.log('File selection: ', selectedRows, selectedItems, this.selectedRows, this.selectedRowKeys)
+    },
     translateName(item) {
       if (item === 'oss') {
         return 'Aliyun'
@@ -1218,12 +1224,19 @@ export default {
       })
     },
     selected: function() {
+      // TODO: More robust way?
       this.resetSelections()
-      // Redirect to the first filepath
       if (this.selected.length > 0) {
-        // We need to redirect the parent directory but the directory
-        const self = this.trimSlash(this.selected[0])
-        this.onSearch(self)
+        // Redirect to the first filepath
+        if (this.selected.length === 1) {
+          // We need to redirect the parent directory but the directory
+          const self = this.trimSlash(this.selected[0])
+          this.onSearch(self)
+        } else {
+          // Need to add / when the path is a directory
+          const self = path.dirname(this.selected[0]) + '/'
+          this.onSearch(self)        
+        }
       }
     }
   },

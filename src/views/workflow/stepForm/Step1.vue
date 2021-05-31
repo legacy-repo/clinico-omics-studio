@@ -37,7 +37,7 @@
           name="createdTime"
           style="width: 100%"
           show-time
-          format="YYYY-MM-DD HH:mm:ss"
+          format="YYYY-MM-DD HH:mm:ss"  
         />
       </a-form-model-item>
       <a-form-model-item
@@ -159,7 +159,8 @@ export default {
     loadLocalData () {
       const localData = JSON.parse(localStorage.getItem('datains_PROJECT_DATA'))
       if (localData) {
-        localData.createdTime = moment(localData.createdTime)
+        // localData.createdTime = moment(localData.createdTime)
+        localData.createdTime = moment()  // Keep the createdTime with now().
         return localData
       } else {
         return {

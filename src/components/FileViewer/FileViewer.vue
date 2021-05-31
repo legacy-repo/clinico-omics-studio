@@ -1,8 +1,8 @@
 <template>
   <a-row class="file-viewer">
     <a-row class="title" v-if="title">{{ title }}</a-row>
-    <pathology :data="data" :key="instanceId" v-if="viewerType == 'PATHOLOGY'" :class="{'title-mode': title}"></pathology>
-    <dicom :data="data" :key="instanceId" v-else-if="viewerType == 'DICOM'" :class="{'title-mode': title}"></dicom>
+    <pathology :data="data" :key="instanceId" v-if="viewerType == 'PATHOLOGY' && checkUrl(targetUrl)" :class="{'title-mode': title}"></pathology>
+    <dicom :data="data" :key="instanceId" v-else-if="viewerType == 'DICOM' && checkUrl(targetUrl)" :class="{'title-mode': title}"></dicom>
     <a-empty v-else />
   </a-row>
 </template>
@@ -43,6 +43,15 @@ export default {
     return {}
   },
   computed: {
+    targetUrl() {
+      if (this.viewerType == 'PATHOLOGY') {
+        return `${this.baseUrl}/${this.instanceId}.dzi`
+      } else if (this.viewerType == 'DICOM') {
+        return `${this.baseUrl}`
+      } else {
+        return ''
+      }
+    },
     data() {
       if (this.viewerType == 'PATHOLOGY') {
         return {
@@ -61,7 +70,15 @@ export default {
       }
     }
   },
-  methods: {},
+  methods: {
+    checkUrl(url){
+      // code for IE7+, Firefox, Chrome, Opera, Safari
+      var http = new XMLHttpRequest();
+      http.open('HEAD', url, false);
+      http.send();
+      return http.status !== 404;
+    }
+  },
   created() {}
 }
 </script>

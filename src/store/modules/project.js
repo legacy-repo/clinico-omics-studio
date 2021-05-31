@@ -33,7 +33,8 @@ const formatDateTime = function(datetime) {
 }
 
 const timeToInt = function(datetime) {
-  return moment(datetime, 'YYYY-MM-DD HH:mm:ss').valueOf()
+  // TODO: DataPicker can't save datetime with correct timezone
+  return moment(datetime, 'YYYY-MM-DD HH:mm:ss').utc(8).valueOf()
 }
 
 const formatRecords = function(records) {

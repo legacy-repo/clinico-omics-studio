@@ -89,7 +89,7 @@ export default {
     ...mapState('preqc', ['items', 'columns'])
   },
   watch: {
-    links(oldValue, newValue) {
+    links(newValue, oldValue) {
       console.log('Links Updated: ', oldValue, newValue)
       this.validateSync(this.links)
     }

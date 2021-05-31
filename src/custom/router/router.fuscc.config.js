@@ -10,22 +10,36 @@ export const asyncRouterMap = [
     name: 'index',
     component: BasicLayout,
     meta: { title: 'Home' },
-    redirect: '/dashboard',
+    redirect: '/data/tnbc-data-commons',
     children: [
       // Dashboard
       {
         path: '/dashboard',
         name: 'dashboard',
-        hidden: false,
-        component: () => import('@/views/dashboard/Workplace'),
+        hidden: true,
+        component: () => import('@/views/datasource/FilterPanel'),
         meta: { title: 'Dashboard', icon: 'dashboard', permission: ['dashboard'], keepAlive: true }
+      },
+      {
+        path: '/data/tnbc-data-commons',
+        name: 'tnbc-data-commons',
+        hidden: false,
+        component: () => import('@/views/datasource/FilterPanel'),
+        meta: { title: 'Data', icon: 'dashboard', permission: ['dashboard'], keepAlive: true }
+      },
+      {
+        path: '/pathology-ai-model',
+        name: 'tnbc-pathology-ai-model',
+        hidden: false,
+        component: () => import('@/views/tools/PathologyModel/PathologyModelList'),
+        meta: { title: 'Workflow', keepAlive: true }
       },
 
       // Data (Level 0 - 4)
       {
         path: '/data',
         name: 'data',
-        hidden: false,
+        hidden: true,
         redirect: '/data/omics-data-commons',
         component: RouteView,
         meta: { title: 'Data', icon: 'deployment-unit', keepAlive: true },
@@ -33,13 +47,13 @@ export const asyncRouterMap = [
           {
             path: '/data/data-model',
             name: 'metadata-definition',
-            hidden: false,
+            hidden: true,
             meta: { title: 'Metadata Definition', icon: 'info-circle', disabled: false },
             children: [
               {
                 path: '/data/data-model/gdc',
                 name: 'genomics-data-commons',
-                hidden: false,
+                hidden: true,
                 redirect: {
                   name: 'embeded-frame',
                   query: {
@@ -51,7 +65,7 @@ export const asyncRouterMap = [
               {
                 path: '/data/data-model/quartet',
                 name: 'chinese-quartet',
-                hidden: false,
+                hidden: true,
                 redirect: {
                   name: 'embeded-frame',
                   query: {
@@ -63,7 +77,7 @@ export const asyncRouterMap = [
               {
                 path: '/data/data-model/tcoa',
                 name: 'The Cancer Omics Atlas',
-                hidden: false,
+                hidden: true,
                 redirect: {
                   name: 'embeded-frame',
                   query: {
@@ -75,7 +89,7 @@ export const asyncRouterMap = [
               {
                 path: '/data/data-model/chiglitazar',
                 name: 'Chiglitazar',
-                hidden: false,
+                hidden: true,
                 redirect: {
                   name: 'embeded-frame',
                   query: {
@@ -89,14 +103,14 @@ export const asyncRouterMap = [
           {
             path: '/data/repo-management',
             name: 'repo-management',
-            hidden: false,
+            hidden: true,
             component: () => import('@/views/datarepo/DataRepoList'),
             meta: { title: 'Metadata Collaboration', icon: 'history', permission: ['table'], keepAlive: true }
           },
           {
             path: 'http://metabase.3steps.cn',
             name: 'metadata-quality-review',
-            hidden: false,
+            hidden: true,
             meta: { title: 'Metadata Quality Review', icon: 'codepen-circle', target: '_blank' }
           },
           {
@@ -121,7 +135,7 @@ export const asyncRouterMap = [
           {
             path: '/data/data-portal',
             name: 'portal',
-            hidden: false,
+            hidden: true,
             component: () => import('@/views/iframe/DataPortal'),
             meta: { title: 'Omics Data Portal', icon: 'file-search', keepAlive: true }
           },
@@ -140,6 +154,7 @@ export const asyncRouterMap = [
       {
         path: '/seq-flow',
         name: 'seq-flow',
+        hidden: true,
         component: RouteView,
         redirect: '/seq-flow/submit',
         meta: { title: 'Workflow', icon: 'project', permission: ['table'], keepAlive: true },
@@ -154,14 +169,14 @@ export const asyncRouterMap = [
           {
             path: '/seq-flow/app-store',
             name: 'appstore',
-            hidden: false,
+            hidden: true,
             component: () => import('@/views/appstore/FilterPanel'),
             meta: { title: 'Apps & Tools', icon: 'appstore', permission: ['table'], keepAlive: true }
           },
           {
             path: '/seq-flow/file-manager',
             name: 'file-manager',
-            hidden: false,
+            hidden: true,
             component: () => import('@/views/filemanager/FileBrowser'),
             props: route => ({
               path: route.query.path,
@@ -195,6 +210,7 @@ export const asyncRouterMap = [
           },
           {
             path: '/seq-flow/project-management',
+            hidden: true,
             name: 'project-management',
             hideChildrenInMenu: true, // 强制显示 MenuItem 而不是 SubMenu
             component: () => import('@/views/workflow/ProjectManagement'),
@@ -207,6 +223,7 @@ export const asyncRouterMap = [
       {
         path: '/report',
         name: 'report',
+        hidden: true,
         component: RouteView,
         redirect: '/report/report-management',
         meta: { title: 'Report', icon: 'dot-chart', keepAlive: true },

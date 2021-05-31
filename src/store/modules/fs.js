@@ -175,8 +175,11 @@ const fs = {
         })
           .then(response => {
             console.log('Get Object Meta: ', parameter, response)
-
-            resolve(formatMeta(response))
+            if (typeof response.meta !== 'object') {
+              reject('Object does not exist')
+            } else {
+              resolve(formatMeta(response))
+            }
           })
           .catch(error => {
             reject(error)

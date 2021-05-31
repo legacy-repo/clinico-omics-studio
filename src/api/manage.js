@@ -27,7 +27,7 @@ const api = {
     reportEndpoint: tserviceHost + '/api/report/',
     report: tserviceHost + '/api/reports',
     chart: tserviceHost + '/api/chart',
-    pathologyAiModel: tserviceAiHost + 'api/tool/pathology-model'
+    pathologyAiModel: tserviceAiHost + '/api/tool/pathology-model'
   },
   // Data Commons
   dataCommons: {
@@ -378,14 +378,15 @@ export function getWorkflow(workflowId) {
 }
 
 // TService AI Model
-export function submitPathologyAiTask(filepath, modelType) {
+export function submitPathologyAiTask(filepath, modelType, payload) {
   return axios({
     url: api.tservice.pathologyAiModel,
     method: 'post',
     data: {
       filepath: filepath,
       parameters: {
-        model_type: modelType
+        model_type: modelType,
+        description: payload
       }
     }
   })

@@ -99,11 +99,7 @@
         </template>
         <!-- Radio -->
         <template v-if="field.tmplType === 'radio'">
-          <a-radio-group
-            v-decorator="[field.model, field.config]"
-            :options="field.options"
-            @change="onUpdate(field)"
-          />
+          <a-radio-group v-decorator="[field.model, field.config]" :options="field.options" @change="onUpdate(field)" />
         </template>
         <!-- Actions -->
         <template v-if="field.tmplType === 'actions'">
@@ -114,7 +110,8 @@
               :type="i.buttonType"
               @click="onAction(i)"
               class="form-btn"
-            >{{ i.buttonLabel }}</a-button>
+              >{{ i.buttonLabel }}</a-button
+            >
           </div>
         </template>
       </a-form-item>
@@ -159,7 +156,8 @@ export default {
       multiple: true,
       files: [],
       selected: [],
-      options: {}
+      options: {},
+      autoGenMode: true
     }
   },
   created() {
@@ -190,7 +188,7 @@ export default {
     },
     resetFileBrowser() {
       this.fileManagerActive = false
-      this.selected = []      
+      this.selected = []
     },
     cancelSelectFiles() {
       this.resetFileBrowser()
@@ -234,6 +232,14 @@ export default {
       return sampleIds
     },
     onUpdate(field) {
+      if (field.registerMethod && field.registerMethod.arguments && field.registerMethod.body) {
+        const registerMethod = field.registerMethod
+        // {"registerMethod": {"arguments": "model", "body": "return a*b+c;"}}
+        const func = new Function(registerMethod.arguments, registerMethod.body)
+        func(this.clonedModel)
+      }
+
+      console.log('onUpdate: ', field, this.clonedModel)
       this.$emit('update', this.clonedModel)
     },
     onAction(e) {

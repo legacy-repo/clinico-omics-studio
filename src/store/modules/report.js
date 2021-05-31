@@ -25,6 +25,14 @@ const formatStatus = function(record) {
   return status
 }
 
+const formatTaskStatus = function(status) {
+  if (status === 'Finished') {
+    return 'Success'
+  } else if (status === 'Started') {
+    return 'Running'
+  }
+}
+
 const formatDateTime = function(datetime) {
   if (datetime && datetime > 0) {
     return moment(datetime)
@@ -43,14 +51,15 @@ const formatRecords = function(records) {
       title: record.report_name,
       projectId: record.projectId,
       description: record.description,
-      script: record.script,
+      appName: record.app_name,
       reportType: record.report_type,
       reportUrl: initSeqFlowHost() + record.report_path,
       startedAt: formatDateTime(record.started_time),
       finishedAt: formatDateTime(record.finished_time),
       checkedAt: formatDateTime(record.checked_time),
       archivedAt: formatDateTime(record.archived_time),
-      status: formatStatus(record)
+      status: formatStatus(record),
+      taskStatus: formatTaskStatus(record.status)
     })
   }
 

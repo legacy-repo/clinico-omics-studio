@@ -408,7 +408,7 @@ const data = {
           })
       })
     },
-    GetCollection({ state }, { filePath, defaultCollection }) {
+    GetCollection({ state }, { key, value, defaultCollection }) {
       const parameter = {
         page: 1,
         per_page: 10
@@ -417,9 +417,9 @@ const data = {
       const payload = {
         type: 'rule',
         query: {
-          variable: 'file_path',
+          variable: key,
           operator: '=',
-          value: filePath
+          value: value
         }
       }
 

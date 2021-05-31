@@ -133,7 +133,7 @@ export default {
     }
   },
   created() {
-    this.getCollection({ filePath: this.recordId, defaultCollection: this.project })
+    this.getCollection({ key: 'file_path', value: this.recordId, defaultCollection: this.project })
       .then(response => {
         this.record = response
         if (this.record.dataFormat == 'NDPI') {

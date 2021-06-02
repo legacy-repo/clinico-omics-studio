@@ -165,6 +165,11 @@ export default {
 
 <style lang="less">
 .report-list {
+  .ant-card-body {
+    height: calc(100% - 65px);
+    overflow: scroll;
+  }
+
   .ant-list-item {
     flex-wrap: wrap;
   }

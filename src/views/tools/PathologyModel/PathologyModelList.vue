@@ -292,7 +292,7 @@ export default {
           this.redirectToRecord(response.path)
         })
         .catch(error => {
-          this.$message.warn('No such record in our database.')
+          this.$message.warn('No such record in Omics Data Commons.')
           console.log(`No Such Record(${error}): `)
         })
     },
@@ -358,7 +358,7 @@ export default {
 <style lang="less">
 .pathology-model-container {
   width: 100%;
-  height: 100%;
+  height: 81vh;
   background-color: #fff;
 
   .ant-pagination {

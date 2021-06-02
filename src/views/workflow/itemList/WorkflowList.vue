@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <a-card style="margin-top: 10px" :bordered="false">
+  <div class="workflow-list">
+    <a-card style="margin-top: 10px; height: 70vh;" :bordered="false">
       <div slot="title">
         <a-tag color="#87d068">{{ $t('workflow.itemList.workflowList.numberOfJobs') }}: {{ data.length }}</a-tag>
       </div>
@@ -380,83 +380,92 @@ export default {
 <style lang="less" scoped>
 @import (reference) '~@/components/index.less';
 
-.list-content-item {
-  color: rgba(0, 0, 0, 0.45);
-  display: inline-block;
-  vertical-align: middle;
-  font-size: 14px;
-  margin-left: 40px;
-  span {
-    line-height: 20px;
-  }
-  p {
-    margin-top: 4px;
-    margin-bottom: 0;
-    line-height: 22px;
-  }
-}
-
-.job-list {
-  .ant-list-item-meta-title > a {
-    color: @primary-color;
-  }
-}
-
-.json-popover {
-  margin-top: 10px;
-  max-width: 500px;
-  max-height: 300px;
-  overflow: scroll;
-}
-
-.json-popover::-webkit-scrollbar {
-  width: 0 !important;
-}
-
-.workflow-box {
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background: rgba(0, 0, 0, 0.3);
-  z-index: 10;
-
-  .log-container {
-    position: absolute;
-    top: 150px;
-    left: 10%;
-    width: 80%;
-    margin: 0px auto;
-    z-index: 11;
-    padding: 20px 30px 30px;
-    border-radius: 5px;
-    min-height: 300px;
+.workflow-list {
+  .list-content-item {
+    color: rgba(0, 0, 0, 0.45);
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 14px;
+    margin-left: 40px;
+    span {
+      line-height: 20px;
+    }
+    p {
+      margin-top: 4px;
+      margin-bottom: 0;
+      line-height: 22px;
+    }
   }
 
-  .results-container {
-    position: absolute;
-    top: 100px;
-    left: 10%;
-    width: 80%;
-    margin: 0px auto;
-    z-index: 11;
-    padding: 0px;
-    border-radius: 5px;
+  .job-list {
+    .ant-list-item-meta-title > a {
+      color: @primary-color;
+    }
   }
-}
 
-.config-logo {
-  font-size: 16px;
-  padding: 4px;
-  width: 60px;
-  height: 60px;
-  vertical-align: middle;
+  .json-popover {
+    margin-top: 10px;
+    max-width: 500px;
+    max-height: 300px;
+    overflow: scroll;
+  }
+
+  .json-popover::-webkit-scrollbar {
+    width: 0 !important;
+  }
+
+  .workflow-box {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 10;
+
+    .log-container {
+      position: absolute;
+      top: 150px;
+      left: 10%;
+      width: 80%;
+      margin: 0px auto;
+      z-index: 11;
+      padding: 20px 30px 30px;
+      border-radius: 5px;
+      min-height: 300px;
+    }
+
+    .results-container {
+      position: absolute;
+      top: 100px;
+      left: 10%;
+      width: 80%;
+      margin: 0px auto;
+      z-index: 11;
+      padding: 0px;
+      border-radius: 5px;
+    }
+  }
+
+  .config-logo {
+    font-size: 16px;
+    padding: 4px;
+    width: 60px;
+    height: 60px;
+    vertical-align: middle;
+  }
 }
 </style>
 
 <style lang="less">
 .vjs-tree .vjs-value__string:hover {
   cursor: pointer;
+}
+
+.workflow-list {
+  .ant-card-body {
+    height: calc(100% - 65px);
+    overflow: scroll;
+  }
 }
 </style>

@@ -111,10 +111,10 @@
         </a-list-item>
       </a-list>
     </a-card>
-    <a-row class="box" v-if="logContainerActive">
+    <a-row class="workflow-box" v-if="logContainerActive">
       <log-container :workflowId="workflowId" :title="workflowName" @close="hideLogContainer()"></log-container>
     </a-row>
-    <a-row class="box" v-if="resultsActive">
+    <a-row class="workflow-box" v-if="resultsActive">
       <results :workflowRoot="workflowRoot" :data="workflowResults" @close="hideResultsContainer()"></results>
     </a-row>
   </div>
@@ -413,7 +413,7 @@ export default {
   width: 0 !important;
 }
 
-.box {
+.workflow-box {
   width: 100%;
   height: 100%;
   position: fixed;

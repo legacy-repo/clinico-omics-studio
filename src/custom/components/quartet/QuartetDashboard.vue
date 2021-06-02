@@ -122,7 +122,7 @@ export default {
   height: 100%;
   width: 100%;
   background-color: #fff;
-  min-height: 650px;
+  min-height: 90vh;
 
   .right {
     display: flex;

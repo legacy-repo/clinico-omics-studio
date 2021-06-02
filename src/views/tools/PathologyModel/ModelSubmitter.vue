@@ -7,7 +7,8 @@
         :remove="handleRemove" 
         :multiple="true"
         :beforeUpload="beforeUpload"
-        :customRequest="uploadFile">
+        :customRequest="uploadFile"
+        @change="handleChange">
         <p class="ant-upload-drag-icon">
           <a-icon type="inbox" />
         </p>
@@ -196,6 +197,16 @@ export default {
       makeUploadUrl: 'MakeUploadUrl',
       getObjectMeta: 'GetObjectMeta'
     }),
+    handleChange(info) {
+      if (info.file.status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === 'done') {
+        this.$message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === 'error') {
+        this.$message.error(`${info.file.name} file upload failed.`);
+      }
+    },
     reset() {
       this.fileList = []
       this.uploadSuccessList = []

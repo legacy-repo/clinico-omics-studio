@@ -3,7 +3,7 @@
     <a-card
       :bordered="false"
       :class="{ standalone: standalone }"
-      :style="[standalone ? { 'height': (height + 100) + 'px' } : { 'height': 'unset' }]"
+      :style="[standalone ? { 'height': '91vh' } : { 'height': 'unset' }]"
     >
       <a-col slot="title" :lg="12" :md="12" :sm="24" :xs="24">
         <a-select :value="service" style="width: 80px" @change="selectService">

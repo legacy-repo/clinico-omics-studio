@@ -428,6 +428,8 @@ const data = {
           .then(response => {
             if (response.total > 0) {
               resolve(formatRecord(response.data[0]))
+            } else {
+              reject('No such record')
             }
           })
           .catch(error => {

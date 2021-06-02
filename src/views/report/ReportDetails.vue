@@ -141,7 +141,7 @@ export default {
 
 <style lang="less" scoped>
 .embeded-frame {
-  height: 680px;
+  height: 92vh;
 }
 
 .report {

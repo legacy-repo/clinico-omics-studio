@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "publish-code": "vue-cli-service build && ossutilmac64 cp -r -u ./dist/ oss://datains-frontend/ -c ~/.ossutilconfig-tgmc",
+    "publish-fuscc": "vue-cli-service build && ossutilmac64 cp -r -u ./dist/ oss://fuscc-pathology-ai-model/ -c ~/.ossutilconfig-tgmc",
     "publish-data": "ossutilmac64 cp -r -u ./data oss://nordata-cdn/choppy -c ~/.ossutilconfig-tgmc",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",

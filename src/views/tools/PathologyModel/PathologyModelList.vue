@@ -163,7 +163,7 @@ const columns = [
     key: 'status',
     align: 'center',
     scopedSlots: { customRender: 'status' },
-    visible: true,
+    visible: false,
   },
   {
     title: 'Action',

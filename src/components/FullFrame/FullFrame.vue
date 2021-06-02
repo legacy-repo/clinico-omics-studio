@@ -82,7 +82,7 @@ export default {
   width: 100%;
   height: 100%;
   display: flex;
-  min-height: 650px;
+  min-height: 90vh;
   justify-content: center;
   align-items: center;
 }
@@ -91,7 +91,7 @@ export default {
   // padding: 10px;
   width: 100%;
   height: 100%;
-  min-height: 630px;
+  min-height: 92vh;
   // overflow: hidden;
   border-radius: 5px;
 }

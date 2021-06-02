@@ -329,7 +329,7 @@ export default {
   margin-right: 0px !important;
 
   .left {
-    height: 650px;
+    height: 91vh;
 
     .ant-tabs {
       height: 100%;
@@ -360,7 +360,7 @@ export default {
     border-radius: 4px;
     border: 1px solid #d9d9d9;
     background-color: #fff;
-    min-height: 650px;
+    height: 91vh;
 
     .graph-tab {
       h4 {

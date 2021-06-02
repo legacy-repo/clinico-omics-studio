@@ -1,6 +1,6 @@
 <template>
   <div class="project-list">
-    <a-card style="margin-top: 10px" :bordered="false">
+    <a-card style="margin-top: 10px; height: 81vh;" :bordered="false">
       <a-badge slot="extra" showZero :count="pagination.total" :numberStyle="{ backgroundColor: '#52c41a' }" />
       <div slot="title">
         <a-radio-group @change="onClickRadioBtn" defaultValue="total" :value="radioGroupValue">

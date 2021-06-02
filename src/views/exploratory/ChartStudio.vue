@@ -294,7 +294,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@height: 650px;
+@height: 91vh;
 @border-radius: 5px;
 
 .fullscreen {

@@ -84,7 +84,7 @@
                   <a @click="redirectToFS(item.title, item.workflowId, 'results')">{{ $t('workflow.itemList.workflowList.results') }}</a>
                 </a-menu-item>
                 <a-menu-item v-if="item.status == 'exception'">
-                  <a-popover title="Notice" trigger="hover" placement="bottomRight">
+                  <a-popover title="Notice" trigger="hover" placement="leftBottom">
                     <span
                       slot="content"
                       style="font-size: 16px; margin-bottom: 10px; display: block;"
@@ -144,10 +144,10 @@ export default {
       searchStr: '',
       data: [],
       pagination: {
-        pageSizeOptions: ['5', '10', '20', '30', '40', '50'],
+        pageSizeOptions: ['20', '30', '40', '50', '100', '150'],
         showSizeChanger: true,
         showQuickJumper: true,
-        pageSize: 5,
+        pageSize: 20,
         page: 1,
         total: 0,
         current: 1,

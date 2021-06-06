@@ -80,7 +80,7 @@ export default {
 
 <style lang="less" scoped>
 .step-form {
-  min-height: 600px;
+  min-height: 91vh;
 
   .steps {
     max-width: 750px;

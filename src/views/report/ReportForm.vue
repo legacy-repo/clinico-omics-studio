@@ -305,7 +305,7 @@ export default {
     formatParameters(data) {
       const parameters = {}
       data.forEach(record => {
-        parameters[record[0]] = record[1]
+        parameters[record.key] = record.value
       })
 
       console.log('formatParameters: ', data, parameters)
@@ -348,29 +348,37 @@ export default {
             parameters: this.formatParameters(this.parametersBody),
             filepath: values.filepath,
             name: values['reportName'],
-            description: values['description'],
-            project_id: values['projectId']
+            description: values['description']
           }
 
-          console.log("Validated messages: ", validate(payload, this.schema))
-
-          const data = {
-            payload: payload,
-            reportName: values['reportTool']
+          const projectId = values['projectId']
+          if (projectId) {
+            payload['project_id'] = projectId
           }
 
-          console.log('Received values of form: ', data)
+          const validateStatus = validate(payload, this.schema)
+          if (validateStatus.valid) {
+            const data = {
+              payload: payload,
+              reportName: values['reportTool']
+            }
 
-          this.submitReport(values)
-            .then(result => {
-              console.log('postReport: ', result)
-              this.$message.success('Create Report Successfully.')
-              this.$emit('finished', result)
-            })
-            .catch(error => {
-              console.log('postReport: ', error)
-              this.$message.error('Unkonwn Error, Please Check Your Input.')
-            })
+            console.log('Received values of form: ', data)
+
+            this.submitReport(data)
+              .then(result => {
+                console.log('postReport: ', result)
+                this.$message.success('Create Report Successfully.')
+                this.$emit('finished', result)
+              })
+              .catch(error => {
+                console.log('postReport: ', error)
+                this.$message.error('Unkonwn Error, Please Check Your Input.')
+              })
+          } else {
+            console.log("Validated messages: ", )
+            this.$message.error('Not valid payload!')
+          }
         }
       })
     }

@@ -126,7 +126,7 @@ export default {
         page: page,
         per_page: pageSize,
         status: status,
-        report_type: "multiqc"
+        report_type: "multireport"
       }).then(result => {
         const that = this
         that.data = result.data

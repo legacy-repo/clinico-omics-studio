@@ -1,6 +1,6 @@
 <template>
   <a-row class="card-list" :gutter="16">
-    <a-col :xl="8" :lg="8" :md="8" :sm="12" :xs="24" v-for="tool in toolList" :key="tool.id">
+    <a-col :xxl="6" :xl="8" :lg="8" :md="8" :sm="12" :xs="24" v-for="tool in toolList" :key="tool.id">
       <a-card hoverable class="card">
         <!-- <img :alt="tool.title" :src="tool.cover" slot="cover"/> -->
         <template class="ant-card-actions" slot="actions">

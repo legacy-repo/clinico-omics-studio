@@ -1,6 +1,6 @@
 import { getReportList, getReport, submitReport } from '@/api/manage'
 import moment from 'moment'
-import { initSeqFlowHost } from '@/config/defaultSettings'
+import { initTServiceHost } from '@/config/defaultSettings'
 
 const formatStatus = function(record) {
   const status = {}
@@ -53,7 +53,7 @@ const formatRecords = function(records) {
       description: record.description,
       appName: record.app_name,
       reportType: record.report_type,
-      reportUrl: initSeqFlowHost() + record.report_path,
+      reportUrl: initTServiceHost() + record.report_path,
       startedAt: formatDateTime(record.started_time),
       finishedAt: formatDateTime(record.finished_time),
       checkedAt: formatDateTime(record.checked_time),

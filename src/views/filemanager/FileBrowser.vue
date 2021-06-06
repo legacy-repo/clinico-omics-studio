@@ -78,6 +78,7 @@
         :pagination="pagination"
         :columns="columns"
         rowKey="path"
+        :class="{ 'standalone-browser': height === 0 }"
         :customRow="customRow"
         :scroll="{y: height - 100}"
         :data-source="data"
@@ -381,7 +382,7 @@ export default {
     },
     height: {
       required: false,
-      default: 540,
+      default: 0,
       type: Number
     },
     filterType: {
@@ -1273,6 +1274,14 @@ export default {
 @header-bottom: @header-top;
 
 .file-list {
+  .standalone-browser {
+    .ant-table-body {
+      max-height: unset !important;
+      overflow-y: scroll;
+      height: calc(91vh - 180px);
+    }
+  }
+
   .folder-dialog {
     position: absolute;
     width: 400px;

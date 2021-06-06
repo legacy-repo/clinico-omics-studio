@@ -43,7 +43,7 @@ export const asyncRouterMap = [
                 redirect: {
                   name: 'embeded-frame',
                   query: {
-                    src: `http://${window.location.host}/data-model/?project=gdc`
+                    src: `http://${window.location.host}/data-model/?project=gdc&random_str=${Math.random().toString(36).slice(-8)}`
                   }
                 },
                 meta: { title: 'Genomics Data Commons', icon: 'dot-chart', keepAlive: true }
@@ -55,7 +55,7 @@ export const asyncRouterMap = [
                 redirect: {
                   name: 'embeded-frame',
                   query: {
-                    src: `http://${window.location.host}/data-model/?project=chinese-quartet`
+                    src: `http://${window.location.host}/data-model/?project=chinese-quartet&random_str=${Math.random().toString(36).slice(-8)}`
                   }
                 },
                 meta: { title: 'Chinese Quartet', icon: 'border-inner', keepAlive: true }
@@ -67,7 +67,7 @@ export const asyncRouterMap = [
                 redirect: {
                   name: 'embeded-frame',
                   query: {
-                    src: `http://${window.location.host}/data-model/?project=omics-data-commons`
+                    src: `http://${window.location.host}/data-model/?project=omics-data-commons&random_str=${Math.random().toString(36).slice(-8)}`
                   }
                 },
                 meta: { title: 'The Cancer Omics Atlas', icon: 'retweet', keepAlive: true }
@@ -79,7 +79,7 @@ export const asyncRouterMap = [
                 redirect: {
                   name: 'embeded-frame',
                   query: {
-                    src: `http://${window.location.host}/data-model/?project=chiglitazar`
+                    src: `http://${window.location.host}/data-model/?project=chiglitazar&random_str=${Math.random().toString(36).slice(-8)}`
                   }
                 },
                 meta: { title: 'Chiglitazar', icon: 'play-circle', keepAlive: true }

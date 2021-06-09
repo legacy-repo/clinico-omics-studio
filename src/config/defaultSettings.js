@@ -23,10 +23,11 @@ export function initSeqFlowHost() {
 
 // TService
 export function initTServiceHost() {
-  const tServiceHost = localStorage.getItem('tServiceHost')
+  let tServiceHost = localStorage.getItem('tServiceHost')
+  tServiceHost = tServiceHost || `${initBaseURL()}/tservice`
   console.log(`TSERVICE_HOST: ${tServiceHost}`)
 
-  return tServiceHost || `${initBaseURL()}/tservice`
+  return tServiceHost
 }
 
 // TService Ai

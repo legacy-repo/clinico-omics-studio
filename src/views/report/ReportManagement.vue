@@ -10,7 +10,7 @@
     <div class="mask-window" v-if="reportFormVisible" @click="hideReportForm"></div>
     <report-form class="popup-form-container" :reportTool="reportTool" :mode="mode" v-if="reportFormVisible" @finished="forceUpdate"></report-form>
 
-    <report-list></report-list>
+    <report-list :key="reportFormVisible"></report-list>
   </page-view>
 </template>
 
@@ -48,7 +48,9 @@ export default {
   methods: {
     forceUpdate() {
       // Remove query parameters for avoiding to show report-form.
-      this.$router.push({
+      this.hideReportForm()
+      // TODO: Cannot work, how to deal with it?
+      this.$router.replace({
         name: 'report-management'
       })
     },

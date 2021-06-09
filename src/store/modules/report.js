@@ -1,5 +1,6 @@
 import { getReportList, getReport, submitReport } from '@/api/manage'
 import moment from 'moment'
+import path from 'path'
 import { initTServiceHost } from '@/config/defaultSettings'
 
 const formatStatus = function(record) {
@@ -43,6 +44,14 @@ const formatDateTime = function(datetime) {
   }
 }
 
+const formatReportUrl = function(reportPath) {
+  const tServiceHost = new URL(initTServiceHost())
+  const fullPath = path.join(tServiceHost.pathname, reportPath)
+  const reportUrl = new URL(fullPath, tServiceHost.origin).toString()
+  console.log('Format Report Url: ', tServiceHost, reportPath, reportUrl)
+  return reportUrl
+}
+
 const formatRecords = function(records) {
   const newRecords = []
   for (const record of records) {
@@ -53,7 +62,7 @@ const formatRecords = function(records) {
       description: record.description,
       appName: record.app_name,
       reportType: record.report_type,
-      reportUrl: initTServiceHost() + record.report_path,
+      reportUrl: formatReportUrl(record.report_path),
       startedAt: formatDateTime(record.started_time),
       finishedAt: formatDateTime(record.finished_time),
       checkedAt: formatDateTime(record.checked_time),

@@ -370,6 +370,20 @@ export const asyncRouterMap = [
             meta: { title: 'Pathology AI Model', keepAlive: true }
           },
           {
+            path: '/tool/pgi',
+            name: 'pgi',
+            hidden: true,
+            component: () => import('@/views/tools/PGI/TaskList'),
+            meta: { title: 'Personal Genome Interpreter', keepAlive: true }
+          },
+          {
+            path: '/tool/pgi-task-result',
+            name: 'pgi-task-result',
+            hidden: true,
+            component: () => import('@/views/tools/PGI/TaskResult'),
+            meta: { title: "The PGI's Result", drawerMode: true, keepAlive: true }
+          },
+          {
             path: '/tool/igv',
             name: 'igv',
             hidden: true,

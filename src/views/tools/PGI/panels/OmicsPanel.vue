@@ -1,16 +1,31 @@
 <template>
-  <div class="biomarker-details">
+  <div class="gene-details">
     <a-tabs default-active-key="1">
-      <a-tab-pane key="1" tab="Curation">
+      <a-tab-pane key="1" tab="Ontology">
+        <a-row class="content-container" :gutter="16">
+          <a-col :lg="24" :xs="24" :sm="24" :md="24">
+            <a-collapse
+              accordion
+              v-if="isValid"
+              :activeKey="formatGeneSymbol(geneSymbols)"
+            >
+              <a-collapse-panel
+                :key="symbol"
+                :header="symbol"
+                v-for="symbol in formatGeneSymbol(geneSymbols)"
+              >
+                <ontology :geneSymbol="symbol"></ontology>
+              </a-collapse-panel>
+            </a-collapse>
+            <a-empty v-else />
+          </a-col>
+        </a-row>
+      </a-tab-pane>
+      <a-tab-pane key="2" tab="Curation">
         <a-row class="content-container" :gutter="16">
           <a-col :lg="24" :xs="24" :sm="24" :md="24">
             <a-collapse v-model="activeKey">
               <a-collapse-panel v-for="key in allKeys" :key="key" :header="formatLabel(key)">
-                <a-icon
-                  slot="extra"
-                  :type="paperActive ? 'fullscreen' : 'fullscreen-exit'"
-                  @click.stop="switchPaperContainer"
-                />
                 <a-row v-for="label in labels[key]" :key="label" style="margin-bottom: 10px">
                   <a-col :xs="24" :sm="12" :md="6" :lg="6">
                     <a-tag color="#108ee9">
@@ -29,33 +44,13 @@
           </a-col>
         </a-row>
       </a-tab-pane>
-      <a-tab-pane key="2" tab="Oncology">
-        <a-row class="content-container" :gutter="16">
-          <a-col :lg="24" :xs="24" :sm="24" :md="24">
-            <a-collapse
-              accordion
-              v-if="biomarker.gene_symbol !== 'NA'"
-              :activeKey="formatGeneSymbol(biomarker.gene_symbol)"
-            >
-              <a-collapse-panel
-                :key="symbol"
-                :header="symbol"
-                v-for="symbol in formatGeneSymbol(biomarker.gene_symbol)"
-              >
-                <ontology :geneSymbol="symbol"></ontology>
-              </a-collapse-panel>
-            </a-collapse>
-            <a-empty v-else />
-          </a-col>
-        </a-row>
-      </a-tab-pane>
       <a-tab-pane key="3" tab="Knowledge">
         <!-- <knowledge-detail :paperId="biomarker.pmid" v-if="biomarker.pmid"></knowledge-detail> -->
         <!-- <a-empty v-else/> -->
-        <a-row v-if="biomarker.gene_symbol !== 'NA'" class="content-container" :gutter="16">
+        <a-row v-if="isValid" class="content-container" :gutter="16">
           <a-col class="knowledge-header" :lg="24" :xs="24" :sm="24" :md="24">
             <a-select size="small" :value="currentGeneSymbol" style="width: 120px" @change="selectGeneSymbol">
-              <a-select-option :value="gene" :key="gene" v-for="gene in formatGeneSymbol(biomarker.gene_symbol)">
+              <a-select-option :value="gene" :key="gene" v-for="gene in formatGeneSymbol(geneSymbols)">
                 {{ gene }}
               </a-select-option>
             </a-select>
@@ -69,8 +64,8 @@
         <a-row class="content-container" :gutter="16">
           <a-col :lg="24" :xs="24" :sm="24" :md="24">
             <full-frame
-              v-if="biomarker.gene_symbol !== 'NA'" 
-              :src="generateDataPortalURL('glioma_msk_2018', formatGeneSymbol(biomarker.gene_symbol))"
+              v-if="isValid" 
+              :src="generateDataPortalURL('glioma_msk_2018', formatGeneSymbol(geneSymbols))"
               :onloadfn="onload"
             ></full-frame>
             <a-empty v-else />
@@ -78,10 +73,10 @@
         </a-row>
       </a-tab-pane>
       <a-tab-pane key="5" tab="Expression Data">
-        <a-row style="position: relative; top: -15px" v-if="biomarker.gene_symbol !== 'NA'">
+        <a-row style="position: relative; top: -15px" v-if="isValid">
           <a-row class="gepia-header">
             <a-select size="small" :value="currentGeneSymbol" style="width: 120px" @change="selectGeneSymbol">
-              <a-select-option :value="gene" :key="gene" v-for="gene in formatGeneSymbol(biomarker.gene_symbol)">
+              <a-select-option :value="gene" :key="gene" v-for="gene in formatGeneSymbol(geneSymbols)">
                 {{ gene }}
               </a-select-option>
             </a-select>
@@ -135,15 +130,13 @@ export default {
     Ontology
   },
   props: {
-    biomarkerId: {
+    geneSymbols: {
       type: String,
-      required: false,
-      default: ''
+      required: true
     }
   },
   data() {
     return {
-      geneSymbols: [],
       geneSymbol: '',
       biomarker: {
         abstract:
@@ -200,6 +193,11 @@ export default {
       tagName: '1'
     }
   },
+  computed: {
+    isValid() {
+      return this.geneSymbols.length > 0
+    }
+  },
   methods: {
     generateDataPortalURL,
     formatGeneSymbol,
@@ -208,9 +206,6 @@ export default {
       const label = '?view=widget&hideHeader=true'
       const queryStr = '&queryType=3&num=1&step=1&term=%27' + hugoGeneSymbol + '%27%5Bgene%5D'
       return baseUrl + label + queryStr
-    },
-    switchPaperContainer() {
-      this.paperActive = !this.paperActive
     },
     buildGepiaURL(geneSymbol) {
       return `http://gepia.cancer-pku.cn/detail.php?gene=${geneSymbol}`
@@ -241,18 +236,18 @@ export default {
     }
   },
   created() {
-    this.selectGeneSymbol(this.formatGeneSymbol(this.biomarker.gene_symbol)[0])
+    this.selectGeneSymbol(this.formatGeneSymbol(this.geneSymbols)[0])
   }
 }
 </script>
 
 <style lang="less" scoped>
-.biomarker-details {
+.gene-details {
   width: 100%;
   height: 100%;
   background-color: #fff;
   border-radius: 5px;
-  padding: 10px;
+  padding: 0px 10px;
 
   .ant-empty {
     height: 500px;
@@ -283,7 +278,7 @@ export default {
 </style>
 
 <style lang="less">
-.biomarker-details {
+.gene-details {
   .content-container {
     height: calc(100vh - 160px);
     overflow: scroll;

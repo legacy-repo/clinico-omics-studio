@@ -113,6 +113,8 @@ export default {
   }
 
   .drawer-mode-btn {
+    height: 0px;
+    margin: 0px 49vw;
     // Hide
     margin-bottom: 5px;
     top: 5px;

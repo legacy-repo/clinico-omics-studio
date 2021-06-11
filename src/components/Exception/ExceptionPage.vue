@@ -1,14 +1,14 @@
 <template>
   <div class="exception">
     <div class="imgBlock">
-      <div class="imgEle" :style="{backgroundImage: `url(${config[type].img})`}">
-      </div>
+      <div class="imgEle" :style="{ backgroundImage: `url(${config[type].img})` }"></div>
     </div>
     <div class="content">
       <h1>{{ config[type].title }}</h1>
       <div class="desc">{{ config[type].desc }}</div>
       <div class="actions">
-        <a-button type="primary" @click="handleToHome">返回首页</a-button>
+        <a-button type="primary" @click="handleToHome">Home</a-button>
+        <a-button type="primary" @click="goBack">Back to Previous Page</a-button>
       </div>
     </div>
   </div>
@@ -25,25 +25,30 @@ export default {
       default: '404'
     }
   },
-  data () {
+  data() {
     return {
       config: types
     }
   },
   methods: {
-    handleToHome () {
-      this.$router.push({ name: 'index' })
+    goBack() {
+      this.$router.go(-2)
+    },
+    handleToHome() {
+      this.$router.push({
+        name: 'index'
+      })
     }
   }
 }
 </script>
 <style lang="less">
-@import (reference) "~ant-design-vue/lib/style/index";
+@import (reference) '~ant-design-vue/lib/style/index';
 
 .exception {
   display: flex;
   align-items: center;
-  height: 80%;
+  height: 100%;
   min-height: 500px;
 
   .imgBlock {

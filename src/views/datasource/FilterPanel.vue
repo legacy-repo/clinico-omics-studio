@@ -155,8 +155,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { FilterList } from '@/components'
-import Pie from './Pie'
+import { FilterList, Pie } from '@/components'
 import DataTable from './DataTable'
 import filter from 'lodash.filter'
 import map from 'lodash.map'

@@ -31,10 +31,11 @@
 
     <a-row class="task-result">
       <a-tabs>
-        <a-tab-pane key="1" tab="Genomic Report"> Content of tab 1 </a-tab-pane>
-        <a-tab-pane key="3" tab="Omics Data"> Content of tab 3 </a-tab-pane>
-        <a-tab-pane key="2" tab="Neoantigens"> Content of tab 2 </a-tab-pane>
-        <a-button slot="tabBarExtraContent" @click="switchOmicsViewer">Checked</a-button>
+        <a-tab-pane key="1" tab="Genomic Report">
+          <variant-filter @show-panel="showPanel"></variant-filter>
+        </a-tab-pane>
+        <a-tab-pane key="2" tab="Neoantigens">Comming Soon...</a-tab-pane>
+        <a-button slot="tabBarExtraContent" @click="switchPanel">Checked</a-button>
       </a-tabs>
       <a-drawer
         class="task-result__annotation"
@@ -42,12 +43,13 @@
         placement="right"
         :get-container="false"
         :wrap-style="{ position: 'absolute' }"
-        @close="switchOmicsViewer"
+        @close="switchPanel"
         :maskClosable="true"
         :destroyOnClose="true"
-        :visible="omicsViewerActive"
+        :visible="panelActive"
       >
-        <omics-viewer></omics-viewer>
+        <omics-panel :geneSymbols="geneSymbols" v-if="panelActive && whichPanel === 'OmicsPanel'"></omics-panel>
+        <variant-panel v-if="panelActive && whichPanel === 'VariantPanel'"></variant-panel>
       </a-drawer>
     </a-row>
   </page-view>
@@ -55,9 +57,11 @@
 
 <script>
 import { PageView } from '@/layouts'
-import { formatDateTime } from './utils'
-import OmicsViewer from './OmicsViewer'
+import { formatDateTime } from './panels/utils'
+import OmicsPanel from './panels/OmicsPanel'
 import DetailList from '@/components/Tools/DetailList'
+import VariantPanel from './panels/VariantPanel'
+import VariantFilter from './filter/VariantFilter.vue'
 
 const DetailListItem = DetailList.Item
 
@@ -66,17 +70,21 @@ export default {
     PageView,
     DetailList,
     DetailListItem,
-    OmicsViewer
+    OmicsPanel,
+    VariantPanel,
+    VariantFilter
   },
   props: {
-    taskId: {
+    taskName: {
       type: String,
       required: false
     }
   },
   data() {
     return {
-      omicsViewerActive: false,
+      geneSymbols: 'ACTN4',
+      whichPanel: 'OmicsPanel',
+      panelActive: false,
       task: {
         patientId: '1900272',
         diseaseType: 'Breast Cancer',
@@ -106,13 +114,29 @@ export default {
     }
   },
   methods: {
+    showPanel(payload) {
+      console.log('Show Panel: ', payload)
+      if (payload.panelType === 'gene_symbol') {
+        this.geneSymbols = payload.id
+        this.whichPanel = 'OmicsPanel'
+        this.switchPanel()
+      }
+    },
     getTitle() {
       return this.$route.meta.title
     },
-    backToTaskList(taskId) {},
+    backToTaskList(taskName) {},
     downloadResult() {},
-    switchOmicsViewer() {
-      this.omicsViewerActive = !this.omicsViewerActive
+    switchPanel() {
+      this.panelActive = !this.panelActive
+    }
+  },
+  created() {
+    console.log("TaskResult: ", this.taskName)
+    if(!this.taskName) {
+      this.$router.push({
+        name: 'exception404'
+      })
     }
   }
 }
@@ -121,18 +145,24 @@ export default {
 <style lang="less" scoped>
 .task-result {
   border-radius: 5px;
-  height: calc(100vh - 84px);
+  height: auto;
   background-color: #fff;
-  padding: 10px;
+  padding: 0px 10px;
 }
 </style>
 
 <style lang="less">
-.task-result__annotation {
-  overflow: scroll;
+.task-result {
+  .ant-tabs-bar {
+    margin: 0px 0px 10px 0px;
+  }
 
-  .ant-drawer-body {
-    padding: 0px;
+  .task-result__annotation {
+    overflow: scroll;
+
+    .ant-drawer-body {
+      padding: 0px;
+    }
   }
 }
 </style>

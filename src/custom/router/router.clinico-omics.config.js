@@ -380,6 +380,9 @@ export const asyncRouterMap = [
             path: '/tool/pgi-task-result',
             name: 'pgi-task-result',
             hidden: true,
+            props: route => ({
+              taskName: route.query.taskName
+            }),
             component: () => import('@/views/tools/PGI/TaskResult'),
             meta: { title: "The PGI's Result", drawerMode: true, keepAlive: true }
           },

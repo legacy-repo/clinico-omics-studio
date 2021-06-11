@@ -81,6 +81,10 @@ export default {
     text-align: center;
   }
 
+  .chart {
+    text-align: center;
+  }
+
   .chart > canvas {
     margin: 0px auto;
   }

@@ -11,11 +11,11 @@
       :pagination="pagination"
       rowKey="taskName"
     >
-      <a slot="link" slot-scope="text, record" @click="loadTaskResults(record)">
+      <a slot="link" slot-scope="text, record" @click="loadTaskResults(record.taskName)">
         {{ text }}
       </a>
       <span slot="operation" slot-scope="text, record">
-        <a-button @click="loadTaskResults(record)" icon="eye" type="primary" style="margin-right: 5px;">Check</a-button>
+        <a-button @click="loadTaskResults(record.taskName)" icon="eye" type="primary" style="margin-right: 5px;">Check</a-button>
         <a-button :disabled="isChecked(record.checkedAt)" icon="safety-certificate">Report</a-button>
       </span>
       <span slot="tag" slot-scope="text" v-if="text && text.split(',')">
@@ -58,7 +58,7 @@ import { PageView } from '@/layouts'
 import TaskResult from './TaskResult'
 import TaskSubmitter from './TaskSubmitter'
 import filter from 'lodash.filter'
-import { formatDateTime } from './utils'
+import { formatDateTime } from './panels/utils'
 import { initTServiceHost } from '@/config/defaultSettings'
 
 const columns = [
@@ -218,20 +218,17 @@ export default {
     hideSubmitPanel() {
       this.submitPanelVisible = false
     },
-    loadTaskResults() {
-
+    loadTaskResults(taskName) {
+      console.log("loadTaskResults: ", taskName)
+      this.$router.push({
+        name: 'pgi-task-result',
+        query: {
+          taskName: taskName
+        }
+      })
     },
     isChecked(checkAt) {
       return checkAt === '0000-00-00 00:00' ? true : false
-    },
-    formatDateTime(datetime) {
-      if (datetime && datetime > 0) {
-        return moment(datetime)
-          .utcOffset('+08:00')
-          .format('YYYY-MM-DD HH:mm')
-      } else {
-        return '0000-00-00 00:00'
-      }
     },
     formatPayload(payload) {
       return {

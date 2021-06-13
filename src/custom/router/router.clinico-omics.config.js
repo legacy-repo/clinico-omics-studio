@@ -94,7 +94,7 @@ export const asyncRouterMap = [
             meta: { title: 'Metadata Collaboration', icon: 'history', permission: ['table'], keepAlive: true }
           },
           {
-            path: 'http://metabase.3steps.cn',
+            path: 'http://metabase.clinico-omics.org',
             name: 'metadata-quality-review',
             hidden: false,
             meta: { title: 'Metadata Quality Review', icon: 'codepen-circle', target: '_blank' }
@@ -491,7 +491,7 @@ export const constantRouterMap = [
   {
     path: '/metabase',
     name: 'Metabase Iframe',
-    props: route => ({ src: 'http://metabase.3steps.cn', toPath: 'welcome' }),
+    props: route => ({ src: 'http://metabase.clinico-omics.org', toPath: 'welcome' }),
     component: () => import('@/views/iframe/EmbededFrame')
   },
 

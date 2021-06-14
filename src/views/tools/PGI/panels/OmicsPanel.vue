@@ -186,7 +186,7 @@ export default {
       onload: function(id) {
         console.log('DataPortal: ', id)
         // document.getElementById(id).contentWindow.postMessage({ hideHeader: true }, 'http://data.3steps.cn')
-        document.getElementById(id).contentWindow.postMessage({ hideHeader: true }, 'http://dataportal.clinico-omics.org/')
+        document.getElementById(id).contentWindow.postMessage({ hideHeader: true }, 'http://dataportal.prophetdb.org/')
       },
       currentGeneSymbol: '',
       paperActive: true,

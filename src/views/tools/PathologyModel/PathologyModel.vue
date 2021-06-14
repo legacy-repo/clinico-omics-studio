@@ -13,9 +13,9 @@
                 <a-col :sm="8" :xs="24" class="key">{{ formatKey(key) }}</a-col>
                 <a-tooltip placement="topLeft">
                   <template slot="title">
-                    <span>{{ formatValue(value) }}</span>
+                    <span>{{ formatValue(key, value) }}</span>
                   </template>
-                  <a-col :sm="16" :xs="24" class="value">{{ formatValue(value) }}</a-col>
+                  <a-col :sm="16" :xs="24" class="value">{{ formatValue(key, value) }}</a-col>
                 </a-tooltip>
               </a-row>
             </a-col>
@@ -35,7 +35,7 @@
             :search-options="{ enabled: true }"
             styleClass="vgt-table striped bordered condensed"
             :columns="genColumns(item.patch)"
-            :rows="genRows(item.patch)"
+            :rows="genRows(item.patch, format)"
             v-if="item.patch.length !== 0"
             :pagination-options="paginationOptions"
             :line-numbers="true"
@@ -119,6 +119,23 @@ export default {
     hideImageViewer() {
       this.imageViewerVisible = false
     },
+    formatPrediction(value) {
+      if (value === 1) {
+        return 'Mutated'
+      } else if (value === 0) {
+        return 'Non Mutated'
+      }
+    },
+    format(record) {
+      if (typeof record.prediction === 'number') {
+        console.log('Format: ', record.prediction, typeof record.prediction)
+        record.prediction = this.formatPrediction(record.prediction)
+      }
+
+      if (record.score) {
+        record.score = Number(Number.parseFloat(record.score).toFixed(3))
+      }
+    },
     formatKey(key) {
       const formattedKey = key.replace(/([A-Z])/g, ' $1')
       return v.titleCase(formattedKey.split('_').join(' '))
@@ -126,11 +143,18 @@ export default {
     isFloat(n) {
       return Number(n) === n && n % 1 !== 0
     },
-    formatValue(value) {
+    formatValue(key, value) {
+      let formatedValue = ''
       if (this.isFloat(value)) {
-        return value.toFixed(3)
+        formatedValue = value.toFixed(3)
       } else {
-        return value
+        formatedValue = value
+      }
+
+      if (key === 'prediction') {
+        return this.formatPrediction(formatedValue)
+      } else {
+        return formatedValue
       }
     },
     genImages(rows) {
@@ -176,8 +200,13 @@ export default {
         return o.label
       })
     },
-    genRows(rows) {
-      return orderBy(rows, ['score'], ['desc'])
+    genRows(rows, format) {
+      const orderedRows = orderBy(rows, ['score'], ['desc'])
+      for (let row of orderedRows) {
+        format(row)
+      }
+
+      return orderedRows
     }
   }
 }

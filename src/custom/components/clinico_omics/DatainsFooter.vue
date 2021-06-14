@@ -104,7 +104,7 @@ export default {
             {
               title: 'Choppy Data Portal',
               // src: 'http://data.3steps.cn',
-              src: 'http://dataportal.clinico-omics.org/cdataportal',  // Fudan Data Portal v3.6.14
+              src: 'http://dataportal.prophetdb.org/cdataportal',  // Fudan Data Portal v3.6.14
               type: 'link',
               target: '_blank'
             }

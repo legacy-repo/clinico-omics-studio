@@ -15,26 +15,35 @@
         {{ text }}
       </a>
       <span slot="operation" slot-scope="text, record">
-        <a-button @click="loadModelResults(record, showRecord)" icon="eye" type="primary" style="margin-right: 5px;">Result</a-button>
+        <a-button
+          @click="loadModelResults(record, showRecord)"
+          :disabled="record.status !== 'Success'"
+          icon="eye"
+          type="primary"
+          style="margin-right: 5px"
+        >
+          Result
+        </a-button>
         <a-button @click="getRecord(record.file_name)" icon="api">Connection</a-button>
       </span>
-      <span slot="status" slot-scope="text">
+      <span slot="status" slot-scope="text, record" class="single-tag">
+        <a-progress type="circle" :percent="record.percentage" :width="45" v-if="text === 'Running'" />
         <a-tag color="#87d068" v-if="text === 'Success'">
           {{ text }}
         </a-tag>
         <a-tag color="#f50" v-if="text === 'Error'">
           {{ text }}
         </a-tag>
-        <a-tag color="#108ee9" v-if="text === 'Running'">
+        <a-tag color="#108ee9" v-if="false && text === 'Running'">
           {{ text }}
         </a-tag>
       </span>
     </a-table>
-    <a-drawer 
-      class="pathology-uploader" 
-      title="Run Models" 
-      width="600" 
-      placement="right" 
+    <a-drawer
+      class="pathology-uploader"
+      title="Run Models"
+      width="800"
+      placement="right"
       @close="hideSubmitPanel"
       :maskClosable="false"
       :destroyOnClose="true"
@@ -59,9 +68,7 @@
                   <a-icon style="font-size: 16px" theme="filled" type="play-circle" />
                   Download Heatmap
                 </a-button> -->
-                <a-checkbox @change="showHeatmap">
-                  Floating in the Right Sidebar
-                </a-checkbox>
+                <a-checkbox @change="showHeatmap"> Floating in the Right Sidebar </a-checkbox>
               </a-menu-item>
             </a-menu>
             <a-button style="margin-left: 8px">
@@ -113,21 +120,21 @@ const columns = [
     dataIndex: 'model_name',
     key: 'model_name',
     align: 'center',
-    visible: true,
+    visible: true
   },
   {
     title: 'Patient ID',
     dataIndex: 'patient_id',
     key: 'patient_id',
     align: 'center',
-    visible: false,
+    visible: false
   },
   {
     title: 'Disease Type',
     dataIndex: 'disease_type',
     key: 'disease_type',
     align: 'center',
-    visible: true,
+    visible: true
   },
   {
     title: 'Primary Site',
@@ -141,21 +148,21 @@ const columns = [
     dataIndex: 'data_format',
     key: 'data_format',
     align: 'center',
-    visible: true,
+    visible: true
   },
   {
     title: 'Data Category',
     dataIndex: 'data_category',
     key: 'data_category',
     align: 'center',
-    visible: true,
+    visible: true
   },
   {
     title: 'Created At',
     dataIndex: 'started_time',
     key: 'started_time',
     align: 'center',
-    visible: true,
+    visible: true
   },
   {
     title: 'Status',
@@ -163,14 +170,14 @@ const columns = [
     key: 'status',
     align: 'center',
     scopedSlots: { customRender: 'status' },
-    visible: false,
+    visible: true
   },
   {
     title: 'Action',
     key: 'operation',
     scopedSlots: { customRender: 'operation' },
     align: 'center',
-    visible: true,
+    visible: true
   }
 ]
 
@@ -258,20 +265,25 @@ export default {
     hideRecord() {
       this.panelVisible = false
     },
-    hideSubmitPanel(){
+    hideSubmitPanel() {
       this.submitPanelVisible = false
       this.getPathologyCollections(this.pagination.current, this.pagination.pageSize)
     },
     formatRecords(records) {
       const data = []
       records.forEach(record => {
-          data.push({
-            ...JSON.parse(record.description),
-            model_name: record.appName,
-            task_name: record.title,
-            started_time: record.startedAt,
-            status: record.taskStatus
-          })
+        const newRecord = {
+          ...JSON.parse(record.description),
+          model_name: record.appName,
+          task_name: record.title,
+          started_time: record.startedAt,
+          status: record.taskStatus,
+          percentage: 0
+        }
+
+        data.push(newRecord)
+
+        this.syncStatus(newRecord)
       })
 
       return data
@@ -316,41 +328,50 @@ export default {
       })
     },
     loadModelResults(record, callback) {
-      // FileViewer
-      this.instanceId = record.patient_id
-      this.currentModel = record.model_name
-      this.baseUrl = `${initBaseURL()}/attachments/pathology`
+      if (record.status === 'Success') {
+        // FileViewer
+        this.instanceId = record.patient_id
+        this.currentModel = record.model_name
+        this.baseUrl = `${initBaseURL()}/attachments/pathology`
 
-      // Pathology Model
-      // const models = map(this.modelOptions, 'value')
-      const models = [record.model_name]
-      this.batchLoad(record.patient_id, models)
-        .then(results => {
-          this.pathologyPrediction = []
-          for (let idx in models) {
-            if (results[idx]) {
-              this.pathologyPrediction.push(results[idx])
+        // Pathology Model
+        // const models = map(this.modelOptions, 'value')
+        const models = [record.model_name]
+        this.batchLoad(record.patient_id, models)
+          .then(results => {
+            this.pathologyPrediction = []
+            for (let idx in models) {
+              if (results[idx]) {
+                this.pathologyPrediction.push(results[idx])
+              }
             }
-          }
 
-          callback()
-        })
-        .catch(error => {
-          console.log('fetchModels Error: ', error)
-          this.pathologyPrediction = []
-          callback()
-        })
+            callback()
+          })
+          .catch(error => {
+            console.log('fetchModels Error: ', error)
+            this.pathologyPrediction = []
+            callback()
+          })
+      } else {
+        this.$message.warn('The task did not finish, and please try again later!')
+      }
+    },
+    syncStatus(record) {
+      if (record.status === 'Running') {
+        record.refreshIntervalId = setInterval(() => {
+          if (record.percentage < 100) {
+            record.percentage = record.percentage + 10
+          } else if (record.percentage === 100) {
+            record.status = 'Success'
+            clearInterval(record.refreshIntervalId)
+          }
+        }, 1000)
+      }
     }
   },
   created() {
     this.getPathologyCollections(this.pagination.current, this.pagination.pageSize)
-    setInterval(() => {
-      this.data.forEach(record => {
-        if (record.status === 'Running') {
-          record.status = 'Success'
-        }
-      })
-    }, 10000)
   }
 }
 </script>
@@ -369,6 +390,12 @@ export default {
     margin: 0px !important;
     border-radius: 5px;
     border: 1px solid #d6d6d6;
+  }
+
+  .single-tag {
+    .ant-tag {
+      margin-right: 0px;
+    }
   }
 }
 
@@ -437,6 +464,12 @@ export default {
       right: 5px;
       bottom: 5px;
     }
+  }
+}
+
+.pathology-uploader {
+  .ant-drawer-body {
+    padding: 24px 24px 0px 0px;
   }
 }
 </style>

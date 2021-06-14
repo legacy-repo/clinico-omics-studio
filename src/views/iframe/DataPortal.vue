@@ -32,10 +32,10 @@ export default {
   data() {
     return {
       // src: 'http://data.3steps.cn',
-      src: 'http://dataportal.clinico-omics.org/cdataportal',
+      src: 'http://dataportal.prophetdb.org/cdataportal',
       onload: function(id) {
         console.log('DataPortal: ', id)
-        document.getElementById(id).contentWindow.postMessage({ hideHeader: true }, 'http://dataportal.clinico-omics.org/')
+        document.getElementById(id).contentWindow.postMessage({ hideHeader: true }, 'http://dataportal.prophetdb.org/')
       }
     }
   },

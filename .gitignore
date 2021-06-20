@@ -29,5 +29,8 @@ ossutil_output
 # Temp
 *.temp
 
-**/custom/**
-!**/custom/clinico-omics
+/src/custom/*
+!/src/custom/clinico-omics
+!/src/custom/index.js
+
+.gitignore.*

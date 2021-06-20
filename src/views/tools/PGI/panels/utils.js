@@ -69,7 +69,7 @@ export function genPayload(geneList) {
 
 export function generateDataPortalURL(cancerStudy, geneList) {
   // const url = 'http://data.3steps.cn/cdataportal/results/oncoprint?Action=Submit&'
-  const url = 'http://dataportal.prophetdb.org/cdataportal/results/oncoprint?Action=Submit&hideHeader=true&'
+  const url = 'http://47.117.3.66/cdataportal/results/oncoprint?Action=Submit&hideHeader=true&'
   // const payload = genPayloadByAllStudies(geneList)
   const payload = genPayload(geneList.join(' '))
 

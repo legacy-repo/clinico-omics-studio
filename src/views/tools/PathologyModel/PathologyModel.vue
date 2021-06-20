@@ -10,12 +10,12 @@
                 <span>Prediction</span>
               </a-row>
               <a-row v-for="(value, key) in item.patient" :key="key" class="content">
-                <a-col :sm="8" :xs="24" class="key">{{ formatKey(key) }}</a-col>
+                <a-col :sm="10" :xs="24" class="key">{{ formatKey(key) }}</a-col>
                 <a-tooltip placement="topLeft">
                   <template slot="title">
                     <span>{{ formatValue(key, value) }}</span>
                   </template>
-                  <a-col :sm="16" :xs="24" class="value">{{ formatValue(key, value) }}</a-col>
+                  <a-col :sm="14" :xs="24" class="value">{{ formatValue(key, value) }}</a-col>
                 </a-tooltip>
               </a-row>
             </a-col>
@@ -138,7 +138,12 @@ export default {
     },
     formatKey(key) {
       const formattedKey = key.replace(/([A-Z])/g, ' $1')
-      return v.titleCase(formattedKey.split('_').join(' '))
+      const newKey = v.titleCase(formattedKey.split('_').join(' '))
+      if (newKey === 'Score') {
+        return 'Predicted Probability'
+      } else {
+        return newKey
+      }
     },
     isFloat(n) {
       return Number(n) === n && n % 1 !== 0
@@ -179,8 +184,8 @@ export default {
         const record = rows[0]
         for (const [key, value] of Object.entries(record)) {
           let config = {
-            // label: this.formatKey(key),
-            label: key,
+            label: this.formatKey(key),
+            // label: key,
             field: key,
             sortable: true,
             width: '180px',
@@ -255,6 +260,7 @@ export default {
 
         .value {
           text-overflow: ellipsis;
+          text-align: center;
           white-space: nowrap;
           overflow: hidden;
         }

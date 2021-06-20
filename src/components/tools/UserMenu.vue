@@ -21,7 +21,25 @@
           </span>
         </a>
       </a-tooltip>
-      <a-tooltip placement="bottom">
+      <a-dropdown>
+        <span class="action">
+          <a-icon type="question-circle-o"></a-icon>
+        </span>
+        <a-menu slot="overlay">
+          <a-menu-item>
+            <a :href="helpEntrypoint" target="_blank">
+              <span>{{ $t('components.tools.userMenu.documentation') }}</span>
+            </a>
+          </a-menu-item>
+          <a-menu-item>
+            <a @click="startTour">2nd menu item</a>
+          </a-menu-item>
+          <a-menu-item>
+            <a href="javascript:;">3rd menu item</a>
+          </a-menu-item>
+        </a-menu>
+      </a-dropdown>
+      <!-- <a-tooltip placement="bottom">
         <template slot="title">
           <span>{{ $t('components.tools.userMenu.documentation') }}</span>
         </template>
@@ -30,7 +48,7 @@
             <a-icon type="question-circle-o"></a-icon>
           </span>
         </a>
-      </a-tooltip>
+      </a-tooltip> -->
       <notice-icon class="action" />
       <lang-select />
       <a-dropdown>
@@ -83,6 +101,10 @@ export default {
   },
   methods: {
     ...mapActions(['Logout']),
+    startTour() {
+      console.log('Start Tour')
+      this.$tours['clinicoOmicsTour'].start()
+    },
     handleLogout() {
       this.$confirm({
         title: 'Notice',

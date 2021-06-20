@@ -29,5 +29,5 @@ ossutil_output
 # Temp
 *.temp
 
-*supersan*
-*test*
+**/custom/**
+!**/custom/clinico-omics

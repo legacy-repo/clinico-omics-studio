@@ -1,9 +1,12 @@
+// eslint-disable-next-line no-undef
 export const project = require('@/custom/index').project
 
-const customConfig = require('@/custom/config/' + project)
+// eslint-disable-next-line no-undef
+const customConfig = require('@/custom/' + project + '/config')
 
 export const config = customConfig.projectSettings
 export const initBaseURL = customConfig.initBaseURL
+export const projectSettings = customConfig.projectSettings
 
 // PreQC Pack
 export function initPreQCHost() {

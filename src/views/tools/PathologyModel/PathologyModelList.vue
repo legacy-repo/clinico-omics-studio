@@ -1,7 +1,7 @@
 <template>
-  <page-view title="Pathology AI Model" logo="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png">
+  <page-view title="WSI-based Prediction" logo="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png">
     <template slot="action">
-      <a-button type="primary" @click="onCreateModels">Run Models</a-button>
+      <a-button type="primary" @click="onCreateModels">New WSI</a-button>
     </template>
     <a-table
       class="pathology-model-container"
@@ -24,10 +24,10 @@
         >
           Result
         </a-button>
-        <a-button @click="getRecord(record.file_name)" icon="api">Connection</a-button>
+        <a-button @click="getRecord(record.file_name)" icon="api" style="display:none;">Connection</a-button>
       </span>
       <span slot="status" slot-scope="text, record" class="single-tag">
-        <a-progress type="circle" :percent="record.percentage" :width="45" v-if="text === 'Running'" />
+        <a-progress type="circle" :showInfo="false" :percent="record.percentage" :width="45" v-if="text === 'Running'" />
         <a-tag color="#87d068" v-if="text === 'Success'">
           {{ text }}
         </a-tag>
@@ -41,7 +41,7 @@
     </a-table>
     <a-drawer
       class="pathology-uploader"
-      title="Run Models"
+      title="New WSI"
       width="800"
       placement="right"
       @close="hideSubmitPanel"
@@ -82,7 +82,7 @@
             <img :src="getHeatmapUrl(instanceId, currentModel)" v-if="currentModel && heatmapVisible" class="heatmap" />
           </a-row>
         </a-collapse-panel>
-        <a-collapse-panel key="pathology-model" header="Pathology Model">
+        <a-collapse-panel key="pathology-model" header="Prediction Target">
           <pathology-model
             v-if="pathologyPrediction.length > 0"
             :data="pathologyPrediction"
@@ -116,7 +116,7 @@ const columns = [
     scopedSlots: { customRender: 'link' }
   },
   {
-    title: 'Model Name',
+    title: 'Prediction Target',
     dataIndex: 'model_name',
     key: 'model_name',
     align: 'center',
@@ -334,7 +334,7 @@ export default {
         this.currentModel = record.model_name
         this.baseUrl = `${initBaseURL()}/attachments/pathology`
 
-        // Pathology Model
+        // Prediction Target
         // const models = map(this.modelOptions, 'value')
         const models = [record.model_name]
         this.batchLoad(record.patient_id, models)
@@ -361,12 +361,12 @@ export default {
       if (record.status === 'Running') {
         record.refreshIntervalId = setInterval(() => {
           if (record.percentage < 100) {
-            record.percentage = record.percentage + 10
-          } else if (record.percentage === 100) {
+            record.percentage = record.percentage + 30
+          } else if (record.percentage >= 100) {
             record.status = 'Success'
             clearInterval(record.refreshIntervalId)
           }
-        }, 1000)
+        }, 6000)
       }
     }
   },

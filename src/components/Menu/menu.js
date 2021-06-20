@@ -124,7 +124,7 @@ export default {
       }
 
       return (
-        <Item {...{ key: menu.path }} disabled={ menu.meta.disabled }>
+        <Item {...{ key: menu.path }} disabled={ menu.meta.disabled } data-v-step={ menu.meta.tourStep }>
           <tag {...{ props, attrs }}>
             {this.renderIcon(menu.meta.icon)}
             <span>{this.formatTitle(menu.meta.title)}</span>
@@ -138,7 +138,7 @@ export default {
         menu.children.forEach(item => itemArr.push(this.renderItem(item)))
       }
       return (
-        <SubMenu {...{ key: menu.path }} disabled={ menu.meta.disabled }>
+        <SubMenu {...{ key: menu.path }} disabled={ menu.meta.disabled } data-v-step={ menu.meta.tourStep }>
           <span slot="title">
             {this.renderIcon(menu.meta.icon)}
             <span>{this.formatTitle(menu.meta.title)}</span>

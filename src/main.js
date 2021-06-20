@@ -7,6 +7,11 @@ import router from './router'
 import store from './store/'
 import { VueAxios } from './utils/request'
 
+import VueTour from 'vue-tour'
+// eslint-disable-next-line no-undef
+require('vue-tour/dist/vue-tour.css')
+Vue.use(VueTour)
+
 // mock
 // import './mock'
 

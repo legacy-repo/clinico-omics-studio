@@ -32,10 +32,10 @@ export default {
   data() {
     return {
       // src: 'http://data.3steps.cn',
-      src: 'http://dataportal.prophetdb.org/cdataportal',
+      src: 'http://cbioportal.oss-cn-shanghai.aliyuncs.com',
       onload: function(id) {
         console.log('DataPortal: ', id)
-        document.getElementById(id).contentWindow.postMessage({ hideHeader: true }, 'http://dataportal.prophetdb.org/')
+        document.getElementById(id).contentWindow.postMessage({ hideHeader: true }, 'http://cbioportal.oss-cn-shanghai.aliyuncs.com/')
       }
     }
   },

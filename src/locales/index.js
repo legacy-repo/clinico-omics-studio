@@ -13,7 +13,7 @@ import { axios } from '@/utils/request'
 import merge from 'lodash.merge'
 
 import { project } from '@/config/defaultSettings'
-const customLang = require('@/custom/lang/' + project)
+const customLang = require('@/custom/' + project + '/lang')
 const enUSLang = merge(enUS, customLang.enUS)
 const zhCNLang = merge(zhCN, customLang.zhCN)
 

@@ -43,7 +43,7 @@
         <data-portal v-if="instanceId" :id="instanceId + '-omics-data'" :subpath="'/patient/summary?' + parameters"></data-portal>
         <a-empty v-else />
       </a-collapse-panel>
-      <a-collapse-panel key="pathways" header="Pathways">
+      <a-collapse-panel key="pathways" header="Pathways" style="display:none;">
         <data-portal v-if="instanceId" :id="instanceId + '-pathways'" :subpath="'/patient/pathways?' + parameters"></data-portal>
         <a-empty v-else />
       </a-collapse-panel>
@@ -84,15 +84,15 @@ export default {
   },
   computed: {
     parameters() {
-      return `caseId=${this.instanceId}&studyId=FUSCC_TNBC_2019&hideHeader=true&hideTabHeader=true`
+      return `caseId=${this.instanceId}&studyId=FUSCC_BRCA_WSI&hideHeader=true&hideTabHeader=true`
     },
     isAdminGroup() {
       return this.userInfo().groups.includes('admin')
     },
     fileRecord() {
-      return (({ fileName, projectId, md5sum, dataFormat, fileSize }) => ({
+      return (({ fileName, project, md5sum, dataFormat, fileSize }) => ({
         fileName,
-        projectId,
+        project,
         md5sum,
         dataFormat,
         fileSize

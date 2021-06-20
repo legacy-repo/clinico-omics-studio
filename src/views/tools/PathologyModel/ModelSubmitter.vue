@@ -29,7 +29,7 @@
         <a-divider style="margin: 0px 0px 16px">Metadata for Pathology Image</a-divider>
         <a-form :form="form" layout="vertical" @submit="submitModels">
           <a-row>
-            <a-form-item label="Models">
+            <a-form-item label="Prediction Target">
               <a-select
                 v-decorator="[
                   'models',
@@ -114,13 +114,13 @@
                   v-decorator="[
                     'data_category',
                     {
-                      initialValue: 'Tissue Slide',
+                      initialValue: 'Whole Slide Image',
                       rules: [{ required: true, message: 'Please select the data category!' }],
                     },
                   ]"
                   placeholder="Select a option and change input text above"
                 >
-                  <a-select-option value="Tissue Slide"> Tissue Slide </a-select-option>
+                  <a-select-option value="Whole Slide Image"> Whole Slide Image </a-select-option>
                 </a-select>
               </a-form-item>
             </a-col>
@@ -128,9 +128,9 @@
           <a-row>
             <a-form-item class="model-submitter__tabs__metadata-former__action">
               <a-button @click="reset" style="margin-right: 5px">Cancel</a-button>
-              <a-button html-type="submit" type="primary" :disabled="submitBtnActive" :loading="loading"
-                >Submit</a-button
-              >
+              <a-button html-type="submit" type="primary" :disabled="submitBtnActive" :loading="loading">
+                Submit
+              </a-button>
             </a-form-item>
           </a-row>
         </a-form>
@@ -153,12 +153,18 @@ export default {
       uploadSuccessList: [],
       form: this.$form.createForm(this, { name: 'coordinated' }),
       loading: false,
+      // modelOptions: [
+      //   { label: 'PIK3CA Mutation Model', value: 'PIK3CA_Mutation' },
+      //   { label: 'Basal-like Immunosuppressed Model', value: 'BLIS' },
+      //   { label: 'Immunomodulatory Model', value: 'IM' },
+      //   { label: 'Luminal Androgen Receptor (LAR) Model', value: 'LAR' },
+      //   { label: 'Mesenchymal (MES) Model', value: 'MES' }
+      // ]
       modelOptions: [
-        { label: 'PIK3CA Mutation Model', value: 'PIK3CA_Mutation' },
-        { label: 'Basal-like Immunosuppressed Model', value: 'BLIS' },
-        { label: 'Immunomodulatory Model', value: 'IM' },
-        { label: 'Luminal Androgen Receptor (LAR) Model', value: 'LAR' },
-        { label: 'Mesenchymal (MES) Model', value: 'MES' }
+        { label: 'PIK3CA Somatic Mutation', value: 'PIK3CA_Mutation' },
+        { label: 'BRCA2 Germline Mutation', value: 'BRCA2_Mutation' },
+        { label: 'TNBC Subtypes', value: 'TNBC_Subtypes' },
+        { label: 'Prognosis', value: 'Prognosis' }
       ]
     }
   },

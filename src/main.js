@@ -7,11 +7,6 @@ import router from './router'
 import store from './store/'
 import { VueAxios } from './utils/request'
 
-import VueTour from 'vue-tour'
-// eslint-disable-next-line no-undef
-require('vue-tour/dist/vue-tour.css')
-Vue.use(VueTour)
-
 // mock
 // import './mock'
 
@@ -27,6 +22,9 @@ import i18n from './locales'
 
 Vue.config.productionTip = false
 Vue.config.devtools = true
+
+import VueShepherd from 'vue-shepherd';
+Vue.use(VueShepherd);
 
 // mount axios Vue.$http and this.$http
 Vue.use(VueAxios)

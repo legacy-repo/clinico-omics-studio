@@ -23,6 +23,7 @@ export const projectSettings = {
   autoHideHeader: true, //  auto hide header
   colorWeak: false,
   multiTab: false,
+  tourMode: false,
   // eslint-disable-next-line
   production: process.env.NODE_ENV === 'production' && process.env.VUE_APP_PREVIEW !== 'true',
   // vue-ls options
@@ -219,22 +220,28 @@ export const projectSettings = {
       }
     ]
   },
-  tourSteps: [
-    {
-      target: '[data-v-step="workflow"]',
-      content: 'Click the workflow button and enter the appstore',
-      params: {
-        placement: 'right'
+  tourSteps: {
+    appstore: [
+      {
+        attachTo: { element: '[data-v-step="appstore-filter-panel-search"]', on: 'right' },
+        title: 'Select an App',
+        text: 'Test',
+        id: 'appstore',
+        popperOptions: {
+          modifiers: [{ name: 'offset', options: { offset: [0, 12] } }]
+        }
+      },
+      {
+        attachTo: { element: '.filter-panel .right .ant-card .anticon-eye', on: 'bottom' },
+        title: 'Run an app',
+        text: 'Test',
+        id: 'appstore-selector',
+        popperOptions: {
+          modifiers: [{ name: 'offset', options: { offset: [0, 12] } }]
+        }
       }
-    },
-    {
-      target: '[data-v-step="appstore-filter-panel"]',
-      content: 'Filter by your enter.',
-      params: {
-        placement: 'bottom'
-      }
-    }
-  ]
+    ]
+  }
 }
 
 export function initBaseURL() {

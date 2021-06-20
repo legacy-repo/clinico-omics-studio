@@ -202,6 +202,7 @@ export default {
   components: {
     tools: {
       userMenu: {
+        tour: '新手指南',
         feedback: '反馈',
         policies: '政策',
         documentation: '文档',

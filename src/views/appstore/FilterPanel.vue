@@ -10,8 +10,8 @@
         <a-tab-pane key="1" tab="Filter">
           <a-row style="display: flex; justify-content: center; margin: 10px 10px;">
             <a-input-search
-              data-v-step="appstore-filter-panel-search"
               allowClear
+              data-v-step="appstore-filter-panel-search"
               placeholder="Enter Search Text"
               style="margin-bottom: 5px;"
               @change="filterFieldsList"

@@ -16,7 +16,8 @@ const getters = {
   isAuthenticated: state => state.user.isAuthenticated,
   addRouters: state => state.permission.addRouters,
   multiTab: state => state.app.multiTab,
-  lang: state => state.i18n.lang
+  lang: state => state.i18n.lang,
+  tourMode: state => state.app.tourMode
 }
 
 export default getters

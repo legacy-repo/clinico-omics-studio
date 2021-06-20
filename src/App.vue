@@ -2,7 +2,6 @@
   <a-locale-provider :locale="locale">
     <div id="app">
       <router-view />
-      <v-tour name="clinicoOmicsTour" v-if="steps" :steps="steps" :callbacks="clinicoOmicsCallbacks"></v-tour>
     </div>
   </a-locale-provider>
 </template>
@@ -15,28 +14,125 @@ import { mixin as langMixin } from '@/store/i18n-mixin'
 import { AppDeviceEnquire } from '@/utils/mixin'
 import { mapGetters } from 'vuex'
 import { projectSettings } from '@/config/defaultSettings'
+import map from 'lodash.map'
+import { forEach } from '_element-resize-detector@1.2.1@element-resize-detector/src/collection-utils'
 
 const tourSteps = projectSettings.tourSteps
 
 export default {
   mixins: [AppDeviceEnquire, langMixin],
   data() {
-    return {
-      steps: tourSteps,
-      clinicoOmicsCallbacks: {
-        onNextStep: function (currentStep) {
-          // Just make sure to execute the route change only if it's the last step of the current page, here for example index = 2 (so it's step 3, the callback will be called from step 3 to 4)
-          if (currentStep === tourSteps.length - 1) {
-            this.$router.push('dashboard')
+    return {}
+  },
+  methods: {
+    listen(shepherd) {
+      ['close', 'cancel'].forEach(event =>
+        shepherd.on(event, () => {
+          this.$store.dispatch('ToggleTourMode', false)
+        })
+      )
+    },
+    genSteps(tour, routeSteps) {
+        if (routeSteps) {
+          const steps = []
+          for (let idx in routeSteps) {
+            console.log('tourSteps: ', idx)
+            const step = routeSteps[idx]
+            let buttons = null
+
+            if (idx == 0) {
+              buttons = [
+                {
+                  text: 'Exit',
+                  action: () => {
+                    this.$store.dispatch('ToggleTourMode', false)
+                    tour.complete()
+                  }
+                },
+                {
+                  text: 'Next',
+                  action: tour.next
+                }
+              ]
+            } else if (idx == routeSteps.length - 1) {
+              buttons = [
+                {
+                  text: 'Prev',
+                  action: tour.back
+                },
+                {
+                  text: 'Exit',
+                  action: () => {
+                    this.$store.dispatch('ToggleTourMode', false)
+                    tour.complete()
+                  }
+                }
+              ]
+            } else {
+              buttons = [
+                {
+                  text: 'Prev',
+                  action: tour.back
+                },
+                {
+                  text: 'Next',
+                  action: tour.next
+                }
+              ]
+            }
+
+            steps.push({
+              ...step,
+              attachTo: {
+                element: document.querySelector(step.attachTo.element),
+                on: step.attachTo.on
+              },
+              buttons: buttons
+            })
           }
+
+          console.log('Steps: ', steps, routeSteps)
+          return steps
+        } else {
+          return []
         }
+    },
+    startTour() {
+      console.log('Start Tour', this)
+      this.$nextTick(() => {
+        const tour = this.$shepherd({
+          name: 'tour',
+          useModalOverlay: true,
+          defaultStepOptions: {
+            cancelIcon: {
+              enabled: true
+            }
+          }
+        })
+
+        this.listen(tour)
+
+        const steps = this.genSteps(tour, tourSteps[this.routeName])
+
+        if (steps.length == 0) {
+          this.$message.warning('No tour guide for the page.')
+        }
+
+        tour.addSteps(steps)
+        tour.start()
+      })
+    }
+  },
+  watch: {
+    tourMode(newValue, oldValue) {
+      if (newValue) {
+        this.startTour()
       }
     }
   },
-  methods: {},
   mounted() {},
   computed: {
-    ...mapGetters(['lang']),
+    ...mapGetters(['lang', 'tourMode']),
     locale() {
       if (this.lang === 'en-US') {
         return enUS
@@ -45,6 +141,9 @@ export default {
       } else {
         return enUS
       }
+    },
+    routeName() {
+      return this.$route.name
     }
   },
   created() {
@@ -59,8 +158,16 @@ export default {
 
 <style lang="less">
 @import url('./components/global.less');
+@import '~shepherd.js/dist/css/shepherd.css';
 
 #app {
   height: 100%;
+
+  .v-tour__target--highlighted {
+    box-shadow: 0 0 0 99999px #00000066;
+    pointer-events: auto;
+    z-index: 9999;
+    border-radius: 5px;
+  }
 }
 </style>

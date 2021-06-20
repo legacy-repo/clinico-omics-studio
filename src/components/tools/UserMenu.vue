@@ -3,6 +3,16 @@
     <div class="content-box">
       <a-tooltip placement="bottom">
         <template slot="title">
+          <span>{{ $t('components.tools.userMenu.tour') }}</span>
+        </template>
+        <a @click="startTour">
+          <span class="action">
+            <a-icon type="compass"></a-icon>
+          </span>
+        </a>
+      </a-tooltip>
+      <a-tooltip placement="bottom">
+        <template slot="title">
           <span>{{ $t('components.tools.userMenu.feedback') }}</span>
         </template>
         <a :href="feedbackEntrypoint" target="_blank">
@@ -21,25 +31,7 @@
           </span>
         </a>
       </a-tooltip>
-      <a-dropdown>
-        <span class="action">
-          <a-icon type="question-circle-o"></a-icon>
-        </span>
-        <a-menu slot="overlay">
-          <a-menu-item>
-            <a :href="helpEntrypoint" target="_blank">
-              <span>{{ $t('components.tools.userMenu.documentation') }}</span>
-            </a>
-          </a-menu-item>
-          <a-menu-item>
-            <a @click="startTour">2nd menu item</a>
-          </a-menu-item>
-          <a-menu-item>
-            <a href="javascript:;">3rd menu item</a>
-          </a-menu-item>
-        </a-menu>
-      </a-dropdown>
-      <!-- <a-tooltip placement="bottom">
+      <a-tooltip placement="bottom">
         <template slot="title">
           <span>{{ $t('components.tools.userMenu.documentation') }}</span>
         </template>
@@ -48,13 +40,13 @@
             <a-icon type="question-circle-o"></a-icon>
           </span>
         </a>
-      </a-tooltip> -->
+      </a-tooltip>
       <notice-icon class="action" />
       <lang-select />
       <a-dropdown>
         <span class="action ant-dropdown-link user-dropdown-menu">
           <a-avatar class="avatar" size="small" :src="avatar" />
-          <span style="vertical-align: middle;">{{ nickname }}</span>
+          <span style="vertical-align: middle">{{ nickname }}</span>
         </span>
         <a-menu slot="overlay" class="user-dropdown-menu-wrapper">
           <a-menu-item key="0">
@@ -102,8 +94,12 @@ export default {
   methods: {
     ...mapActions(['Logout']),
     startTour() {
-      console.log('Start Tour')
-      this.$tours['clinicoOmicsTour'].start()
+      this.$store.dispatch(
+        'ToggleTourMode',
+        Math.random()
+          .toString(36)
+          .slice(-8)
+      )
     },
     handleLogout() {
       this.$confirm({

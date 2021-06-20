@@ -204,6 +204,7 @@ export default {
   components: {
     tools: {
       userMenu: {
+        tour: 'Tour',
         feedback: 'Feedback',
         policies: 'Policies',
         documentation: 'Documentation',

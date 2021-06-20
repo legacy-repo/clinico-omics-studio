@@ -484,7 +484,7 @@ export const constantRouterMap = [
   {
     path: '/welcome',
     name: 'welcome',
-    component: () => import('@/custom/components/clinico_omics/Home'),
+    component: () => import('@/custom/clinico-omics/components/Home'),
     meta: { isPublic: true, keepAlive: false }
   },
 

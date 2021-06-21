@@ -6,8 +6,8 @@ Vue.use(Router)
 
 // 解决重复点击路由报错的BUG
 const originalPush = Router.prototype.push
-Router.prototype.push = function push(location) {
-  return originalPush.call(this, location).catch((err) => err)
+Router.prototype.push = function push(location, onComplement, onCatch) {
+  return originalPush.call(this, location, onComplement, onCatch).catch((err) => err)
 }
 
 const isElectron = process.env.VUE_APP_ELECTRON === 'true'

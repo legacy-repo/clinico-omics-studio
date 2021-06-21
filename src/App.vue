@@ -13,9 +13,8 @@ import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
 import { mixin as langMixin } from '@/store/i18n-mixin'
 import { AppDeviceEnquire } from '@/utils/mixin'
 import { mapGetters } from 'vuex'
+import { checkElement } from '@/utils/domUtil'
 import { projectSettings } from '@/config/defaultSettings'
-import map from 'lodash.map'
-import { forEach } from '_element-resize-detector@1.2.1@element-resize-detector/src/collection-utils'
 
 const tourSteps = projectSettings.tourSteps
 
@@ -33,69 +32,88 @@ export default {
       )
     },
     genSteps(tour, routeSteps) {
-        if (routeSteps) {
-          const steps = []
-          for (let idx in routeSteps) {
-            console.log('tourSteps: ', idx)
-            const step = routeSteps[idx]
-            let buttons = null
+      if (routeSteps) {
+        const steps = []
+        for (let idx in routeSteps) {
+          console.log('tourSteps: ', idx)
+          const step = routeSteps[idx]
+          let buttons = null
 
-            if (idx == 0) {
-              buttons = [
-                {
-                  text: 'Exit',
-                  action: () => {
-                    this.$store.dispatch('ToggleTourMode', false)
-                    tour.complete()
-                  }
-                },
-                {
-                  text: 'Next',
-                  action: tour.next
+          if (idx == 0) {
+            buttons = [
+              {
+                text: 'Exit',
+                action: () => {
+                  this.$store.dispatch('ToggleTourMode', false)
+                  tour.complete()
                 }
-              ]
-            } else if (idx == routeSteps.length - 1) {
-              buttons = [
-                {
-                  text: 'Prev',
-                  action: tour.back
-                },
-                {
-                  text: 'Exit',
-                  action: () => {
-                    this.$store.dispatch('ToggleTourMode', false)
-                    tour.complete()
-                  }
-                }
-              ]
-            } else {
-              buttons = [
-                {
-                  text: 'Prev',
-                  action: tour.back
-                },
-                {
-                  text: 'Next',
-                  action: tour.next
-                }
-              ]
-            }
-
-            steps.push({
-              ...step,
-              attachTo: {
-                element: document.querySelector(step.attachTo.element),
-                on: step.attachTo.on
               },
-              buttons: buttons
-            })
+              {
+                text: 'Next',
+                action: () => {
+                  this.$router.push(
+                    {
+                      name: step.nextRouteName
+                    },
+                    function() {
+                      const nextStep = routeSteps[Number(idx) + 1]
+                      console.log('Next Step: ', nextStep)
+                      checkElement(nextStep.attachTo.element).then(() => {
+                        tour.show(nextStep.id)
+                      })
+                    },
+                    function() {
+                      const nextStep = routeSteps[Number(idx) + 1]
+                      console.log('Next Step: ', nextStep)
+                      tour.show(nextStep.id)
+                    }
+                  )
+                }
+              }
+            ]
+          } else if (idx == routeSteps.length - 1) {
+            buttons = [
+              {
+                text: 'Prev',
+                action: tour.back
+              },
+              {
+                text: 'Exit',
+                action: () => {
+                  this.$store.dispatch('ToggleTourMode', false)
+                  tour.complete()
+                }
+              }
+            ]
+          } else {
+            buttons = [
+              {
+                text: 'Prev',
+                action: tour.back
+              },
+              {
+                text: 'Next',
+                action: tour.next
+              }
+            ]
           }
 
-          console.log('Steps: ', steps, routeSteps)
-          return steps
-        } else {
-          return []
+          steps.push({
+            ...step,
+            attachTo: {
+              // MUST NOT get element firstly, more details: https://github.com/shipshapecode/shepherd/pull/1187
+              element: step.attachTo.element,
+              on: step.attachTo.on
+            },
+            buttons: buttons
+          })
         }
+
+        console.log('Steps: ', steps, routeSteps)
+        return steps
+      } else {
+        return []
+      }
     },
     startTour() {
       console.log('Start Tour', this)
@@ -112,7 +130,8 @@ export default {
 
         this.listen(tour)
 
-        const steps = this.genSteps(tour, tourSteps[this.routeName])
+        // const steps = this.genSteps(tour, tourSteps[this.routeName])
+        const steps = this.genSteps(tour, tourSteps['appstore'])
 
         if (steps.length == 0) {
           this.$message.warning('No tour guide for the page.')

@@ -167,7 +167,8 @@ export const projectSettings = {
       home: 'https://github.com/clinico-omics/pgi',
       hidden: false,
       author: 'Fudan PGx',
-      description: 'Personal Genome Interpreter (PGI) is designed to support the identification of tumor alterations that drive the disease and detect those that may be therapeutically actionable. PGI relies on existing knowledge collected from several resources and on computational methods that annotate the alterations in a tumor according to distinct levels of evidence.',
+      description:
+        'Personal Genome Interpreter (PGI) is designed to support the identification of tumor alterations that drive the disease and detect those that may be therapeutically actionable. PGI relies on existing knowledge collected from several resources and on computational methods that annotate the alterations in a tumor according to distinct levels of evidence.',
       icons: [
         {
           sizes: '192x192',
@@ -222,6 +223,16 @@ export const projectSettings = {
   },
   tourSteps: {
     appstore: [
+      {
+        attachTo: { element: '[data-v-step="workflow"]', on: 'bottom' },
+        title: 'Click the workflow button',
+        text: 'Test',
+        id: 'workflow',
+        popperOptions: {
+          modifiers: [{ name: 'offset', options: { offset: [0, 12] } }]
+        },
+        nextRouteName: 'appstore'
+      },
       {
         attachTo: { element: '[data-v-step="appstore-filter-panel-search"]', on: 'right' },
         title: 'Select an App',

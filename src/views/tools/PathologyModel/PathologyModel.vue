@@ -4,10 +4,10 @@
     <a-row class="content">
       <a-tabs>
         <a-tab-pane :key="index" v-for="(item, index) in data" :tab="item.model">
-          <a-row class="info">
+          <a-row class="patient-info">
             <a-col :sm="24" :xs="24" :md="12" :lg="12" class="detail-info">
               <a-row class="title" style="padding-left: 0px">
-                <span>Prediction</span>
+                <span>Patient-level Results</span>
               </a-row>
               <a-row v-for="(value, key) in item.patient" :key="key" class="content">
                 <a-col :sm="10" :xs="24" class="key">{{ formatKey(key) }}</a-col>
@@ -26,30 +26,35 @@
               </a-row>
             </a-col>
           </a-row>
-          <a-row>
-            <a-icon v-show="imageViewerVisible" class="close-btn" @click="hideImageViewer" theme="filled" type="close-circle" />
-            <image-viewer ref="viewer" class="image-viewer" v-show="imageViewerVisible"></image-viewer>
+          <a-row class="patch-info">
+            <a-row class="title">
+              <span>Patch-level Results</span>
+            </a-row>
+            <a-row>
+              <a-icon v-show="imageViewerVisible" class="close-btn" @click="hideImageViewer" theme="filled" type="close-circle" />
+              <image-viewer ref="viewer" class="image-viewer" v-show="imageViewerVisible"></image-viewer>
+            </a-row>
+            <vue-good-table
+              class="vue-good-table"
+              :search-options="{ enabled: true }"
+              styleClass="vgt-table striped bordered condensed"
+              :columns="genColumns(item.patch)"
+              :rows="genRows(item.patch, format)"
+              v-if="item.patch.length !== 0"
+              :pagination-options="paginationOptions"
+              :line-numbers="true"
+            >
+              <template slot="table-row" slot-scope="props">
+                <a
+                  @click="showPatchImage(props.formattedRow[props.column.field], genImages(item.patch))"
+                  v-if="props.column.field.indexOf('name') >= 0"
+                >
+                  {{ props.formattedRow[props.column.field] }}
+                </a>
+                <span v-else>{{ props.formattedRow[props.column.field] }}</span>
+              </template>
+            </vue-good-table>
           </a-row>
-          <vue-good-table
-            class="vue-good-table"
-            :search-options="{ enabled: true }"
-            styleClass="vgt-table striped bordered condensed"
-            :columns="genColumns(item.patch)"
-            :rows="genRows(item.patch, format)"
-            v-if="item.patch.length !== 0"
-            :pagination-options="paginationOptions"
-            :line-numbers="true"
-          >
-            <template slot="table-row" slot-scope="props">
-              <a
-                @click="showPatchImage(props.formattedRow[props.column.field], genImages(item.patch))"
-                v-if="props.column.field.indexOf('name') >= 0"
-              >
-                {{ props.formattedRow[props.column.field] }}
-              </a>
-              <span v-else>{{ props.formattedRow[props.column.field] }}</span>
-            </template>
-          </vue-good-table>
         </a-tab-pane>
       </a-tabs>
     </a-row>
@@ -141,6 +146,8 @@ export default {
       const newKey = v.titleCase(formattedKey.split('_').join(' '))
       if (newKey === 'Score') {
         return 'Predicted Probability'
+      } else if (newKey === 'Prediction') {
+        return 'Binarized Prediction'
       } else {
         return newKey
       }
@@ -178,6 +185,15 @@ export default {
       // rowY - row object for row2
       return x < y ? -1 : x > y ? 1 : 0
     },
+    whichOrder(key) {
+      const keyMap = {
+        name: 0,
+        prediction: 1,
+        score: 2
+      }
+
+      return keyMap[key]
+    },
     genColumns(rows) {
       var columns = []
       if (rows.length > 0) {
@@ -187,6 +203,7 @@ export default {
             label: this.formatKey(key),
             // label: key,
             field: key,
+            order: this.whichOrder(key),
             sortable: true,
             width: '180px',
             tdClass: 'text-center',
@@ -202,7 +219,7 @@ export default {
       }
 
       return sortBy(columns, o => {
-        return o.label
+        return o.order
       })
     },
     genRows(rows, format) {
@@ -236,7 +253,7 @@ export default {
   .content {
     padding: 0px 10px 10px;
 
-    .info {
+    .patient-info {
       display: flex;
       flex-direction: row;
       margin: 10px 0px;
@@ -282,6 +299,18 @@ export default {
           color: #6b6262;
           border-bottom: 1px solid #d9d9d9;
         }
+      }
+    }
+
+    .patch-info {
+      display: flex;
+      flex-direction: column;
+      margin: 10px 0px;
+      border-radius: 5px;
+
+      .title {
+        border: 1px solid #d9d9d9;
+        border-bottom: unset;
       }
     }
   }

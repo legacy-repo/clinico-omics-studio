@@ -35,7 +35,17 @@ export default {
       src: 'http://cbioportal.oss-cn-shanghai.aliyuncs.com',
       onload: function(id) {
         console.log('DataPortal: ', id)
-        document.getElementById(id).contentWindow.postMessage({ hideHeader: true }, 'http://cbioportal.oss-cn-shanghai.aliyuncs.com/')
+        const iframe = document.getElementById(id)
+        const resizeIframe = function(iframe, height) {
+          iframe.height = height + 'px'
+        }
+
+        window.addEventListener("message", function(event) {        
+          console.log("iFrame postMessage: ", event)
+          resizeIframe(iframe, event.target)
+        }, false);
+
+        iframe.contentWindow.postMessage({ resizeIframe: true, hideHeight: true }, 'http://cbioportal.oss-cn-shanghai.aliyuncs.com/')
       }
     }
   },

@@ -91,7 +91,7 @@ export default {
   // padding: 10px;
   width: 100%;
   height: 100%;
-  min-height: 92vh;
+  // min-height: 92vh;
   // overflow: hidden;
   border-radius: 5px;
 }

@@ -1,5 +1,5 @@
 <template>
-  <full-frame :id="id" :src="url" :onloadfn="onload"></full-frame>
+  <full-frame :id="id" :src="url" :onloadfn="onload(minHeight)"></full-frame>
 </template>
 
 <script>
@@ -22,6 +22,11 @@ export default {
       type: String,
       required: false,
       default: undefined
+    },
+    minHeight: {
+      type: Number,
+      required: false,
+      default: 600
     }
   },
   computed: {
@@ -32,24 +37,36 @@ export default {
   data() {
     return {
       // src: 'http://data.3steps.cn',
-      src: 'http://cbioportal.oss-cn-shanghai.aliyuncs.com',
-      onload: function(id) {
-        console.log('DataPortal: ', id)
-        const iframe = document.getElementById(id)
-        const resizeIframe = function(iframe, height) {
-          iframe.height = height + 'px'
-        }
-
-        window.addEventListener("message", function(event) {        
-          console.log("iFrame postMessage: ", event)
-          resizeIframe(iframe, event.target)
-        }, false);
-
-        iframe.contentWindow.postMessage({ resizeIframe: true, hideHeight: true }, 'http://cbioportal.oss-cn-shanghai.aliyuncs.com/')
-      }
+      src: 'http://cbioportal.oss-cn-shanghai.aliyuncs.com'
     }
   },
   methods: {
+    onload(minHeight) {
+      return function (id) {
+        console.log('DataPortal: ', id)
+        const iframe = document.getElementById(id)
+        const resizeIframe = function(iframe, height) {
+          iframe.setAttribute('style', 'height: ' + height + 'px;')
+        }
+
+        window.addEventListener(
+          'message',
+          event => {
+            console.log('iFrame postMessage: ', event, minHeight)
+            if (event.data.iframeId === id) {
+              const height = event.data.pageHeight < minHeight ? minHeight : event.data.pageHeight
+              resizeIframe(iframe, height)
+            }
+          },
+          false
+        )
+
+        iframe.contentWindow.postMessage(
+          { resizeIframe: true, hideHeader: true, disableLink: true, iframeId: id, element: '#reactRoot' },
+          'http://cbioportal.oss-cn-shanghai.aliyuncs.com/'
+        )
+      }
+    },
     joinPath(root, subpath) {
       if (subpath) {
         return root.replace(/\/$/g, '') + subpath

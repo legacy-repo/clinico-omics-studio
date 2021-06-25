@@ -36,11 +36,11 @@
         <file-viewer :instanceId="instanceId" :viewerType="viewerType" :baseUrl="baseUrl"></file-viewer>
       </a-collapse-panel>
       <a-collapse-panel key="clinical-data" header="Clinical Data">
-        <data-portal v-if="instanceId" :id="instanceId + '-clinical-data'" :subpath="'/patient/clinicalData?' + parameters"></data-portal>
+        <data-portal v-if="instanceId" :minHeight="520" :id="instanceId + '-clinical-data'" :subpath="'/patient/clinicalData?' + parameters"></data-portal>
         <a-empty v-else />
       </a-collapse-panel>
       <a-collapse-panel key="omics-data" header="Omics Data">
-        <data-portal v-if="instanceId" :id="instanceId + '-omics-data'" :subpath="'/patient/summary?' + parameters"></data-portal>
+        <data-portal v-if="instanceId" :minHeight="1100" :id="instanceId + '-omics-data'" :subpath="'/patient/summary?' + parameters"></data-portal>
         <a-empty v-else />
       </a-collapse-panel>
       <a-collapse-panel key="pathways" header="Pathways" style="display:none;">

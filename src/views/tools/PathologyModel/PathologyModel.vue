@@ -31,8 +31,14 @@
               <span>Patch-level Results</span>
             </a-row>
             <a-row>
-              <a-icon v-show="imageViewerVisible" class="close-btn" @click="hideImageViewer" theme="filled" type="close-circle" />
-              <image-viewer ref="viewer" class="image-viewer" v-show="imageViewerVisible"></image-viewer>
+              <a-icon
+                v-show="imageViewerVisible"
+                class="close-btn"
+                @click="hideImageViewer"
+                theme="filled"
+                type="close-circle"
+              />
+              <image-viewer ref="viewer" :zoomTo="3" class="image-viewer" v-show="imageViewerVisible"></image-viewer>
             </a-row>
             <vue-good-table
               class="vue-good-table"
@@ -42,6 +48,7 @@
               :rows="genRows(item.patch, format)"
               v-if="item.patch.length !== 0"
               @on-sort-change="onSortChange"
+              @on-per-page-change="onPerPageChange"
               :pagination-options="paginationOptions"
               :line-numbers="true"
             >
@@ -66,7 +73,6 @@
 import v from 'voca'
 import { VueGoodTable } from 'vue-good-table'
 import sortBy from 'lodash.sortby'
-import findKey from 'lodash.findkey'
 import 'vue-good-table/dist/vue-good-table.css'
 import { ImageViewer } from '@/components'
 import { initBaseURL } from '@/config/defaultSettings'
@@ -122,15 +128,17 @@ export default {
     onSortChange(params) {
       this.$emit('sort-column', params)
     },
+    onPerPageChange(params) {
+      this.paginationOptions.perPage = params.currentPerPage
+    },
     showPatchImage(patchId, images) {
       this.imageViewerVisible = true
       const index = images.findIndex(image => {
         return image.title === patchId
       })
 
-      const end = images.length > 36 ? 36 : images.length
-
-      this.$refs.viewer[0].show(images.slice(index, end), index)
+      const end = images.length > this.paginationOptions.perPage ? this.paginationOptions.perPage : images.length
+      this.$refs.viewer[0].show(images.slice(0, end), index)
     },
     hideImageViewer() {
       this.imageViewerVisible = false
@@ -181,10 +189,12 @@ export default {
       }
     },
     genImages(rows) {
+      const baseApiUrl = initBaseURL()
       return map(rows, row => {
         return {
+          description: row.name,
           title: row.name,
-          source: `${initBaseURL()}/attachments/pathology/${this.imageId}_models/norm_patches/${row.name}`
+          source: `${baseApiUrl}/attachments/pathology/${this.imageId}_models/norm_patches/${row.name}`
         }
       })
     },

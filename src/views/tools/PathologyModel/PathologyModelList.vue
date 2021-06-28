@@ -257,7 +257,7 @@ export default {
     }),
     sortColumn(params) {
       console.log('Sort column by ', params)
-      Vue.set(
+      this.$set(
         this.pathologyPrediction[0],
         'patch',
         orderBy(this.pathologyPrediction[0].patch, [params[0].field], [params[0].type])
@@ -381,7 +381,7 @@ export default {
       if (record.status === 'Running') {
         record.refreshIntervalId = setInterval(() => {
           if (record.percentage < 100) {
-            record.percentage = record.percentage + 50
+            record.percentage = record.percentage + 11
           } else if (record.percentage >= 100) {
             record.status = 'Success'
             clearInterval(record.refreshIntervalId)

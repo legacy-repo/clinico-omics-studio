@@ -38,6 +38,13 @@ export default {
   components: {
     Viewer
   },
+  props: {
+    zoomTo: {
+      type: Number,
+      required: false,
+      default: 1
+    }
+  },
   data() {
     return {
       index: 0,
@@ -49,6 +56,9 @@ export default {
     inited(viewer) {
       this.$viewer = viewer
       this.$viewer.view(this.index)
+      this.$viewer.element.addEventListener('viewed', () => {
+        this.$viewer.zoomTo(this.zoomTo)
+      })
     },
     view(index) {
       this.index = index
@@ -91,7 +101,7 @@ export default {
 
       .image-wrapper {
         display: inline-block;
-        width: 150px;
+        // width: 150px;
         margin: 5px 5px 0 5px;
 
         .image {

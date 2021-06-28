@@ -41,6 +41,7 @@
               :columns="genColumns(item.patch)"
               :rows="genRows(item.patch, format)"
               v-if="item.patch.length !== 0"
+              @on-sort-change="onSortChange"
               :pagination-options="paginationOptions"
               :line-numbers="true"
             >
@@ -65,7 +66,7 @@
 import v from 'voca'
 import { VueGoodTable } from 'vue-good-table'
 import sortBy from 'lodash.sortby'
-import orderBy from 'lodash.orderby'
+import findKey from 'lodash.findkey'
 import 'vue-good-table/dist/vue-good-table.css'
 import { ImageViewer } from '@/components'
 import { initBaseURL } from '@/config/defaultSettings'
@@ -109,17 +110,27 @@ export default {
         pageLabel: 'page', // for 'pages' mode
         allLabel: 'All'
       },
+      keyMap: {
+        name: 0,
+        prediction: 1,
+        score: 2
+      },
       imageViewerVisible: false
     }
   },
   methods: {
+    onSortChange(params) {
+      this.$emit('sort-column', params)
+    },
     showPatchImage(patchId, images) {
       this.imageViewerVisible = true
       const index = images.findIndex(image => {
         return image.title === patchId
       })
 
-      this.$refs.viewer[0].show(images.slice(index, index + 8), index)
+      const end = images.length > 36 ? 36 : images.length
+
+      this.$refs.viewer[0].show(images.slice(index, end), index)
     },
     hideImageViewer() {
       this.imageViewerVisible = false
@@ -186,13 +197,7 @@ export default {
       return x < y ? -1 : x > y ? 1 : 0
     },
     whichOrder(key) {
-      const keyMap = {
-        name: 0,
-        prediction: 1,
-        score: 2
-      }
-
-      return keyMap[key]
+      return this.keyMap[key]
     },
     genColumns(rows) {
       var columns = []
@@ -223,12 +228,11 @@ export default {
       })
     },
     genRows(rows, format) {
-      const orderedRows = orderBy(rows, ['score'], ['desc'])
-      for (let row of orderedRows) {
+      for (let row of rows) {
         format(row)
       }
 
-      return orderedRows
+      return rows
     }
   }
 }

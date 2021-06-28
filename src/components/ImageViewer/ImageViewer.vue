@@ -95,7 +95,7 @@ export default {
         margin: 5px 5px 0 5px;
 
         .image {
-          width: 100%;
+          // width: 100%;
           cursor: pointer;
           display: inline-block;
         }

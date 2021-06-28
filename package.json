@@ -48,6 +48,7 @@
     "lodash.debounce": "^4.0.8",
     "lodash.filter": "^4.6.0",
     "lodash.findindex": "^4.6.0",
+    "lodash.findkey": "^4.6.0",
     "lodash.flatmap": "^4.5.0",
     "lodash.flatten": "^4.4.0",
     "lodash.get": "^4.4.2",

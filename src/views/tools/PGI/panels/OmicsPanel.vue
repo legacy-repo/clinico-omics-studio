@@ -283,5 +283,9 @@ export default {
     height: calc(100vh - 160px);
     overflow: scroll;
   }
+
+  .ant-tabs-nav {
+    padding: 5px 0px;
+  }
 }
 </style>

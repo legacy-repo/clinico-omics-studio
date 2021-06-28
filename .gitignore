@@ -34,3 +34,4 @@ ossutil_output
 !/src/custom/index.js
 
 .gitignore.*
+**/.history

@@ -24,10 +24,16 @@
         >
           Result
         </a-button>
-        <a-button @click="getRecord(record.file_name)" icon="api" style="display:none;">Connection</a-button>
+        <a-button @click="getRecord(record.file_name)" icon="api" style="display: none">Connection</a-button>
       </span>
       <span slot="status" slot-scope="text, record" class="single-tag">
-        <a-progress type="circle" :showInfo="false" :percent="record.percentage" :width="45" v-if="text === 'Running'" />
+        <a-progress
+          type="circle"
+          :showInfo="false"
+          :percent="record.percentage"
+          :width="45"
+          v-if="text === 'Running'"
+        />
         <a-tag color="#87d068" v-if="text === 'Success'">
           {{ text }}
         </a-tag>
@@ -87,6 +93,7 @@
             v-if="pathologyPrediction.length > 0"
             :data="pathologyPrediction"
             :imageId="instanceId"
+            @sort-column="sortColumn"
           ></pathology-model>
           <a-empty v-else class="empty-container" />
         </a-collapse-panel>
@@ -96,6 +103,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import { PageView } from '@/layouts'
 import { mapActions, mapGetters } from 'vuex'
 import PathologyMixins from '@/mixins/pathology'
@@ -103,6 +111,7 @@ import PathologyModel from './PathologyModel'
 import ModelSubmitter from './ModelSubmitter'
 import FileViewer from '@/components/FileViewer'
 import filter from 'lodash.filter'
+import orderBy from 'lodash.orderby'
 import FileSaver from 'file-saver'
 import { initBaseURL } from '@/config/defaultSettings'
 
@@ -246,6 +255,14 @@ export default {
       getReportList: 'GetReportList',
       getCollection: 'GetCollection'
     }),
+    sortColumn(params) {
+      console.log('Sort column by ', params)
+      Vue.set(
+        this.pathologyPrediction[0],
+        'patch',
+        orderBy(this.pathologyPrediction[0].patch, [params[0].field], [params[0].type])
+      )
+    },
     showHeatmap() {
       this.heatmapVisible = !this.heatmapVisible
     },
@@ -339,12 +356,15 @@ export default {
         const models = [record.model_name]
         this.batchLoad(record.patient_id, models)
           .then(results => {
-            this.pathologyPrediction = []
+            const pathologyPrediction = []
             for (let idx in models) {
               if (results[idx]) {
-                this.pathologyPrediction.push(results[idx])
+                pathologyPrediction.push(results[idx])
               }
             }
+
+            pathologyPrediction[0].patch = orderBy(pathologyPrediction[0].patch, ['score'], ['desc'])
+            this.pathologyPrediction = pathologyPrediction
 
             callback()
           })
@@ -361,12 +381,12 @@ export default {
       if (record.status === 'Running') {
         record.refreshIntervalId = setInterval(() => {
           if (record.percentage < 100) {
-            record.percentage = record.percentage + 30
+            record.percentage = record.percentage + 50
           } else if (record.percentage >= 100) {
             record.status = 'Success'
             clearInterval(record.refreshIntervalId)
           }
-        }, 6000)
+        }, 1000)
       }
     }
   },

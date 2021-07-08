@@ -1,7 +1,7 @@
 <template>
   <a-row>
     <a-row class="table-operations">
-      <a-col :xl="12" :lg="12" :md="24" :sm="24" :xs="24">
+      <a-col :xl="16" :lg="16" :md="24" :sm="24" :xs="24">
         <a-popover v-model="menuVisible" trigger="click" placement="bottom">
           <a-input-search
             style="margin-bottom: 10px;"
@@ -27,20 +27,20 @@
         <a-button @click="showSortMenu" disabled>
           <a-icon type="sort-ascending" />
         </a-button>
-        <a-button @click="downloadAsJSON">JSON</a-button>
-        <a-button @click="downloadAsCSV">CSV</a-button>
+        <a-button icon="download" @click="downloadAsJSON">JSON ({{ pagination.total }})</a-button>
+        <a-button icon="download" @click="downloadAsCSV">CSV ({{ pagination.total }})</a-button>
         <a-button @click="switchCartTable">
           <a-icon type="experiment" />
           <span>Cart Files &nbsp;</span>
           <a-tag color="#87d068" style="margin: 0px;">{{ recordCounts }}</a-tag>
         </a-button>
       </a-col>
-      <a-col :xl="12" :lg="12" :md="24" :sm="24" :xs="24">
+      <a-col :xl="8" :lg="8" :md="24" :sm="24" :xs="24">
         <p class="header-info">Showing {{ first }} - {{ last }} of {{ total }} files</p>
       </a-col>
     </a-row>
     <a-table
-      :row-selection="{ onSelect: onSelectRecord, selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
+      :row-selection="{ onSelectAll: onSelectAll, onSelect: onSelectRecord, selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       :columns="visibleColumns"
       :pagination="pagination"
       :dataSource="data"
@@ -68,6 +68,7 @@ import filter from 'lodash.filter'
 import map from 'lodash.map'
 import { mapActions, mapMutations, mapGetters } from 'vuex'
 import DataSet from '@/views/datasource/DataSet'
+import { downloadAsCSV, downloadAsJSON } from '@/views/utils'
 
 const columns = [
   {
@@ -111,7 +112,7 @@ const columns = [
     dataIndex: 'fileSize',
     key: 'fileSize',
     align: 'center',
-    visible: false
+    visible: true
   },
   {
     title: 'Annotations',
@@ -213,7 +214,7 @@ export default {
       return this.pagination.pageSize
     },
     allowDownload() {
-      if (this.total <= 100) {
+      if (this.total <= 10000) {
         return true
       } else {
         return false
@@ -240,6 +241,17 @@ export default {
     switchCartTable() {
       this.cartTableActive = !this.cartTableActive
     },
+    onSelectAll(selected, selectedRows, changeRows) {
+      console.log('onSelectAll: ', selected, selectedRows, changeRows)
+      if (selected) {
+        this.$store.commit('PUSH_RECORDS', changeRows)
+        this.$message.success(`Added ${changeRows.length} Records to the Currect Dataset.`, 3)
+      } else {
+        this.$store.commit('POP_RECORDS', changeRows)
+        this.$message.warn(`Removed ${changeRows.length} Records from the Current Dataset.`, 3)        
+      }
+      this.saveCurrentDataSet()
+    },
     onSelectRecord(record, selected, selectedRows) {
       console.log('onSelectRecord: ', record, selected, selectedRows)
       if (selected) {
@@ -249,6 +261,7 @@ export default {
         this.$store.commit('POP_RECORD', record)
         this.$message.warn(`Removed ${record.key} from the Current Dataset.`, 3)
       }
+      this.saveCurrentDataSet()
     },
     onSearch(e) {
       this.filterValue = e.target.value
@@ -266,23 +279,8 @@ export default {
       console.log('selectedRowKeys changed: ', selectedRowKeys)
       // this.selectedRowKeys = selectedRowKeys
     },
-    json2csv(data) {
-      var fields = Object.keys(data[0])
-      var replacer = function(key, value) {
-        return value === null ? '' : value
-      }
-
-      var csv = data.map(function(row) {
-        return fields
-          .map(function(fieldName) {
-            return JSON.stringify(row[fieldName], replacer)
-          })
-          .join(',')
-      })
-
-      csv.unshift(fields.join(',')) // add header column
-      csv = csv.join('\r\n')
-      return csv
+    removeFields(fields, exclude) {
+      return fields.filter(x => !exclude.includes(x));
     },
     resetPage() {
       this.set_page({
@@ -297,31 +295,23 @@ export default {
       })
     },
     downloadAsJSON() {
+      this.$message.success('Downloading..., Please don\'t refresh the page.')
       if (this.allowDownload) {
         this.setTotal()
         this.searchCollections(data => {
-          var dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(data))
-          var dlAnchorElem = document.getElementById('downloadAnchorElem')
-          dlAnchorElem.setAttribute('href', dataStr)
-          dlAnchorElem.setAttribute('download', 'data.json')
-          dlAnchorElem.click()
+          downloadAsJSON(data, 'downloadAnchorElem')
 
           this.resetPage()
         }, true)
       } else {
-        this.$message.warn('Please filter before downloading (No more than 100 records are supported).')
+        this.$message.warn('Please filter before downloading (No more than 10000 records are supported).')
       }
     },
     downloadAsCSV() {
       if (this.allowDownload) {
         this.setTotal()
         this.searchCollections(data => {
-          const csv = this.json2csv(data)
-          var dataStr = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv)
-          var dlAnchorElem = document.getElementById('downloadAnchorElem')
-          dlAnchorElem.setAttribute('href', dataStr)
-          dlAnchorElem.setAttribute('download', 'data.csv')
-          dlAnchorElem.click()
+          downloadAsCSV(data, 'downloadAnchorElem', ['_id'])
 
           this.resetPage()
         }, true)
@@ -355,9 +345,10 @@ export default {
     }
   },
   mounted() {
-    setTimeout(() => {
-      this.saveCurrentDataSet()
-    }, 6000)
+    // TODO: Remove the code? No need to save for a period of time
+    // setTimeout(() => {
+    //   this.saveCurrentDataSet()
+    // }, 6000)
   },
   created() {
     this.searchCollections()

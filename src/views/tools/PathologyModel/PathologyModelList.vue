@@ -386,7 +386,7 @@ export default {
             record.status = 'Success'
             clearInterval(record.refreshIntervalId)
           }
-        }, 1000)
+        }, 6000)
       }
     }
   },

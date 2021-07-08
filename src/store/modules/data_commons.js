@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import { getCollections, countCollections, getDataSchema, listCollections } from '@/api/manage'
 import orderBy from 'lodash.orderby'
+import uniqBy from 'lodash.uniqby'
+import xorWith from 'lodash.xorwith'
+import isEqual from 'lodash.isequal'
 import map from 'lodash.map'
 import filter from 'lodash.filter'
 import { config } from '@/config/defaultSettings'
@@ -372,10 +375,18 @@ const data = {
         state.currentDataSet.push(record)
       }
     },
+    PUSH_RECORDS: (state, records) => {
+      const dataset = state.currentDataSet.concat(records)
+      state.currentDataSet = uniqBy(dataset, 'key')
+    },
     POP_RECORD: (state, record) => {
       state.currentDataSet = state.currentDataSet.filter(o => {
         return o.key !== record.key
       })
+    },
+    POP_RECORDS: (state, records) => {
+      // 差集
+      state.currentDataSet = xorWith(state.currentDataSet, records, isEqual)
     }
   },
   actions: {

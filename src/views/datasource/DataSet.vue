@@ -66,6 +66,15 @@
         </a-tooltip>
       </template>
     </a-table>
+    <a-row class="float-element">
+      <a-button icon="download" type="primary" @click="downloadAsJSON(data, 'downloadDataSet')" :disabled="disabled">
+        JSON ({{ numOfRecords }})
+      </a-button>
+      <a-button icon="download" type="primary" @click="downloadAsCSV(data, 'downloadDataSet', ['_id'])" :disabled="disabled">
+        CSV ({{ numOfRecords }})
+      </a-button>
+      <a id="downloadDataSet" v-show="false"></a>
+    </a-row>
   </a-row>
 </template>
 
@@ -73,6 +82,7 @@
 import { mapActions } from 'vuex'
 import uniqBy from 'lodash.uniqby'
 import filter from 'lodash.filter'
+import { downloadAsCSV, downloadAsJSON } from '@/views/utils'
 
 export default {
   props: {
@@ -250,12 +260,18 @@ export default {
           this.$emit('file-select', this.selectedRows)
           console.log('File selection: ', selectedRows, selectedItems, this.selectedRows, this.rowSelection.selectedRowKeys)
         }
-      }
+      },
     }
   },
   computed: {
     data() {
       return this.$store.getters.currentDataSet
+    },
+    numOfRecords() {
+      return this.$store.getters.currentDataSet.length
+    },
+    disabled() {
+      return this.$store.getters.currentDataSet.length === 0
     },
     scrollHeight() {
       if (this.height) {
@@ -274,6 +290,8 @@ export default {
     ...mapActions({
       saveCurrentDataSet: 'SaveCurrentDataSet'
     }),
+    downloadAsCSV,
+    downloadAsJSON,
     doCopy(text) {
       this.$copyText(text)
         .then(message => {
@@ -293,6 +311,7 @@ export default {
     deleteRecord(record) {
       this.$store.commit('POP_RECORD', record)
       this.$message.warn(`Removed ${record.key} from the Current Dataset.`, 3)
+      this.saveCurrentDataSet()
     },
     handleSearch(selectedKeys, confirm, dataIndex) {
       confirm()
@@ -319,9 +338,10 @@ export default {
     }
   },
   mounted() {
-    setTimeout(() => {
-      this.saveCurrentDataSet()
-    }, 5000)
+    // TODO: Remove the code? No need to save for a period of time
+    // setTimeout(() => {
+    //   this.saveCurrentDataSet()
+    // }, 5000)
   },
   created() {
     if (this.mode === 'selection') {
@@ -332,9 +352,22 @@ export default {
   }
 }
 </script>
-<style scoped>
+
+<style lang="less" scoped>
 .highlight {
   background-color: rgb(255, 192, 105);
   padding: 0px;
+}
+
+.dataset-container {
+  .float-element {
+    position: absolute;
+    top: -45px;
+    right: 50px;
+
+    .ant-btn {
+      margin-right: 5px;
+    }
+  }
 }
 </style>

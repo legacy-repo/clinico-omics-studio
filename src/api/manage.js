@@ -12,6 +12,7 @@ const api = {
     project: seqFlowHost + '/api/projects',
     workflow: seqFlowHost + '/api/workflows',
     log: seqFlowHost + '/api/logs',
+    message: seqFlowHost + '/api/messages',
     notification: seqFlowHost + '/api/notifications',
     apps: seqFlowHost + '/apps',
     appStore: {
@@ -485,6 +486,22 @@ export function getNotificationList(parameter) {
     url: api.seqFlow.notification,
     method: 'get',
     params: parameter
+  })
+}
+
+export function getMessageList(parameter) {
+  return axios({
+    url: api.seqFlow.message,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function submitMessage(data) {
+  return axios({
+    url: api.seqFlow.message,
+    method: 'post',
+    data: data
   })
 }
 

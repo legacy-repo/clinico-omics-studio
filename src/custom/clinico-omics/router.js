@@ -209,7 +209,7 @@ export const asyncRouterMap = [
         name: 'report',
         component: RouteView,
         redirect: '/report/report-management',
-        meta: { title: 'Report', icon: 'dot-chart', keepAlive: true },
+        meta: { title: 'Report', icon: 'snippets', keepAlive: true },
         children: [
           {
             path: '/report/report-management',
@@ -221,6 +221,24 @@ export const asyncRouterMap = [
           }
         ]
       },
+
+      // Stat
+      {
+        path: '/stat',
+        name: 'stat',
+        component: RouteView,
+        redirect: '/stat/stat-studio',
+        meta: { title: 'Stat', icon: 'dot-chart', keepAlive: true },
+        children: [
+          {
+            path: '/stat/stat-studio',
+            name: 'stat-studio',
+            hidden: false,
+            component: () => import('@/views/stat/StatStudio'),
+            meta: { title: 'Stat Studio', icon: 'codepen', permission: ['table'], keepAlive: true }
+          }
+        ]
+      },      
 
       // Embeded Frame
       {

@@ -1,120 +1,125 @@
 <template>
   <div class="a-form-builder">
     <a-form :form="clonedModel" @submit="onAction" layout="vertical">
-      <a-form-item v-for="(field, index) in fields" :key="field.label + index">
-        <span slot="label" v-if="field.label">
-          {{ field.label }}&nbsp;
-          <a-tooltip :title="field.question" v-if="field.question">
-            <a-icon type="question-circle-o" />
-          </a-tooltip>
-        </span>
-        <template v-if="field.tmplType === 'file'">
-          <a-button @click="selectFiles(field.model, field.multiple, field.filterType)">
-            <a-icon type="plus" />Select Files
-          </a-button>
-          <a-select
-            :allowClear="field.allowClear || true"
-            :mode="field.multiple ? 'multiple' : 'default'"
-            :placeholder="field.placeholder"
-            :maxTagCount="3"
-            :disabled="field.readOnly || !options[field.model]"
-            v-decorator="[field.model, field.config]"
-          >
-            <a-select-option v-for="d in options[field.model]" :key="d.value">{{ d.text }}</a-select-option>
-          </a-select>
-        </template>
-        <template v-if="field.tmplType === 'sample_id'">
-          <a-input-number
-            :placeholder="field.placeholder"
-            :key="field.name + index"
-            :id="field.id || ''"
-            :min="field.min || 1"
-            :max="field.max || 100"
-            :disabled="field.disabled || false"
-            :ref="field.name"
-            v-decorator="[field.model, field.config]"
-            @change="onUpdate(field)"
-          ></a-input-number>
-        </template>
-        <!-- Input Number -->
-        <template v-if="field.tmplType === 'input_number'">
-          <a-input-number
-            :placeholder="field.placeholder"
-            :key="field.name + index"
-            :id="field.id || ''"
-            :min="field.min || 1"
-            :max="field.max || 100"
-            :disabled="field.disabled || false"
-            :ref="field.name"
-            v-decorator="[field.model, field.config]"
-            @change="onUpdate(field)"
-          ></a-input-number>
-        </template>
-        <!-- Input -->
-        <template v-if="field.tmplType === 'input'">
-          <a-input
-            :addonAfter="field.addonAfter || ''"
-            :addonBefore="field.addonBefore || ''"
-            :disabled="field.disabled || false"
-            :id="field.id || ''"
-            :prefix="field.prefix || ''"
-            :size="field.size || 'default'"
-            :suffix="field.suffix || ''"
-            :type="field.type || 'text'"
-            :allowClear="field.allowClear || false"
-            :placeholder="field.placeholder"
-            :autosize="field.autosize || false"
-            :key="field.name + index"
-            :ref="field.name"
-            v-decorator="[field.model, field.config]"
-            @change="onUpdate(field)"
-          />
-        </template>
-        <!-- Select -->
-        <template v-if="field.tmplType === 'select'">
-          <a-select
-            v-decorator="[field.model, field.config]"
-            :disabled="field.disabled"
-            :showSearch="true"
-            :name="field.name"
-            :mode="field.mode"
-            :allowClear="field.allowClear || true"
-            :data="field.options"
-            :placeholder="field.placeholder"
-            @change="onUpdate(field)"
-          >
-            <a-select-option v-for="i in field.options" :key="i.label">{{ i.value }}</a-select-option>
-          </a-select>
-        </template>
-        <!-- Checkbox -->
-        <template v-if="field.tmplType === 'checkbox'">
-          <a-checkbox-group
-            v-if="Array.isArray(clonedModel[field.model])"
-            v-decorator="[field.model, field.config]"
-            :name="field.name"
-            :options="field.options"
-            @change="onUpdate(field)"
-          ></a-checkbox-group>
-          <a-checkbox v-else v-decorator="[field.model, field.config]" @change="onUpdate(field)" />
-        </template>
-        <!-- Radio -->
-        <template v-if="field.tmplType === 'radio'">
-          <a-radio-group v-decorator="[field.model, field.config]" :options="field.options" @change="onUpdate(field)" />
-        </template>
-        <!-- Actions -->
-        <template v-if="field.tmplType === 'actions'">
-          <div class="actions">
-            <a-button
-              v-for="(i, idx) in field.buttons"
-              :key="idx"
-              :type="i.buttonType"
-              @click="onAction(i)"
-              class="form-btn"
-              >{{ i.buttonLabel }}</a-button
-            >
-          </div>
-        </template>
-      </a-form-item>
+      <a-row :gutter="8">
+        <a-col v-for="(field, index) in fields" :key="field.label + index" :span="field.span ? field.span : 24 / nums">
+          <a-form-item>
+            <span slot="label" v-if="field.label">
+              {{ field.label }}&nbsp;
+              <a-tooltip :title="field.question" v-if="field.question">
+                <a-icon type="question-circle-o" />
+              </a-tooltip>
+            </span>
+            <template v-if="field.tmplType === 'file'">
+              <a-button @click="selectFiles(field.model, field.multiple, field.filterType)">
+                <a-icon type="plus" />Select Files
+              </a-button>
+              <a-select
+                :allowClear="field.allowClear || true"
+                :mode="field.multiple ? 'multiple' : 'default'"
+                :placeholder="field.placeholder"
+                :maxTagCount="3"
+                :disabled="field.readOnly || !options[field.model]"
+                v-decorator="[field.model, field.config]"
+              >
+                <a-select-option v-for="d in options[field.model]" :key="d.value">{{ d.text }}</a-select-option>
+              </a-select>
+            </template>
+            <template v-if="field.tmplType === 'sample_id'">
+              <a-input-number
+                :placeholder="field.placeholder"
+                :key="field.name + index"
+                :id="field.id || ''"
+                :min="field.min || 1"
+                :max="field.max || 100"
+                :disabled="field.disabled || false"
+                :ref="field.name"
+                v-decorator="[field.model, field.config]"
+                @change="onUpdate(field)"
+              ></a-input-number>
+            </template>
+            <!-- Input Number -->
+            <template v-if="field.tmplType === 'input_number'">
+              <a-input-number
+                :placeholder="field.placeholder"
+                :key="field.name + index"
+                :id="field.id || ''"
+                :min="field.min || 1"
+                :max="field.max || 100"
+                :disabled="field.disabled || false"
+                :ref="field.name"
+                v-decorator="[field.model, field.config]"
+                @change="onUpdate(field)"
+              ></a-input-number>
+            </template>
+            <!-- Input -->
+            <template v-if="field.tmplType === 'input'">
+              <a-input
+                :addonAfter="field.addonAfter || ''"
+                :addonBefore="field.addonBefore || ''"
+                :disabled="field.disabled || false"
+                :id="field.id || ''"
+                :prefix="field.prefix || ''"
+                :size="field.size || 'default'"
+                :suffix="field.suffix || ''"
+                :type="field.type || 'text'"
+                :allowClear="field.allowClear || false"
+                :placeholder="field.placeholder"
+                :autosize="field.autosize || false"
+                :key="field.name + index"
+                :ref="field.name"
+                v-decorator="[field.model, field.config]"
+                @change="onUpdate(field)"
+              />
+            </template>
+            <!-- Select -->
+            <template v-if="field.tmplType === 'select'">
+              <a-select
+                v-decorator="[field.model, field.config]"
+                :disabled="field.disabled"
+                :showSearch="true"
+                :name="field.name"
+                :mode="field.mode"
+                :allowClear="field.allowClear || true"
+                :data="field.options"
+                :placeholder="field.placeholder"
+                @change="onUpdate(field)"
+              >
+                <a-select-option v-for="i in field.options" :key="i.label">{{ i.value }}</a-select-option>
+              </a-select>
+            </template>
+            <!-- Checkbox -->
+            <template v-if="field.tmplType === 'checkbox'">
+              <a-checkbox-group
+                v-if="Array.isArray(clonedModel[field.model])"
+                v-decorator="[field.model, field.config]"
+                :name="field.name"
+                :options="field.options"
+                @change="onUpdate(field)"
+              ></a-checkbox-group>
+              <a-checkbox v-else v-decorator="[field.model, field.config]" @change="onUpdate(field)" />
+            </template>
+            <!-- Radio -->
+            <template v-if="field.tmplType === 'radio'">
+              <a-radio-group v-decorator="[field.model, field.config]" :options="field.options" @change="onUpdate(field)" />
+            </template>
+            <!-- Actions -->
+            <template v-if="field.tmplType === 'actions'">
+              <div class="actions">
+                <a-button
+                  v-for="(i, idx) in field.buttons"
+                  :key="idx"
+                  :icon="i.icon"
+                  :type="i.buttonType"
+                  @click="onAction(i)"
+                  class="form-btn"
+                  >{{ i.buttonLabel }}</a-button
+                >
+              </div>
+            </template>
+          </a-form-item>
+        </a-col>
+      </a-row>
     </a-form>
     <a-row class="box" v-show="fileManagerActive">
       <popup-file-browser
@@ -146,6 +151,10 @@ export default {
     fields: {
       type: Array,
       default: () => []
+    },
+    nums: {
+      type: Number,
+      default: 1
     }
   },
   data() {

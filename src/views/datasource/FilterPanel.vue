@@ -128,7 +128,7 @@
           @change="hideSelectedFields"
         >Hide selected fields?</a-checkbox>
       </a-row>
-      <a-card class="field-list">
+      <a-card class="field-list" v-if="existsFilteredFields">
         <a-row
           @click.native="addField(field.key)"
           v-for="(field, index) in filteredFields"
@@ -149,6 +149,7 @@
           </a-row>
         </a-row>
       </a-card>
+      <a-empty class="field-list" v-else />
     </a-modal>
   </a-row>
 </template>
@@ -211,6 +212,9 @@ export default {
       return map(this.fieldsList, o => {
         return o.key
       })
+    },
+    existsFilteredFields() {
+      return this.filteredFields.length > 0
     },
     filteredFields() {
       let fields = []

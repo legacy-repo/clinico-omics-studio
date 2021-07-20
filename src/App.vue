@@ -116,30 +116,34 @@ export default {
       }
     },
     startTour() {
-      console.log('Start Tour', this)
-      this.$nextTick(() => {
-        const tour = this.$shepherd({
-          name: 'tour',
-          useModalOverlay: true,
-          defaultStepOptions: {
-            cancelIcon: {
-              enabled: true
+      if (tourSteps) {
+        console.log('Start Tour', this)
+        this.$nextTick(() => {
+          const tour = this.$shepherd({
+            name: 'tour',
+            useModalOverlay: true,
+            defaultStepOptions: {
+              cancelIcon: {
+                enabled: true
+              }
             }
+          })
+
+          this.listen(tour)
+
+          // const steps = this.genSteps(tour, tourSteps[this.routeName])
+          const steps = this.genSteps(tour, tourSteps['appstore'])
+
+          if (steps.length == 0) {
+            this.$message.warning('No tour guide for the page.')
           }
+
+          tour.addSteps(steps)
+          tour.start()
         })
-
-        this.listen(tour)
-
-        // const steps = this.genSteps(tour, tourSteps[this.routeName])
-        const steps = this.genSteps(tour, tourSteps['appstore'])
-
-        if (steps.length == 0) {
-          this.$message.warning('No tour guide for the page.')
-        }
-
-        tour.addSteps(steps)
-        tour.start()
-      })
+      } else {
+        this.$message.warn('No tour guide for the page.')
+      }
     }
   },
   watch: {

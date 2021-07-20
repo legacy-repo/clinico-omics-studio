@@ -38,20 +38,20 @@
           <app-list :appList="filteredApps" :key="localAppMode"></app-list>
         </a-tab-pane>
         <!-- TService -->
-        <a-tab-pane tab="Tools" key="tool">
+        <a-tab-pane tab="Tools" key="tool" v-if="filteredTools.length > 0">
           <tool-list :toolList="filteredTools" :key="localToolMode"></tool-list>
         </a-tab-pane>
         <a-tab-pane tab="Reports" key="report">
           <report-list :reportList="filteredReports" :key="localReportMode"></report-list>
         </a-tab-pane>
-        <a-tab-pane tab="Charts" key="chart" disabled>
+        <a-tab-pane tab="Charts" key="chart" disabled v-if="filteredCharts.length > 0">
           <chart-list :chartList="filteredCharts" :key="localChartMode"></chart-list>
         </a-tab-pane>
         <a-button slot="tabBarExtraContent" @click="expandPanel" type="primary" v-if="!expanded">
-          Expand<a-icon type="fullscreen" />
+          Hide Filter Panel<a-icon type="fullscreen" />
         </a-button>
         <a-button slot="tabBarExtraContent" @click="expandPanel" type="primary" v-else>
-          Shrink<a-icon type="fullscreen-exit" />
+          Show Filter Panel<a-icon type="fullscreen-exit" />
         </a-button>
       </a-tabs>
     </a-col>
@@ -116,7 +116,7 @@ export default {
       localReports: [],
       localChartMode: false,
       localCharts: [],
-      expanded: false
+      expanded: true
     }
   },
   props: {},

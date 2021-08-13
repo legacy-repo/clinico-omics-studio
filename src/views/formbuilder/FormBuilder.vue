@@ -3,7 +3,7 @@
     <a-form :form="clonedModel" @submit="onAction" layout="vertical">
       <a-row :gutter="8">
         <a-col v-for="(field, index) in fields" :key="field.label + index" :span="field.span ? field.span : 24 / nums">
-          <a-form-item>
+          <a-form-item v-if="showComponent(field.visibleVariable, field.expectedValue)">
             <span slot="label" v-if="field.label">
               {{ field.label }}&nbsp;
               <a-tooltip :title="field.question" v-if="field.question">
@@ -101,7 +101,11 @@
             </template>
             <!-- Radio -->
             <template v-if="field.tmplType === 'radio'">
-              <a-radio-group v-decorator="[field.model, field.config]" :options="field.options" @change="onUpdate(field)" />
+              <a-radio-group
+                v-decorator="[field.model, field.config]"
+                :options="field.options"
+                @change="onUpdate(field)"
+              />
             </template>
             <!-- Actions -->
             <template v-if="field.tmplType === 'actions'">
@@ -178,6 +182,17 @@ export default {
     this.$forceUpdate()
   },
   methods: {
+    showComponent(fieldName, expectedValue) {
+      if (fieldName && expectedValue) {
+        if (this.clonedModel.getFieldValue(fieldName) === expectedValue) {
+          return true
+        } else {
+          return false
+        }
+      } else {
+        return true
+      }
+    },
     selectFiles(model, multiple, filterType) {
       // Reset all related values
       this.fileManagerActive = true

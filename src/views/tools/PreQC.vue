@@ -6,7 +6,7 @@
     <a-row class="preqc-pack">
       <div class="mask-window" v-if="fileBrowserActive"></div>
       <popup-file-browser
-        filterType=".fq.gz|.fastq.gz|.fq|.fastq"
+        filterType="\.*$"
         :multiple="true"
         :selected="selected"
         @select-files="confirmSelectFiles"
@@ -126,8 +126,8 @@ export default {
       } else if (!/oss:\/\/[a-zA-Z0-9 \-/_.]+(,[a-zA-Z0-9]+)?$/.test(value)) {
         errorMsg = 'The first column shoud be an oss link, the second column need to be a md5sum.'
         error = true
-      } else if (value.split('\n').length > 10) {
-        errorMsg = 'The number of rows shoud not be more than 10.'
+      } else if (value.split('\n').length > 100) {
+        errorMsg = 'The number of rows shoud not be more than 100.'
         error = true
       } else if (uniqBy(records, 'filepath').length !== records.length) {
         errorMsg = 'Duplicated OSS Link'

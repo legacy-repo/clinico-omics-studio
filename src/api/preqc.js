@@ -10,7 +10,7 @@ class PreQCService {
         data: {
           filepath: filepath
         },
-        timeout: 180000  // 120s
+        timeout: 600000  // 10min
       })
         .then(response => {
           resolve(response.data)

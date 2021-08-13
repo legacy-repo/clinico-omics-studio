@@ -38,7 +38,7 @@
         <span slot="number" slot-scope="text">{{ text.slice(0, 3) }}</span>
         <span slot="tag" slot-scope="text, record">
           <a-tooltip>
-            <template slot="title">{{ record.statusMsg ? record.statusMsg : text }}</template>
+            <template slot="title">{{ record.matchedStatus ? record.matchedStatus : text }}</template>
             <a-tag color="#f50" v-if="text === 'exception'">{{ text }}</a-tag>
             <a-tag color="#87d068" v-if="text === 'success'">{{ text }}</a-tag>
             <a-tag color="#108ee9" v-if="text === 'active'">{{ text }}</a-tag>
@@ -103,8 +103,9 @@ export default {
       titleCase,
       menuVisible: false,
       currentPage: 1,
-      pageSize: 10,
-      pageSizeOptions: ['10', '20', '30', '50', '100']
+      pageSize: 100,
+      // pageSizeOptions: ['10', '20', '30', '50', '100']
+      pageSizeOptions: ['100']
     }
   },
   computed: {

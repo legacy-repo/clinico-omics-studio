@@ -13,7 +13,8 @@ export function initPreQCHost() {
   const preQcHost = localStorage.getItem('preQcHost')
   console.log(`PRE_QC_HOST: ${preQcHost}`)
 
-  return preQcHost || `${initBaseURL()}/preqc-pack`
+  // return preQcHost || `${initBaseURL()}/preqc-pack`
+  return 'https://1016342078909050.cn-shanghai.fc.aliyuncs.com/2016-08-15/proxy/ClinicoOmics/fastq-meta/'
 }
 
 // SeqFlow

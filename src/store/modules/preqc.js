@@ -109,9 +109,7 @@ const preqc = {
     },
     setItems(state, payload) {
       state.items = payload
-      if (state.total === 0) {
-        state.total = payload.length
-      }
+      state.total = payload.length
     },
     setLoading(state, payload) {
       state.loading = payload
@@ -157,7 +155,7 @@ const preqc = {
         filepath: record.filepath,
         updatedValues: {
           status: 'active',
-          statusMsg: 'Running'
+          matchedStatus: 'Unknown'
         }
       })
 
@@ -165,16 +163,27 @@ const preqc = {
         PreQCService.getItem(record.filepath)
           .then(response => {
             const updatedValues = {}
-            updatedValues['filesize'] = formatBytes(response.filemeta.filesize)
-            updatedValues['md5sum'] = response.filemeta.md5sum
-            updatedValues['datasize'] = response.fastqc.datasize
+            if (response.filemeta) {
+              updatedValues['filesize'] = formatBytes(response.filemeta.filesize)
+              updatedValues['md5sum'] = response.filemeta.md5sum
+              updatedValues['datasize'] = response.fastqc.datasize
+            } else {
+              updatedValues['filesize'] = formatBytes(response.filesize)
+              updatedValues['md5sum'] = response.md5sum
+              updatedValues['datasize'] = -1
+            }
 
-            if (record.expected_md5sum && updatedValues['md5sum'] !== record.expected_md5sum) {
-              updatedValues['status'] = 'warning'
-              updatedValues['statusMsg'] = 'Mismatch'
+            if (record.expected_md5sum) {
+              if (updatedValues['md5sum'] !== record.expected_md5sum) {
+                updatedValues['status'] = 'warning'
+                updatedValues['matchedStatus'] = 'Mismatch'
+              } else {
+                updatedValues['status'] = 'success'
+                updatedValues['matchedStatus'] = 'Matched'
+              }
             } else {
               updatedValues['status'] = 'success'
-              updatedValues['statusMsg'] = 'Success'
+              updatedValues['matchedStatus'] = 'Unknown'              
             }
 
             commit('updateRecord', {
@@ -191,7 +200,7 @@ const preqc = {
               filepath: record.filepath,
               updatedValues: {
                 status: 'exception',
-                statusMsg: 'Unknown Error'
+                matchedStatus: 'Unknown Error'
               }
             })
 

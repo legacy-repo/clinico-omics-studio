@@ -26,7 +26,8 @@ const api = {
     manifest: tserviceHost + '/api/manifest',
     root: tserviceHost,
     reportEndpoint: tserviceHost + '/api/report/',
-    report: tserviceHost + '/api/reports',
+    report: tserviceHost + '/api/tasks',
+    // Deprecated
     chart: tserviceHost + '/api/chart',
     pathologyAiModel: tserviceAiHost + '/api/tool/pathology-model'
   },

@@ -226,6 +226,7 @@ export const asyncRouterMap = [
       {
         path: '/stat',
         name: 'stat',
+        hidden: true,
         component: RouteView,
         redirect: '/stat/stat-studio',
         meta: { title: 'Stat', icon: 'dot-chart', keepAlive: true },
@@ -365,6 +366,13 @@ export const asyncRouterMap = [
             hidden: true,
             component: () => import('@/views/tools/XPS2PDF'),
             meta: { title: 'XPS2PDF', keepAlive: true }
+          },
+          {
+            path: '/tool/syncdata',
+            name: 'syncdata',
+            hidden: true,
+            component: () => import('@/views/tools/SyncData'),
+            meta: { title: 'Sync Data', keepAlive: true }
           },
           {
             path: '/tool/merge-rnaseq-exp',

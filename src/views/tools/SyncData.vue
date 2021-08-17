@@ -71,6 +71,7 @@ import moment from 'moment'
 import { PageView } from '@/layouts'
 import filter from 'lodash.filter'
 import map from 'lodash.map'
+import orderBy from 'lodash.orderby'
 import { initTServiceHost } from '@/config/defaultSettings'
 
 export const formatDateTime = function(datetime) {
@@ -112,21 +113,21 @@ const columns = [
     dataIndex: 'plugin_name',
     key: 'plugin_name',
     align: 'center',
-    visible: true
+    visible: false
   },
   {
     title: 'Plugin Type',
     dataIndex: 'plugin_type',
     key: 'plugin_type',
     align: 'center',
-    visible: true
+    visible: false
   },
   {
     title: 'Plugin Version',
     dataIndex: 'plugin_version',
     key: 'plugin_version',
-    visible: true,
-    align: 'center'
+    align: 'center',
+    visible: false
   },
   {
     title: 'Created At',
@@ -250,7 +251,7 @@ export default {
           this.pagination.pageSize = response.page_size
           this.pagination.current = response.page
           console.log('Get Tasks: ', response)
-          this.data = this.formatRecords(response.data)
+          this.data = orderBy(this.formatRecords(response.data), 'started_time', 'desc')
           this.syncdataLoading = false
         })
         .catch(error => {
@@ -277,13 +278,18 @@ export default {
       }
     }
   },
-  beforeDestroy() {
-    clearInterval(this.timer)
-  },
   mounted() {
     this.timer = setInterval(() => {
       this.getTasks(this.pagination.current, this.pagination.pageSize)
     }, 6000)
+  },
+  beforeRouteLeave(to, from, next) {
+    next()
+    if (this.timer) {
+      console.log('Clear the getTasks timer.')
+      clearInterval(this.timer)
+      this.timer = null
+    }
   },
   created() {
     this.getTasks(this.pagination.current, this.pagination.pageSize)

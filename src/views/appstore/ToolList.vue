@@ -6,11 +6,11 @@
         <template class="ant-card-actions" slot="actions">
           <a-icon type="eye" @click="onView(tool)" />
           <a-popover trigger="click">
-            <a slot="title" :href="tool.home" target="_blank">{{ tool.appName }}</a>
+            <a slot="title" :href="tool.home" target="_blank">{{ `${tool.shortName}-${tool.version}` }}</a>
             <p slot="content">{{ tool.description }}</p>
             <a-icon type="info-circle" />
           </a-popover>
-          <a-icon type="share-alt" />
+          <a-icon disabled type="share-alt" />
         </template>
         <a-card-meta :title="tool.title" :description="tool.description" class="card-meta">
           <a-avatar slot="avatar" style="backgroundColor: #87d068">{{ tool.title[0].toUpperCase() }}</a-avatar>

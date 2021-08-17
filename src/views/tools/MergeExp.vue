@@ -150,8 +150,13 @@ export default {
   mounted() {
     this.timer = setInterval(this.updateTasks, 10000)
   },
-  beforeDestroy() {
-    clearInterval(this.timer)
+  beforeRouteLeave(to, from, next) {
+    next()
+    if (this.timer) {
+      console.log('Clear the updateTasks timer.')
+      clearInterval(this.timer)
+      this.timer = null
+    }
   },
   watch: {
     data: {

@@ -209,12 +209,13 @@ export default {
     }, 60000)
   },
   // When keepAlive is true, we need to clear timer before route leaving
-  beforeRouteLeave (to, from, next) {
-    clearInterval(this.timer)
+  beforeRouteLeave(to, from, next) {
     next()
-  },
-  beforeDestroy() {
-    clearInterval(this.timer)
+    if (this.timer) {
+      console.log('Clear the searchProject timer.')
+      clearInterval(this.timer)
+      this.timer = null
+    }
   }
 }
 </script>

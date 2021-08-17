@@ -41,7 +41,7 @@
         <a-tab-pane tab="Tools" key="tool" v-if="filteredTools.length > 0">
           <tool-list :toolList="filteredTools" :key="localToolMode"></tool-list>
         </a-tab-pane>
-        <a-tab-pane tab="Reports" key="report">
+        <a-tab-pane tab="Reports" key="report" v-if="filteredReports.length > 0">
           <report-list :reportList="filteredReports" :key="localReportMode"></report-list>
         </a-tab-pane>
         <a-tab-pane tab="Charts" key="chart" disabled v-if="filteredCharts.length > 0">
@@ -155,9 +155,13 @@ export default {
     },
     filteredTools() {
       if (this.localToolMode) {
-        return orderBy(this.localTools, 'title', 'aes')
+        return filter(orderBy(this.localTools, 'title', 'aes'), item => {
+          return !item.hidden
+        })
       } else {
-        return orderBy(this.toolList, 'title', 'aes')
+        return filter(orderBy(this.toolList, 'title', 'aes'), item => {
+          return !item.hidden
+        })
       }
     },
     filteredReports() {

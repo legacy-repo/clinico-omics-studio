@@ -105,7 +105,7 @@ const report = {
             console.log('GetReportList: ', parameter, response)
 
             const data = {
-              perPage: response['per_page'],
+              perPage: response['page_size'],
               page: response['page'],
               total: response['total'],
               data: formatRecords(response.data)

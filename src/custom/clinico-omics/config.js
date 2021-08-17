@@ -122,10 +122,9 @@ export const projectSettings = {
   ],
   localTools: [
     {
-      id: '64578311997f9234517982151f10c077',
       title: 'PreQC Pack for FASTQ File',
       shortName: 'preqc-pack-meta',
-      appName: 'yangjingcheng/preqc-pack-meta',
+      version: 'v0.1.0',
       home: 'https://github.com/clinico-omics/datains-frontend',
       hidden: false,
       author: 'Jingcheng Yang',
@@ -141,12 +140,11 @@ export const projectSettings = {
       source: 'PGx'
     },
     {
-      id: '3d561642d6b4a22f5ef43e8ce34c5004',
       title: 'Pathology AI Model',
       shortName: 'pathology-ai-model',
-      appName: 'fuscc/pathology-ai-model',
+      version: 'v0.1.0',
       home: 'https://github.com/clinico-omics/datains-frontend',
-      hidden: false,
+      hidden: true,
       author: 'FUSCC',
       description: 'AI models for pathology images.',
       icons: [
@@ -160,12 +158,11 @@ export const projectSettings = {
       source: 'FUSCC'
     },
     {
-      id: 'e381664c65b518b4faa1bfba3fc647af',
       title: 'Personal Genome Interpreter',
       shortName: 'pgi',
-      appName: 'fudan-pgx/pgi',
+      version: 'v0.1.0',
       home: 'https://github.com/clinico-omics/pgi',
-      hidden: false,
+      hidden: true,
       author: 'Fudan PGx',
       description:
         'Personal Genome Interpreter (PGI) is designed to support the identification of tumor alterations that drive the disease and detect those that may be therapeutically actionable. PGI relies on existing knowledge collected from several resources and on computational methods that annotate the alterations in a tumor according to distinct levels of evidence.',

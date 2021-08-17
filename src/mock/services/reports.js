@@ -81,14 +81,14 @@ const archivedTimeLst = [
 const report = (options) => {
   const queryParameters = getQueryParameters(options)
   console.log('queryParameters', queryParameters)
-  if (queryParameters && !queryParameters.per_page) {
-    queryParameters.per_page = 10
+  if (queryParameters && !queryParameters.page_size) {
+    queryParameters.page_size = 10
   } else {
-    queryParameters.per_page = parseInt(queryParameters.per_page)
+    queryParameters.page_size = parseInt(queryParameters.page_size)
   }
   const data = []
-  const start = queryParameters.per_page * (queryParameters.page - 1)
-  const end = queryParameters.per_page * queryParameters.page
+  const start = queryParameters.page_size * (queryParameters.page - 1)
+  const end = queryParameters.page_size * queryParameters.page
   for (let num = start; num < end; num++) {
     data.push({
       id: ids[num],
@@ -109,7 +109,7 @@ const report = (options) => {
 
   const response = {
     total: ids.length,
-    per_page: parseInt(queryParameters.per_page),
+    page_size: parseInt(queryParameters.page_size),
     page: parseInt(queryParameters.page),
     message: 'success',
     data: data

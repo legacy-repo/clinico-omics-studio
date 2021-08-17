@@ -124,9 +124,9 @@ export default {
       this.loading = true
       this.getReportList({
         page: page,
-        per_page: pageSize,
+        page_size: pageSize,
         status: status,
-        report_type: "multireport"
+        plugin_type: "ReportPlugin"
       }).then(result => {
         const that = this
         that.data = result.data

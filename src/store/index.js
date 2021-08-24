@@ -22,6 +22,7 @@ import permission from './modules/permission'
 import getters from './getters'
 
 Vue.use(Vuex)
+Vue.config.devtools = true
 
 export default new Vuex.Store({
   modules: {

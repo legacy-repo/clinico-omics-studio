@@ -51,6 +51,7 @@ const formatManifest = function(manifest) {
       title: record.name,
       shortName: record.short_name,
       appName: record.app_name,
+      version: record.version,
       home: record.home,
       hidden: record.hidden,
       author: record.author,

@@ -21,7 +21,6 @@ import './utils/filter' // global filter
 import i18n from './locales'
 
 Vue.config.productionTip = false
-Vue.config.devtools = true
 
 import VueShepherd from 'vue-shepherd';
 Vue.use(VueShepherd);

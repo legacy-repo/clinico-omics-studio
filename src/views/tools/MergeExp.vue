@@ -19,27 +19,25 @@
       </a-row>
       <a-row class="tool-form">
         <a-col :xl="12" :lg="12" :md="12" :sm="24" :xs="24">
-          <a-form
-            :form="form"
-            :label-col="{ span: 6 }"
-            :wrapper-col="{ span: 18 }"
-            layout="horizontal"
-          >
+          <a-form :form="form" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" layout="horizontal">
             <a-form-item label="Data">
-              <a-button @click="selectDirectory" style="margin-bottom: 5px;">
+              <a-button @click="selectDirectory" style="margin-bottom: 5px">
                 <a-icon type="plus" />Select Directory
               </a-button>
               <a-select
                 placeholder="Select the Directory"
                 disabled
-                v-decorator="['filepath', {rules: [{required: true, message: 'Please select directory!'}]}]"
+                v-decorator="['filepath', { rules: [{ required: true, message: 'Please select directory!' }] }]"
               >
                 <a-select-option v-for="d in options['filepath']" :key="d.value">{{ d.text }}</a-select-option>
               </a-select>
             </a-form-item>
             <a-form-item label="Enable MultiQC">
               <a-select
-                v-decorator="['enable_multiqc', { initialValue: 'true', rules: [{ required: true, message: 'Whether to enable multiqc?' }]}]"
+                v-decorator="[
+                  'enable_multiqc',
+                  { initialValue: 'true', rules: [{ required: true, message: 'Whether to enable multiqc?' }] },
+                ]"
                 placeholder="Select a option"
               >
                 <a-select-option value="true">True</a-select-option>
@@ -59,19 +57,25 @@
     <a-row class="task-history">
       <a-collapse v-model="activeKey">
         <a-collapse-panel key="1" header="Task History">
-          <a-table :columns="columns" :data-source="data" size="small">
+          <a-table
+            :columns="filteredColumns"
+            :pagination="pagination"
+            :loading="loading"
+            :data-source="data"
+            size="small"
+          >
             <span slot="result" slot-scope="result, record">
               <a
                 @click="redirectToFS(result)"
                 target="_blank"
-                :disabled="record.status !== 'success'"
-              >Download</a>
+                :disabled="record.status !== 'success' || result === 'unknown'"
+                >Download</a
+              >
             </span>
             <span slot="status" slot-scope="status">
               <a-tag :color="formatColor(status)">{{ status.toUpperCase() }}</a-tag>
             </span>
           </a-table>
-          <a-icon slot="extra" type="delete" @click="removeHistory" />
         </a-collapse-panel>
       </a-collapse>
     </a-row>
@@ -81,39 +85,98 @@
 <script>
 import { PageView } from '@/layouts'
 import VueMarkdown from 'vue-markdown'
-import Prism from 'prismjs'
 import moment from 'moment'
+import Prism from 'prismjs'
 import filter from 'lodash.filter'
 import flatMap from 'lodash.flatmap'
+import orderBy from 'lodash.orderby'
+import map from 'lodash.map'
 import PopupFileBrowser from '@/views/filemanager/PopupFileBrowser'
 import { initTServiceHost } from '@/config/defaultSettings'
 
+export const formatDateTime = function(datetime) {
+  if (datetime && datetime > 0) {
+    return moment(datetime)
+      .utcOffset('+08:00')
+      .format('YYYY-MM-DD HH:mm')
+  } else {
+    return '0000-00-00 00:00'
+  }
+}
+
 const columns = [
   {
-    dataIndex: 'filename',
-    key: 'filename',
-    title: 'File Name'
+    title: 'Name',
+    dataIndex: 'name',
+    key: 'name',
+    align: 'center',
+    visible: false
+    // scopedSlots: { customRender: 'link' }
   },
   {
-    title: 'Created Time',
-    dataIndex: 'createdTime',
-    key: 'createdTime',
-    align: 'center'
+    title: 'Source',
+    dataIndex: 'filepath',
+    key: 'filepath',
+    align: 'center',
+    visible: true
+    // scopedSlots: { customRender: 'link' }
   },
   {
-    title: 'Status',
-    key: 'status',
-    dataIndex: 'status',
-    scopedSlots: { customRender: 'status' },
-    width: '100px',
+    title: 'Description',
+    dataIndex: 'description',
+    key: 'description',
+    align: 'center',
+    visible: false
+  },
+  {
+    title: 'Plugin Name',
+    dataIndex: 'plugin_name',
+    key: 'plugin_name',
+    align: 'center',
+    visible: false
+  },
+  {
+    title: 'Plugin Type',
+    dataIndex: 'plugin_type',
+    key: 'plugin_type',
+    align: 'center',
+    visible: false
+  },
+  {
+    title: 'Plugin Version',
+    dataIndex: 'plugin_version',
+    key: 'plugin_version',
+    align: 'center',
+    visible: false
+  },
+  {
+    title: 'Created At',
+    dataIndex: 'started_time',
+    key: 'started_time',
+    align: 'center',
+    visible: true
+  },
+  {
+    title: 'Finished At',
+    dataIndex: 'finished_time',
+    key: 'finished_time',
+    align: 'center',
+    visible: true
+  },
+  {
+    title: 'Count Table',
+    dataIndex: 'count_file',
+    key: 'count_file',
+    scopedSlots: { customRender: 'result' },
+    visible: true,
     align: 'center'
   },
   {
     title: 'Expression Table',
-    dataIndex: 'output_file',
-    key: 'output_file',
+    dataIndex: 'fpkm_file',
+    key: 'fpkm_file',
     scopedSlots: { customRender: 'result' },
-    width: '200px',
+    visible: true,
     align: 'center'
   },
   {
@@ -121,8 +184,23 @@ const columns = [
     dataIndex: 'report',
     key: 'report',
     scopedSlots: { customRender: 'result' },
-    width: '100px',
+    visible: true,
     align: 'center'
+  },
+  {
+    title: 'Status',
+    dataIndex: 'status',
+    key: 'status',
+    align: 'center',
+    scopedSlots: { customRender: 'status' },
+    visible: true
+  },
+  {
+    title: 'Action',
+    key: 'operation',
+    scopedSlots: { customRender: 'operation' },
+    align: 'center',
+    visible: false
   }
 ]
 
@@ -144,11 +222,39 @@ export default {
       activeKey: ['1'],
       fileBrowserActive: false,
       tServiceHost: initTServiceHost(),
-      form: this.$form.createForm(this, { name: 'coordinated' })
+      form: this.$form.createForm(this, { name: 'coordinated' }),
+      loading: false,
+      pagination: {
+        pageSizeOptions: ['10', '30', '50', '100'],
+        showSizeChanger: true,
+        showQuickJumper: true,
+        pageSize: 10,
+        total: 0,
+        current: 1,
+        onChange: (page, pageSize) => {
+          this.pagination.current = page
+          this.pagination.pageSize = pageSize
+          this.getTasks(this.pagination.current, this.pagination.pageSize)
+        },
+        onShowSizeChange: (current, pageSize) => {
+          this.pagination.current = current
+          this.pagination.pageSize = pageSize
+          this.getTasks(this.pagination.current, this.pagination.pageSize)
+        }
+      }
     }
   },
   mounted() {
-    this.timer = setInterval(this.updateTasks, 10000)
+    this.timer = setInterval(() => {
+      this.getTasks(this.pagination.current, this.pagination.pageSize)
+    }, 10000)
+  },
+  computed: {
+    filteredColumns: function() {
+      return filter(this.columns, item => {
+        return item.visible
+      })
+    }
   },
   beforeRouteLeave(to, from, next) {
     next()
@@ -158,17 +264,12 @@ export default {
       this.timer = null
     }
   },
-  watch: {
-    data: {
-      handler(newData, oldData) {
-        console.log('Data Updated!', newData, oldData)
-        if (newData.length > 0) {
-          localStorage.setItem('merge-rnaseq-exp-history', JSON.stringify(this.data))
-        }
-      },
-      immediate: true,
-      deep: true
-    }
+  beforeDestroy() {
+    if (this.timer) {
+      console.log('Clear the refresh timer.')
+      clearInterval(this.timer)
+      this.timer = null
+    }    
   },
   methods: {
     confirmSelectFiles(filePathList) {
@@ -187,7 +288,7 @@ export default {
       this.fileBrowserActive = true
     },
     redirectToFS(result) {
-      const minioLink = 'minio://tservice/' + result
+      const minioLink = 'minio://tservice' + result
       this.$router.push({
         name: 'file-manager',
         query: { path: minioLink, refreshKey: JSON.stringify(Date.now()) }
@@ -207,12 +308,6 @@ export default {
       })
 
       return parameters
-    },
-    removeHistory(event) {
-      localStorage.setItem('merge-rnaseq-exp-history', '[]')
-      this.loadHistory()
-      this.$message.success('Remove History Successfully.')
-      event.stopPropagation()
     },
     update() {
       this.$nextTick(() => {
@@ -244,39 +339,57 @@ export default {
         return '#f50'
       }
     },
-    updateTasks() {
-      const runningTasks = filter(this.data, o => {
-        return o.status === 'running'
-      })
-
-      runningTasks.forEach(task => {
-        this.updateTask(task, resp => {
-          const idx = this.data.findIndex(obj => obj.log == task.log)
-          console.log('updateTask: ', task, resp, idx, resp.status.toUpperCase())
-          if (resp.status.toUpperCase() == 'SUCCESS') {
-            this.data[idx].status = 'success'
-          } else if (resp.status.toUpperCase() == 'ERROR') {
-            this.data[idx].status = 'error'
+    getTasks(page, pageSize) {
+      this.loading = true
+      const baseUrl = `${initTServiceHost()}/api/tasks`
+      this.$http
+        .get(baseUrl, {
+          params: {
+            page: page,
+            page_size: pageSize,
+            plugin_name: 'merge-rnaseq-expression'
           }
         })
-      })
-    },
-    updateTask(task, callback) {
-      this.$http({
-        url: this.tServiceHost + '/' + task.log,
-        method: 'get'
-      })
-        .then(resp => {
-          callback(resp)
+        .then(response => {
+          this.pagination.total = response.total
+          this.pagination.pageSize = response.page_size
+          this.pagination.current = response.page
+          console.log('Get Tasks: ', response)
+          this.data = orderBy(this.formatRecords(response.data), 'started_time', 'desc')
+          this.loading = false
         })
         .catch(error => {
-          console.log('updateTask: ', error)
+          console.log('Get Tasks Error: ', error)
+          this.data = []
+          this.loading = false
         })
     },
-    handleConvert(file) {
-      const history = JSON.parse(localStorage.getItem('merge-rnaseq-exp-history'))
-      var mergeExpHistory = history !== null ? history : []
+    formatRecords(records) {
+      return map(records, record => {
+        const payload = record.payload
+        let status = 'running'
+        if (record.status === 'Finished') {
+          status = 'success'
+        } else if (record.status === 'Failed') {
+          status = 'error'
+        }
 
+        const files = record.response.files
+        const filepath = record.payload.filepath
+
+        return {
+          ...record,
+          status: status,
+          filepath: filepath,
+          report: files.length === 3 ? files[0] : 'unknown',
+          fpkm_file: files.length === 3 ? files[1] : 'unknown',
+          count_file: files.length === 3 ? files[2] : 'unknown',
+          finished_time: formatDateTime(record.finished_time),
+          started_time: formatDateTime(record.started_time)
+        }
+      })
+    },
+    handleConvert(file) {
       this.form.validateFields((err, values) => {
         if (!err) {
           console.log('Received values of form: ', values)
@@ -293,38 +406,18 @@ export default {
           })
             .then(resp => {
               this.$message.success('Submit successfully.')
-
-              file['filename'] = this.parameters['filepath']
-              file['createdTime'] = moment().toString()
-              file['output_file'] = resp['output_file']
-              file['report'] = resp['report']
-              file['log'] = resp['log_url']
-              file['status'] = 'running'
-              mergeExpHistory.splice(0, 0, file)
-              localStorage.setItem('merge-rnaseq-exp-history', JSON.stringify(mergeExpHistory))
-              this.loadHistory()
+              this.getTasks(this.pagination.current, this.pagination.pageSize)
             })
             .catch(error => {
-              file['filename'] = this.parameters['filepath']
-              file['report'] = null
-              file['log'] = null
-              file['output_file'] = null
-              file['status'] = 'error'
-              mergeExpHistory.splice(0, 0, file)
-              localStorage.setItem('merge-rnaseq-exp-history', JSON.stringify(mergeExpHistory))
               console.log('Error: ', error)
               this.$message.error('Convert failed.')
             })
         }
       })
-    },
-    loadHistory() {
-      const history = JSON.parse(localStorage.getItem('merge-rnaseq-exp-history'))
-      this.data = history !== null ? history : []
     }
   },
   created() {
-    this.loadHistory()
+    this.getTasks(this.pagination.current, this.pagination.pageSize)
     this.loadHelpMsg()
   }
 }

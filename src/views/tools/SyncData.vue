@@ -9,6 +9,7 @@
       :loading="syncdataLoading"
       :data-source="data"
       :pagination="pagination"
+      :scroll="{ y: 500 }"
       rowKey="name"
     >
       <a slot="link" slot-scope="text, record" disabled @click="loadLog(record)">
@@ -243,7 +244,8 @@ export default {
         .get(baseUrl, {
           params: {
             page: page,
-            page_size: pageSize
+            page_size: pageSize,
+            plugin_name: 'syncdata'
           }
         })
         .then(response => {
@@ -281,7 +283,7 @@ export default {
   mounted() {
     this.timer = setInterval(() => {
       this.getTasks(this.pagination.current, this.pagination.pageSize)
-    }, 6000)
+    }, 30000)
   },
   beforeRouteLeave(to, from, next) {
     next()
@@ -290,6 +292,13 @@ export default {
       clearInterval(this.timer)
       this.timer = null
     }
+  },
+  beforeDestroy() {
+    if (this.timer) {
+      console.log('Clear the refresh timer.')
+      clearInterval(this.timer)
+      this.timer = null
+    }    
   },
   created() {
     this.getTasks(this.pagination.current, this.pagination.pageSize)
@@ -300,7 +309,7 @@ export default {
 <style lang="less">
 .syncdata-container {
   width: 100%;
-  height: 81vh;
+  // height: 81vh;
   background-color: #fff;
 
   .ant-pagination {

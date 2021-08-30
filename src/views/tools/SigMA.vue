@@ -259,6 +259,13 @@ export default {
       this.timer = null
     }
   },
+  beforeDestroy() {
+    if (this.timer) {
+      console.log('Clear the refresh timer.')
+      clearInterval(this.timer)
+      this.timer = null
+    }    
+  },
   watch: {
     data: {
       handler(newData, oldData) {

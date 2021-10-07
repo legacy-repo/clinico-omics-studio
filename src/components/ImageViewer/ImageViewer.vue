@@ -14,7 +14,7 @@
 
 <script>
 import 'viewerjs/dist/viewer.css'
-import Viewer from 'v-viewer/src/component.vue'
+import Viewer from 'v-viewer'
 
 const options = {
   inline: true,

@@ -375,6 +375,13 @@ export const asyncRouterMap = [
             meta: { title: 'Sync Data', keepAlive: true }
           },
           {
+            path: '/tool/sync-billing',
+            name: 'sync-billing',
+            hidden: true,
+            component: () => import('@/views/tools/SyncBilling'),
+            meta: { title: 'Sync Billing', keepAlive: true }
+          },
+          {
             path: '/tool/merge-rnaseq-exp',
             name: 'merge-rnaseq-exp',
             hidden: true,
